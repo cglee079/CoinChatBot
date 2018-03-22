@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.cointelebot.mapper.ClientMapper">
+
+	<select id="get" resultType="com.cglee079.cointelebot.model.ClientVo">
+			SELECT 
+			CLNT_USERID as 'userId',
+			CLNT_USERNAME as 'username',
+			CLNT_EXCHANGE as 'exchange',
+			CLNT_TIMELOOP as 'timeLoop',
+			CLNT_DAYLOOP as 'dayLoop',
+			CLNT_TGUP_PRICE as 'targetUpPrice',
+			CLNT_TGDOWN_PRICE as 'targetDownPrice',
+			CLNT_AVGPRICE as 'avgPrice',
+			CLNT_COIN_COUNT  as 'coinCount',
+			CLNT_ENABLED as 'enabled',
+			CLNT_OPEN_DATE as 'openDate',
+			CLNT_REOPEN_DATE as 'reopenDate',
+			CLNT_CLOSE_DATE as 'closeDate'
+			FROM TB_TESTBOT_CLIENT
+			WHERE CLNT_USERID = #{userId}
+	</select>
+	
+	<select id="list" resultType="com.cglee079.cointelebot.model.ClientVo" parameterType="map">
+			SELECT 
+			CLNT_USERID as 'userId',
+			CLNT_USERNAME as 'username',
+			CLNT_EXCHANGE as 'exchange',
+			CLNT_TIMELOOP as 'timeLoop',
+			CLNT_DAYLOOP as 'dayLoop',
+			CLNT_TGUP_PRICE as 'targetUpPrice',
+			CLNT_TGDOWN_PRICE as 'targetDownPrice',
+			CLNT_AVGPRICE as 'avgPrice',
+			CLNT_COIN_COUNT  as 'coinCount',
+			CLNT_ENABLED as 'enabled',
+			CLNT_OPEN_DATE as 'openDate',
+			CLNT_REOPEN_DATE as 'reopenDate',
+			CLNT_CLOSE_DATE as 'closeDate'
+			FROM TB_TESTBOT_CLIENT
+			WHERE 1 = 1
+			<if test="exchange != null">
+			AND CLNT_EXCHANGE = #{exchange}
+			</if>
+			<if test="timeLoop != null">
+			AND CLNT_TIMELOOP = #{timeLoop}
+			</if>
+			<if test="dayLoop != null">
+			AND CLNT_DAYLOOP = #{dayLoop}
+			</if>
+			<if test="currentPrice != null">
+			<![CDATA[ AND  #{currentPrice} >= CLNT_TGUP_PRICE ]]>
+			<![CDATA[ OR  #{currentPrice} <= CLNT_TGDOWN_PRICE ]]>
+			</if>
+			AND CLNT_ENABLED = 'Y'
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_TESTBOT_CLIENT(CLNT_USERID, CLNT_USERNAME, CLNT_EXCHANGE, CLNT_TIMELOOP, CLNT_DAYLOOP, CLNT_TGUP_PRICE, CLNT_TGDOWN_PRICE, CLNT_AVGPRICE, CLNT_COIN_COUNT, CLNT_ENABLED, CLNT_OPEN_DATE, CLNT_REOPEN_DATE, CLNT_CLOSE_DATE)
+		VALUES (#{userId}, #{username}, #{exchange}, #{timeLoop}, #{dayLoop}, #{targetUpPrice}, #{targetDownPrice}, #{avgPrice}, #{coinCount}, #{enabled}, #{openDate}, #{reopenDate}, #{closeDate})
+	</insert>
+	
+	<delete id="delete" parameterType="map">
+		DELETE FROM TB_TESTBOT_CLIENT
+		WHERE CLNT_USERID = #{userId}
+	</delete>
+	
+	<update id="update">
+		UPDATE TB_TESTBOT_CLIENT
+		SET 
+		CLNT_USERNAME = #{username},
+		CLNT_EXCHANGE = #{exchange},
+		CLNT_TIMELOOP = #{timeLoop},
+		CLNT_DAYLOOP = #{dayLoop},
+		<choose>
+			<when test="targetUpPrice == 0">
+			CLNT_TGUP_PRICE = null,
+			</when>
+			<otherwise>
+			CLNT_TGUP_PRICE = #{targetUpPrice},
+			</otherwise>
+		</choose>
+		
+		<choose>
+			<when test="targetDownPrice == 0">
+			CLNT_TGDOWN_PRICE = null,
+			</when>
+			<otherwise>
+			CLNT_TGDOWN_PRICE = #{targetDownPrice},
+			</otherwise>
+		</choose>
+		
+		<choose>
+			<when test="avgPrice == 0">
+			CLNT_AVGPRICE = null,
+			</when>
+			<otherwise>
+			CLNT_AVGPRICE = #{avgPrice},
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="coinCount == 0">
+			CLNT_COIN_COUNT = null,
+			</when>
+			<otherwise>
+			CLNT_COIN_COUNT = #{coinCount},
+			</otherwise>
+		</choose>
+		CLNT_ENABLED = #{enabled},
+		CLNT_OPEN_DATE = #{openDate},
+		CLNT_REOPEN_DATE = #{reopenDate},
+		CLNT_CLOSE_DATE = #{closeDate}
+		WHERE CLNT_USERID = #{userId}
+	</update>
+	
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.cointelebot.mapper.ClientMsgMapper">
+
+	<select id="get" resultType="com.cglee079.cointelebot.model.ClientMsgVo">
+	</select>
+	
+	<select id="list" resultType="com.cglee079.cointelebot.model.ClientMsgVo">
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_TESTBOT_CLIENT_MSG (MSG_USERID, MSG_USERNAME, MSG_TEXT, MSG_DATE)
+ 		VALUES (#{userId}, #{username}, #{msg}, #{date})
+	</insert>
+	
+	<delete id="delete" parameterType="map">
+	</delete>
+	
+	<update id="update">
+	</update>	
+</mapper>
