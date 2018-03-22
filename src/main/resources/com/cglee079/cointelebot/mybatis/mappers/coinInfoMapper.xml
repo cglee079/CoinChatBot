@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.cointelebot.mapper.CoinInfoMapper">
+
+	<select id="list" resultType="com.cglee079.cointelebot.model.CoinInfoVo">
+			SELECT 
+			CINFO_COINID as 'coinId',
+			CINFO_COINNAME as 'coinname',
+			CINFO_CHAT_ADDR as 'chatAddr',
+			CINFO_EX_PRICE as 'priceEx',
+			CINFO_EX_NUMBER as 'numberEx',
+			CINFO_EX_TARGET as 'targetEx',
+			CINFO_VERSION as 'version'
+			FROM TB_COINBOT_INFO
+			<![CDATA[WHERE CINFO_COINID <> #{coinId}]]>
+	</select>
+	
+	<select id="get" resultType="com.cglee079.cointelebot.model.CoinInfoVo">
+			SELECT 
+			CINFO_COINID as 'coinId',
+			CINFO_COINNAME as 'coinname',
+			CINFO_CHAT_ADDR as 'chatAddr',
+			CINFO_EX_PRICE as 'priceEx',
+			CINFO_EX_NUMBER as 'numberEx',
+			CINFO_EX_TARGET as 'targetEx',
+			CINFO_VERSION as 'version'
+			FROM TB_COINBOT_INFO
+			WHERE CINFO_COINID = #{coinId}
+	</select>
+	
+</mapper>

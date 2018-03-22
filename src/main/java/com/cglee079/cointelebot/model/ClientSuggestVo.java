@@ -5,14 +5,13 @@ import com.cglee079.cointelebot.constants.C;
 public class ClientSuggestVo {
 	private int seq;
 	private String userId;
-	private String coin;
+	private String coinId;
 	private String username;
 	private String msg;
 	private String date;
 
-	
 	public ClientSuggestVo() {
-		coin = C.MY_COIN_STR;
+		coinId = C.MY_COIN;
 	}
 
 	public int getSeq() {
@@ -23,12 +22,12 @@ public class ClientSuggestVo {
 		this.seq = seq;
 	}
 
-	public String getCoin() {
-		return coin;
+	public String getCoinId() {
+		return coinId;
 	}
 
-	public void setCoin(String coin) {
-		this.coin = coin;
+	public void setCoinId(String coinId) {
+		this.coinId = coinId;
 	}
 
 	public String getUserId() {

@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +23,13 @@ import com.cglee079.cointelebot.constants.C;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.ClientVo;
+import com.cglee079.cointelebot.model.CoinInfoVo;
 import com.cglee079.cointelebot.model.DailyInfoVo;
 import com.cglee079.cointelebot.model.TimelyInfoVo;
 import com.cglee079.cointelebot.service.ClientMsgService;
 import com.cglee079.cointelebot.service.ClientService;
 import com.cglee079.cointelebot.service.ClientSuggestService;
-import com.cglee079.cointelebot.util.TimeStamper;
+import com.cglee079.cointelebot.service.CoinInfoService;
 
 public class TelegramBot extends AbilityBot  {
 	
@@ -40,16 +43,34 @@ public class TelegramBot extends AbilityBot  {
 	private ClientSuggestService clientSuggestService;
 	
 	@Autowired
+	private CoinInfoService coinInfoService;
+	
+	@Autowired
 	private CoinManager coinManager;
 	
 	private String helpMsg;
+	private String coinname;
+	private String version;
+	private String priceEx;
+	private String targetEx;
+	private String numberEx;
 	
 	protected TelegramBot(String botToken, String botUsername) {
 		super(botToken, botUsername);
+	}
+	
+	@PostConstruct
+	public void init() {
+	    CoinInfoVo coinInfo = coinInfoService.get(C.MY_COIN);
+	    priceEx = coinInfo.getPriceEx();
+	    numberEx  = coinInfo.getNumberEx();
+	    targetEx = coinInfo.getTargetEx();
+		version = coinInfo.getVersion();
+		coinname = coinInfo.getCoinname();
 		
 		helpMsg = "";
 		helpMsg += "별도의 설정을 안하셨다면,\n";
-		helpMsg += "3시간 간격으로 " + C.MY_COIN_STR + " 가격 알림이 전송됩니다.\n";
+		helpMsg += "3시간 간격으로 " + coinname + " 가격 알림이 전송됩니다.\n";
 		helpMsg += "\n";
 		
 		helpMsg += "별도의 설정을 안하셨다면,\n";
@@ -78,7 +99,7 @@ public class TelegramBot extends AbilityBot  {
 		helpMsg += "목표가격을 위한 가격정보는 각 거래소에서 1분 주기로 갱신합니다.\n";
 		helpMsg += "\n";
 		
-		helpMsg += "톡을 보내시면 현재 " + C.MY_COIN_STR + " 가격을 확인 하실 수 있습니다.\n";
+		helpMsg += "톡을 보내시면 현재 " + coinname + " 가격을 확인 하실 수 있습니다.\n";
 		helpMsg += "\n";
 		
 		helpMsg += "한국 프리미엄 정보를 확인 하실 수 있습니다.\n";
@@ -125,36 +146,37 @@ public class TelegramBot extends AbilityBot  {
 		helpMsg += "* 목표가격 설정\n";
 		helpMsg += "/target 금액  \n";
 		helpMsg += "ex) /target 0 = 목표가격 입력 초기화\n";
-		helpMsg += "ex) /target " + C.MY_COIN_TARGET + " = 목표가격 " + C.MY_COIN_TARGET + " 원\n";
+		helpMsg += "ex) /target " + targetEx + " = 목표가격 " + targetEx + " 원\n";
 		helpMsg += "\n";
 
 		helpMsg += "* 평균단가 설정\n";
 		helpMsg += "/price 금액  \n";
 		helpMsg += "ex) /price 0 = 평균단가 입력 초기화\n";
-		helpMsg += "ex) /price " + C.MY_COIN_PRICE + " = 평균단가 " + C.MY_COIN_PRICE + " 원\n";
+		helpMsg += "ex) /price " + priceEx + " = 평균단가 " + priceEx + " 원\n";
 		helpMsg += "\n";
 
 		helpMsg += "* 코인개수 설정\n";
 		helpMsg += "/number 개수\n";
-		helpMsg += "ex) /number 0 = " + C.MY_COIN_STR + " 개수 입력 초기화\n";
-		helpMsg += "ex) /number " + C.MY_COIN_NUMBER +" = " + C.MY_COIN_STR+ " 개수 설정\n";
+		helpMsg += "ex) /number 0 = " + coinname + " 개수 입력 초기화\n";
+		helpMsg += "ex) /number " + numberEx +" = " + coinname+ " 개수 설정\n";
 		helpMsg += "\n";
 
-		helpMsg += "/help - 도움말 \n";
 		helpMsg += "/calc - 원금,현재금액,손익금 확인 \n";
 		helpMsg += "/kimp - 한국 프리미엄 정보 확인 \n";
+		
 		if(!(C.MY_COIN == C.COIN_BTC)) {
 			helpMsg += "/btc  - 비트코인 대비 변화량 확인\n";
 		}
+		
 		helpMsg += "/info - 설정확인\n";
-		helpMsg += "/stop - 모든알림(시간알림 간격, 일일알림 간격, 목표가격) 끄기 \n";
+		helpMsg += "/coin - 코인알리미 리스트\n";
+		helpMsg += "/help - 도움말 \n";
+		helpMsg += "/stop - 모든알림(시간알림, 일일알림 , 목표가격) 끄기 \n";
 		helpMsg += "\n";
 		helpMsg += "* 문의,제안,건의사항은 다음 명령어를 이용해주세요.\n";
 		helpMsg += "/msg 내용\n";
 		helpMsg += "ex) /msg 안녕하세요. 건의사항이~~~\n";
 		helpMsg += "\n";
-		helpMsg += "\n";
-		
 		//
 		helpMsg += "국내정보 By ";
 		if(C.ENABLED_COINONE) { helpMsg += "코인원, ";}
@@ -205,8 +227,8 @@ public class TelegramBot extends AbilityBot  {
 				case "help": cmdHelp(userId); break;
 				case "info": cmdInfo(userId); break;
 				case "kimp": cmdKimp(userId); break;
-				case "btc": cmdBtc(userId); break;
 				case "calc": cmdCalc(userId); break;
+				case "btc" : cmdBtc(userId); break;
 				case "price": cmdSetPrice(userId, args); break;
 				case "target": cmdSetTargetPrice(userId, args); break;
 				case "number": cmdSetCoinCnt(userId, args); break;
@@ -214,6 +236,7 @@ public class TelegramBot extends AbilityBot  {
 				case "dayloop": cmdSetDayLoop(userId, args); break;
 				case "exchange": cmdSetExchange(userId, args); break;
 				case "msg" : cmdMsg(userId, username, args); break;
+				case "coin" : cmdCoin(userId); break;
 				default:
 					sendMessage("잘못된 명령어입니다\n도움말 - /help", userId.toString());
 					break;
@@ -259,7 +282,7 @@ public class TelegramBot extends AbilityBot  {
 
 	public void cmdHelp(Integer userId) {
 		String msg = "";
-		msg += C.MY_COIN_STR + " 알리미 ver" + C.VERSION + "\n";
+		msg += coinname + " 알리미 ver" + version + "\n";
 		msg += "\n";
 		msg += helpMsg;
 		sendMessage(msg, userId);
@@ -301,11 +324,11 @@ public class TelegramBot extends AbilityBot  {
 	
 	public void cmdStart(Integer userId, String username) {
 		if (clientService.openChat(userId, username)) {
-			String msg = C.MY_COIN_STR + " 알림이 시작되었습니다.\n";
+			String msg = coinname + " 알림이 시작되었습니다.\n";
 			msg += helpMsg;
 			sendMessage(msg, userId);
 		} else {
-			String msg = "이미 " + C.MY_COIN_STR + " 알리미에 설정 정보가 기록되어있습니다.";
+			String msg = "이미 " + coinname + " 알리미에 설정 정보가 기록되어있습니다.";
 			sendMessage(msg, userId);
 			cmdInfo(userId);
 		}
@@ -313,7 +336,7 @@ public class TelegramBot extends AbilityBot  {
 
 	public void cmdStop(Integer userId) {
 		if (clientService.stopChat(userId)) {
-			String msg = C.MY_COIN_STR + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n";
+			String msg = coinname + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n";
 			sendMessage(msg, userId);
 		} else {
 			String msg = "알람이 설정되어있지 않습니다";
@@ -378,9 +401,9 @@ public class TelegramBot extends AbilityBot  {
 			String msg = "";
 			msg += "현재시각 : " + date + "\n";
 			msg += "BTC 가격 : " + toCommaStr(btcCV) +" 원 \n";
-			msg += C.MY_COIN_STR + " 가격 : " + toCommaStr(coinCV) +" 원 \n";
+			msg += coinname + " 가격 : " + toCommaStr(coinCV) +" 원 \n";
 			msg += "BTC 24시간 변화량 : " + getPercent(btcCV, btcBV) + "\n";
-			msg += C.MY_COIN_STR + " 24시간 변화량 : " + getPercent(coinCV, coinBV) + "\n";
+			msg += coinname + " 24시간 변화량 : " + getPercent(coinCV, coinBV) + "\n";
 			
 			sendMessage(msg, userId);
 		}
@@ -389,8 +412,8 @@ public class TelegramBot extends AbilityBot  {
 	public void cmdCalc(Integer userId) {
 		ClientVo client = clientService.get(userId);
 		if(client != null){
-			if( client.getCoinCount() == null){ sendMessage("먼저 코인개수를 설정해주세요.\nex)/number " + C.MY_COIN_NUMBER, userId); return ;}
-			if( client.getAvgPrice() == null){ sendMessage("먼저 평균단가를 설정해주세요.\nex) /price " + C.MY_COIN_PRICE, userId); return ;}
+			if( client.getCoinCount() == null){ sendMessage("먼저 코인개수를 설정해주세요.\nex)/number " + numberEx, userId); return ;}
+			if( client.getAvgPrice() == null){ sendMessage("먼저 평균단가를 설정해주세요.\nex) /price " + priceEx, userId); return ;}
 			if( client.getAvgPrice() != null && client.getCoinCount() != null){
 				try {
 					JSONObject coin = coinManager.getCoin(C.MY_COIN,client.getExchange());
@@ -456,10 +479,10 @@ public class TelegramBot extends AbilityBot  {
 	
 	public void cmdSetPrice(Integer userId, String[] args) {
 		if (args.length == 0) { // case1. 평균단가를 입력하지 않았을때
-			sendMessage("평균단가를 입력해주세요.\nex) /price " + C.MY_COIN_PRICE, userId);
+			sendMessage("평균단가를 입력해주세요.\nex) /price " + priceEx, userId);
 			return;
 		} else if (args.length > 1) { // case2. 평균단가와 다른 파라미터를 붙였을때.
-			sendMessage("평균단가만 입력해주세요.\nex) /price " + C.MY_COIN_PRICE, userId);
+			sendMessage("평균단가만 입력해주세요.\nex) /price " + priceEx, userId);
 			return;
 		} else {
 			String priceStr = args[0];
@@ -468,7 +491,7 @@ public class TelegramBot extends AbilityBot  {
 			try { // case3. 평균단가에 문자가 포함될때
 				price = Integer.parseInt(priceStr);
 			} catch (NumberFormatException e) {
-				sendMessage("평균단가는 숫자로만 입력해주세요.\nex) /price " + C.MY_COIN_PRICE, userId);
+				sendMessage("평균단가는 숫자로만 입력해주세요.\nex) /price " + priceEx, userId);
 				return;
 			}
 
@@ -498,10 +521,10 @@ public class TelegramBot extends AbilityBot  {
 		}
 		
 		if (args.length == 0) { // case1. 평균단가를 입력하지 않았을때
-			sendMessage("목표가격를 입력해주세요.\nex) /target " + C.MY_COIN_TARGET, userId);
+			sendMessage("목표가격를 입력해주세요.\nex) /target " + targetEx, userId);
 			return;
 		} else if (args.length > 1) { // case2. 평균단가와 다른 파라미터를 붙였을때.
-			sendMessage("목표가격만 입력해주세요.\nex) /target " + C.MY_COIN_TARGET, userId);
+			sendMessage("목표가격만 입력해주세요.\nex) /target " + targetEx, userId);
 			return;
 		} else {
 			String priceStr = args[0];
@@ -510,7 +533,7 @@ public class TelegramBot extends AbilityBot  {
 			try { // case3. 평균단가에 문자가 포함될때
 				targetPrice = Integer.parseInt(priceStr);
 			} catch (NumberFormatException e) {
-				sendMessage("목표가격은 숫자로만 입력해주세요.\nex) /target " + C.MY_COIN_TARGET, userId);
+				sendMessage("목표가격은 숫자로만 입력해주세요.\nex) /target " + targetEx, userId);
 				return;
 			}
 
@@ -545,10 +568,10 @@ public class TelegramBot extends AbilityBot  {
 	
 	public void cmdSetCoinCnt(Integer userId, String[] args) {
 		if (args.length == 0) { // case1. 개수를 입력하지 않았을때
-			sendMessage("코인개수를 입력해주세요.\nex) /number " + C.MY_COIN_NUMBER, userId);
+			sendMessage("코인개수를 입력해주세요.\nex) /number " + numberEx, userId);
 			return;
 		} else if (args.length > 1) { // case2. 평균단가와 다른 파라미터를
-			sendMessage("코인개수만 입력해주세요.\nex) /number " + C.MY_COIN_NUMBER, userId);
+			sendMessage("코인개수만 입력해주세요.\nex) /number " + numberEx, userId);
 			return;
 		} else {
 			String numberStr = args[0];
@@ -557,7 +580,7 @@ public class TelegramBot extends AbilityBot  {
 			try { // case3. 평균단가에 문자가 포함될때
 				number = Double.parseDouble(numberStr);
 			} catch (NumberFormatException e) {
-				sendMessage("코인개수는 숫자로만 입력해주세요.\nex) /number " + C.MY_COIN_NUMBER, userId);
+				sendMessage("코인개수는 숫자로만 입력해주세요.\nex) /number " + numberEx, userId);
 				return;
 			}
 
@@ -670,7 +693,29 @@ public class TelegramBot extends AbilityBot  {
 		}
 	}
 	
+	public void cmdCoin(Integer userId) {
+		String msg = "";
+		msg += "링크를 클릭 하시면,\n";
+		msg += "해당 코인알리미 봇으로 이동합니다.\n";
+		msg += "-----------------------\n";
+		List<CoinInfoVo> coinInfos = coinInfoService.list(C.MY_COIN);
+	    CoinInfoVo coinInfo = null;
+	    int coinInfosLen = coinInfos.size();
+			for(int i =0; i < coinInfosLen; i++) {
+	        coinInfo = coinInfos.get(i);
+	        msg += coinInfo.getCoinname() + "  :  " + coinInfo.getChatAddr() + "\n";
+	    }
+		msg += "\n";
+		sendMessage(msg, userId);
+	}
+	
+	
 	/* Send Message */
+	
+	public void sendMessage(String msg, Integer id){
+		this.sendMessage(msg, id.toString());
+	}
+	
 	public void sendMessage(String msg, String id){
 		Log.i("To Client  :  [id :" +id + " ]  " + msg.replace("\n", "  "));
 		
@@ -685,10 +730,6 @@ public class TelegramBot extends AbilityBot  {
 			return ;
 		}
 		
-	}
-	
-	public void sendMessage(String msg, Integer id){
-		this.sendMessage(msg, id.toString());
 	}
 	
 	public void sendKrwMessage(ClientVo client, int coinVal){

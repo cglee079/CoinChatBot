@@ -10,7 +10,7 @@
 
 	<bean id="TelegramBot" class="com.cglee079.cointelebot.telegram.TelegramBot">
 		<constructor-arg index="0" value=""></constructor-arg>
-		<constructor-arg index="1" value="xrp_text_bot"></constructor-arg>
+		<constructor-arg index="1" value="cg_ada_bot"></constructor-arg>
 	</bean>
 	
 	<bean id="TelegramClient" class="com.cglee079.cointelebot.telegram.TelegramClient">

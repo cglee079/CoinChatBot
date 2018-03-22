@@ -14,7 +14,7 @@
 		DINFO_RESULT as 'result',
 		DINFO_ERRCODE as 'errorCode',
 		DINFO_ERRMSG as 'errorMsg'
-		FROM TB_TESTBOT_DAILYINFO
+		FROM TB_ADABOT_DAILYINFO
 		WHERE 1 = 1
 		AND DINFO_DATE = #{date}
 		<if test="exchange != null">
@@ -26,7 +26,7 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO TB_TESTBOT_DAILYINFO
+		INSERT INTO TB_ADABOT_DAILYINFO
 		VALUES (#{date}, #{exchange}, #{high}, #{low}, #{last}, #{volume}, #{result}, #{errorCode}, #{errorMsg})
 	</insert>
 	
