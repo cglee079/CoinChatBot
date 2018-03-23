@@ -76,7 +76,6 @@ public class UpbitPooler extends ApiPooler{
 		url += "&to=";
 		url += to;
 		
-		Log.i(url);
 		HttpClient httpClient = new HttpClient();
 		String response;
 		try {

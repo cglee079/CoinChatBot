@@ -5,17 +5,18 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.MessageEntity;
 import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import com.cglee079.cointelebot.coin.CoinManager;
@@ -54,6 +55,7 @@ public class TelegramBot extends AbilityBot  {
 	private String priceEx;
 	private String targetEx;
 	private String numberEx;
+	private String rateEx;
 	
 	protected TelegramBot(String botToken, String botUsername) {
 		super(botToken, botUsername);
@@ -67,6 +69,7 @@ public class TelegramBot extends AbilityBot  {
 	    targetEx = coinInfo.getTargetEx();
 		version = coinInfo.getVersion();
 		coinname = coinInfo.getCoinname();
+		rateEx = "5%";
 		
 		helpMsg = "";
         helpMsg += "별도의 시간 알림 주기 설정을 안하셨다면,\n";
@@ -204,20 +207,29 @@ public class TelegramBot extends AbilityBot  {
 	public void onUpdateReceived(Update update) {
 		clientMsgService.insert(update);
 		
-		List<MessageEntity> enitities = update.getMessage().getEntities();
+		Message message = null;
+		if(update.getMessage() != null) {
+			message = update.getMessage();
+		} else if( update.getEditedMessage() != null) {
+			message = update.getEditedMessage();
+		}
+		
+		List<MessageEntity> enitities = message.getEntities();
+		User user = message.getFrom();
+		
 		if(enitities != null) {
-			MessageEntity entity = update.getMessage().getEntities().get(0);
+			MessageEntity entity = enitities.get(0);
 			if(entity.getType().equals("bot_command")) {
-				Integer userId = update.getMessage().getFrom().getId();
-				String username = update.getMessage().getFrom().getLastName() + " " + update.getMessage().getFrom().getFirstName();
+				Integer userId = user.getId();
+				String username = user.getLastName() + " " + user.getFirstName();
 				
-				String message = update.getMessage().getText().substring(1);
-				String[] messageCutted = message.split("\\s+");
-				String command = messageCutted[0];
+				String msg = message.getText().substring(1);
+				String[] msgCutted = msg.split("\\s+");
+				String command = msgCutted[0];
 				
-				String[] args = new String[messageCutted.length -1];
+				String[] args = new String[msgCutted.length -1];
 				for(int i = 0 ; i < args.length; i++) {
-					args[i] = messageCutted[i+1];
+					args[i] = msgCutted[i+1];
 				}
 				
 				switch(command) {
@@ -244,8 +256,8 @@ public class TelegramBot extends AbilityBot  {
 			}
 		}
 		
-		if(update.getMessage().getEntities() == null){
-			Integer userId = update.getMessage().getFrom().getId();
+		if(enitities == null){
+			Integer userId = user.getId();
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			String date = format.format(new Date());
 
@@ -524,34 +536,33 @@ public class TelegramBot extends AbilityBot  {
 	public void cmdSetTargetPrice(Integer userId, String[] args) {
 		ClientVo client = clientService.get(userId);
 		String exchange = client.getExchange();
+		
+		String exMsg = "";
+		exMsg += "------------------------------\n";
+		exMsg += "ex) /target " + targetEx + "  : 목표가격 " + targetEx + "원\n";
+		exMsg += "ex) /target " + rateEx + "    : 현재가 +" + rateEx + "\n";
+		exMsg += "ex) /target -" + rateEx + "  : 현재가 -" + rateEx + "\n";
+		
 		int currentPrice = -1;
 		try {
 			currentPrice = coinManager.getCoin(C.MY_COIN, exchange).getInt("last");
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		} catch (ServerErrorException e1) {
-			e1.printStackTrace();
-			Logger.getLogger(this.getClass().getName()).severe("ErrorCode : " + e1.getErrCode());
+		}
+		catch (ServerErrorException e1) {
+			Log.i(e1.log());
+			Log.i(e1.getStackTrace());
 			sendMessage("잠시 후 다시 보내주세요.\n" + e1.getTelegramMsg(), userId);
 			return;
 		}
 		
 		if (args.length == 0) { // case1. 평균단가를 입력하지 않았을때
-			sendMessage("목표가격를 입력해주세요.\nex) /target " + targetEx, userId);
+			sendMessage("목표가격을 입력해주세요.\n" + exMsg, userId);
 			return;
 		} else if (args.length > 1) { // case2. 평균단가와 다른 파라미터를 붙였을때.
-			sendMessage("목표가격만 입력해주세요.\nex) /target " + targetEx, userId);
+			sendMessage("목표가격만 입력해주세요.\n" + exMsg, userId);
 			return;
 		} else {
 			String priceStr = args[0];
-			int targetPrice = 0;
-
-			try { // case3. 평균단가에 문자가 포함될때
-				targetPrice = Integer.parseInt(priceStr);
-			} catch (NumberFormatException e) {
-				sendMessage("목표가격은 숫자로만 입력해주세요.\nex) /target " + targetEx, userId);
-				return;
-			}
+			int targetPrice = -1;
 
 			if (targetPrice == 0) {  // case4. 초기화
 				if(clientService.clearTargetPrice(userId.toString())) {
@@ -559,6 +570,33 @@ public class TelegramBot extends AbilityBot  {
 					return ;
 				}
 			} 
+			
+			if(priceStr.matches("^\\d*$")) {
+				targetPrice = Integer.valueOf(priceStr);
+			} else if( priceStr.matches("^[+-]?\\d*%$")) {
+				priceStr = priceStr.replace("%", "");
+				double percent = (Double.valueOf(priceStr)/100);
+				
+				Log.i(percent + "");
+				
+				if(percent == 0) {
+					targetPrice = 0;
+				} else if(percent > 0) {
+					targetPrice = currentPrice + (int)((double)currentPrice * percent);
+				}  else if( percent < 0 && percent >= -100) {
+					Log.i("ddddd");
+					int a = ((int)((double)currentPrice * percent) * -1);
+					targetPrice = currentPrice - a;
+				} else if( percent < -100) {
+					sendMessage("목표가격 백분율을 -100% 이하로 설정 할 수 없습니다.\n" + exMsg, userId);
+					return ;	
+				}
+				
+			} else {
+				sendMessage("목표가격을 숫자 또는 백분율로 입력해주세요.\n" + exMsg, userId);
+				return ;
+			}
+			
 			
 			String msg = "";
 			msg += "목표가격 " + toCommaStr(targetPrice) + "원으로 설정되었습니다.\n";
