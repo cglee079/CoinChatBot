@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.cglee079.cointelebot.constants.C;
 import com.cglee079.cointelebot.exception.ServerErrorException;
+import com.cglee079.cointelebot.log.Log;
 
 public class UpbitPooler extends ApiPooler{
 	
@@ -75,10 +76,12 @@ public class UpbitPooler extends ApiPooler{
 		url += "&to=";
 		url += to;
 		
+		Log.i(url);
 		HttpClient httpClient = new HttpClient();
 		String response;
 		try {
 			response = httpClient.get(url);
+			;
 			JSONObject jsonObj = new JSONArray(response).getJSONObject(0);
 			JSONObject info = new JSONObject();
 			info.put("first", (int)jsonObj.getDouble("tradePrice"));

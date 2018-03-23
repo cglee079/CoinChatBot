@@ -69,131 +69,130 @@ public class TelegramBot extends AbilityBot  {
 		coinname = coinInfo.getCoinname();
 		
 		helpMsg = "";
-		helpMsg += "별도의 설정을 안하셨다면,\n";
-		helpMsg += "3시간 간격으로 " + coinname + " 가격 알림이 전송됩니다.\n";
-		helpMsg += "\n";
-		
-		helpMsg += "별도의 설정을 안하셨다면,\n";
-		helpMsg += "1일 간격으로 거래량, 상한가, 하한가, 종가가 비교되어 전송됩니다.\n";
-		helpMsg += "\n";
-		
-		helpMsg += "별도의 설정을 안하셨다면,\n";
-		
-		//
-		String exchange = "";
-		if(C.ENABLED_UPBIT) {exchange = "업비트";}
-		if(C.ENABLED_BITHUMB) {exchange = "빗썸";}
-		if(C.ENABLED_COINONE) {exchange = "코인원";}
-		helpMsg += exchange;
-		//
-		
-		helpMsg += " 기준의 정보가 전송됩니다.\n";
-		helpMsg += "\n";
+        helpMsg += "별도의 시간 알림 주기 설정을 안하셨다면,\n";
+        helpMsg += "3시간 주기로 " + coinname + " 가격 알림이 전송됩니다.\n";
+        helpMsg += "\n";
 
-		helpMsg += "평균단가,코인개수를 설정하시면,\n";
-		helpMsg += "원금, 현재금액, 손익금을 확인 하실 수 있습니다.\n";
-		helpMsg += "\n";
-		
-		helpMsg += "목표가격을 설정하시면,\n";
-		helpMsg += "목표가격이 되었을때 알림을 받을 수 있습니다.\n";
-		helpMsg += "목표가격을 위한 가격정보는 각 거래소에서 1분 주기로 갱신합니다.\n";
-		helpMsg += "\n";
-		
-		helpMsg += "톡을 보내시면 현재 " + coinname + " 가격을 확인 하실 수 있습니다.\n";
-		helpMsg += "\n";
-		
-		helpMsg += "한국 프리미엄 정보를 확인 하실 수 있습니다.\n";
-		helpMsg += "\n";
-		
-		if(!(C.MY_COIN == C.COIN_BTC)) {
-			helpMsg += "비트코인대비 변화량을 확인 하실 수 있습니다.\n";
-		}
-		helpMsg += "-------------------------\n";
-		helpMsg += "\n";
-		
-		helpMsg += "다음 명령어를 사용해주세요.\n";
-		helpMsg += "\n";
+        helpMsg += "별도의 일일 알림 주기 설정을 안하셨다면,\n";
+        helpMsg += "1일 주기로 거래량, 상한가, 하한가, 종가가 비교되어 전송됩니다.\n";
+        helpMsg += "\n";
 
-		helpMsg += "* 시간 알림 간격 설정\n";
-		helpMsg += "/timeloop 시간\n";
-		helpMsg += "0(시간 알림 끄기), 1 ~ 12 시간 간격만 적용됩니다.\n";
-		helpMsg += "ex) /timeloop 0 = 시간 알림 없음\n";
-		helpMsg += "ex) /timeloop 3 = 3시간 간격 알림\n";
-		helpMsg += "\n";
+        helpMsg += "별도의 거래소 설정을 안하셨다면,\n";
 
-		helpMsg += "* 일일 알림 간격 설정\n";
-		helpMsg += "/dayloop 일\n";
-		helpMsg += "0(일일 알림 끄기), 1 ~ 7 일 간격만 적용됩니다.\n";
-		helpMsg += "ex) /dayloop 0 = 일일 알림 없음\n";
-		helpMsg += "ex) /dayloop 3 = 3일 간격 알림\n";
-		helpMsg += "\n";
+        //
+        String exchange = "";
+        if(C.ENABLED_UPBIT) {exchange = "업비트";}
+        if(C.ENABLED_BITHUMB) {exchange = "빗썸";}
+        if(C.ENABLED_COINONE) {exchange = "코인원";}
+        helpMsg += exchange;
+        //
 
-		helpMsg += "* 거래소 설정\n";
-		helpMsg += "/exchange 거래소번호\n";
-	
-		//
-		if(C.ENABLED_COINONE) { helpMsg += "1 - 코인원, ";}
-		if(C.ENABLED_BITHUMB) { helpMsg += "2 - 빗썸, ";}
-		if(C.ENABLED_UPBIT) { helpMsg += "3 - 업비트 ";}
-		helpMsg += "\n";
-		
-		if(C.ENABLED_COINONE) {helpMsg += "ex) /exchange 1 = 코인원으로 거래소 설정\n";}
-		if(C.ENABLED_BITHUMB) {helpMsg += "ex) /exchange 2 = 빗썸으로 거래소 설정\n"; }
-		if(C.ENABLED_UPBIT) {helpMsg += "ex) /exchange 3 = 업비트로 거래소 설정\n"; }
-		helpMsg += "\n";
-		//
-		
-		helpMsg += "* 목표가격 설정\n";
-		helpMsg += "/target 금액  \n";
-		helpMsg += "ex) /target 0 = 목표가격 입력 초기화\n";
-		helpMsg += "ex) /target " + targetEx + " = 목표가격 " + targetEx + " 원\n";
-		helpMsg += "\n";
+        helpMsg += " 기준의 정보가 전송됩니다.\n";
+        helpMsg += "\n";
 
-		helpMsg += "* 평균단가 설정\n";
-		helpMsg += "/price 금액  \n";
-		helpMsg += "ex) /price 0 = 평균단가 입력 초기화\n";
-		helpMsg += "ex) /price " + priceEx + " = 평균단가 " + priceEx + " 원\n";
-		helpMsg += "\n";
+        helpMsg += "평균단가,코인개수를 설정하시면,\n";
+        helpMsg += "원금, 현재금액, 손익금을 확인 하실 수 있습니다.\n";
+        helpMsg += "\n";
 
-		helpMsg += "* 코인개수 설정\n";
-		helpMsg += "/number 개수\n";
-		helpMsg += "ex) /number 0 = " + coinname + " 개수 입력 초기화\n";
-		helpMsg += "ex) /number " + numberEx +" = " + coinname+ " 개수 설정\n";
-		helpMsg += "\n";
+        helpMsg += "목표가격을 설정하시면,\n";
+        helpMsg += "목표가격이 되었을때 알림을 받을 수 있습니다.\n";
+        helpMsg += "목표가격을 위한 가격정보는 각 거래소에서 1분 주기로 갱신됩니다.\n";
+        helpMsg += "\n";
 
-		helpMsg += "/calc - 원금,현재금액,손익금 확인 \n";
-		helpMsg += "/kimp - 한국 프리미엄 정보 확인 \n";
-		
-		if(!(C.MY_COIN == C.COIN_BTC)) {
-			helpMsg += "/btc  - 비트코인 대비 변화량 확인\n";
-		}
-		
-		helpMsg += "/info - 설정확인\n";
-		helpMsg += "/coin - 코인알리미 리스트\n";
-		helpMsg += "/help - 도움말 \n";
-		helpMsg += "/stop - 모든알림(시간알림, 일일알림 , 목표가격) 끄기 \n";
-		helpMsg += "\n";
-		helpMsg += "* 문의,제안,건의사항은 다음 명령어를 이용해주세요.\n";
-		helpMsg += "/msg 내용\n";
-		helpMsg += "ex) /msg 안녕하세요. 건의사항이~~~\n";
-		helpMsg += "\n";
-		//
-		helpMsg += "국내정보 By ";
-		if(C.ENABLED_COINONE) { helpMsg += "코인원, ";}
-		if(C.ENABLED_BITHUMB) { helpMsg += "빗썸, ";}
-		if(C.ENABLED_UPBIT) { helpMsg += "업비트";}
-		helpMsg += "\n";
-		//
-		
-		helpMsg += "미국정보 By ";
-		if(C.ENABLED_BITTREX) { helpMsg += "Bittrex, ";}
-		if(C.ENABLED_BITFINEX) { helpMsg += "Bitfinex ";}
-		
-		helpMsg += "\n";
-		
-		helpMsg += "환율정보 By the European Central Bank\n";
-		helpMsg += "\n";
-		helpMsg += "Developed By CGLEE ( cglee079@gmail.com )\n";
+        helpMsg += "톡을 보내시면 현재 " + coinname + " 가격을 확인 하실 수 있습니다.\n";
+        helpMsg += "\n";
+
+        helpMsg += "한국 프리미엄 정보를 확인 하실 수 있습니다.\n";
+        helpMsg += "\n";
+
+        if(!(C.MY_COIN == C.COIN_BTC)) {
+            helpMsg += "비트코인대비 변화량을 확인 하실 수 있습니다.\n";
+        }
+        helpMsg += "-------------------------\n";
+        helpMsg += "\n";
+
+        helpMsg += "다음 명령어를 사용해주세요.\n";
+        helpMsg += "\n";
+        helpMsg += "* 시간 알림 주기 설정\n";
+        helpMsg += "/timeloop 시간\n";
+        helpMsg += "0(시간 알림 끄기), 1 ~ 12 시간 주기만 적용됩니다.\n";
+        helpMsg += "ex) /timeloop 0 = 시간 알림 없음\n";
+        helpMsg += "ex) /timeloop 3 = 3시간 주기 알림\n";
+        helpMsg += "\n";
+
+        helpMsg += "* 일일 알림 주기 설정\n";
+        helpMsg += "/dayloop 일\n";
+        helpMsg += "0(일일 알림 끄기), 1 ~ 7 일 주기만 적용됩니다.\n";
+        helpMsg += "ex) /dayloop 0 = 일일 알림 없음\n";
+        helpMsg += "ex) /dayloop 3 = 3일 주기 알림\n";
+        helpMsg += "\n";
+
+        helpMsg += "* 거래소 설정\n";
+        helpMsg += "/exchange 거래소번호\n";
+
+        //
+        if(C.ENABLED_COINONE) { helpMsg += "1 - 코인원, ";}
+        if(C.ENABLED_BITHUMB) { helpMsg += "2 - 빗썸, ";}
+        if(C.ENABLED_UPBIT) { helpMsg += "3 - 업비트 ";}
+        helpMsg += "\n";
+
+        if(C.ENABLED_COINONE) {helpMsg += "ex) /exchange 1 = 코인원으로 거래소 설정\n";}
+        if(C.ENABLED_BITHUMB) {helpMsg += "ex) /exchange 2 = 빗썸으로 거래소 설정\n"; }
+        if(C.ENABLED_UPBIT) {helpMsg += "ex) /exchange 3 = 업비트로 거래소 설정\n"; }
+        helpMsg += "\n";
+        //
+
+        helpMsg += "* 목표가격 설정\n";
+        helpMsg += "/target 금액  \n";
+        helpMsg += "ex) /target 0 = 목표가격 입력 초기화\n";
+        helpMsg += "ex) /target " + targetEx + " = 목표가격 " + targetEx + " 원\n";
+        helpMsg += "\n";
+
+        helpMsg += "* 평균단가 설정\n";
+        helpMsg += "/price 금액  \n";
+        helpMsg += "ex) /price 0 = 평균단가 입력 초기화\n";
+        helpMsg += "ex) /price " + priceEx + " = 평균단가 " + priceEx + " 원\n";
+        helpMsg += "\n";
+
+        helpMsg += "* 코인개수 설정\n";
+        helpMsg += "/number 개수\n";
+        helpMsg += "ex) /number 0 = " + coinname + " 개수 입력 초기화\n";
+        helpMsg += "ex) /number " + numberEx +" = " + coinname+ " 개수 설정\n";
+        helpMsg += "\n";
+
+        helpMsg += "/calc - 원금,현재금액,손익금 확인 \n";
+        helpMsg += "/kimp - 한국 프리미엄 정보 확인 \n";
+
+        if(!(C.MY_COIN == C.COIN_BTC)) {
+            helpMsg += "/btc  - 비트코인 대비 변화량 확인\n";
+        }
+
+        helpMsg += "/info - 설정확인\n";
+        helpMsg += "/coin - 코인알리미 리스트\n";
+        helpMsg += "/help - 도움말 \n";
+        helpMsg += "/stop - 모든알림(시간알림, 일일알림 , 목표가격) 끄기 \n";
+        helpMsg += "\n";
+        helpMsg += "* 문의,제안,건의사항은 다음 명령어를 이용해주세요.\n";
+        helpMsg += "/msg 내용\n";
+        helpMsg += "ex) /msg 안녕하세요. 건의사항이~~~\n";
+        helpMsg += "\n";
+        //
+        helpMsg += "국내정보 By ";
+        if(C.ENABLED_COINONE) { helpMsg += "코인원, ";}
+        if(C.ENABLED_BITHUMB) { helpMsg += "빗썸, ";}
+        if(C.ENABLED_UPBIT) { helpMsg += "업비트";}
+        helpMsg += "\n";
+        //
+
+        helpMsg += "미국정보 By ";
+        if(C.ENABLED_BITTREX) { helpMsg += "Bittrex, ";}
+        if(C.ENABLED_BITFINEX) { helpMsg += "Bitfinex ";}
+
+        helpMsg += "\n";
+
+        helpMsg += "환율정보 By the European Central Bank\n";
+        helpMsg += "\n";
+        helpMsg += "Developed By CGLEE ( cglee079@gmail.com )\n";
 	}
 	
 	@Override
@@ -286,6 +285,14 @@ public class TelegramBot extends AbilityBot  {
 		msg += "\n";
 		msg += helpMsg;
 		sendMessage(msg, userId);
+		
+		msg = "";
+		msg += "★ 필독! 명령어 쉬운 사용법\n\n";
+		msg += "채팅입력란 오른쪽에 / 버튼을 눌러주세요.\n";
+		msg += "명령어 목록이 보여집니다.\n\n";
+		msg += "1. 명령어 뒤에 값을 입력하지 않는 경우 명령어를 눌러주세요. ex ) calc, btc, kimp 등\n\n";
+		msg += "2. 명령어 뒤에 값을 입력하는 경우 명령어를 꾹 눌러 주신 후 값을 입력해주세요. ex) price, number 등\n\n";
+		sendMessage(msg, userId);
 	}
 
 	public void cmdInfo(Integer userId) {
@@ -303,10 +310,10 @@ public class TelegramBot extends AbilityBot  {
 		else if(client.getExchange().equals(C.EXCHANGE_BITHUMB)){ msg += "거래소     = 빗썸\n";}
 		else if(client.getExchange().equals(C.EXCHANGE_UPBIT)){ msg += "거래소     = 업비트\n";}
 		
-		if(client.getTimeLoop() != 0){ msg += "시간알림 = 매 " + client.getTimeLoop() + " 시간 간격 알림\n";} 
+		if(client.getTimeLoop() != 0){ msg += "시간알림 = 매 " + client.getTimeLoop() + " 시간 주기 알림\n";} 
 		else{ msg += "시간알림 = 알람 없음\n";}
 		
-		if(client.getDayLoop() != 0){ msg += "일일알림 = 매 " + client.getDayLoop() + " 일 간격 알림\n";} 
+		if(client.getDayLoop() != 0){ msg += "일일알림 = 매 " + client.getDayLoop() + " 일 주기 알림\n";} 
 		else{ msg += "일일알림 = 알람 없음\n";}
 		
 		if(client.getTargetUpPrice() != null){msg += "목표가격 = " + toCommaStr(client.getTargetUpPrice()) + " 원 \n";}
@@ -324,9 +331,18 @@ public class TelegramBot extends AbilityBot  {
 	
 	public void cmdStart(Integer userId, String username) {
 		if (clientService.openChat(userId, username)) {
-			String msg = coinname + " 알림이 시작되었습니다.\n";
+			String msg = coinname + " 알림이 시작되었습니다.\n\n";
 			msg += helpMsg;
 			sendMessage(msg, userId);
+			
+			msg = "";
+			msg += "★ 필독! 명령어 쉬운 사용법\n\n";
+			msg += "채팅입력란 오른쪽에 / 버튼을 눌러주세요.\n";
+			msg += "명령어 목록이 보여집니다.\n\n";
+			msg += "1. 명령어 뒤에 값을 입력하지 않는 경우 명령어를 눌러주세요. ex ) calc, btc, kimp 등\n\n";
+			msg += "2. 명령어 뒤에 값을 입력하는 경우 명령어를 꾹 눌러 주신 후 값을 입력해주세요. ex) price, number 등\n\n";
+			sendMessage(msg, userId);
+			
 		} else {
 			String msg = "이미 " + coinname + " 알리미에 설정 정보가 기록되어있습니다.";
 			sendMessage(msg, userId);
@@ -595,10 +611,10 @@ public class TelegramBot extends AbilityBot  {
 
 	public void cmdSetTimeLoop(Integer userId, String[] args) {
 		if (args.length == 0) { // case1. 시간을 입력하지 않았을때
-			sendMessage("시간 알림 간격을 입력해주세요.\nex) /timeloop 3\n*가능 시간 간격 : 0(알림 끄기), 1 ~ 12", userId);
+			sendMessage("시간 알림 주기를 입력해주세요.\nex) /timeloop 3\n*가능 시간 주기 : 0(알림 끄기), 1 ~ 12", userId);
 			return;
 		} else if (args.length > 1) { // case2.시간과 다른 파라미터를 붙였을때.
-			sendMessage("시간 알림 간격을 입력해주세요.\nex) /timeloop 3\n*가능 시간 간격 : 0(알림 끄기), 1 ~ 12", userId);
+			sendMessage("시간 알림 주기를 입력해주세요.\nex) /timeloop 3\n*가능 시간 주기 : 0(알림 끄기), 1 ~ 12", userId);
 			return;
 		} else {
 			String priceStr = args[0];
@@ -607,7 +623,7 @@ public class TelegramBot extends AbilityBot  {
 			try { // case3. 시간에 문자가 포함될때
 				timeloop = Integer.parseInt(priceStr);
 			} catch (NumberFormatException e) {
-				sendMessage("시간 알림 간격은 숫자로만 입력해주세요.\nex) /timeloop 3\n*가능 시간 간격 : 0(알림 끄기), 1 ~ 12", userId);
+				sendMessage("시간 알림 주기는 숫자로만 입력해주세요.\nex) /timeloop 3\n*가능 시간 주기 : 0(알림 끄기), 1 ~ 12", userId);
 				return;
 			}
 
@@ -622,13 +638,13 @@ public class TelegramBot extends AbilityBot  {
 			case 1: case 2: case 3: case 4: case 5: case 6:
 			case 7: case 8: case 9: case 10: case 11: case 12:// case5.설정완료
 				if(clientService.updateTimeLoop(userId.toString(), timeloop)){
-					sendMessage("시간 알림 간격이 " + timeloop + "시간으로 설정되었습니다.", userId);
+					sendMessage("시간 알림 주기가 " + timeloop + "시간으로 설정되었습니다.", userId);
 				} else{
 					sendMessage("알림을 먼저 시작해주세요.\n명령어 /start", userId);
 				}
 				break;
 			default: // case6. 다른 시간 입력
-				sendMessage("시간 알림 간격을 정확히 입력해주세요.\n*가능 시간 간격 : 0(알림 끄기), 1 ~ 12", userId);
+				sendMessage("시간 알림 주기를 정확히 입력해주세요.\n*가능 시간 주기 : 0(알림 끄기), 1 ~ 12", userId);
 				break;
 			}
 		}
@@ -637,10 +653,10 @@ public class TelegramBot extends AbilityBot  {
 
 	public void cmdSetDayLoop(Integer userId, String[] args) {
 		if (args.length == 0) { // case1. 일일을 입력하지 않았을때
-			sendMessage("일일 알림 간격을 입력해주세요.\nex) /dayloop 3\n*가능 일일 간격 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
+			sendMessage("일일 알림 주기를 입력해주세요.\nex) /dayloop 3\n*가능 일일 주기 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
 			return;
 		} else if (args.length > 1) { // case2.일일과 다른 파라미터를 붙였을때.
-			sendMessage("일일 알림 간격을 입력해주세요.\nex) /dayloop 3\n*가능 일일 간격 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
+			sendMessage("일일 알림 주기를 입력해주세요.\nex) /dayloop 3\n*가능 일일 주기 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
 			return;
 		} else {
 			String priceStr = args[0];
@@ -649,7 +665,7 @@ public class TelegramBot extends AbilityBot  {
 			try { // case3. 일일에 문자가 포함될때
 				dayLoop = Integer.parseInt(priceStr);
 			} catch (NumberFormatException e) {
-				sendMessage("일일 알림 간격은 숫자로만 입력해주세요.\nex) /dayloop 3\n*가능 일일 간격 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
+				sendMessage("일일 알림 주기는 숫자로만 입력해주세요.\nex) /dayloop 3\n*가능 일일 주기 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
 				return;
 			}
 
@@ -663,13 +679,13 @@ public class TelegramBot extends AbilityBot  {
 				break;
 			case 1: case 2: case 3: case 4: case 5: case 6: case 7:// case5.설정완료
 				if(clientService.updateDayLoop(userId.toString(), dayLoop)){
-					sendMessage("일일 알림 간격이 " + dayLoop + "일로 설정되었습니다.", userId);
+					sendMessage("일일 알림 주기가 " + dayLoop + "일로 설정되었습니다.", userId);
 				} else{
 					sendMessage("알림을 먼저 시작해주세요.\n명령어 /start", userId);
 				}
 				break;
 			default: // case6. 다른 시간 입력
-				sendMessage("일일 알림 간격을 정확히 입력해주세요.\n*가능 일일 간격 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
+				sendMessage("일일 알림 주기를 정확히 입력해주세요.\n*가능 일일 주기 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
 				break;
 			}
 		}
