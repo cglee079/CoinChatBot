@@ -149,6 +149,8 @@ public class TelegramBot extends AbilityBot  {
         helpMsg += "/target 금액  \n";
         helpMsg += "ex) /target 0 = 목표가격 입력 초기화\n";
         helpMsg += "ex) /target " + targetEx + " = 목표가격 " + targetEx + " 원\n";
+        helpMsg += "ex) /target " + rateEx + "    : 현재가 +" + rateEx + "\n";
+        helpMsg += "ex) /target -" + rateEx + "  : 현재가 -" + rateEx + "\n";
         helpMsg += "\n";
 
         helpMsg += "* 평균단가 설정\n";
