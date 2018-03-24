@@ -579,14 +579,11 @@ public class TelegramBot extends AbilityBot  {
 				priceStr = priceStr.replace("%", "");
 				double percent = (Double.valueOf(priceStr)/100);
 				
-				Log.i(percent + "");
-				
 				if(percent == 0) {
 					targetPrice = 0;
 				} else if(percent > 0) {
 					targetPrice = currentPrice + (int)((double)currentPrice * percent);
 				}  else if( percent < 0 && percent >= -100) {
-					Log.i("ddddd");
 					int a = ((int)((double)currentPrice * percent) * -1);
 					targetPrice = currentPrice - a;
 				} else if( percent < -100) {

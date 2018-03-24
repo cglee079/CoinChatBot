@@ -28,7 +28,7 @@ public class CoinManager {
 	@Autowired
 	private ExchangePooler exchangePooler;
 
-	private double exchangeRate = 1071;
+	private double exchangeRate = 1080;
 
 	public CoinManager() {
 	}

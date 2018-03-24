@@ -5,7 +5,7 @@
 <mapper namespace="com.cglee079.cointelebot.mapper.LogMapper">
 
 	<insert id="insert">
-		INSERT INTO TB_TESTBOT_LOG(LOG_DATE, LOG_MESSAGE)
+		INSERT INTO TB_BTCBOT_LOG(LOG_DATE, LOG_MESSAGE)
 		VALUES (#{date}, #{message})
 	</insert>
 	
