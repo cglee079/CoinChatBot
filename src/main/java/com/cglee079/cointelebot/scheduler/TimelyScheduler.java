@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cglee079.cointelebot.coin.CoinManager;
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.SET;
+import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 import com.cglee079.cointelebot.model.ClientVo;
 import com.cglee079.cointelebot.model.TimelyInfoVo;
 import com.cglee079.cointelebot.service.ClientService;
-import com.cglee079.cointelebot.service.DailyInfoService;
 import com.cglee079.cointelebot.service.TimelyInfoService;
 import com.cglee079.cointelebot.telegram.TelegramBot;
 
@@ -36,9 +36,9 @@ public class TimelyScheduler {
 	public void loadTimelyCoins(){
 		Date dateCurrent = new Date();
 		
-		if(C.ENABLED_COINONE) { loadTimelyCoin(dateCurrent, C.EXCHANGE_COINONE); }
-		if(C.ENABLED_BITHUMB) { loadTimelyCoin(dateCurrent, C.EXCHANGE_BITHUMB); }
-		if(C.ENABLED_UPBIT) { loadTimelyCoin(dateCurrent, C.EXCHANGE_UPBIT); }
+		if(SET.ENABLED_COINONE) { loadTimelyCoin(dateCurrent, ID.EXCHANGE_COINONE); }
+		if(SET.ENABLED_BITHUMB) { loadTimelyCoin(dateCurrent, ID.EXCHANGE_BITHUMB); }
+		if(SET.ENABLED_UPBIT) { loadTimelyCoin(dateCurrent, ID.EXCHANGE_UPBIT); }
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("HH");
 		String hourStr = formatter.format(dateCurrent);
@@ -53,7 +53,7 @@ public class TimelyScheduler {
 	public void loadTimelyCoin(Date dateCurrent, String exchange) {
 		JSONObject coinObj = null;
 		try {
-			coinObj = coinManager.getCoin(C.MY_COIN, exchange);
+			coinObj = coinManager.getCoin(SET.MY_COIN, exchange);
 		} catch (ServerErrorException e) {
 			coinObj = timelyInfoService.getBefore(dateCurrent, exchange);
 			coinObj.put("result", "error");
@@ -65,9 +65,9 @@ public class TimelyScheduler {
 	}
 	
 	public void sendCoinInfos(Date dateCurrent, int timeLoop) {
-		if(C.ENABLED_COINONE){sendCoinInfo(dateCurrent, C.EXCHANGE_COINONE, timeLoop);}
-		if(C.ENABLED_BITHUMB){sendCoinInfo(dateCurrent, C.EXCHANGE_BITHUMB, timeLoop);}
-		if(C.ENABLED_UPBIT){sendCoinInfo(dateCurrent, C.EXCHANGE_UPBIT, timeLoop);}
+		if(SET.ENABLED_COINONE){sendCoinInfo(dateCurrent, ID.EXCHANGE_COINONE, timeLoop);}
+		if(SET.ENABLED_BITHUMB){sendCoinInfo(dateCurrent, ID.EXCHANGE_BITHUMB, timeLoop);}
+		if(SET.ENABLED_UPBIT){sendCoinInfo(dateCurrent, ID.EXCHANGE_UPBIT, timeLoop);}
 	}
 	
 	public void sendCoinInfo(Date dateCurrent, String exchange, int timeLoop){

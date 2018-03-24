@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cglee079.cointelebot.coin.CoinManager;
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.SET;
+import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.ClientVo;
 import com.cglee079.cointelebot.service.ClientService;
 import com.cglee079.cointelebot.telegram.TelegramBot;
-import com.cglee079.cointelebot.util.TimeStamper;
 
 public class TargetScheduler {
 
@@ -28,9 +28,9 @@ public class TargetScheduler {
 
 	@Scheduled(cron = "30 0/1 * * * *")
 	public void loadTargetPrices(){
-		if (C.ENABLED_COINONE) { loadTargetPrice(C.EXCHANGE_COINONE);}
-		if (C.ENABLED_BITHUMB) { loadTargetPrice(C.EXCHANGE_BITHUMB);}
-		if (C.ENABLED_UPBIT) { loadTargetPrice(C.EXCHANGE_UPBIT); }
+		if (SET.ENABLED_COINONE) { loadTargetPrice(ID.EXCHANGE_COINONE);}
+		if (SET.ENABLED_BITHUMB) { loadTargetPrice(ID.EXCHANGE_BITHUMB);}
+		if (SET.ENABLED_UPBIT) { loadTargetPrice(ID.EXCHANGE_UPBIT); }
 	}
 	
 	public void loadTargetPrice(String exchange) {
@@ -38,7 +38,7 @@ public class TargetScheduler {
 		JSONObject coinObj = null;
 		
 		try {
-			coinObj = coinManager.getCoin(C.MY_COIN, exchange);
+			coinObj = coinManager.getCoin(SET.MY_COIN, exchange);
 			clients = clientService.list(exchange, null, null, coinObj.getInt("last"));
 			telegramBot.sendTargetPriceMessage(clients, coinObj);
 		} catch (ServerErrorException e) {

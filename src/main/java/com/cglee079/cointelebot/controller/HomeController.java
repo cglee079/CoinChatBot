@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cglee079.cointelebot.coin.CoinManager;
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.model.ClientVo;
 import com.cglee079.cointelebot.service.ClientService;
 import com.cglee079.cointelebot.telegram.TelegramBot;

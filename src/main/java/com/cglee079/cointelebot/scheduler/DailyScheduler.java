@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cglee079.cointelebot.coin.CoinManager;
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.SET;
+import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 import com.cglee079.cointelebot.model.ClientVo;
 import com.cglee079.cointelebot.model.DailyInfoVo;
@@ -40,9 +41,9 @@ public class DailyScheduler {
 	public void loadDailyCoins(){
 		Date dateCurrent = new Date();
 		
-		if(C.ENABLED_COINONE) { loadDailyCoin(dateCurrent, C.EXCHANGE_COINONE);}
-		if(C.ENABLED_BITHUMB) { loadDailyCoin(dateCurrent, C.EXCHANGE_BITHUMB);}
-		if(C.ENABLED_UPBIT) { loadDailyCoin(dateCurrent, C.EXCHANGE_UPBIT);}
+		if(SET.ENABLED_COINONE) { loadDailyCoin(dateCurrent, ID.EXCHANGE_COINONE);}
+		if(SET.ENABLED_BITHUMB) { loadDailyCoin(dateCurrent, ID.EXCHANGE_BITHUMB);}
+		if(SET.ENABLED_UPBIT) { loadDailyCoin(dateCurrent, ID.EXCHANGE_UPBIT);}
 				
 		SimpleDateFormat formatter = new SimpleDateFormat("dd");
 		String dayStr = formatter.format(dateCurrent);
@@ -57,7 +58,7 @@ public class DailyScheduler {
 	public void loadDailyCoin(Date dateCurrent, String exchange) {
 		JSONObject coin = null;
 		try {
-			coin = coinManager.getCoin(C.MY_COIN, exchange);
+			coin = coinManager.getCoin(SET.MY_COIN, exchange);
 		} catch (ServerErrorException e) {
 			coin = timelyInfoService.getBefore(dateCurrent, exchange);
 			coin.put("result", "error");
@@ -69,9 +70,9 @@ public class DailyScheduler {
 	}
 	
 	public void sendDailyInfos(Date dateCurrent, int dayLoop) {
-		if(C.ENABLED_COINONE){sendDailyInfo(dateCurrent, C.EXCHANGE_COINONE, dayLoop);}
-		if(C.ENABLED_BITHUMB){sendDailyInfo(dateCurrent, C.EXCHANGE_BITHUMB, dayLoop);}
-		if(C.ENABLED_UPBIT){sendDailyInfo(dateCurrent, C.EXCHANGE_UPBIT, dayLoop);}
+		if(SET.ENABLED_COINONE){sendDailyInfo(dateCurrent, ID.EXCHANGE_COINONE, dayLoop);}
+		if(SET.ENABLED_BITHUMB){sendDailyInfo(dateCurrent, ID.EXCHANGE_BITHUMB, dayLoop);}
+		if(SET.ENABLED_UPBIT){sendDailyInfo(dateCurrent, ID.EXCHANGE_UPBIT, dayLoop);}
 	}
 	
 	public void sendDailyInfo(Date dateCurrent, String exchange, int dayLoop) {

@@ -9,24 +9,23 @@ import java.util.Date;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
-import com.cglee079.cointelebot.log.Log;
 
 public class UpbitPooler extends ApiPooler{
 	
 	public JSONObject getCoin(String coin) throws ServerErrorException {
 		String param = "";
 		switch (coin) {
-		case C.COIN_BTC : param = "BTC"; break;
-		case C.COIN_XRP : param = "XRP"; break;
-		case C.COIN_ETH : param = "ETH"; break;
-		case C.COIN_EOS : param = "EOS"; break;
-		case C.COIN_QTM : param = "QTUM"; break;
-		case C.COIN_LTC : param = "LTC"; break;
-		case C.COIN_BCH : param = "BCH"; break;
-		case C.COIN_ETC : param = "ETC"; break;
-		case C.COIN_ADA : param = "ADA"; break;
+		case ID.COIN_BTC : param = "BTC"; break;
+		case ID.COIN_XRP : param = "XRP"; break;
+		case ID.COIN_ETH : param = "ETH"; break;
+		case ID.COIN_EOS : param = "EOS"; break;
+		case ID.COIN_QTM : param = "QTUM"; break;
+		case ID.COIN_LTC : param = "LTC"; break;
+		case ID.COIN_BCH : param = "BCH"; break;
+		case ID.COIN_ETC : param = "ETC"; break;
+		case ID.COIN_ADA : param = "ADA"; break;
 		}
 		
 		JSONObject coinObj = getCurrentCoin(param);

@@ -3,7 +3,8 @@ package com.cglee079.cointelebot.model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.SET;
+import com.cglee079.cointelebot.constants.ID;
 
 public class ClientVo {
 	private String userId = null;
@@ -21,9 +22,9 @@ public class ClientVo {
 	private String closeDate;
 
 	public ClientVo() {
-		if (C.ENABLED_UPBIT) { exchange = C.EXCHANGE_UPBIT; }
-		if (C.ENABLED_BITHUMB) { exchange = C.EXCHANGE_BITHUMB; }
-		if (C.ENABLED_COINONE) { exchange = C.EXCHANGE_COINONE; }
+		if (SET.ENABLED_UPBIT) { exchange = ID.EXCHANGE_UPBIT; }
+		if (SET.ENABLED_BITHUMB) { exchange = ID.EXCHANGE_BITHUMB; }
+		if (SET.ENABLED_COINONE) { exchange = ID.EXCHANGE_COINONE; }
 	}
 
 	public String getUserId() {

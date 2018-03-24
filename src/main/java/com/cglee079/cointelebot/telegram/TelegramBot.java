@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.MessageSourceAccessor;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
@@ -20,7 +19,8 @@ import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import com.cglee079.cointelebot.coin.CoinManager;
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.SET;
+import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.ClientVo;
@@ -63,7 +63,7 @@ public class TelegramBot extends AbilityBot  {
 	
 	@PostConstruct
 	public void init() {
-	    CoinInfoVo coinInfo = coinInfoService.get(C.MY_COIN);
+	    CoinInfoVo coinInfo = coinInfoService.get(SET.MY_COIN);
 	    priceEx = coinInfo.getPriceEx();
 	    numberEx  = coinInfo.getNumberEx();
 	    targetEx = coinInfo.getTargetEx();
@@ -84,9 +84,9 @@ public class TelegramBot extends AbilityBot  {
 
         //
         String exchange = "";
-        if(C.ENABLED_UPBIT) {exchange = "업비트";}
-        if(C.ENABLED_BITHUMB) {exchange = "빗썸";}
-        if(C.ENABLED_COINONE) {exchange = "코인원";}
+        if(SET.ENABLED_UPBIT) {exchange = "업비트";}
+        if(SET.ENABLED_BITHUMB) {exchange = "빗썸";}
+        if(SET.ENABLED_COINONE) {exchange = "코인원";}
         helpMsg += exchange;
         //
 
@@ -108,7 +108,7 @@ public class TelegramBot extends AbilityBot  {
         helpMsg += "한국 프리미엄 정보를 확인 하실 수 있습니다.\n";
         helpMsg += "\n";
 
-        if(!(C.MY_COIN == C.COIN_BTC)) {
+        if(!(SET.MY_COIN == ID.COIN_BTC)) {
             helpMsg += "비트코인대비 변화량을 확인 하실 수 있습니다.\n";
         }
         helpMsg += "-------------------------\n";
@@ -134,14 +134,14 @@ public class TelegramBot extends AbilityBot  {
         helpMsg += "/exchange 거래소번호\n";
 
         //
-        if(C.ENABLED_COINONE) { helpMsg += "1 - 코인원, ";}
-        if(C.ENABLED_BITHUMB) { helpMsg += "2 - 빗썸, ";}
-        if(C.ENABLED_UPBIT) { helpMsg += "3 - 업비트 ";}
+        if(SET.ENABLED_COINONE) { helpMsg += "1 - 코인원, ";}
+        if(SET.ENABLED_BITHUMB) { helpMsg += "2 - 빗썸, ";}
+        if(SET.ENABLED_UPBIT) { helpMsg += "3 - 업비트 ";}
         helpMsg += "\n";
 
-        if(C.ENABLED_COINONE) {helpMsg += "ex) /exchange 1 = 코인원으로 거래소 설정\n";}
-        if(C.ENABLED_BITHUMB) {helpMsg += "ex) /exchange 2 = 빗썸으로 거래소 설정\n"; }
-        if(C.ENABLED_UPBIT) {helpMsg += "ex) /exchange 3 = 업비트로 거래소 설정\n"; }
+        if(SET.ENABLED_COINONE) {helpMsg += "ex) /exchange 1 = 코인원으로 거래소 설정\n";}
+        if(SET.ENABLED_BITHUMB) {helpMsg += "ex) /exchange 2 = 빗썸으로 거래소 설정\n"; }
+        if(SET.ENABLED_UPBIT) {helpMsg += "ex) /exchange 3 = 업비트로 거래소 설정\n"; }
         helpMsg += "\n";
         //
 
@@ -166,7 +166,7 @@ public class TelegramBot extends AbilityBot  {
         helpMsg += "/calc - 원금,현재금액,손익금 확인 \n";
         helpMsg += "/kimp - 한국 프리미엄 정보 확인 \n";
 
-        if(!(C.MY_COIN == C.COIN_BTC)) {
+        if(!(SET.MY_COIN == ID.COIN_BTC)) {
             helpMsg += "/btc  - 비트코인 대비 변화량 확인\n";
         }
 
@@ -181,15 +181,15 @@ public class TelegramBot extends AbilityBot  {
         helpMsg += "\n";
         //
         helpMsg += "국내정보 By ";
-        if(C.ENABLED_COINONE) { helpMsg += "코인원, ";}
-        if(C.ENABLED_BITHUMB) { helpMsg += "빗썸, ";}
-        if(C.ENABLED_UPBIT) { helpMsg += "업비트";}
+        if(SET.ENABLED_COINONE) { helpMsg += "코인원, ";}
+        if(SET.ENABLED_BITHUMB) { helpMsg += "빗썸, ";}
+        if(SET.ENABLED_UPBIT) { helpMsg += "업비트";}
         helpMsg += "\n";
         //
 
         helpMsg += "미국정보 By ";
-        if(C.ENABLED_BITTREX) { helpMsg += "Bittrex, ";}
-        if(C.ENABLED_BITFINEX) { helpMsg += "Bitfinex ";}
+        if(SET.ENABLED_BITTREX) { helpMsg += "Bittrex, ";}
+        if(SET.ENABLED_BITFINEX) { helpMsg += "Bitfinex ";}
 
         helpMsg += "\n";
 
@@ -265,7 +265,7 @@ public class TelegramBot extends AbilityBot  {
 			int currentValue = 0;
 			String exchange = clientService.getExchange(userId);
 			try {
-				coin = coinManager.getCoin(C.MY_COIN, exchange);
+				coin = coinManager.getCoin(SET.MY_COIN, exchange);
 			} catch (ServerErrorException e) {
 				Log.i(e.log());
 				Log.i(e.getStackTrace());
@@ -318,9 +318,9 @@ public class TelegramBot extends AbilityBot  {
 		msg += "현재 설정은 다음과 같습니다.\n";
 		msg += "-----------------\n";
 		
-		if(client.getExchange().equals(C.EXCHANGE_COINONE)){ msg += "거래소     = 코인원\n";} 
-		else if(client.getExchange().equals(C.EXCHANGE_BITHUMB)){ msg += "거래소     = 빗썸\n";}
-		else if(client.getExchange().equals(C.EXCHANGE_UPBIT)){ msg += "거래소     = 업비트\n";}
+		if(client.getExchange().equals(ID.EXCHANGE_COINONE)){ msg += "거래소     = 코인원\n";} 
+		else if(client.getExchange().equals(ID.EXCHANGE_BITHUMB)){ msg += "거래소     = 빗썸\n";}
+		else if(client.getExchange().equals(ID.EXCHANGE_UPBIT)){ msg += "거래소     = 업비트\n";}
 		
 		if(client.getTimeLoop() != 0){ msg += "시간알림 = 매 " + client.getTimeLoop() + " 시간 주기 알림\n";} 
 		else{ msg += "시간알림 = 알람 없음\n";}
@@ -411,8 +411,8 @@ public class TelegramBot extends AbilityBot  {
 		JSONObject btc = null;
 		String exchange = clientService.getExchange(userId);
 		try {
-			coin = coinManager.getCoin(C.MY_COIN, exchange);
-			btc = coinManager.getCoin(C.COIN_BTC, exchange);
+			coin = coinManager.getCoin(SET.MY_COIN, exchange);
+			btc = coinManager.getCoin(ID.COIN_BTC, exchange);
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
 			Log.i(e.getStackTrace());			
@@ -444,7 +444,7 @@ public class TelegramBot extends AbilityBot  {
 			if( client.getAvgPrice() == null){ sendMessage("먼저 평균단가를 설정해주세요.\nex) /price " + priceEx, userId); return ;}
 			if( client.getAvgPrice() != null && client.getCoinCount() != null){
 				try {
-					JSONObject coin = coinManager.getCoin(C.MY_COIN,client.getExchange());
+					JSONObject coin = coinManager.getCoin(SET.MY_COIN,client.getExchange());
 					sendKrwMessage(client, coin.getInt("last"));
 				} catch (ServerErrorException e) {
 					Log.i(e.log());
@@ -460,13 +460,13 @@ public class TelegramBot extends AbilityBot  {
 	
 	public void cmdSetExchange(Integer userId, String[] args) {
 		String ex = "";
-		if(C.ENABLED_COINONE) { ex += "1 - 코인원, ";}
-		if(C.ENABLED_BITHUMB) { ex += "2 - 빗썸 ";}
-		if(C.ENABLED_UPBIT) { ex += "3 - 업비트 ";}
+		if(SET.ENABLED_COINONE) { ex += "1 - 코인원, ";}
+		if(SET.ENABLED_BITHUMB) { ex += "2 - 빗썸 ";}
+		if(SET.ENABLED_UPBIT) { ex += "3 - 업비트 ";}
 		ex += "\n";
-		if(C.ENABLED_COINONE) {ex += "ex) /exchange 1\n";}
-		if(C.ENABLED_BITHUMB) {ex += "ex) /exchange 2\n";}
-		if(C.ENABLED_UPBIT) {ex += "ex) /exchange 3\n";}
+		if(SET.ENABLED_COINONE) {ex += "ex) /exchange 1\n";}
+		if(SET.ENABLED_BITHUMB) {ex += "ex) /exchange 2\n";}
+		if(SET.ENABLED_UPBIT) {ex += "ex) /exchange 3\n";}
 		
 		if (args.length == 0) { // case1. 평균단가를 입력하지 않았을때
 			sendMessage("거래소 번호를 입력해주세요.\n" + ex, userId);
@@ -485,16 +485,16 @@ public class TelegramBot extends AbilityBot  {
 				return;
 			}
 			
-			if(exchangeNum == 1 && C.ENABLED_COINONE) {//코인원
-				clientService.updateExchange(userId.toString(), C.EXCHANGE_COINONE);
+			if(exchangeNum == 1 && SET.ENABLED_COINONE) {//코인원
+				clientService.updateExchange(userId.toString(), ID.EXCHANGE_COINONE);
 				sendMessage("거래소가 코인원으로 설정되었습니다.", userId);
 			} 
-			else if(exchangeNum == 2 && C.ENABLED_BITHUMB) {
-				clientService.updateExchange(userId.toString(), C.EXCHANGE_BITHUMB);
+			else if(exchangeNum == 2 && SET.ENABLED_BITHUMB) {
+				clientService.updateExchange(userId.toString(), ID.EXCHANGE_BITHUMB);
 				sendMessage("거래소가 빗썸으로 설정되었습니다.", userId);
 			} 
-			else if(exchangeNum == 3 && C.ENABLED_UPBIT) {
-				clientService.updateExchange(userId.toString(), C.EXCHANGE_UPBIT);
+			else if(exchangeNum == 3 && SET.ENABLED_UPBIT) {
+				clientService.updateExchange(userId.toString(), ID.EXCHANGE_UPBIT);
 				sendMessage("거래소가 업비트로 설정되었습니다.", userId);
 			} 
 			else {
@@ -545,7 +545,7 @@ public class TelegramBot extends AbilityBot  {
 		
 		int currentPrice = -1;
 		try {
-			currentPrice = coinManager.getCoin(C.MY_COIN, exchange).getInt("last");
+			currentPrice = coinManager.getCoin(SET.MY_COIN, exchange).getInt("last");
 		}
 		catch (ServerErrorException e1) {
 			Log.i(e1.log());
@@ -752,7 +752,7 @@ public class TelegramBot extends AbilityBot  {
 		msg += "링크를 클릭 하시면,\n";
 		msg += "해당 코인알리미 봇으로 이동합니다.\n";
 		msg += "-----------------------\n";
-		List<CoinInfoVo> coinInfos = coinInfoService.list(C.MY_COIN);
+		List<CoinInfoVo> coinInfos = coinInfoService.list(SET.MY_COIN);
 	    CoinInfoVo coinInfo = null;
 	    int coinInfosLen = coinInfos.size();
 			for(int i =0; i < coinInfosLen; i++) {

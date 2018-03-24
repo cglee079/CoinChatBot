@@ -4,7 +4,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.ID;
+import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 import com.cglee079.cointelebot.log.Log;
 
@@ -54,21 +55,21 @@ public class CoinManager {
 	public JSONObject getCoin(String coin, String exchange) throws ServerErrorException{
 		JSONObject coinObj = null;
 		
-		if(exchange.equals(C.EXCHANGE_COINONE) && C.ENABLED_COINONE) { 
+		if(exchange.equals(ID.EXCHANGE_COINONE) && SET.ENABLED_COINONE) { 
 			coinObj = coinonePooler.getCoin(coin);
-		} else if(exchange.equals(C.EXCHANGE_BITHUMB) && C.ENABLED_BITHUMB){
+		} else if(exchange.equals(ID.EXCHANGE_BITHUMB) && SET.ENABLED_BITHUMB){
 			coinObj = bithumbPooler.getCoin(coin);
-		} else if(exchange.equals(C.EXCHANGE_UPBIT) && C.ENABLED_UPBIT){
+		} else if(exchange.equals(ID.EXCHANGE_UPBIT) && SET.ENABLED_UPBIT){
 			coinObj = upbitPooler.getCoin(coin);
 		}
 		return coinObj;
 	}
 	
 	public JSONObject getCoinWithKimp(String exchange) throws ServerErrorException{
-		JSONObject coinKR = this.getCoin(C.MY_COIN, exchange);
+		JSONObject coinKR = this.getCoin(SET.MY_COIN, exchange);
 		JSONObject coinUS = null;
-		if(C.ENABLED_BITFINEX) {coinUS = bitfinexPooler.getCoin(C.MY_COIN);}
-		if(C.ENABLED_BITTREX) {coinUS = bittrexPooler.getCoin(C.MY_COIN);}
+		if(SET.ENABLED_BITFINEX) {coinUS = bitfinexPooler.getCoin(SET.MY_COIN);}
+		if(SET.ENABLED_BITTREX) {coinUS = bittrexPooler.getCoin(SET.MY_COIN);}
 		
 		if(coinUS == null) {
 			new ServerErrorException("미국 코인정보를 받아 올 수 없습니다");

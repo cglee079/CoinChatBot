@@ -5,21 +5,21 @@ import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 
 public class BitfinexPooler extends ApiPooler{
 	public JSONObject getCoin(String coin) throws ServerErrorException {
 		String param = "";
 		switch (coin) {
-		case C.COIN_BTC : param = "tBTCUSD"; break;
-		case C.COIN_XRP : param = "tXRPUSD"; break;
-		case C.COIN_ETH : param = "tETHUSD"; break;
-		case C.COIN_EOS : param = "tEOSUSD"; break;
-		case C.COIN_QTM : param = "tQTMUSD"; break;
-		case C.COIN_LTC : param = "tLTCUSD"; break;
-		case C.COIN_BCH : param = "tBCHUSD"; break;
-		case C.COIN_ETC : param = "tETCUSD"; break;
+		case ID.COIN_BTC : param = "tBTCUSD"; break;
+		case ID.COIN_XRP : param = "tXRPUSD"; break;
+		case ID.COIN_ETH : param = "tETHUSD"; break;
+		case ID.COIN_EOS : param = "tEOSUSD"; break;
+		case ID.COIN_QTM : param = "tQTMUSD"; break;
+		case ID.COIN_LTC : param = "tLTCUSD"; break;
+		case ID.COIN_BCH : param = "tBCHUSD"; break;
+		case ID.COIN_ETC : param = "tETCUSD"; break;
 		}
 		
 		String url = "https://api.bitfinex.com/v2/ticker/" + param;

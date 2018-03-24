@@ -2,10 +2,9 @@ package com.cglee079.cointelebot.coin;
 
 import java.io.IOException;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 
 public class BittrexPooler extends ApiPooler{
@@ -13,7 +12,7 @@ public class BittrexPooler extends ApiPooler{
 	public JSONObject getCoin(String coin) throws ServerErrorException {
 		String param = "";
 		switch (coin) {
-		case C.COIN_ADA : param = "USDT-ADA"; break;
+		case ID.COIN_ADA : param = "USDT-ADA"; break;
 		}
 		
 		String url = "https://bittrex.com/api/v1.1/public/getticker?market=" + param;

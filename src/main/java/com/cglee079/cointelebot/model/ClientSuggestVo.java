@@ -1,6 +1,6 @@
 package com.cglee079.cointelebot.model;
 
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.SET;
 
 public class ClientSuggestVo {
 	private int seq;
@@ -11,7 +11,7 @@ public class ClientSuggestVo {
 	private String date;
 
 	public ClientSuggestVo() {
-		coinId = C.MY_COIN;
+		coinId = SET.MY_COIN;
 	}
 
 	public int getSeq() {

@@ -6,7 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cglee079.cointelebot.constants.C;
+import com.cglee079.cointelebot.constants.SET;
+import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.dao.ClientDao;
 import com.cglee079.cointelebot.model.ClientVo;
 
@@ -37,10 +38,10 @@ public class ClientService {
 		if(client != null) {
 			return client.getExchange();
 		} else {
-			if(C.ENABLED_COINONE) { return C.EXCHANGE_COINONE; }
-			if(C.ENABLED_BITHUMB) { return C.EXCHANGE_BITHUMB; }
-			if(C.ENABLED_UPBIT) { return C.EXCHANGE_UPBIT; }
-			return C.EXCHANGE_COINONE;
+			if(SET.ENABLED_COINONE) { return ID.EXCHANGE_COINONE; }
+			if(SET.ENABLED_BITHUMB) { return ID.EXCHANGE_BITHUMB; }
+			if(SET.ENABLED_UPBIT) { return ID.EXCHANGE_UPBIT; }
+			return ID.EXCHANGE_COINONE;
 		}
 	}
 	
