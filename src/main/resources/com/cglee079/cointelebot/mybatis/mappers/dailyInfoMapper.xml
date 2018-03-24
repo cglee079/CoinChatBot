@@ -10,7 +10,7 @@
 		DINFO_HIGH as 'high',
 		DINFO_LOW as 'low',
 		DINFO_LAST as 'last',
-		DINFO_VOLUME as 'volume'
+		DINFO_VOLUME as 'volume',
 		DINFO_RESULT as 'result',
 		DINFO_ERRCODE as 'errorCode',
 		DINFO_ERRMSG as 'errorMsg'
