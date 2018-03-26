@@ -386,13 +386,13 @@ public class TelegramBot extends AbilityBot  {
 		try { // case1. 평균단가에 문자가 포함될때
 			price = Integer.parseInt(priceStr);
 		} catch (NumberFormatException e) {
-			msg = "평균단가는 숫자로만 입력해주세요.\n";
+			msg = "투자금액은 숫자로만 입력해주세요.\n";
 		}
 
 		if(price != -1) {
-			if(clientService.updateNumber(userId.toString(), price)){
-				if (price == 0) { msg = "평균단가가 초기화 되었습니다.\n";} // case2. 초기화
-				else {msg = "평균단가가 " + price + " 원으로 설정되었습니다.\n";} // case3.설정완료
+			if(clientService.updatePrice(userId.toString(), price)){
+				if (price == 0) { msg = "투자금액이 초기화 되었습니다.\n";} // case2. 초기화
+				else {msg = "투자금액이 " + price + " 원으로 설정되었습니다.\n";} // case3.설정완료
 			} else{
 				msg = "알림을 먼저 시작해주세요.\n 명령어 /start << 클릭\n";
 			}
@@ -489,18 +489,18 @@ public class TelegramBot extends AbilityBot  {
 		else if(client.getExchange().equals(ID.EXCHANGE_BITHUMB)){ msg += "거래소     = 빗썸\n";}
 		else if(client.getExchange().equals(ID.EXCHANGE_UPBIT)){ msg += "거래소     = 업비트\n";}
 		
-		if(client.getTimeLoop() != 0){ msg += "시간알림 = 매 " + client.getTimeLoop() + " 시간 주기 알림\n";} 
-		else{ msg += "시간알림 = 알람 없음\n";}
-		
 		if(client.getDayLoop() != 0){ msg += "일일알림 = 매 " + client.getDayLoop() + " 일 주기 알림\n";} 
 		else{ msg += "일일알림 = 알람 없음\n";}
+		
+		if(client.getTimeLoop() != 0){ msg += "시간알림 = 매 " + client.getTimeLoop() + " 시간 주기 알림\n";} 
+		else{ msg += "시간알림 = 알람 없음\n";}
 		
 		if(client.getTargetUpPrice() != null){msg += "목표가격 = " + toCommaStr(client.getTargetUpPrice()) + " 원 \n";}
 		else if(client.getTargetDownPrice() != null){msg += "목표가격 = " + toCommaStr(client.getTargetDownPrice()) + " 원 \n";}
 		else { msg += "목표가격 = 입력되어있지 않음.\n";}
 		
-		if(client.getAvgPrice() != null){msg += "평균단가 = " + toCommaStr(client.getAvgPrice()) + " 원 \n";}
-		else { msg += "평균단가 = 입력되어있지 않음.\n";}
+		if(client.getPrice() != null){msg += "투자금액 = " + toCommaStr(client.getPrice()) + " 원 \n";}
+		else { msg += "투자금액 = 입력되어있지 않음.\n";}
 		
 		if(client.getCoinCount() != null){msg += "코인개수 = " + toStr(client.getCoinCount()) + " 개 \n"; }
 		else { msg += "코인개수 = 입력되어있지 않음.\n";}
@@ -588,9 +588,9 @@ public class TelegramBot extends AbilityBot  {
 	public String messageCalc(Integer userId) {
 		ClientVo client = clientService.get(userId);
 		if(client != null){
-			if( client.getAvgPrice() == null){ return "먼저 평균단가를 설정해주세요.\n";}
+			if( client.getPrice() == null){ return "먼저 투자금액을 설정해주세요.\n";}
 			if( client.getCoinCount() == null){ return "먼저 코인개수를 설정해주세요.\n";}
-			if( client.getAvgPrice() != null && client.getCoinCount() != null){
+			if( client.getPrice() != null && client.getCoinCount() != null){
 				try {
 					JSONObject coin = coinManager.getCoin(SET.MY_COIN,client.getExchange());
 					return calcStr(client, coin.getInt("last"));
@@ -637,15 +637,17 @@ public class TelegramBot extends AbilityBot  {
 	
 	public String calcStr(ClientVo client, int coinVal){
 		double cnt = client.getCoinCount();
-		int price = client.getAvgPrice();
+		int price = client.getPrice();
+		int avgPrice = (int) ((double)price / cnt);
+		
 		String msg = "";
-		msg += "평균단가 : " + toCommaStr(price) + " 원\n";
+		msg += "평균단가 : " + toCommaStr(avgPrice) + " 원\n";
 		msg += "현재가격 : " + toCommaStr(coinVal)+ " 원\n";
 		msg += "코인개수 : " + toStr(cnt) + " 개\n";
 		msg += "---------------------\n";
-		msg += "투자금액 : " + toCommaStr((int)(cnt * price)) + "원\n"; 
+		msg += "투자금액 : " + toCommaStr(price) + "원\n"; 
 		msg += "현재금액 : " + toCommaStr((int)(coinVal * cnt)) + "원\n";
-		msg += "손익금액 : " + toSignStr((int)((coinVal * cnt) - (cnt * price))) + "원 (" + getPercent((int)(coinVal * cnt), (int)(cnt * price)) + ")\n";
+		msg += "손익금액 : " + toSignStr((int)((coinVal * cnt) - (cnt * avgPrice))) + "원 (" + getPercent((int)(coinVal * cnt), (int)(cnt * avgPrice)) + ")\n";
 		msg += "\n";
 		return msg;
 	}
@@ -760,7 +762,7 @@ public class TelegramBot extends AbilityBot  {
 			client = clients.get(i);
 			sendMessage(client.getUserId(), null, msg, null);
 			
-			if(client.getCoinCount() != null && client.getAvgPrice() != null){
+			if(client.getCoinCount() != null && client.getPrice() != null){
 				sendMessage(client.getUserId(), null, calcStr(client, currentLast), null);
 			}
 		}

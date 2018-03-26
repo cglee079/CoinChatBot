@@ -55,7 +55,7 @@ public class Explainer {
         helpMsg += " 기준의 정보가 전송됩니다.\n";
         helpMsg += "\n";
 
-        helpMsg += "평균단가,코인개수를 설정하시면,\n";
+        helpMsg += "투자금액,코인개수를 설정하시면,\n";
         helpMsg += "원금, 현재금액, 손익금을 확인 하실 수 있습니다.\n";
         helpMsg += "\n";
 
@@ -159,20 +159,20 @@ public class Explainer {
 	
 	public String explainSetPrice() {
 		String msg =  "";
-		msg += "평균단가를 입력해주세요.\n";
-		msg += "평균단가와 코인개수를 입력하시면 손익금은 확인 하실 수 있습니다.\n";
+		msg += "투자금액을 입력해주세요.\n";
+		msg += "투자금액과 코인개수를 입력하시면 손익금을 확인 하실 수 있습니다.\n";
 		msg += "\n";
-		msg += "* 평균단가는는 숫자로만 입력해주세요.\n";
+		msg += "* 투자금액은 숫자로만 입력해주세요.\n";
 		msg += "* 0을 입력하시면 초기화됩니다.\n";
 		msg += "* ex) " + 0 + " : 초기화\n";
-		msg += "* ex) " + priceEx + " : 평균단가 " + priceEx +" 원 설정";
+		msg += "* ex) " + priceEx + " : 투자금액 " + priceEx +" 원 설정";
 		return msg;
 	}
 	
 	public String explainSetNumber() {
 		String msg =  "";
 		msg += "코인개수를 입력해주세요.\n";
-		msg += "평균단가와 코인개수를 입력하시면 손익금은 확인 하실 수 있습니다.\n";
+		msg += "투자금액과 코인개수를 입력하시면 손익금을 확인 하실 수 있습니다.\n";
 		msg += "\n";
 		msg += "* 코인개수는 숫자로만 입력해주세요.\n";
 		msg += "* 0을 입력하시면 초기화됩니다.\n";

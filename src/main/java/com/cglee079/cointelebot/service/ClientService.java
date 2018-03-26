@@ -143,7 +143,7 @@ public class ClientService {
 	public boolean updatePrice(String userId, int price) {
 		ClientVo client = clientDao.get(userId);
 		if(client != null){
-			client.setAvgPrice(price);
+			client.setPrice(price);
 			return clientDao.update(client);
 		} else{
 			return false;

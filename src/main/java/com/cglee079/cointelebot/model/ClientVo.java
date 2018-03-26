@@ -15,7 +15,7 @@ public class ClientVo {
 	private Integer dayLoop = null;
 	private Integer targetUpPrice = null;
 	private Integer targetDownPrice = null;
-	private Integer avgPrice = null;
+	private Integer price = null;
 	private Double coinCount = null;
 	private String enabled = "Y";
 	private String openDate;
@@ -35,16 +35,6 @@ public class ClientVo {
 	}
 
 	
-	@Override
-	public String toString() {
-		return "ClientVo [userId=" + userId + ", username=" + username + ", state=" + state + ", exchange=" + exchange
-				+ ", timeLoop=" + timeLoop + ", dayLoop=" + dayLoop + ", targetUpPrice=" + targetUpPrice
-				+ ", targetDownPrice=" + targetDownPrice + ", avgPrice=" + avgPrice + ", coinCount=" + coinCount
-				+ ", enabled=" + enabled + ", openDate=" + openDate + ", reopenDate=" + reopenDate + ", closeDate="
-				+ closeDate + "]";
-	}
-
-
 	public String getUserId() {
 		return userId;
 	}
@@ -109,12 +99,12 @@ public class ClientVo {
 		this.targetDownPrice = targetPrice;
 	}
 
-	public Integer getAvgPrice() {
-		return avgPrice;
+	public Integer getPrice() {
+		return price;
 	}
 
-	public void setAvgPrice(Integer avgPrice) {
-		this.avgPrice = avgPrice;
+	public void setPrice(Integer avgPrice) {
+		this.price = avgPrice;
 	}
 
 	public Double getCoinCount() {

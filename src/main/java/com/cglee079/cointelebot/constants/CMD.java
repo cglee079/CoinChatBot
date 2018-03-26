@@ -7,7 +7,7 @@ public class CMD {
 	public static final String MAIN_CALCULATE = "손익금계산";
 	public static final String MAIN_HELP = "도움말";
 
-	public static final String MAIN_SET_PRICE = "투자금\n설정";
+	public static final String MAIN_SET_PRICE = "투자금액\n설정";
 	public static final String MAIN_SET_NUMBER = "코인개수\n설정";
 	public static final String MAIN_SET_TARGET = "목표가\n설정";
 	public static final String MAIN_SET_EXCHANGE = "거래소\n설정";
