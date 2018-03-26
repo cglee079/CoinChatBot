@@ -13,26 +13,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.MessageEntity;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.User;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import com.cglee079.cointelebot.coin.CoinManager;
-import com.cglee079.cointelebot.constants.SET;
+import com.cglee079.cointelebot.constants.CMD;
 import com.cglee079.cointelebot.constants.ID;
+import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.exception.ServerErrorException;
+import com.cglee079.cointelebot.keyboard.MainKeyboard;
+import com.cglee079.cointelebot.keyboard.SetDayloopKeyboard;
+import com.cglee079.cointelebot.keyboard.SetExchangeKeyboard;
+import com.cglee079.cointelebot.keyboard.SetTimeloopKeyboard;
 import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.ClientVo;
-import com.cglee079.cointelebot.model.CoinInfoVo;
 import com.cglee079.cointelebot.model.DailyInfoVo;
 import com.cglee079.cointelebot.model.TimelyInfoVo;
 import com.cglee079.cointelebot.service.ClientMsgService;
 import com.cglee079.cointelebot.service.ClientService;
 import com.cglee079.cointelebot.service.ClientSuggestService;
-import com.cglee079.cointelebot.service.CoinInfoService;
 
 public class TelegramBot extends AbilityBot  {
+	@Autowired
+	private Explainer exp;
 	
 	@Autowired
 	private ClientService clientService;
@@ -44,160 +50,29 @@ public class TelegramBot extends AbilityBot  {
 	private ClientSuggestService clientSuggestService;
 	
 	@Autowired
-	private CoinInfoService coinInfoService;
-	
-	@Autowired
 	private CoinManager coinManager;
 	
-	private String helpMsg;
+	private ReplyKeyboardRemove defaultKeyboard;
+	private MainKeyboard mainKeyboard;
+	private SetDayloopKeyboard setDayloopKeyboard;
+	private SetTimeloopKeyboard setTimeloopKeyboard;
+	private SetExchangeKeyboard setExchangeKeyboard;
+	
 	private String coinname;
-	private String version;
-	private String priceEx;
-	private String targetEx;
-	private String numberEx;
-	private String rateEx;
 	
 	protected TelegramBot(String botToken, String botUsername) {
 		super(botToken, botUsername);
+		
+		defaultKeyboard = new ReplyKeyboardRemove();
+		mainKeyboard = new MainKeyboard();
+		setDayloopKeyboard = new SetDayloopKeyboard();
+		setTimeloopKeyboard = new SetTimeloopKeyboard();
+		setExchangeKeyboard = new SetExchangeKeyboard();
 	}
 	
 	@PostConstruct
 	public void init() {
-	    CoinInfoVo coinInfo = coinInfoService.get(SET.MY_COIN);
-	    priceEx = coinInfo.getPriceEx();
-	    numberEx  = coinInfo.getNumberEx();
-	    targetEx = coinInfo.getTargetEx();
-		version = coinInfo.getVersion();
-		coinname = coinInfo.getCoinname();
-		rateEx = "5%";
-		
-		helpMsg = "";
-        helpMsg += "별도의 시간 알림 주기 설정을 안하셨다면,\n";
-        helpMsg += "3시간 주기로 " + coinname + " 가격 알림이 전송됩니다.\n";
-        helpMsg += "\n";
-
-        helpMsg += "별도의 일일 알림 주기 설정을 안하셨다면,\n";
-        helpMsg += "1일 주기로 거래량, 상한가, 하한가, 종가가 비교되어 전송됩니다.\n";
-        helpMsg += "\n";
-
-        helpMsg += "별도의 거래소 설정을 안하셨다면,\n";
-
-        //
-        String exchange = "";
-        if(SET.ENABLED_UPBIT) {exchange = "업비트";}
-        if(SET.ENABLED_BITHUMB) {exchange = "빗썸";}
-        if(SET.ENABLED_COINONE) {exchange = "코인원";}
-        helpMsg += exchange;
-        //
-
-        helpMsg += " 기준의 정보가 전송됩니다.\n";
-        helpMsg += "\n";
-
-        helpMsg += "평균단가,코인개수를 설정하시면,\n";
-        helpMsg += "원금, 현재금액, 손익금을 확인 하실 수 있습니다.\n";
-        helpMsg += "\n";
-
-        helpMsg += "목표가격을 설정하시면,\n";
-        helpMsg += "목표가격이 되었을때 알림을 받을 수 있습니다.\n";
-        helpMsg += "목표가격을 위한 가격정보는 각 거래소에서 1분 주기로 갱신됩니다.\n";
-        helpMsg += "\n";
-
-        helpMsg += "톡을 보내시면 현재 " + coinname + " 가격을 확인 하실 수 있습니다.\n";
-        helpMsg += "\n";
-
-        helpMsg += "한국 프리미엄 정보를 확인 하실 수 있습니다.\n";
-        helpMsg += "\n";
-
-        if(!(SET.MY_COIN == ID.COIN_BTC)) {
-            helpMsg += "비트코인대비 변화량을 확인 하실 수 있습니다.\n";
-        }
-        helpMsg += "-------------------------\n";
-        helpMsg += "\n";
-
-        helpMsg += "다음 명령어를 사용해주세요.\n";
-        helpMsg += "\n";
-        helpMsg += "* 시간 알림 주기 설정\n";
-        helpMsg += "/timeloop 시간\n";
-        helpMsg += "0(시간 알림 끄기), 1 ~ 12 시간 주기만 적용됩니다.\n";
-        helpMsg += "ex) /timeloop 0 = 시간 알림 없음\n";
-        helpMsg += "ex) /timeloop 3 = 3시간 주기 알림\n";
-        helpMsg += "\n";
-
-        helpMsg += "* 일일 알림 주기 설정\n";
-        helpMsg += "/dayloop 일\n";
-        helpMsg += "0(일일 알림 끄기), 1 ~ 7 일 주기만 적용됩니다.\n";
-        helpMsg += "ex) /dayloop 0 = 일일 알림 없음\n";
-        helpMsg += "ex) /dayloop 3 = 3일 주기 알림\n";
-        helpMsg += "\n";
-
-        helpMsg += "* 거래소 설정\n";
-        helpMsg += "/exchange 거래소번호\n";
-
-        //
-        if(SET.ENABLED_COINONE) { helpMsg += "1 - 코인원, ";}
-        if(SET.ENABLED_BITHUMB) { helpMsg += "2 - 빗썸, ";}
-        if(SET.ENABLED_UPBIT) { helpMsg += "3 - 업비트 ";}
-        helpMsg += "\n";
-
-        if(SET.ENABLED_COINONE) {helpMsg += "ex) /exchange 1 = 코인원으로 거래소 설정\n";}
-        if(SET.ENABLED_BITHUMB) {helpMsg += "ex) /exchange 2 = 빗썸으로 거래소 설정\n"; }
-        if(SET.ENABLED_UPBIT) {helpMsg += "ex) /exchange 3 = 업비트로 거래소 설정\n"; }
-        helpMsg += "\n";
-        //
-
-        helpMsg += "* 목표가격 설정\n";
-        helpMsg += "/target 금액  \n";
-        helpMsg += "ex) /target 0 = 목표가격 입력 초기화\n";
-        helpMsg += "ex) /target " + targetEx + " = 목표가격 " + targetEx + " 원\n";
-        helpMsg += "ex) /target " + rateEx + "    : 현재가 +" + rateEx + "\n";
-        helpMsg += "ex) /target -" + rateEx + "  : 현재가 -" + rateEx + "\n";
-        helpMsg += "\n";
-
-        helpMsg += "* 평균단가 설정\n";
-        helpMsg += "/price 금액  \n";
-        helpMsg += "ex) /price 0 = 평균단가 입력 초기화\n";
-        helpMsg += "ex) /price " + priceEx + " = 평균단가 " + priceEx + " 원\n";
-        helpMsg += "\n";
-
-        helpMsg += "* 코인개수 설정\n";
-        helpMsg += "/number 개수\n";
-        helpMsg += "ex) /number 0 = " + coinname + " 개수 입력 초기화\n";
-        helpMsg += "ex) /number " + numberEx +" = " + coinname+ " 개수 설정\n";
-        helpMsg += "\n";
-
-        helpMsg += "/calc - 원금,현재금액,손익금 확인 \n";
-        helpMsg += "/kimp - 한국 프리미엄 정보 확인 \n";
-
-        if(!(SET.MY_COIN == ID.COIN_BTC)) {
-            helpMsg += "/btc  - 비트코인 대비 변화량 확인\n";
-        }
-
-        helpMsg += "/info - 설정확인\n";
-        helpMsg += "/coin - 코인알리미 리스트\n";
-        helpMsg += "/help - 도움말 \n";
-        helpMsg += "/stop - 모든알림(시간알림, 일일알림 , 목표가격) 끄기 \n";
-        helpMsg += "\n";
-        helpMsg += "* 문의,제안,건의사항은 다음 명령어를 이용해주세요.\n";
-        helpMsg += "/msg 내용\n";
-        helpMsg += "ex) /msg 안녕하세요. 건의사항이~~~\n";
-        helpMsg += "\n";
-        //
-        helpMsg += "국내정보 By ";
-        if(SET.ENABLED_COINONE) { helpMsg += "코인원, ";}
-        if(SET.ENABLED_BITHUMB) { helpMsg += "빗썸, ";}
-        if(SET.ENABLED_UPBIT) { helpMsg += "업비트";}
-        helpMsg += "\n";
-        //
-
-        helpMsg += "미국정보 By ";
-        if(SET.ENABLED_BITTREX) { helpMsg += "Bittrex, ";}
-        if(SET.ENABLED_BITFINEX) { helpMsg += "Bitfinex ";}
-
-        helpMsg += "\n";
-
-        helpMsg += "환율정보 By the European Central Bank\n";
-        helpMsg += "\n";
-        helpMsg += "Developed By CGLEE ( cglee079@gmail.com )\n";
+		coinname = exp.getCoinname();
 	}
 	
 	@Override
@@ -216,104 +91,394 @@ public class TelegramBot extends AbilityBot  {
 			message = update.getEditedMessage();
 		}
 		
-		List<MessageEntity> enitities = message.getEntities();
 		User user = message.getFrom();
+		String username = user.getLastName() + " " + user.getFirstName();
+		Integer userId = user.getId();
+		Integer messageId = message.getMessageId();
+		String cmd = message.getText();
 		
-		if(enitities != null) {
-			MessageEntity entity = enitities.get(0);
-			if(entity.getType().equals("bot_command")) {
-				Integer userId = user.getId();
-				String username = user.getLastName() + " " + user.getFirstName();
-				
-				String msg = message.getText().substring(1);
-				String[] msgCutted = msg.split("\\s+");
-				String command = msgCutted[0];
-				
-				String[] args = new String[msgCutted.length -1];
-				for(int i = 0 ; i < args.length; i++) {
-					args[i] = msgCutted[i+1];
+		ClientVo client = clientService.get(userId);
+		
+		if(message.getText().equals("/start")) {
+			String msg = "";
+			if (clientService.openChat(userId, username)) {
+				msg = coinname + " 알림이 시작되었습니다.\n\n";
+				msg += exp.explainHelp();
+			} else {
+				msg = "이미 " + coinname + " 알리미에 설정 정보가 기록되어있습니다.";
+			}
+			sendMessage(userId, null, msg, mainKeyboard);
+			
+			return ;
+		} 
+		
+		String state = client.getState();
+		switch(state) {
+		case ID.STATE_MAIN: handleMenu(userId, messageId, cmd); break;
+		case ID.STATE_SET_DAYLOOP : handleDayloop(userId, messageId, cmd); break;
+		case ID.STATE_SET_TIMELOOP : handleTimeloop(userId, messageId, cmd); break;
+		case ID.STATE_SET_EXCHANGE : handleExchange(userId, messageId, cmd); break;
+		case ID.STATE_SET_TARGET : handleTarget(userId, messageId, cmd); break;
+		case ID.STATE_SET_PRICE : handlePrice(userId, messageId, cmd); break;
+		case ID.STATE_SET_NUMBER : handleNumber(userId, messageId, cmd); break;
+		case ID.STATE_SEND_MSG : handleMsg(userId, username, messageId, cmd); break;
+		}
+	}
+
+	private void handleMenu(Integer userId, Integer messageId, String cmd) {
+		String state = ID.STATE_MAIN;
+		switch(cmd){
+		//One Menu Event
+		case CMD.MAIN_CURRENT_PRICE:
+			sendMessage(userId, messageId, messageCurrentPrice(userId), mainKeyboard);
+			break;
+		case CMD.MAIN_KOREA_PREMIUM:
+			sendMessage(userId, messageId, messageKimp(userId), mainKeyboard);
+			break;
+		case CMD.MAIN_BTC:
+			sendMessage(userId, messageId, messageBtc(userId), mainKeyboard);
+			break;
+		case CMD.MAIN_CALCULATE:
+			sendMessage(userId, messageId, messageCalc(userId), mainKeyboard);
+			break;
+		case CMD.MAIN_INFO:
+			sendMessage(userId, messageId, messageInfo(userId), mainKeyboard);
+			break;
+		case CMD.MAIN_STOP:
+			sendMessage(userId, messageId, messageStop(userId), mainKeyboard);
+			break;
+		case CMD.MAIN_COIN_LIST:
+			sendMessage(userId, messageId, exp.explainCoinList(), mainKeyboard);
+			break;
+		case CMD.MAIN_HELP:
+			sendMessage(userId, messageId, exp.explainHelp(), mainKeyboard);
+			break;
+	
+			
+		//One more Menu
+		case CMD.MAIN_SET_DAYLOOP:
+			sendMessage(userId, messageId, exp.explainSetDayloop(), setDayloopKeyboard);
+			state = ID.STATE_SET_DAYLOOP;
+			break;
+		case CMD.MAIN_SET_TIMELOOP:
+			sendMessage(userId, messageId, exp.explainSetTimeloop(), setTimeloopKeyboard);
+			state = ID.STATE_SET_TIMELOOP;
+			break;
+		case CMD.MAIN_SET_EXCHANGE:
+			sendMessage(userId, messageId, exp.explainSetExchange(), setExchangeKeyboard);
+			state = ID.STATE_SET_EXCHANGE;
+			break;
+		case CMD.MAIN_SET_TARGET:
+			sendMessage(userId, messageId, exp.explainSetTarget(), defaultKeyboard);
+			state = ID.STATE_SET_TARGET;
+			break;
+		case CMD.MAIN_SET_PRICE:
+			sendMessage(userId, messageId, exp.explainSetPrice(), defaultKeyboard);
+			state = ID.STATE_SET_PRICE;
+			break;
+		case CMD.MAIN_SET_NUMBER:
+			sendMessage(userId, messageId, exp.explainSetNumber(), defaultKeyboard);
+			state = ID.STATE_SET_NUMBER;
+			break;
+		case CMD.MAIN_SEND_MSG:
+			sendMessage(userId, messageId, exp.explainSendMsg(), defaultKeyboard);
+			state = ID.STATE_SEND_MSG;
+			break;
+	
+		default :
+			sendMessage(userId, messageId, messageCurrentPrice(userId), mainKeyboard);	
+		}
+		
+		clientService.updateState(userId.toString(), state);
+	}
+
+	private void handleDayloop(Integer userId, Integer messageId, String cmd) {
+		int dayloop = -1;
+		String msg = "";
+		switch(cmd) {
+		case CMD.SET_DAYLOOP_01 : dayloop = 1; break;
+		case CMD.SET_DAYLOOP_02 : dayloop = 2; break;
+		case CMD.SET_DAYLOOP_03 : dayloop = 3; break;
+		case CMD.SET_DAYLOOP_04 : dayloop = 4; break;
+		case CMD.SET_DAYLOOP_05 : dayloop = 5; break;
+		case CMD.SET_DAYLOOP_06 : dayloop = 6; break;
+		case CMD.SET_DAYLOOP_07 : dayloop = 7; break;
+		case CMD.SET_DAYLOOP_OFF : dayloop = 0; break;
+		}
+		
+		if(dayloop == -1) {
+			msg = "일일 알림 주기가 설정 되지 않았습니다.\n";
+		} else {
+			if(clientService.updateDayLoop(userId.toString(), dayloop)) {
+				if(dayloop == 0) {
+					msg = "일일 알림이 전송되지 않습니다.\n";
+				} else {
+					msg = "일일 알림가 매 " +  dayloop + " 일주기로 전송됩니다.\n";
 				}
-				
-				switch(command) {
-				case "start": cmdStart(userId, username); break;
-				case "stop": cmdStop(userId); break;
-				case "help": cmdHelp(userId); break;
-				case "info": cmdInfo(userId); break;
-				case "kimp": cmdKimp(userId); break;
-				case "calc": cmdCalc(userId); break;
-				case "btc" : cmdBtc(userId); break;
-				case "price": cmdSetPrice(userId, args); break;
-				case "target": cmdSetTargetPrice(userId, args); break;
-				case "number": cmdSetCoinCnt(userId, args); break;
-				case "timeloop": cmdSetTimeLoop(userId, args); break;
-				case "dayloop": cmdSetDayLoop(userId, args); break;
-				case "exchange": cmdSetExchange(userId, args); break;
-				case "msg" : cmdMsg(userId, username, args); break;
-				case "coin" : cmdCoin(userId); break;
-				default:
-					sendMessage("잘못된 명령어입니다\n도움말 - /help", userId.toString());
-					break;
-				
-				}
+			} else {
+				msg = "일일 알림 주기가 설정 되지 않았습니다.\n";
 			}
 		}
 		
-		if(enitities == null){
-			Integer userId = user.getId();
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-			String date = format.format(new Date());
-
-			JSONObject coin = null;
-			int currentValue = 0;
-			String exchange = clientService.getExchange(userId);
-			try {
-				coin = coinManager.getCoin(SET.MY_COIN, exchange);
-			} catch (ServerErrorException e) {
-				Log.i(e.log());
-				Log.i(e.getStackTrace());
-				sendMessage("잠시 후 다시 보내주세요.\n" + e.getTelegramMsg(), userId);
-				return;
-			}
-			
-			
-			if(coin == null) {
-				Log.i("가격정보를 보낼 수 없습니다. : return NULL");
-				sendMessage("잠시 후 다시보내주세요", userId);
-				return ;
-			}
-			
-			currentValue = coin.getInt("last");
-			String msg = "";
-			msg += "현재시각 : " + date + "\n";
-			msg += "현재가격 : " + toCommaStr(currentValue) + " 원\n";
-			
-			sendMessage(msg, userId);
-		};
+		msg += "메인 화면으로 돌아갑니다.\n";
 		
-		
+		sendMessage(userId, messageId, msg, mainKeyboard);
+		clientService.updateState(userId.toString(), ID.STATE_MAIN);
 	}
-
-	public void cmdHelp(Integer userId) {
+	
+	private void handleTimeloop(Integer userId, Integer messageId, String cmd) {
+		int timeloop = -1;
 		String msg = "";
-		msg += coinname + " 알리미 ver" + version + "\n";
-		msg += "\n";
-		msg += helpMsg;
-		sendMessage(msg, userId);
 		
-		msg = "";
-		msg += "★ 필독! 명령어 쉬운 사용법\n\n";
-		msg += "채팅입력란 오른쪽에 / 버튼을 눌러주세요.\n";
-		msg += "명령어 목록이 보여집니다.\n\n";
-		msg += "1. 명령어 뒤에 값을 입력하지 않는 경우 명령어를 눌러주세요. ex ) calc, btc, kimp 등\n\n";
-		msg += "2. 명령어 뒤에 값을 입력하는 경우 명령어를 꾹 눌러 주신 후 값을 입력해주세요. ex) price, number 등\n\n";
-		sendMessage(msg, userId);
+		switch(cmd) {
+		case CMD.SET_TIMELOOP_01 : timeloop = 1; break;
+		case CMD.SET_TIMELOOP_02 : timeloop = 2; break;
+		case CMD.SET_TIMELOOP_03 : timeloop = 3; break;
+		case CMD.SET_TIMELOOP_04 : timeloop = 4; break;
+		case CMD.SET_TIMELOOP_05 : timeloop = 5; break;
+		case CMD.SET_TIMELOOP_06 : timeloop = 6; break;
+		case CMD.SET_TIMELOOP_07 : timeloop = 7; break;
+		case CMD.SET_TIMELOOP_08 : timeloop = 8; break;
+		case CMD.SET_TIMELOOP_09 : timeloop = 9; break;
+		case CMD.SET_TIMELOOP_10 : timeloop = 10; break;
+		case CMD.SET_TIMELOOP_11 : timeloop = 11; break;
+		case CMD.SET_TIMELOOP_12 : timeloop = 12; break;
+		case CMD.SET_TIMELOOP_OFF : timeloop = 0; break;
+		}
+		
+		if(timeloop == -1) {
+			msg = "시간 알림 주기가 설정 되지 않았습니다.\n";
+		} else {
+			if(clientService.updateTimeLoop(userId.toString(), timeloop)) {
+				 if(timeloop == 0) {
+					msg = "시간 알림이 전송되지 않습니다.\n";
+				 } else {
+					msg = "시간 알림이 " +  timeloop + " 시간 주기로 전송됩니다.\n";
+				 }
+			} else {
+				msg = "시간 알림 주기가 설정 되지 않았습니다.\n";
+			}
+		}
+		
+		msg += "메인 화면으로 돌아갑니다.\n";
+		
+		sendMessage(userId, messageId, msg, mainKeyboard);
+		clientService.updateState(userId.toString(), ID.STATE_MAIN);
+	}
+	
+	private void handleExchange(Integer userId, Integer messageId, String cmd) {
+		String exchange = null;
+		String msg = "거래소가 설정되지 않았습니다.\n";
+		
+		if(SET.ENABLED_COINONE && cmd.equals(CMD.SET_EXCHANGE_COINONE)) {
+			exchange = ID.EXCHANGE_COINONE;
+			msg = "거래소가 코인원으로 설정 되었습니다.\n";
+		}
+		
+		if(SET.ENABLED_BITHUMB && cmd.equals(CMD.SET_EXCHANGE_BITHUMB)) {
+			exchange = ID.EXCHANGE_BITHUMB;
+			msg = "거래소가 빗썸으로 설정 되었습니다.\n";
+		}
+		
+		if(SET.ENABLED_UPBIT && cmd.equals(CMD.SET_EXCHANGE_UPBIT)) {
+			exchange = ID.EXCHANGE_UPBIT;
+			msg = "거래소가 업비트로 설정 되었습니다.\n";
+		}
+		
+		if(exchange != null) {
+			if(clientService.updateExchange(userId.toString(), exchange)) {
+				//Success Update
+			} else {
+				msg = "거래소가 설정되지 않았습니다.\n";
+			}
+		} else {
+			msg = "거래소가 설정되지 않았습니다.\n";
+		}
+		
+		msg += "메인 화면으로 돌아갑니다.\n";
+		
+		sendMessage(userId, messageId, msg, mainKeyboard);
+		clientService.updateState(userId.toString(), ID.STATE_MAIN);
+	}
+	
+	private void handleTarget(Integer userId, Integer messageId, String cmd) {
+		ClientVo client = clientService.get(userId);
+		String exchange = client.getExchange();
+		String msg = "";
+		boolean valid = false;
+		
+		int currentPrice = -1;
+		try {
+			currentPrice = coinManager.getCoin(SET.MY_COIN, exchange).getInt("last");
+		}
+		catch (ServerErrorException e1) {
+			Log.i(e1.log());
+			Log.i(e1.getStackTrace());
+			msg = "잠시 후 다시 보내주세요.\n" + e1.getTelegramMsg();
+		}
+		
+		if(currentPrice != -1) {
+			String priceStr = cmd;
+			int targetPrice = -1;
+
+			if(priceStr.matches("^\\d*$")) {
+				targetPrice = Integer.valueOf(priceStr);
+				
+				if (targetPrice == 0) {  // case4. 초기화
+					if(clientService.clearTargetPrice(userId.toString())) {
+						msg = "목표가격이 초기화 되었습니다.\n";
+					}
+				} else {
+					valid = true;
+				}
+				
+			} else if( priceStr.matches("^[+-]?\\d*%$")) {
+				priceStr = priceStr.replace("%", "");
+				double percent = (Double.valueOf(priceStr)/100);
+				
+				if(percent == 0) {
+					valid = true;
+					targetPrice = 0;
+				} else if(percent > 0) {
+					valid = true;
+					targetPrice = currentPrice + (int)((double)currentPrice * percent);
+				}  else if( percent < 0 && percent >= -100) {
+					valid = true;
+					int a = ((int)((double)currentPrice * percent) * -1);
+					targetPrice = currentPrice - a;
+				} else if( percent < -100) {
+					msg = "목표가격 백분율을 -100% 이하로 설정 할 수 없습니다.\n";
+				}
+				
+			} else {
+				msg = "목표가격을 숫자 또는 백분율로 입력해주세요.\n";
+			}
+			
+			if(valid) {
+				msg += "목표가격 " + toCommaStr(targetPrice) + "원으로 설정되었습니다.\n";
+				msg += "------------------------\n";
+				msg += "목표가격 : " + toCommaStr(targetPrice) + " 원\n";
+				msg += "현재가격 : " + toCommaStr(currentPrice) + " 원\n";
+				msg += "가격차이 : " + toCommaStr(targetPrice - currentPrice) + " 원 (" + getPercent(targetPrice, currentPrice) + " )\n";
+				if(targetPrice >= currentPrice) {
+					if(!clientService.updateTargetUpPrice(userId.toString(), targetPrice)){
+						msg = "알림을 먼저 시작해주세요.\n명령어 /start";
+					}
+				} else {
+					if(!clientService.updateTargetDownPrice(userId.toString(), targetPrice)){
+						msg = "알림을 먼저 시작해주세요.\n명령어 /start";
+					}
+				}
+			}
+			
+		}
+		
+		msg += "메인 화면으로 돌아갑니다.\n";
+		sendMessage(userId, messageId, msg, mainKeyboard);
+		clientService.updateState(userId.toString(), ID.STATE_MAIN);
+	}
+	
+	private void handlePrice(Integer userId, Integer messageId, String cmd) {
+		String priceStr = cmd;
+		String msg = "";
+		int price = -1;
+
+		try { // case1. 평균단가에 문자가 포함될때
+			price = Integer.parseInt(priceStr);
+		} catch (NumberFormatException e) {
+			msg = "평균단가는 숫자로만 입력해주세요.\n";
+		}
+
+		if(price != -1) {
+			if(clientService.updateNumber(userId.toString(), price)){
+				if (price == 0) { msg = "평균단가가 초기화 되었습니다.\n";} // case2. 초기화
+				else {msg = "평균단가가 " + price + " 원으로 설정되었습니다.\n";} // case3.설정완료
+			} else{
+				msg = "알림을 먼저 시작해주세요.\n 명령어 /start << 클릭\n";
+			}
+		}
+		
+		msg += "메인 화면으로 돌아갑니다.\n";
+		
+		sendMessage(userId, messageId, msg, mainKeyboard);
+		clientService.updateState(userId.toString(), ID.STATE_MAIN);
+	}
+	
+	private void handleNumber(Integer userId, Integer messageId, String cmd) {
+		String numberStr = cmd;
+		String msg = "";
+		double number = -1;
+
+		try { // case1. 코인개수에 문자가 포함될때
+			number = Double.parseDouble(numberStr);
+		} catch (NumberFormatException e) {
+			msg = "코인개수는 숫자로만 입력해주세요.\n";
+		}
+
+		if(number != -1) {
+			if(clientService.updateNumber(userId.toString(), number)){
+				if (number == 0) { msg = "코인개수가 초기화 되었습니다.\n";} // case2. 초기화
+				else {msg = "코인개수가 " + number + " 개로 설정되었습니다.\n";} // case3.설정완료
+			} else{
+				msg = "알림을 먼저 시작해주세요.\n 명령어 /start << 클릭\n";
+			}
+		}
+		
+		msg += "메인 화면으로 돌아갑니다.\n";
+		
+		sendMessage(userId, messageId, msg, mainKeyboard);
+		clientService.updateState(userId.toString(), ID.STATE_MAIN);
+	}
+	
+	private void handleMsg(Integer userId, String username, Integer messageId, String message) {
+		clientSuggestService.insert(userId, username, message);
+		sendMessage(userId, messageId, "의견 감사드립니다.\n성투하세요!", mainKeyboard);
+		clientService.updateState(userId.toString(), ID.STATE_MAIN);
+		
+		//To Me
+		String msg = "";
+		msg += "메세지가 도착했습니다!\n------------------\n\n";
+		msg += message;
+		msg += "\n\n------------------\n";
+		msg += " By ";
+		msg += username + " [" + userId + " ]";
+		
+		sendMessage(this.creatorId(), null, msg, mainKeyboard);
+	}
+	
+	private String messageCurrentPrice(Integer userId) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String date = format.format(new Date());
+
+		JSONObject coin = null;
+		int currentValue = 0;
+		String exchange = clientService.getExchange(userId);
+		try {
+			coin = coinManager.getCoin(SET.MY_COIN, exchange);
+		} catch (ServerErrorException e) {
+			Log.i(e.log());
+			Log.i(e.getStackTrace());
+			return "잠시 후 다시 보내주세요.\n" + e.getTelegramMsg();
+		}
+		
+		
+		if(coin == null) {
+			Log.i("가격정보를 보낼 수 없습니다. : return NULL");
+			return "잠시 후 다시보내주세요";
+		}
+		
+		currentValue = coin.getInt("last");
+		String msg = "";
+		msg += "현재시각 : " + date + "\n";
+		msg += "현재가격 : " + toCommaStr(currentValue) + " 원\n";
+		
+		return msg;
 	}
 
-	public void cmdInfo(Integer userId) {
+	public String messageInfo(Integer userId) {
 		ClientVo client = clientService.get(userId);
 		if(client == null){
-			sendMessage("알림을 먼저 시작해주세요.\n명령어 /start", userId);
-			return ;
+			return "알림을 먼저 시작해주세요.\n명령어 /start";
 		}
 		
 		String msg = "";
@@ -340,41 +505,20 @@ public class TelegramBot extends AbilityBot  {
 		if(client.getCoinCount() != null){msg += "코인개수 = " + toStr(client.getCoinCount()) + " 개 \n"; }
 		else { msg += "코인개수 = 입력되어있지 않음.\n";}
 		
-		sendMessage(msg, userId);
+		return msg;
 	}
 	
-	public void cmdStart(Integer userId, String username) {
-		if (clientService.openChat(userId, username)) {
-			String msg = coinname + " 알림이 시작되었습니다.\n\n";
-			msg += helpMsg;
-			sendMessage(msg, userId);
-			
-			msg = "";
-			msg += "★ 필독! 명령어 쉬운 사용법\n\n";
-			msg += "채팅입력란 오른쪽에 / 버튼을 눌러주세요.\n";
-			msg += "명령어 목록이 보여집니다.\n\n";
-			msg += "1. 명령어 뒤에 값을 입력하지 않는 경우 명령어를 눌러주세요. ex ) calc, btc, kimp 등\n\n";
-			msg += "2. 명령어 뒤에 값을 입력하는 경우 명령어를 꾹 눌러 주신 후 값을 입력해주세요. ex) price, number 등\n\n";
-			sendMessage(msg, userId);
-			
-		} else {
-			String msg = "이미 " + coinname + " 알리미에 설정 정보가 기록되어있습니다.";
-			sendMessage(msg, userId);
-			cmdInfo(userId);
-		}
-	}
-
-	public void cmdStop(Integer userId) {
+	public String messageStop(Integer userId) {
+		String msg = "";
 		if (clientService.stopChat(userId)) {
-			String msg = coinname + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n";
-			sendMessage(msg, userId);
+			msg = coinname + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n";
 		} else {
-			String msg = "알람이 설정되어있지 않습니다";
-			sendMessage(msg, userId);
+			msg = "알람이 설정되어있지 않습니다";
 		}
+		return msg;
 	}
 
-	public void cmdKimp(Integer userId) {
+	public String messageKimp(Integer userId) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String date = format.format(new Date());
 
@@ -386,8 +530,7 @@ public class TelegramBot extends AbilityBot  {
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
 			Log.i(e.getStackTrace());
-			sendMessage("잠시 후 다시 보내주세요.\n" + e.getTelegramMsg(), userId);
-			return ;
+			return "잠시 후 다시 보내주세요.\n" + e.getTelegramMsg();
 		} 
 		
 		if(coin != null){
@@ -401,11 +544,13 @@ public class TelegramBot extends AbilityBot  {
 			msg += "미국가격 : " + toCommaStr(coin.getInt("usd2krw")) + " 원 ($ " + toStr(coin.getDouble("usd")) + ")\n";
 			msg += "프리미엄 : " + toSignStr(coin.getDouble("kimp")) + " %\n";
 			
-			sendMessage(msg, userId);
+			return msg;
 		}
+		
+		return "temp";
 	}
 	
-	public void cmdBtc(Integer userId) {
+	public String messageBtc(Integer userId) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String date = format.format(new Date());
 
@@ -418,8 +563,7 @@ public class TelegramBot extends AbilityBot  {
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
 			Log.i(e.getStackTrace());			
-			sendMessage("잠시 후 다시 보내주세요.\n" + e.getTelegramMsg(), userId);
-			return;
+			return "잠시 후 다시 보내주세요.\n" + e.getTelegramMsg();
 		}
 	
 		if(coin != null && btc != null){
@@ -435,344 +579,50 @@ public class TelegramBot extends AbilityBot  {
 			msg += "BTC 24시간 변화량 : " + getPercent(btcCV, btcBV) + "\n";
 			msg += coinname + " 24시간 변화량 : " + getPercent(coinCV, coinBV) + "\n";
 			
-			sendMessage(msg, userId);
+			return msg;
 		}
+		
+		return "temp";
 	}
 	
-	public void cmdCalc(Integer userId) {
+	public String messageCalc(Integer userId) {
 		ClientVo client = clientService.get(userId);
 		if(client != null){
-			if( client.getCoinCount() == null){ sendMessage("먼저 코인개수를 설정해주세요.\nex)/number " + numberEx, userId); return ;}
-			if( client.getAvgPrice() == null){ sendMessage("먼저 평균단가를 설정해주세요.\nex) /price " + priceEx, userId); return ;}
+			if( client.getAvgPrice() == null){ return "먼저 평균단가를 설정해주세요.\n";}
+			if( client.getCoinCount() == null){ return "먼저 코인개수를 설정해주세요.\n";}
 			if( client.getAvgPrice() != null && client.getCoinCount() != null){
 				try {
 					JSONObject coin = coinManager.getCoin(SET.MY_COIN,client.getExchange());
-					sendKrwMessage(client, coin.getInt("last"));
+					return calcStr(client, coin.getInt("last"));
 				} catch (ServerErrorException e) {
 					Log.i(e.log());
 					Log.i(e.getStackTrace());
-					sendMessage("잠시 후 다시 보내주세요.\n" + e.getTelegramMsg(), userId);
-					return ;
+					return "잠시 후 다시 보내주세요.\n" + e.getTelegramMsg();
 				}
 			}
 		} else{
-			 sendMessage("알림을 먼저 시작해주세요.", userId);
-		}
-	}
-	
-	public void cmdSetExchange(Integer userId, String[] args) {
-		String ex = "";
-		if(SET.ENABLED_COINONE) { ex += "1 - 코인원, ";}
-		if(SET.ENABLED_BITHUMB) { ex += "2 - 빗썸 ";}
-		if(SET.ENABLED_UPBIT) { ex += "3 - 업비트 ";}
-		ex += "\n";
-		if(SET.ENABLED_COINONE) {ex += "ex) /exchange 1\n";}
-		if(SET.ENABLED_BITHUMB) {ex += "ex) /exchange 2\n";}
-		if(SET.ENABLED_UPBIT) {ex += "ex) /exchange 3\n";}
-		
-		if (args.length == 0) { // case1. 평균단가를 입력하지 않았을때
-			sendMessage("거래소 번호를 입력해주세요.\n" + ex, userId);
-			return;
-		} else if (args.length > 1) { // case2. 평균단가와 다른 파라미터를 붙였을때.
-			sendMessage("거래소 번호만 입력해주세요.\n" + ex, userId);
-			return;
-		} else {
-			String priceStr = args[0];
-			int exchangeNum = 0;
-
-			try { // case3. 평균단가에 문자가 포함될때
-				exchangeNum = Integer.parseInt(priceStr);
-			} catch (NumberFormatException e) {
-				sendMessage("거래소 번호는 숫자로만 입력해주세요.\n" + ex, userId);
-				return;
-			}
-			
-			if(exchangeNum == 1 && SET.ENABLED_COINONE) {//코인원
-				clientService.updateExchange(userId.toString(), ID.EXCHANGE_COINONE);
-				sendMessage("거래소가 코인원으로 설정되었습니다.", userId);
-			} 
-			else if(exchangeNum == 2 && SET.ENABLED_BITHUMB) {
-				clientService.updateExchange(userId.toString(), ID.EXCHANGE_BITHUMB);
-				sendMessage("거래소가 빗썸으로 설정되었습니다.", userId);
-			} 
-			else if(exchangeNum == 3 && SET.ENABLED_UPBIT) {
-				clientService.updateExchange(userId.toString(), ID.EXCHANGE_UPBIT);
-				sendMessage("거래소가 업비트로 설정되었습니다.", userId);
-			} 
-			else {
-				sendMessage("거래소 번호를 정확히 입력해주세요.\n" + ex, userId);
-				return;
-			}
-
-		}
-	}
-	
-	public void cmdSetPrice(Integer userId, String[] args) {
-		if (args.length == 0) { // case1. 평균단가를 입력하지 않았을때
-			sendMessage("평균단가를 입력해주세요.\nex) /price " + priceEx, userId);
-			return;
-		} else if (args.length > 1) { // case2. 평균단가와 다른 파라미터를 붙였을때.
-			sendMessage("평균단가만 입력해주세요.\nex) /price " + priceEx, userId);
-			return;
-		} else {
-			String priceStr = args[0];
-			int price = 0;
-
-			try { // case3. 평균단가에 문자가 포함될때
-				price = Integer.parseInt(priceStr);
-			} catch (NumberFormatException e) {
-				sendMessage("평균단가는 숫자로만 입력해주세요.\nex) /price " + priceEx, userId);
-				return;
-			}
-
-			if(clientService.updatePrice(userId.toString(), price)){
-				if (price == 0) { sendMessage("평균단가가 초기화 되었습니다.", userId); } // case4. 초기화
-				else {sendMessage("평균단가 " + toCommaStr(price) + "원으로 설정되었습니다.", userId);} // case5.설정완료
-			} else{
-				sendMessage("알림을 먼저 시작해주세요.\n명령어 /start", userId);
-			}
-		}
-	}
-	
-
-	public void cmdSetTargetPrice(Integer userId, String[] args) {
-		ClientVo client = clientService.get(userId);
-		String exchange = client.getExchange();
-		
-		String exMsg = "";
-		exMsg += "------------------------------\n";
-		exMsg += "ex) /target " + targetEx + "  : 목표가격 " + targetEx + "원\n";
-		exMsg += "ex) /target " + rateEx + "    : 현재가 +" + rateEx + "\n";
-		exMsg += "ex) /target -" + rateEx + "  : 현재가 -" + rateEx + "\n";
-		
-		int currentPrice = -1;
-		try {
-			currentPrice = coinManager.getCoin(SET.MY_COIN, exchange).getInt("last");
-		}
-		catch (ServerErrorException e1) {
-			Log.i(e1.log());
-			Log.i(e1.getStackTrace());
-			sendMessage("잠시 후 다시 보내주세요.\n" + e1.getTelegramMsg(), userId);
-			return;
+			 return "알림을 먼저 시작해주세요.";
 		}
 		
-		if (args.length == 0) { // case1. 평균단가를 입력하지 않았을때
-			sendMessage("목표가격을 입력해주세요.\n" + exMsg, userId);
-			return;
-		} else if (args.length > 1) { // case2. 평균단가와 다른 파라미터를 붙였을때.
-			sendMessage("목표가격만 입력해주세요.\n" + exMsg, userId);
-			return;
-		} else {
-			String priceStr = args[0];
-			int targetPrice = -1;
-
-			if (targetPrice == 0) {  // case4. 초기화
-				if(clientService.clearTargetPrice(userId.toString())) {
-					sendMessage("목표가격이 초기화 되었습니다.", userId);
-					return ;
-				}
-			} 
-			
-			if(priceStr.matches("^\\d*$")) {
-				targetPrice = Integer.valueOf(priceStr);
-			} else if( priceStr.matches("^[+-]?\\d*%$")) {
-				priceStr = priceStr.replace("%", "");
-				double percent = (Double.valueOf(priceStr)/100);
-				
-				if(percent == 0) {
-					targetPrice = 0;
-				} else if(percent > 0) {
-					targetPrice = currentPrice + (int)((double)currentPrice * percent);
-				}  else if( percent < 0 && percent >= -100) {
-					int a = ((int)((double)currentPrice * percent) * -1);
-					targetPrice = currentPrice - a;
-				} else if( percent < -100) {
-					sendMessage("목표가격 백분율을 -100% 이하로 설정 할 수 없습니다.\n" + exMsg, userId);
-					return ;	
-				}
-				
-			} else {
-				sendMessage("목표가격을 숫자 또는 백분율로 입력해주세요.\n" + exMsg, userId);
-				return ;
-			}
-			
-			
-			String msg = "";
-			msg += "목표가격 " + toCommaStr(targetPrice) + "원으로 설정되었습니다.\n";
-			msg += "------------------------\n";
-			msg += "목표가격 : " + toCommaStr(targetPrice) + " 원\n";
-			msg += "현재가격 : " + toCommaStr(currentPrice) + " 원\n";
-			msg += "가격차이 : " + toCommaStr(targetPrice - currentPrice) + " 원 (" + getPercent(targetPrice, currentPrice) + " )\n";
-			if(targetPrice >= currentPrice) {
-				if(clientService.updateTargetUpPrice(userId.toString(), targetPrice)){
-					sendMessage(msg, userId); // case5.설정완료
-				} else{
-					sendMessage("알림을 먼저 시작해주세요.\n명령어 /start", userId);
-				}
-			} else {
-				if(clientService.updateTargetDownPrice(userId.toString(), targetPrice)){
-					sendMessage(msg, userId); // case5.설정완료
-				} else{
-					sendMessage("알림을 먼저 시작해주세요.\n명령어 /start", userId);
-				}
-			}
-		}
-	}
-	
-	public void cmdSetCoinCnt(Integer userId, String[] args) {
-		if (args.length == 0) { // case1. 개수를 입력하지 않았을때
-			sendMessage("코인개수를 입력해주세요.\nex) /number " + numberEx, userId);
-			return;
-		} else if (args.length > 1) { // case2. 평균단가와 다른 파라미터를
-			sendMessage("코인개수만 입력해주세요.\nex) /number " + numberEx, userId);
-			return;
-		} else {
-			String numberStr = args[0];
-			double number = 0;
-
-			try { // case3. 평균단가에 문자가 포함될때
-				number = Double.parseDouble(numberStr);
-			} catch (NumberFormatException e) {
-				sendMessage("코인개수는 숫자로만 입력해주세요.\nex) /number " + numberEx, userId);
-				return;
-			}
-
-			if(clientService.updateNumber(userId.toString(), number)){
-				if (number == 0) { sendMessage("코인개수가 초기화 되었습니다.", userId); } // case4. 초기화
-				else {sendMessage("코인개수가 " + number + " 개로 설정되었습니다.", userId);} // case5.설정완료
-			} else{
-				sendMessage("알림을 먼저 시작해주세요.\n명령어 /start", userId);
-			}
-		}
-	}
-
-	public void cmdSetTimeLoop(Integer userId, String[] args) {
-		if (args.length == 0) { // case1. 시간을 입력하지 않았을때
-			sendMessage("시간 알림 주기를 입력해주세요.\nex) /timeloop 3\n*가능 시간 주기 : 0(알림 끄기), 1 ~ 12", userId);
-			return;
-		} else if (args.length > 1) { // case2.시간과 다른 파라미터를 붙였을때.
-			sendMessage("시간 알림 주기를 입력해주세요.\nex) /timeloop 3\n*가능 시간 주기 : 0(알림 끄기), 1 ~ 12", userId);
-			return;
-		} else {
-			String priceStr = args[0];
-			int timeloop = 0;
-
-			try { // case3. 시간에 문자가 포함될때
-				timeloop = Integer.parseInt(priceStr);
-			} catch (NumberFormatException e) {
-				sendMessage("시간 알림 주기는 숫자로만 입력해주세요.\nex) /timeloop 3\n*가능 시간 주기 : 0(알림 끄기), 1 ~ 12", userId);
-				return;
-			}
-
-			switch (timeloop) {
-			case 0: // case4. 알람 끄기
-				if(clientService.updateTimeLoop(userId.toString(), timeloop)){
-					sendMessage("시간 알림이 전송되지 않도록 설정하였습니다.", userId);
-				} else{
-					sendMessage("알림을 먼저 시작해주세요.\n명령어 /start", userId);
-				}
-				break;
-			case 1: case 2: case 3: case 4: case 5: case 6:
-			case 7: case 8: case 9: case 10: case 11: case 12:// case5.설정완료
-				if(clientService.updateTimeLoop(userId.toString(), timeloop)){
-					sendMessage("시간 알림 주기가 " + timeloop + "시간으로 설정되었습니다.", userId);
-				} else{
-					sendMessage("알림을 먼저 시작해주세요.\n명령어 /start", userId);
-				}
-				break;
-			default: // case6. 다른 시간 입력
-				sendMessage("시간 알림 주기를 정확히 입력해주세요.\n*가능 시간 주기 : 0(알림 끄기), 1 ~ 12", userId);
-				break;
-			}
-		}
+		return "temp";
 	}
 	
 
-	public void cmdSetDayLoop(Integer userId, String[] args) {
-		if (args.length == 0) { // case1. 일일을 입력하지 않았을때
-			sendMessage("일일 알림 주기를 입력해주세요.\nex) /dayloop 3\n*가능 일일 주기 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
-			return;
-		} else if (args.length > 1) { // case2.일일과 다른 파라미터를 붙였을때.
-			sendMessage("일일 알림 주기를 입력해주세요.\nex) /dayloop 3\n*가능 일일 주기 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
-			return;
-		} else {
-			String priceStr = args[0];
-			int dayLoop = 0;
-
-			try { // case3. 일일에 문자가 포함될때
-				dayLoop = Integer.parseInt(priceStr);
-			} catch (NumberFormatException e) {
-				sendMessage("일일 알림 주기는 숫자로만 입력해주세요.\nex) /dayloop 3\n*가능 일일 주기 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
-				return;
-			}
-
-			switch (dayLoop) {
-			case 0: // case4. 알람 끄기
-				if(clientService.updateDayLoop(userId.toString(), dayLoop)){
-					sendMessage("일일 알림이 전송되지 않도록 설정하였습니다.", userId);
-				} else{
-					sendMessage("알림을 먼저 시작해주세요.\n명령어 /start", userId);
-				}
-				break;
-			case 1: case 2: case 3: case 4: case 5: case 6: case 7:// case5.설정완료
-				if(clientService.updateDayLoop(userId.toString(), dayLoop)){
-					sendMessage("일일 알림 주기가 " + dayLoop + "일로 설정되었습니다.", userId);
-				} else{
-					sendMessage("알림을 먼저 시작해주세요.\n명령어 /start", userId);
-				}
-				break;
-			default: // case6. 다른 시간 입력
-				sendMessage("일일 알림 주기를 정확히 입력해주세요.\n*가능 일일 주기 : 0(알림 끄기), 1, 2, 3, 4, 5, 6, 7", userId);
-				break;
-			}
-		}
-	}
-		
-	public void cmdMsg(Integer userId, String username, String[] args) {
-		if(args.length > 0) {
-			String message  =  "";
-			for(int i =0; i < args.length; i++) {
-				message = message + args[i] + " ";
-			}
-			
-			clientSuggestService.insert(userId, username, message);
-			sendMessage("의견 감사드립니다.\n성투하세요!", userId);
-			
-			//To Me
-			sendMessage("메세지가 도착했습니다!\n------------------\n\n"  + message +"\n\n------------------\n By " + username + " [" + userId + " ]", this.creatorId());
-			
-		} else {
-			sendMessage("내용을 입력해주세요.\nex)/msg 안녕하세요.건의사항이~~", userId);
-		}
-	}
-	
-	public void cmdCoin(Integer userId) {
-		String msg = "";
-		msg += "링크를 클릭 하시면,\n";
-		msg += "해당 코인알리미 봇으로 이동합니다.\n";
-		msg += "-----------------------\n";
-		List<CoinInfoVo> coinInfos = coinInfoService.list(SET.MY_COIN);
-	    CoinInfoVo coinInfo = null;
-	    int coinInfosLen = coinInfos.size();
-			for(int i =0; i < coinInfosLen; i++) {
-	        coinInfo = coinInfos.get(i);
-	        msg += coinInfo.getCoinname() + "  :  " + coinInfo.getChatAddr() + "\n";
-	    }
-		msg += "\n";
-		sendMessage(msg, userId);
-	}
-	
-	
 	/* Send Message */
 	
-	public void sendMessage(String msg, Integer id){
-		this.sendMessage(msg, id.toString());
+	public void sendMessage(Integer id, Integer msgId, String msg, ReplyKeyboard keyboard){
+		this.sendMessage(id.toString(), msgId, msg, keyboard);
 	}
 	
-	public void sendMessage(String msg, String id){
+	public void sendMessage(String id, Integer msgId, String msg, ReplyKeyboard keyboard){
 		Log.i("To Client  :  [id :" +id + " ]  " + msg.replace("\n", "  "));
 		
 		SendMessage sendMessage = new SendMessage(id, msg);
+		sendMessage.setReplyToMessageId(msgId);
+		
+		if(keyboard != null) { 
+			sendMessage.setReplyMarkup(keyboard);
+		} 
 		
 		try {
 			sender.execute(sendMessage);
@@ -785,7 +635,7 @@ public class TelegramBot extends AbilityBot  {
 		
 	}
 	
-	public void sendKrwMessage(ClientVo client, int coinVal){
+	public String calcStr(ClientVo client, int coinVal){
 		double cnt = client.getCoinCount();
 		int price = client.getAvgPrice();
 		String msg = "";
@@ -797,7 +647,7 @@ public class TelegramBot extends AbilityBot  {
 		msg += "현재금액 : " + toCommaStr((int)(coinVal * cnt)) + "원\n";
 		msg += "손익금액 : " + toSignStr((int)((coinVal * cnt) - (cnt * price))) + "원 (" + getPercent((int)(coinVal * cnt), (int)(cnt * price)) + ")\n";
 		msg += "\n";
-		this.sendMessage(msg, client.getUserId());
+		return msg;
 	}
 	
 	public void sendTargetPriceMessage(List<ClientVo> clients, JSONObject coinObj) {
@@ -818,10 +668,10 @@ public class TelegramBot extends AbilityBot  {
 			if(client.getTargetUpPrice() != null) { msg += "목표가격 : " + toCommaStr(client.getTargetUpPrice()) + " 원\n"; }
 			if(client.getTargetDownPrice() != null) { msg += "목표가격 : " + toCommaStr(client.getTargetDownPrice()) + " 원\n"; }
 			msg += "현재가격 : " + toCommaStr(currentPrice) + " 원\n";
-			this.sendMessage(msg, client.getUserId());
-			
+
+			sendMessage(client.getUserId(), null, msg, null);
 			if(clientService.clearTargetPrice(client.getUserId())) {
-				this.sendMessage("목표가격이 초기화되었습니다.", client.getUserId());
+				sendMessage(client.getUserId(), null, "목표가격이 초기화되었습니다.", null);
 			}
 		}
 	}
@@ -853,7 +703,7 @@ public class TelegramBot extends AbilityBot  {
 		
 		for (int i = 0; i < clientLength; i++) {
 			client = clients.get(i);
-			this.sendMessage(msg, client.getUserId());
+			sendMessage(client.getUserId(), null, msg, null);
 		}
 	}
 	
@@ -908,10 +758,10 @@ public class TelegramBot extends AbilityBot  {
 		int clientLength = clients.size();
 		for(int i = 0; i < clientLength; i++){
 			client = clients.get(i);
-			this.sendMessage(msg, client.getUserId());
+			sendMessage(client.getUserId(), null, msg, null);
 			
 			if(client.getCoinCount() != null && client.getAvgPrice() != null){
-				this.sendKrwMessage(client, currentLast);
+				sendMessage(client.getUserId(), null, calcStr(client, currentLast), null);
 			}
 		}
 	}

@@ -9,6 +9,7 @@ import com.cglee079.cointelebot.constants.ID;
 public class ClientVo {
 	private String userId = null;
 	private String username = null;
+	private String state = null;
 	private String exchange = null;
 	private Integer timeLoop = null;
 	private Integer dayLoop = null;
@@ -22,10 +23,27 @@ public class ClientVo {
 	private String closeDate;
 
 	public ClientVo() {
-		if (SET.ENABLED_UPBIT) { exchange = ID.EXCHANGE_UPBIT; }
-		if (SET.ENABLED_BITHUMB) { exchange = ID.EXCHANGE_BITHUMB; }
-		if (SET.ENABLED_COINONE) { exchange = ID.EXCHANGE_COINONE; }
+		if (SET.ENABLED_UPBIT) {
+			exchange = ID.EXCHANGE_UPBIT;
+		}
+		if (SET.ENABLED_BITHUMB) {
+			exchange = ID.EXCHANGE_BITHUMB;
+		}
+		if (SET.ENABLED_COINONE) {
+			exchange = ID.EXCHANGE_COINONE;
+		}
 	}
+
+	
+	@Override
+	public String toString() {
+		return "ClientVo [userId=" + userId + ", username=" + username + ", state=" + state + ", exchange=" + exchange
+				+ ", timeLoop=" + timeLoop + ", dayLoop=" + dayLoop + ", targetUpPrice=" + targetUpPrice
+				+ ", targetDownPrice=" + targetDownPrice + ", avgPrice=" + avgPrice + ", coinCount=" + coinCount
+				+ ", enabled=" + enabled + ", openDate=" + openDate + ", reopenDate=" + reopenDate + ", closeDate="
+				+ closeDate + "]";
+	}
+
 
 	public String getUserId() {
 		return userId;
@@ -41,6 +59,14 @@ public class ClientVo {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	public String getExchange() {
@@ -74,7 +100,7 @@ public class ClientVo {
 	public void setTargetUpPrice(Integer targetPrice) {
 		this.targetUpPrice = targetPrice;
 	}
-	
+
 	public Integer getTargetDownPrice() {
 		return targetDownPrice;
 	}

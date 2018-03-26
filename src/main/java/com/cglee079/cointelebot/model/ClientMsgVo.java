@@ -1,7 +1,5 @@
 package com.cglee079.cointelebot.model;
 
-import com.cglee079.cointelebot.util.TimeStamper;
-
 public class ClientMsgVo {
 	private int seq;
 	private String userId;

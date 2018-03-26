@@ -1,16 +1,6 @@
 package com.cglee079.cointelebot.constants;
 
 public class ID {
-	public final static String MY_COIN = ID.COIN_EOS;
-	
-	public final static boolean ENABLED_COINONE = true;
-	public final static boolean ENABLED_BITHUMB = true;	
-	public final static boolean ENABLED_UPBIT 	= false;
-	
-	public final static boolean ENABLED_BITFINEX = true;
-	public final static boolean ENABLED_BITTREX	 = false;
-	
-	////
 	public final static String EXCHANGE_COINONE = "101";
 	public final static String EXCHANGE_BITHUMB	= "102";
 	public final static String EXCHANGE_UPBIT	= "103";
@@ -24,4 +14,15 @@ public class ID {
 	public final static String COIN_BCH = "17";
 	public final static String COIN_ETC = "18";
 	public final static String COIN_ADA = "19";
+	
+    public static final String STATE_MAIN = "ST000";
+    public static final String STATE_SET_PRICE  = "ST012";
+    public static final String STATE_SET_NUMBER = "ST013";
+    public static final String STATE_SET_TARGET = "ST014";
+    public static final String STATE_SET_EXCHANGE = "ST015";
+    public static final String STATE_SET_DAYLOOP = "ST016";
+    public static final String STATE_SET_TIMELOOP = "ST017";
+    public static final String STATE_SEND_MSG = "ST018";
+
+	
 }

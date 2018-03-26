@@ -33,6 +33,15 @@ public class ClientService {
 		return clientDao.list(exchange, timeLoop, dayLoop, currentPrice);
 	}
 	
+	public String getState(Integer id) {
+		ClientVo client = clientDao.get(id.toString());
+		if(client != null) {
+			return client.getState();
+		} else {
+			return null;
+		}
+	}
+	
 	public String getExchange(String userId){
 		ClientVo client = clientDao.get(userId);
 		if(client != null) {
@@ -60,6 +69,7 @@ public class ClientService {
 			client.setUsername(username);
 			client.setTimeLoop(3);
 			client.setDayLoop(1);
+			client.setState(ID.STATE_MAIN);
 			client.setOpenDate(new Date());
 			return clientDao.insert(client);
 		} else{
@@ -107,6 +117,17 @@ public class ClientService {
 			return clientDao.update(client);
 		}
 		return false;
+	}
+	
+	public boolean updateState(String userId, String state) {
+		ClientVo client = clientDao.get(userId);
+		if(client != null){
+			client.setState(state);
+			return clientDao.update(client);
+		} else{
+			return false;
+		}
+		
 	}
 
 	public boolean updateExchange(String userId, String exchange) {
@@ -200,5 +221,6 @@ public class ClientService {
 	public ClientVo get(int userId) {
 		return this.get(String.valueOf(userId));
 	}
+
 
 }

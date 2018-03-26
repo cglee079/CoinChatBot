@@ -62,7 +62,7 @@ public class HomeController {
 		ClientVo client = null;
 		for(int i =0; i < size; i++){
 			client = clients.get(i);
-			telegramBot.sendMessage(text, client.getUserId());
+			telegramBot.sendMessage(client.getUserId(), null, text, null);
 		}
 		return new JSONObject().put("result", true).toString();
 	}
@@ -70,7 +70,7 @@ public class HomeController {
 	@ResponseBody
 	@RequestMapping(value = "/send.do")
 	public String DoSend(String id, String text) throws IOException {
-		telegramBot.sendMessage(text, id);
+		telegramBot.sendMessage(id, null, text, null);
 		return new JSONObject().put("result", true).toString();
 	}
 	

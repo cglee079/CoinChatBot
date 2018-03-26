@@ -8,6 +8,7 @@
 			SELECT 
 			CLNT_USERID as 'userId',
 			CLNT_USERNAME as 'username',
+			CLNT_STATE as 'state',
 			CLNT_EXCHANGE as 'exchange',
 			CLNT_TIMELOOP as 'timeLoop',
 			CLNT_DAYLOOP as 'dayLoop',
@@ -19,7 +20,7 @@
 			CLNT_OPEN_DATE as 'openDate',
 			CLNT_REOPEN_DATE as 'reopenDate',
 			CLNT_CLOSE_DATE as 'closeDate'
-			FROM TB_BTCBOT_CLIENT
+			FROM TB_TESTBOT_CLIENT
 			WHERE CLNT_USERID = #{userId}
 	</select>
 	
@@ -27,6 +28,7 @@
 			SELECT 
 			CLNT_USERID as 'userId',
 			CLNT_USERNAME as 'username',
+			CLNT_STATE as 'state',
 			CLNT_EXCHANGE as 'exchange',
 			CLNT_TIMELOOP as 'timeLoop',
 			CLNT_DAYLOOP as 'dayLoop',
@@ -38,7 +40,7 @@
 			CLNT_OPEN_DATE as 'openDate',
 			CLNT_REOPEN_DATE as 'reopenDate',
 			CLNT_CLOSE_DATE as 'closeDate'
-			FROM TB_BTCBOT_CLIENT
+			FROM TB_TESTBOT_CLIENT
 			WHERE 1 = 1
 			<if test="exchange != null">
 			AND CLNT_EXCHANGE = #{exchange}
@@ -56,20 +58,69 @@
 			AND CLNT_ENABLED = 'Y'
 	</select>
 	
+	<select id="list_tgup" resultType="com.cglee079.cointelebot.model.ClientVo" parameterType="map">
+			SELECT 
+			CLNT_USERID as 'userId',
+			CLNT_USERNAME as 'username',
+			CLNT_STATE as 'state',
+			CLNT_EXCHANGE as 'exchange',
+			CLNT_TIMELOOP as 'timeLoop',
+			CLNT_DAYLOOP as 'dayLoop',
+			CLNT_TGUP_PRICE as 'targetUpPrice',
+			CLNT_TGDOWN_PRICE as 'targetDownPrice',
+			CLNT_AVGPRICE as 'avgPrice',
+			CLNT_COIN_COUNT  as 'coinCount',
+			CLNT_ENABLED as 'enabled',
+			CLNT_OPEN_DATE as 'openDate',
+			CLNT_REOPEN_DATE as 'reopenDate',
+			CLNT_CLOSE_DATE as 'closeDate'
+			FROM TB_TESTBOT_CLIENT
+			WHERE 1 = 1
+			<if test="currentPrice != null">
+			<![CDATA[ AND  #{currentPrice} >= CLNT_TGUP_PRICE ]]>
+			</if>
+			AND CLNT_ENABLED = 'Y'
+	</select>
+	
+	<select id="list_tgdown" resultType="com.cglee079.cointelebot.model.ClientVo" parameterType="map">
+			SELECT 
+			CLNT_USERID as 'userId',
+			CLNT_USERNAME as 'username',
+			CLNT_STATE as 'state',
+			CLNT_EXCHANGE as 'exchange',
+			CLNT_TIMELOOP as 'timeLoop',
+			CLNT_DAYLOOP as 'dayLoop',
+			CLNT_TGUP_PRICE as 'targetUpPrice',
+			CLNT_TGDOWN_PRICE as 'targetDownPrice',
+			CLNT_AVGPRICE as 'avgPrice',
+			CLNT_COIN_COUNT  as 'coinCount',
+			CLNT_ENABLED as 'enabled',
+			CLNT_OPEN_DATE as 'openDate',
+			CLNT_REOPEN_DATE as 'reopenDate',
+			CLNT_CLOSE_DATE as 'closeDate'
+			FROM TB_TESTBOT_CLIENT
+			WHERE 1 = 1
+			<if test="currentPrice != null">
+			<![CDATA[ AND  #{currentPrice} >= CLNT_TGUP_PRICE ]]>
+			</if>
+			AND CLNT_ENABLED = 'Y'
+	</select>
+	
 	<insert id="insert">
-		INSERT INTO TB_BTCBOT_CLIENT(CLNT_USERID, CLNT_USERNAME, CLNT_EXCHANGE, CLNT_TIMELOOP, CLNT_DAYLOOP, CLNT_TGUP_PRICE, CLNT_TGDOWN_PRICE, CLNT_AVGPRICE, CLNT_COIN_COUNT, CLNT_ENABLED, CLNT_OPEN_DATE, CLNT_REOPEN_DATE, CLNT_CLOSE_DATE)
-		VALUES (#{userId}, #{username}, #{exchange}, #{timeLoop}, #{dayLoop}, #{targetUpPrice}, #{targetDownPrice}, #{avgPrice}, #{coinCount}, #{enabled}, #{openDate}, #{reopenDate}, #{closeDate})
+		INSERT INTO TB_TESTBOT_CLIENT(CLNT_USERID, CLNT_USERNAME, CLNT_STATE, CLNT_EXCHANGE, CLNT_TIMELOOP, CLNT_DAYLOOP, CLNT_TGUP_PRICE, CLNT_TGDOWN_PRICE, CLNT_AVGPRICE, CLNT_COIN_COUNT, CLNT_ENABLED, CLNT_OPEN_DATE, CLNT_REOPEN_DATE, CLNT_CLOSE_DATE)
+		VALUES (#{userId}, #{username}, #{state}, #{exchange}, #{timeLoop}, #{dayLoop}, #{targetUpPrice}, #{targetDownPrice}, #{avgPrice}, #{coinCount}, #{enabled}, #{openDate}, #{reopenDate}, #{closeDate})
 	</insert>
 	
 	<delete id="delete" parameterType="map">
-		DELETE FROM TB_BTCBOT_CLIENT
+		DELETE FROM TB_TESTBOT_CLIENT
 		WHERE CLNT_USERID = #{userId}
 	</delete>
 	
 	<update id="update">
-		UPDATE TB_BTCBOT_CLIENT
+		UPDATE TB_TESTBOT_CLIENT
 		SET 
 		CLNT_USERNAME = #{username},
+		CLNT_STATE = #{state},
 		CLNT_EXCHANGE = #{exchange},
 		CLNT_TIMELOOP = #{timeLoop},
 		CLNT_DAYLOOP = #{dayLoop},
