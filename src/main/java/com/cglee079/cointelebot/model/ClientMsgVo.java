@@ -48,7 +48,7 @@ public class ClientMsgVo {
 	}
 
 	public String log() {
-		return "From Client  :  [id: " + userId + " : " + username + " ]  " + msg;
+		return "From Client\t:\t[id: " + userId + " : " + username + " ]  " + msg;
 	}
 
 }

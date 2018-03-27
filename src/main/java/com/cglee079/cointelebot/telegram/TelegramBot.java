@@ -22,6 +22,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import com.cglee079.cointelebot.coin.CoinManager;
 import com.cglee079.cointelebot.constants.CMD;
 import com.cglee079.cointelebot.constants.ID;
+import com.cglee079.cointelebot.constants.MSG;
 import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 import com.cglee079.cointelebot.keyboard.MainKeyboard;
@@ -99,29 +100,30 @@ public class TelegramBot extends AbilityBot  {
 		
 		ClientVo client = clientService.get(userId);
 		
-		if(message.getText().equals("/start")) {
+		if(message.getText().equals("/start") || client == null) {
 			String msg = "";
 			if (clientService.openChat(userId, username)) {
 				msg = coinname + " 알림이 시작되었습니다.\n\n";
 				msg += exp.explainHelp();
+				sendMessage(userId, null, msg, mainKeyboard);
 			} else {
 				msg = "이미 " + coinname + " 알리미에 설정 정보가 기록되어있습니다.";
+				sendMessage(userId, null, msg, mainKeyboard);
+				sendMessage(userId, messageId, messageInfo(userId), mainKeyboard);
 			}
-			sendMessage(userId, null, msg, mainKeyboard);
-			
 			return ;
 		} 
 		
 		String state = client.getState();
 		switch(state) {
 		case ID.STATE_MAIN: handleMenu(userId, messageId, cmd); break;
-		case ID.STATE_SET_DAYLOOP : handleDayloop(userId, messageId, cmd); break;
-		case ID.STATE_SET_TIMELOOP : handleTimeloop(userId, messageId, cmd); break;
-		case ID.STATE_SET_EXCHANGE : handleExchange(userId, messageId, cmd); break;
-		case ID.STATE_SET_TARGET : handleTarget(userId, messageId, cmd); break;
-		case ID.STATE_SET_PRICE : handlePrice(userId, messageId, cmd); break;
-		case ID.STATE_SET_NUMBER : handleNumber(userId, messageId, cmd); break;
-		case ID.STATE_SEND_MSG : handleMsg(userId, username, messageId, cmd); break;
+		case ID.STATE_SET_DAYLOOP : handleSetDayloop(userId, messageId, cmd); break;
+		case ID.STATE_SET_TIMELOOP : handleSetTimeloop(userId, messageId, cmd); break;
+		case ID.STATE_SET_EXCHANGE : handleSetExchange(userId, messageId, cmd); break;
+		case ID.STATE_SET_TARGET : handleSetTarget(userId, messageId, cmd); break;
+		case ID.STATE_SET_PRICE : handleSetPrice(userId, messageId, cmd); break;
+		case ID.STATE_SET_NUMBER : handleSetNumber(userId, messageId, cmd); break;
+		case ID.STATE_SEND_MSG : handleSendMsg(userId, username, messageId, cmd); break;
 		}
 	}
 
@@ -192,7 +194,7 @@ public class TelegramBot extends AbilityBot  {
 		clientService.updateState(userId.toString(), state);
 	}
 
-	private void handleDayloop(Integer userId, Integer messageId, String cmd) {
+	private void handleSetDayloop(Integer userId, Integer messageId, String cmd) {
 		int dayloop = -1;
 		String msg = "";
 		switch(cmd) {
@@ -220,13 +222,13 @@ public class TelegramBot extends AbilityBot  {
 			}
 		}
 		
-		msg += "메인 화면으로 돌아갑니다.\n";
+		msg += MSG.TO_MAIN;
 		
 		sendMessage(userId, messageId, msg, mainKeyboard);
 		clientService.updateState(userId.toString(), ID.STATE_MAIN);
 	}
 	
-	private void handleTimeloop(Integer userId, Integer messageId, String cmd) {
+	private void handleSetTimeloop(Integer userId, Integer messageId, String cmd) {
 		int timeloop = -1;
 		String msg = "";
 		
@@ -260,13 +262,13 @@ public class TelegramBot extends AbilityBot  {
 			}
 		}
 		
-		msg += "메인 화면으로 돌아갑니다.\n";
+		msg += MSG.TO_MAIN;
 		
 		sendMessage(userId, messageId, msg, mainKeyboard);
 		clientService.updateState(userId.toString(), ID.STATE_MAIN);
 	}
 	
-	private void handleExchange(Integer userId, Integer messageId, String cmd) {
+	private void handleSetExchange(Integer userId, Integer messageId, String cmd) {
 		String exchange = null;
 		String msg = "거래소가 설정되지 않았습니다.\n";
 		
@@ -295,13 +297,13 @@ public class TelegramBot extends AbilityBot  {
 			msg = "거래소가 설정되지 않았습니다.\n";
 		}
 		
-		msg += "메인 화면으로 돌아갑니다.\n";
+		msg += MSG.TO_MAIN;
 		
 		sendMessage(userId, messageId, msg, mainKeyboard);
 		clientService.updateState(userId.toString(), ID.STATE_MAIN);
 	}
 	
-	private void handleTarget(Integer userId, Integer messageId, String cmd) {
+	private void handleSetTarget(Integer userId, Integer messageId, String cmd) {
 		ClientVo client = clientService.get(userId);
 		String exchange = client.getExchange();
 		String msg = "";
@@ -311,10 +313,10 @@ public class TelegramBot extends AbilityBot  {
 		try {
 			currentPrice = coinManager.getCoin(SET.MY_COIN, exchange).getInt("last");
 		}
-		catch (ServerErrorException e1) {
-			Log.i(e1.log());
-			Log.i(e1.getStackTrace());
-			msg = "잠시 후 다시 보내주세요.\n" + e1.getTelegramMsg();
+		catch (ServerErrorException e) {
+			Log.i(e.log());
+			Log.i(e.getStackTrace());
+			msg = MSG.WAIT_SECONDS + e.getTelegramMsg();
 		}
 		
 		if(currentPrice != -1) {
@@ -362,23 +364,23 @@ public class TelegramBot extends AbilityBot  {
 				msg += "가격차이 : " + toCommaStr(targetPrice - currentPrice) + " 원 (" + getPercent(targetPrice, currentPrice) + " )\n";
 				if(targetPrice >= currentPrice) {
 					if(!clientService.updateTargetUpPrice(userId.toString(), targetPrice)){
-						msg = "알림을 먼저 시작해주세요.\n명령어 /start";
+						msg = MSG.NEED_TO_START;
 					}
 				} else {
 					if(!clientService.updateTargetDownPrice(userId.toString(), targetPrice)){
-						msg = "알림을 먼저 시작해주세요.\n명령어 /start";
+						msg = MSG.NEED_TO_START;
 					}
 				}
 			}
 			
 		}
 		
-		msg += "메인 화면으로 돌아갑니다.\n";
+		msg += MSG.TO_MAIN;
 		sendMessage(userId, messageId, msg, mainKeyboard);
 		clientService.updateState(userId.toString(), ID.STATE_MAIN);
 	}
 	
-	private void handlePrice(Integer userId, Integer messageId, String cmd) {
+	private void handleSetPrice(Integer userId, Integer messageId, String cmd) {
 		String priceStr = cmd;
 		String msg = "";
 		int price = -1;
@@ -394,17 +396,17 @@ public class TelegramBot extends AbilityBot  {
 				if (price == 0) { msg = "투자금액이 초기화 되었습니다.\n";} // case2. 초기화
 				else {msg = "투자금액이 " + price + " 원으로 설정되었습니다.\n";} // case3.설정완료
 			} else{
-				msg = "알림을 먼저 시작해주세요.\n 명령어 /start << 클릭\n";
+				msg = MSG.NEED_TO_START;
 			}
 		}
 		
-		msg += "메인 화면으로 돌아갑니다.\n";
+		msg += MSG.TO_MAIN;
 		
 		sendMessage(userId, messageId, msg, mainKeyboard);
 		clientService.updateState(userId.toString(), ID.STATE_MAIN);
 	}
 	
-	private void handleNumber(Integer userId, Integer messageId, String cmd) {
+	private void handleSetNumber(Integer userId, Integer messageId, String cmd) {
 		String numberStr = cmd;
 		String msg = "";
 		double number = -1;
@@ -420,30 +422,38 @@ public class TelegramBot extends AbilityBot  {
 				if (number == 0) { msg = "코인개수가 초기화 되었습니다.\n";} // case2. 초기화
 				else {msg = "코인개수가 " + number + " 개로 설정되었습니다.\n";} // case3.설정완료
 			} else{
-				msg = "알림을 먼저 시작해주세요.\n 명령어 /start << 클릭\n";
+				msg = MSG.NEED_TO_START;
 			}
 		}
 		
-		msg += "메인 화면으로 돌아갑니다.\n";
+		msg += MSG.TO_MAIN;
 		
 		sendMessage(userId, messageId, msg, mainKeyboard);
 		clientService.updateState(userId.toString(), ID.STATE_MAIN);
 	}
 	
-	private void handleMsg(Integer userId, String username, Integer messageId, String message) {
-		clientSuggestService.insert(userId, username, message);
-		sendMessage(userId, messageId, "의견 감사드립니다.\n성투하세요!", mainKeyboard);
+	private void handleSendMsg(Integer userId, String username, Integer messageId, String message) {
+		switch(message) {
+		case CMD.SEND_MSG_OUT :
+			sendMessage(userId, messageId, MSG.TO_MAIN, mainKeyboard);
+			break;
+		default:
+			clientSuggestService.insert(userId, username, message);
+			sendMessage(userId, messageId, "의견 감사드립니다.\n성투하세요!", mainKeyboard);
+			
+			//To Developer
+			String msg = "";
+			msg += "메세지가 도착했습니다!\n------------------\n\n";
+			msg += message;
+			msg += "\n\n------------------\n";
+			msg += " By ";
+			msg += username + " [" + userId + " ]";
+			
+			sendMessage(this.creatorId(), null, msg, mainKeyboard);
+			break;
+		}
+		
 		clientService.updateState(userId.toString(), ID.STATE_MAIN);
-		
-		//To Me
-		String msg = "";
-		msg += "메세지가 도착했습니다!\n------------------\n\n";
-		msg += message;
-		msg += "\n\n------------------\n";
-		msg += " By ";
-		msg += username + " [" + userId + " ]";
-		
-		sendMessage(this.creatorId(), null, msg, mainKeyboard);
 	}
 	
 	private String messageCurrentPrice(Integer userId) {
@@ -458,13 +468,13 @@ public class TelegramBot extends AbilityBot  {
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
 			Log.i(e.getStackTrace());
-			return "잠시 후 다시 보내주세요.\n" + e.getTelegramMsg();
+			return MSG.WAIT_SECONDS + e.getTelegramMsg();
 		}
 		
 		
 		if(coin == null) {
 			Log.i("가격정보를 보낼 수 없습니다. : return NULL");
-			return "잠시 후 다시보내주세요";
+			return MSG.WAIT_SECONDS + "Coin NULL";
 		}
 		
 		currentValue = coin.getInt("last");
@@ -478,7 +488,7 @@ public class TelegramBot extends AbilityBot  {
 	public String messageInfo(Integer userId) {
 		ClientVo client = clientService.get(userId);
 		if(client == null){
-			return "알림을 먼저 시작해주세요.\n명령어 /start";
+			return MSG.NEED_TO_START;
 		}
 		
 		String msg = "";
@@ -528,9 +538,10 @@ public class TelegramBot extends AbilityBot  {
 			String exchange = clientService.getExchange(userId);
 			coin = coinManager.getCoinWithKimp(exchange);
 		} catch (ServerErrorException e) {
+			e.printStackTrace();
 			Log.i(e.log());
 			Log.i(e.getStackTrace());
-			return "잠시 후 다시 보내주세요.\n" + e.getTelegramMsg();
+			return MSG.WAIT_SECONDS + e.getTelegramMsg();
 		} 
 		
 		if(coin != null){
@@ -545,9 +556,9 @@ public class TelegramBot extends AbilityBot  {
 			msg += "프리미엄 : " + toSignStr(coin.getDouble("kimp")) + " %\n";
 			
 			return msg;
+		} else {
+			return MSG.WAIT_SECONDS + "Coin NULL";
 		}
-		
-		return "temp";
 	}
 	
 	public String messageBtc(Integer userId) {
@@ -563,7 +574,7 @@ public class TelegramBot extends AbilityBot  {
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
 			Log.i(e.getStackTrace());			
-			return "잠시 후 다시 보내주세요.\n" + e.getTelegramMsg();
+			return MSG.WAIT_SECONDS + e.getTelegramMsg();
 		}
 	
 		if(coin != null && btc != null){
@@ -580,9 +591,10 @@ public class TelegramBot extends AbilityBot  {
 			msg += coinname + " 24시간 변화량 : " + getPercent(coinCV, coinBV) + "\n";
 			
 			return msg;
+		} else {
+			return MSG.WAIT_SECONDS + "Coin NULL";
 		}
 		
-		return "temp";
 	}
 	
 	public String messageCalc(Integer userId) {
@@ -593,21 +605,38 @@ public class TelegramBot extends AbilityBot  {
 			if( client.getPrice() != null && client.getCoinCount() != null){
 				try {
 					JSONObject coin = coinManager.getCoin(SET.MY_COIN,client.getExchange());
-					return calcStr(client, coin.getInt("last"));
+					return calcResult(client, coin.getInt("last"));
 				} catch (ServerErrorException e) {
 					Log.i(e.log());
 					Log.i(e.getStackTrace());
-					return "잠시 후 다시 보내주세요.\n" + e.getTelegramMsg();
+					return MSG.WAIT_SECONDS + e.getTelegramMsg();
 				}
 			}
 		} else{
-			 return "알림을 먼저 시작해주세요.";
+			 return MSG.NEED_TO_START;
 		}
 		
 		return "temp";
 	}
 	
 
+	public String calcResult(ClientVo client, int coinVal){
+		double cnt = client.getCoinCount();
+		int price = client.getPrice();
+		int avgPrice = (int) ((double)price / cnt);
+		
+		String msg = "";
+		msg += "평균단가 : " + toCommaStr(avgPrice) + " 원\n";
+		msg += "현재가격 : " + toCommaStr(coinVal)+ " 원\n";
+		msg += "코인개수 : " + toStr(cnt) + " 개\n";
+		msg += "---------------------\n";
+		msg += "투자금액 : " + toCommaStr(price) + "원\n"; 
+		msg += "현재금액 : " + toCommaStr((int)(coinVal * cnt)) + "원\n";
+		msg += "손익금액 : " + toSignStr((int)((coinVal * cnt) - (cnt * avgPrice))) + "원 (" + getPercent((int)(coinVal * cnt), (int)(cnt * avgPrice)) + ")\n";
+		msg += "\n";
+		return msg;
+	}
+	
 	/* Send Message */
 	
 	public void sendMessage(Integer id, Integer msgId, String msg, ReplyKeyboard keyboard){
@@ -615,7 +644,7 @@ public class TelegramBot extends AbilityBot  {
 	}
 	
 	public void sendMessage(String id, Integer msgId, String msg, ReplyKeyboard keyboard){
-		Log.i("To Client  :  [id :" +id + " ]  " + msg.replace("\n", "  "));
+		Log.i("To Client\t:\t[id :" +id + " ]  " + msg.replace("\n", "  "));
 		
 		SendMessage sendMessage = new SendMessage(id, msg);
 		sendMessage.setReplyToMessageId(msgId);
@@ -633,23 +662,6 @@ public class TelegramBot extends AbilityBot  {
 			return ;
 		}
 		
-	}
-	
-	public String calcStr(ClientVo client, int coinVal){
-		double cnt = client.getCoinCount();
-		int price = client.getPrice();
-		int avgPrice = (int) ((double)price / cnt);
-		
-		String msg = "";
-		msg += "평균단가 : " + toCommaStr(avgPrice) + " 원\n";
-		msg += "현재가격 : " + toCommaStr(coinVal)+ " 원\n";
-		msg += "코인개수 : " + toStr(cnt) + " 개\n";
-		msg += "---------------------\n";
-		msg += "투자금액 : " + toCommaStr(price) + "원\n"; 
-		msg += "현재금액 : " + toCommaStr((int)(coinVal * cnt)) + "원\n";
-		msg += "손익금액 : " + toSignStr((int)((coinVal * cnt) - (cnt * avgPrice))) + "원 (" + getPercent((int)(coinVal * cnt), (int)(cnt * avgPrice)) + ")\n";
-		msg += "\n";
-		return msg;
 	}
 	
 	public void sendTargetPriceMessage(List<ClientVo> clients, JSONObject coinObj) {
@@ -763,7 +775,7 @@ public class TelegramBot extends AbilityBot  {
 			sendMessage(client.getUserId(), null, msg, null);
 			
 			if(client.getCoinCount() != null && client.getPrice() != null){
-				sendMessage(client.getUserId(), null, calcStr(client, currentLast), null);
+				sendMessage(client.getUserId(), null, calcResult(client, currentLast), null);
 			}
 		}
 	}

@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.cglee079.cointelebot.constants.CMD;
 import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.model.CoinInfoVo;
@@ -153,6 +154,9 @@ public class Explainer {
 		msg += "* ex) " + targetEx + "  : 목표가격 " + targetEx + "원\n";
 		msg += "* ex) " + rateEx + "    : 현재가 +" + rateEx + "\n";
 		msg += "* ex) -" + rateEx + "  : 현재가 -" + rateEx + "\n";
+		msg += "\n";
+		msg += "\n";
+		msg += "# 메인으로 돌아가시려면 문자를 입력해주세요.\n";
 		
 		return msg;
 	}
@@ -162,10 +166,14 @@ public class Explainer {
 		msg += "투자금액을 입력해주세요.\n";
 		msg += "투자금액과 코인개수를 입력하시면 손익금을 확인 하실 수 있습니다.\n";
 		msg += "\n";
+		
 		msg += "* 투자금액은 숫자로만 입력해주세요.\n";
 		msg += "* 0을 입력하시면 초기화됩니다.\n";
 		msg += "* ex) " + 0 + " : 초기화\n";
-		msg += "* ex) " + priceEx + " : 투자금액 " + priceEx +" 원 설정";
+		msg += "* ex) " + priceEx + " : 투자금액 " + priceEx +" 원 설정\n";
+		msg += "\n";
+		msg += "\n";
+		msg += "# 메인으로 돌아가시려면 문자를 입력해주세요.\n";
 		return msg;
 	}
 	
@@ -177,7 +185,10 @@ public class Explainer {
 		msg += "* 코인개수는 숫자로만 입력해주세요.\n";
 		msg += "* 0을 입력하시면 초기화됩니다.\n";
 		msg += "* ex) " + 0 + " : 초기화\n";
-		msg += "* ex) " + numberEx + " : 코인개수 " + numberEx +" 개 설정";
+		msg += "* ex) " + numberEx + " : 코인개수 " + numberEx +" 개 설정\n";
+		msg += "\n";
+		msg += "\n";
+		msg += "# 메인으로 돌아가시려면 문자를 입력해주세요.\n";
 		return msg;
 	}
 	
@@ -186,6 +197,9 @@ public class Explainer {
 		String msg =  "";
 		msg += "개발자에게 내용이 전송되어집니다.\n";
 		msg += "내용을 전송해주세요.\n";
+		msg += "\n";
+		msg += "\n";
+		msg += "# 메인으로 돌아가시려면 " + CMD.SEND_MSG_OUT + " 를 입력해주세요.\n";
 		return msg;
 	}
 
