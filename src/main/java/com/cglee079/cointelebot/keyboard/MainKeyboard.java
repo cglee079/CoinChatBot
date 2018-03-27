@@ -22,9 +22,7 @@ public class MainKeyboard extends ReplyKeyboardMarkup{
 	    KeyboardRow keyboardFirstRow = new KeyboardRow();
 	    keyboardFirstRow.add(CMD.MAIN_CURRENT_PRICE);
 	    keyboardFirstRow.add(CMD.MAIN_KOREA_PREMIUM);
-	    if(SET.MY_COIN != ID.COIN_BTC) {
-	    	keyboardFirstRow.add(CMD.MAIN_BTC);
-	    }
+	    keyboardFirstRow.add(CMD.MAIN_BTC);
 	    keyboardFirstRow.add(CMD.MAIN_CALCULATE);
 	    
 	    KeyboardRow keyboardSecondRow = new KeyboardRow();
