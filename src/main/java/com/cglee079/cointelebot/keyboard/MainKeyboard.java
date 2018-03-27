@@ -7,6 +7,8 @@ import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import com.cglee079.cointelebot.constants.CMD;
+import com.cglee079.cointelebot.constants.ID;
+import com.cglee079.cointelebot.constants.SET;
 
 public class MainKeyboard extends ReplyKeyboardMarkup{
 	public MainKeyboard() {
@@ -20,7 +22,9 @@ public class MainKeyboard extends ReplyKeyboardMarkup{
 	    KeyboardRow keyboardFirstRow = new KeyboardRow();
 	    keyboardFirstRow.add(CMD.MAIN_CURRENT_PRICE);
 	    keyboardFirstRow.add(CMD.MAIN_KOREA_PREMIUM);
-	    keyboardFirstRow.add(CMD.MAIN_BTC);
+	    if(SET.MY_COIN != ID.COIN_BTC) {
+	    	keyboardFirstRow.add(CMD.MAIN_BTC);
+	    }
 	    keyboardFirstRow.add(CMD.MAIN_CALCULATE);
 	    
 	    KeyboardRow keyboardSecondRow = new KeyboardRow();
