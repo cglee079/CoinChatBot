@@ -85,8 +85,8 @@ public class Explainer {
 
         helpMsg += "미국정보 By ";
         if(SET.ENABLED_BITTREX) { helpMsg += "Bittrex, ";}
-        if(SET.ENABLED_BITFINEX) { helpMsg += "Bitfinex ";}
-
+        if(SET.ENABLED_BITFINEX) { helpMsg += "Bitfinex, ";}
+        if(SET.ENABLED_POLONIEX) { helpMsg += "Poloniex, ";}
         helpMsg += "\n";
 
         helpMsg += "환율정보 By the European Central Bank\n";

@@ -8,6 +8,7 @@
 	<bean id="UpbitPooler" class="com.cglee079.cointelebot.coin.UpbitPooler"></bean>
 	<bean id="BitfinexPooler" class="com.cglee079.cointelebot.coin.BitfinexPooler"></bean>
 	<bean id="BittrexPooler" class="com.cglee079.cointelebot.coin.BittrexPooler"></bean>
+	<bean id="PoloniexPooler" class="com.cglee079.cointelebot.coin.PoloniexPooler"></bean>
 	<bean id="ExchangePooler" class="com.cglee079.cointelebot.coin.ExchangePooler"></bean>
 	<bean id="CoinManager" class="com.cglee079.cointelebot.coin.CoinManager"></bean>
 

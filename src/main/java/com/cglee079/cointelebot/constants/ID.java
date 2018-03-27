@@ -14,6 +14,7 @@ public class ID {
 	public final static String COIN_BCH = "17";
 	public final static String COIN_ETC = "18";
 	public final static String COIN_ADA = "19";
+	public final static String COIN_XLM = "20";
 	
     public static final String STATE_MAIN = "ST000";
     public static final String STATE_SET_PRICE  = "ST012";

@@ -26,6 +26,7 @@ public class UpbitPooler extends ApiPooler{
 		case ID.COIN_BCH : param = "BCH"; break;
 		case ID.COIN_ETC : param = "ETC"; break;
 		case ID.COIN_ADA : param = "ADA"; break;
+		case ID.COIN_XLM : param = "XLM"; break;
 		}
 		
 		JSONObject coinObj = getCurrentCoin(param);
