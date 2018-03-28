@@ -13,6 +13,7 @@ public class BittrexPooler extends ApiPooler{
 		String param = "";
 		switch (coin) {
 		case ID.COIN_ADA : param = "USDT-ADA"; break;
+		case ID.COIN_XVG : param = "USDT-XVG"; break;
 		}
 		
 		String url = "https://bittrex.com/api/v1.1/public/getticker?market=" + param;

@@ -196,7 +196,7 @@ public class Explainer {
 	public String explainSendMsg() {
 		String msg =  "";
 		msg += "개발자에게 내용이 전송되어집니다.\n";
-		msg += "내용을 전송해주세요.\n";
+		msg += "내용을 입력해주세요.\n";
 		msg += "\n";
 		msg += "\n";
 		msg += "# 메인으로 돌아가시려면 " + CMD.SEND_MSG_OUT + " 를 입력해주세요.\n";

@@ -15,7 +15,9 @@ public class ID {
 	public final static String COIN_ETC = "18";
 	public final static String COIN_ADA = "19";
 	public final static String COIN_XLM = "20";
-	public static final String COIN_NEO = "21";
+	public final static String COIN_NEO = "21";
+	public final static String COIN_XVG = "22";
+
 	
     public static final String STATE_MAIN = "ST000";
     public static final String STATE_SET_PRICE  = "ST012";
@@ -25,6 +27,5 @@ public class ID {
     public static final String STATE_SET_DAYLOOP = "ST016";
     public static final String STATE_SET_TIMELOOP = "ST017";
     public static final String STATE_SEND_MSG = "ST018";
-
 	
 }

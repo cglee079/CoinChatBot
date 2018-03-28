@@ -14,7 +14,7 @@
 		TINFO_RESULT as 'result',
 		TINFO_ERRCODE as 'errorCode',
 		TINFO_ERRMSG as 'errorMsg'
-		FROM TB_NEOBOT_TIMELYINFO
+		FROM TB_XVGBOT_TIMELYINFO
 		WHERE 1 = 1
 		AND TINFO_DATE = #{date}
 		<if test="exchange != null">
@@ -32,7 +32,7 @@
 		TINFO_RESULT as 'result',
 		TINFO_ERRCODE as 'errorCode',
 		TINFO_ERRMSG as 'errorMsg'
-		FROM TB_NEOBOT_TIMELYINFO
+		FROM TB_XVGBOT_TIMELYINFO
 		WHERE 1 = 1
 		<if test="exchange != null">
 		AND TINFO_EXCHANGE = #{exchange}
@@ -42,7 +42,7 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO TB_NEOBOT_TIMELYINFO
+		INSERT INTO TB_XVGBOT_TIMELYINFO
 		VALUES (#{date}, #{exchange}, #{high}, #{low}, #{last}, #{volume}, #{result}, #{errorCode}, #{errorMsg})
 	</insert>
 	

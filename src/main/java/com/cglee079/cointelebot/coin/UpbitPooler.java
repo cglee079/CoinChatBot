@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
+import com.cglee079.cointelebot.log.Log;
 
 public class UpbitPooler extends ApiPooler{
 	
@@ -28,6 +29,7 @@ public class UpbitPooler extends ApiPooler{
 		case ID.COIN_ADA : param = "ADA"; break;
 		case ID.COIN_XLM : param = "XLM"; break;
 		case ID.COIN_NEO : param = "NEO"; break;
+		case ID.COIN_XVG : param = "XVG"; break;
 		}
 		
 		JSONObject coinObj = getCurrentCoin(param);
