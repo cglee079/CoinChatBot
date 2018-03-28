@@ -8,7 +8,7 @@ public class SET {
 	public final static boolean ENABLED_UPBIT 	= true;
 	
 	public final static boolean ENABLED_BITFINEX = false;
-	public final static boolean ENABLED_BITTREX	 = true;
-	public static final boolean ENABLED_POLONIEX = false;
+	public final static boolean ENABLED_BITTREX	 = false;
+	public static final boolean ENABLED_POLONIEX = true;
 	
 }

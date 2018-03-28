@@ -600,8 +600,8 @@ public class TelegramBot extends AbilityBot  {
 	public String messageCalc(Integer userId) {
 		ClientVo client = clientService.get(userId);
 		if(client != null){
-			if( client.getPrice() == null){ return "먼저 투자금액을 설정해주세요.\n메뉴에서 '투자금액 설정'을 클릭해주세요.";}
-			if( client.getCoinCount() == null){ return "먼저 코인개수를 설정해주세요.\n메뉴에서 '투자금액 설정'을 클릭해주세요.";}
+			if( client.getPrice() == null){ return "먼저 투자금액을 설정해주세요.\n메뉴에서 '" + CMD.MAIN_SET_PRICE  + "'을 클릭해주세요.";}
+			if( client.getCoinCount() == null){ return "먼저 코인개수를 설정해주세요.\n메뉴에서 '" + CMD.MAIN_SET_NUMBER  + "'을 클릭해주세요.";}
 			if( client.getPrice() != null && client.getCoinCount() != null){
 				try {
 					JSONObject coin = coinManager.getCoin(SET.MY_COIN,client.getExchange());
