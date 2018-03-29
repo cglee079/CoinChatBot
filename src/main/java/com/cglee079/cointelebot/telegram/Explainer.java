@@ -203,4 +203,16 @@ public class Explainer {
 		return msg;
 	}
 
+	public String explainStop() {
+		String msg =  "";
+		msg += "모든 알림(일일알림, 시간알림, 목표가알림)을 중지하시겠습니까?\n";
+		msg += "\n";
+		
+		msg += "★ 필독!\n";
+		msg += "1. 해당 서비스를 완전히 중지하시려면 대화방을 삭제해주세요!\n";
+		msg += "2. 모든알림이 중지되더라도 공지사항은 전송됩니다.\n";
+		msg += "3. 모든알림이 중지되더라도 버튼을 통해 코인관련정보를 받을 수 있습니다.\n";
+		return msg;
+	}
+
 }

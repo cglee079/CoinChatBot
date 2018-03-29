@@ -25,6 +25,7 @@ import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.constants.MSG;
 import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.exception.ServerErrorException;
+import com.cglee079.cointelebot.keyboard.ConfirmStopKeyboard;
 import com.cglee079.cointelebot.keyboard.MainKeyboard;
 import com.cglee079.cointelebot.keyboard.SetDayloopKeyboard;
 import com.cglee079.cointelebot.keyboard.SetExchangeKeyboard;
@@ -58,6 +59,7 @@ public class TelegramBot extends AbilityBot  {
 	private SetDayloopKeyboard setDayloopKeyboard;
 	private SetTimeloopKeyboard setTimeloopKeyboard;
 	private SetExchangeKeyboard setExchangeKeyboard;
+	private ConfirmStopKeyboard confirmStopKeyboard;
 	
 	private String coinname;
 	
@@ -69,6 +71,7 @@ public class TelegramBot extends AbilityBot  {
 		setDayloopKeyboard = new SetDayloopKeyboard();
 		setTimeloopKeyboard = new SetTimeloopKeyboard();
 		setExchangeKeyboard = new SetExchangeKeyboard();
+		confirmStopKeyboard = new ConfirmStopKeyboard();
 	}
 	
 	@PostConstruct
@@ -124,6 +127,7 @@ public class TelegramBot extends AbilityBot  {
 		case ID.STATE_SET_PRICE : handleSetPrice(userId, messageId, cmd); break;
 		case ID.STATE_SET_NUMBER : handleSetNumber(userId, messageId, cmd); break;
 		case ID.STATE_SEND_MSG : handleSendMsg(userId, username, messageId, cmd); break;
+		case ID.STATE_CONFIRM_STOP : handleConfirmStop(userId, username, messageId, cmd); break;
 		}
 	}
 
@@ -145,9 +149,6 @@ public class TelegramBot extends AbilityBot  {
 			break;
 		case CMD.MAIN_INFO:
 			sendMessage(userId, messageId, messageInfo(userId), mainKeyboard);
-			break;
-		case CMD.MAIN_STOP:
-			sendMessage(userId, messageId, messageStop(userId), mainKeyboard);
 			break;
 		case CMD.MAIN_COIN_LIST:
 			sendMessage(userId, messageId, exp.explainCoinList(), mainKeyboard);
@@ -185,6 +186,10 @@ public class TelegramBot extends AbilityBot  {
 		case CMD.MAIN_SEND_MSG:
 			sendMessage(userId, messageId, exp.explainSendMsg(), defaultKeyboard);
 			state = ID.STATE_SEND_MSG;
+			break;
+		case CMD.MAIN_STOP:
+			sendMessage(userId, messageId, exp.explainStop(), confirmStopKeyboard);
+			state = ID.STATE_CONFIRM_STOP;
 			break;
 	
 		default :
@@ -456,6 +461,29 @@ public class TelegramBot extends AbilityBot  {
 		clientService.updateState(userId.toString(), ID.STATE_MAIN);
 	}
 	
+	private void handleConfirmStop(Integer userId, String username, Integer messageId, String cmd) {
+		
+		String msg = "";
+		switch(cmd) {
+		case CMD.CONFIRM_STOP_YES :
+			if (clientService.stopChat(userId)) {
+				msg = coinname + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n";
+			} else {
+				msg = MSG.NEED_TO_START;
+			}
+			break;
+		case CMD.CONFIRM_STOP_NO:
+		default:
+			msg = "\n";
+			break;
+		}
+		
+		msg += MSG.TO_MAIN;
+		
+		sendMessage(userId, messageId, msg, mainKeyboard);
+		clientService.updateState(userId.toString(), ID.STATE_MAIN);
+	}
+	
 	private String messageCurrentPrice(Integer userId) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String date = format.format(new Date());
@@ -518,16 +546,6 @@ public class TelegramBot extends AbilityBot  {
 		return msg;
 	}
 	
-	public String messageStop(Integer userId) {
-		String msg = "";
-		if (clientService.stopChat(userId)) {
-			msg = coinname + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n";
-		} else {
-			msg = "알람이 설정되어있지 않습니다";
-		}
-		return msg;
-	}
-
 	public String messageKimp(Integer userId) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String date = format.format(new Date());
