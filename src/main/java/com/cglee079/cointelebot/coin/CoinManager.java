@@ -68,12 +68,12 @@ public class CoinManager {
 		return coinObj;
 	}
 	
-	public JSONObject getCoinWithKimp(String exchange) throws ServerErrorException{
-		JSONObject coinKR = this.getCoin(SET.MY_COIN, exchange);
+	public JSONObject getCoinWithKimp(String coin, String exchange) throws ServerErrorException{
+		JSONObject coinKR = this.getCoin(coin, exchange);
 		JSONObject coinUS = null;
-		if(SET.ENABLED_BITFINEX) {coinUS = bitfinexPooler.getCoin(SET.MY_COIN);}
-		if(SET.ENABLED_BITTREX) {coinUS = bittrexPooler.getCoin(SET.MY_COIN);}
-		if(SET.ENABLED_POLONIEX) {coinUS = poloniexPooler.getCoin(SET.MY_COIN);}
+		if(SET.ENABLED_BITFINEX) {coinUS = bitfinexPooler.getCoin(coin);}
+		if(SET.ENABLED_BITTREX) {coinUS = bittrexPooler.getCoin(coin);}
+		if(SET.ENABLED_POLONIEX) {coinUS = poloniexPooler.getCoin(coin);}
 		
 		if(coinUS == null) {
 			new ServerErrorException("미국 코인정보를 받아 올 수 없습니다");

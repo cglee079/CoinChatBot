@@ -14,8 +14,6 @@ public class TimelyInfoVo {
 	private String errorCode;
 	private String errorMsg;
 	
-
-	
 	public String getDate() {
 		return date;
 	}

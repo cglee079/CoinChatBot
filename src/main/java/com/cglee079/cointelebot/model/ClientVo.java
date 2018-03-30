@@ -18,6 +18,7 @@ public class ClientVo {
 	private Integer price = null;
 	private Double coinCount = null;
 	private String enabled = "Y";
+	private Integer errCnt = 0;
 	private String openDate;
 	private String reopenDate;
 	private String closeDate;
@@ -138,6 +139,15 @@ public class ClientVo {
 
 	public void setEnabled(String enabled) {
 		this.enabled = enabled;
+	}
+	
+	public Integer getErrCnt() {
+		return errCnt;
+	}
+
+
+	public void setErrCnt(Integer errCnt) {
+		this.errCnt = errCnt;
 	}
 
 	public String getReopenDate() {

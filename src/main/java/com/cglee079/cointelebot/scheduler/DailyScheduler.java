@@ -58,7 +58,7 @@ public class DailyScheduler {
 	public void loadDailyCoin(Date dateCurrent, String exchange) {
 		JSONObject coin = null;
 		try {
-			coin = coinManager.getCoin(SET.MY_COIN, exchange);
+			coin = coinManager.getCoinWithKimp(SET.MY_COIN, exchange);
 		} catch (ServerErrorException e) {
 			coin = timelyInfoService.getBefore(dateCurrent, exchange);
 			coin.put("result", "error");

@@ -9,6 +9,7 @@ public class SET {
 	
 	public final static boolean ENABLED_BITFINEX = true;
 	public final static boolean ENABLED_BITTREX	 = false;
-	public static final boolean ENABLED_POLONIEX = false;
+	public final static boolean ENABLED_POLONIEX = false;
 	
+	public final static Integer CLNT_MAX_ERRCNT = 10;
 }

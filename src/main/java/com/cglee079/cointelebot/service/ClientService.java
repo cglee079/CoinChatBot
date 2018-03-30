@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.dao.ClientDao;
+import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.ClientVo;
 
 @Service
 public class ClientService {
-
 	@Autowired
 	private ClientDao clientDao;
 
@@ -71,6 +71,7 @@ public class ClientService {
 			client.setDayLoop(1);
 			client.setState(ID.STATE_MAIN);
 			client.setOpenDate(new Date());
+			client.setErrCnt(0);
 			return clientDao.insert(client);
 		} else{
 			String enabled = client.getEnabled();
@@ -78,6 +79,7 @@ public class ClientService {
 				return false;
 			}
 			else if(enabled.equals("N")){
+				client.setErrCnt(0);
 				client.setEnabled("Y");
 				client.setReopenDate(new Date());
 				return clientDao.update(client);
@@ -88,25 +90,6 @@ public class ClientService {
 		}
 	}
 
-	public boolean closeChat(String userId) {
-		ClientVo client = clientDao.get(userId);
-		if(client != null){
-			if(client.getEnabled().equals("Y")){
-				client.setEnabled("N");
-				client.setCloseDate(new Date());
-				return clientDao.update(client);
-			} else{
-				return false;
-			}
-		} else{
-			return false;
-		}
-	}
-	
-	public boolean closeChat(int userId) {
-		return this.closeChat(String.valueOf(userId));
-	}
-	
 	public boolean stopChat(int userId) {
 		ClientVo client = clientDao.get(String.valueOf(userId));
 		if(client != null) {
@@ -117,6 +100,30 @@ public class ClientService {
 			return clientDao.update(client);
 		}
 		return false;
+	}
+	
+	public boolean increaseErrCnt(String userId) {
+		ClientVo client = clientDao.get(userId);
+		if(client != null){
+			if(client.getEnabled().equals("Y")){
+				int errCnt = client.getErrCnt();
+				System.out.println(errCnt + "");
+				errCnt = errCnt + 1;
+				if(errCnt > SET.CLNT_MAX_ERRCNT) {
+					Log.i("Close Client\t:\t[id :" + userId+ "\t" + client.getUsername() + " ] ");
+					client.setEnabled("N");
+					client.setCloseDate(new Date());
+				} else {
+					client.setErrCnt(errCnt);
+				}
+				return clientDao.update(client);
+			} else{
+				return false;
+			}
+		} else{
+			return false;
+		}
+		
 	}
 	
 	public boolean updateState(String userId, String state) {

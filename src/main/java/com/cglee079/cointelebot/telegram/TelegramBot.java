@@ -554,7 +554,7 @@ public class TelegramBot extends AbilityBot  {
 		int currentValue = 0;
 		try {
 			String exchange = clientService.getExchange(userId);
-			coin = coinManager.getCoinWithKimp(exchange);
+			coin = coinManager.getCoinWithKimp(SET.MY_COIN, exchange);
 		} catch (ServerErrorException e) {
 			e.printStackTrace();
 			Log.i(e.log());
@@ -674,9 +674,9 @@ public class TelegramBot extends AbilityBot  {
 		try {
 			sender.execute(sendMessage);
 		} catch (TelegramApiException e) {
-			Log.i(id + " 대화창은 닫혔습니다.\t" + e.getMessage());
+			Log.i("To Client Error\t:\t[id :" + id + " ]  에게 메세지를 보낼 수 없습니다.  :" + e.getMessage());
 			Log.i(e.getStackTrace());
-			clientService.closeChat(id);
+			clientService.increaseErrCnt(id);
 			return ;
 		}
 		
