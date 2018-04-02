@@ -12,6 +12,7 @@ import com.cglee079.cointelebot.coin.CoinManager;
 import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
+import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.ClientVo;
 import com.cglee079.cointelebot.model.DailyInfoVo;
 import com.cglee079.cointelebot.service.ClientService;
@@ -36,7 +37,6 @@ public class DailyScheduler {
 	@Autowired
 	private CoinManager coinManager;
 	
-	
 	@Scheduled(cron = "00 58 23 * * *")
 	public void loadDailyCoins(){
 		Date dateCurrent = new Date();
@@ -60,7 +60,14 @@ public class DailyScheduler {
 		try {
 			coin = coinManager.getCoinWithKimp(SET.MY_COIN, exchange);
 		} catch (ServerErrorException e) {
+			Log.i("ERROR loadDailyCoin : " + e.getMessage());
+			Log.i(e.getStackTrace());
+			
 			coin = timelyInfoService.getBefore(dateCurrent, exchange);
+			coin.put("kimp", -1.0);
+			coin.put("usd", -1.0);
+			coin.put("usd2krw", -1);
+			coin.put("rate", -1);
 			coin.put("result", "error");
 			coin.put("errorCode", e.getErrCode());
 			coin.put("errorMsg", e.getMessage());

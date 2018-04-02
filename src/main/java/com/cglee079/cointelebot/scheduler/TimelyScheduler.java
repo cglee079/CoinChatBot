@@ -12,6 +12,7 @@ import com.cglee079.cointelebot.coin.CoinManager;
 import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
+import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.ClientVo;
 import com.cglee079.cointelebot.model.TimelyInfoVo;
 import com.cglee079.cointelebot.service.ClientService;
@@ -55,6 +56,9 @@ public class TimelyScheduler {
 		try {
 			coinObj = coinManager.getCoin(SET.MY_COIN, exchange);
 		} catch (ServerErrorException e) {
+			Log.i("ERROR loadDailyCoin : " + e.getMessage());
+			Log.i(e.getStackTrace());
+			
 			coinObj = timelyInfoService.getBefore(dateCurrent, exchange);
 			coinObj.put("result", "error");
 			coinObj.put("errorCode", e.getErrCode());

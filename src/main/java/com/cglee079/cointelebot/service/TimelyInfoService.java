@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cglee079.cointelebot.dao.TimelyInfoDao;
+import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.TimelyInfoVo;
 import com.google.gson.Gson;
 
