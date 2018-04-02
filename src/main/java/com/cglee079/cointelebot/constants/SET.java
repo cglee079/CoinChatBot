@@ -6,6 +6,7 @@ public class SET {
 	public final static boolean ENABLED_COINONE = false;
 	public final static boolean ENABLED_BITHUMB = false;	
 	public final static boolean ENABLED_UPBIT 	= true;
+	public final static boolean ENABLED_COINNEST= false;
 	
 	public final static boolean ENABLED_BITFINEX = false;
 	public final static boolean ENABLED_BITTREX	 = true;

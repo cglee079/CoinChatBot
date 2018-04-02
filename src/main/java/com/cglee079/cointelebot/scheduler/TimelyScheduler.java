@@ -40,6 +40,7 @@ public class TimelyScheduler {
 		if(SET.ENABLED_COINONE) { loadTimelyCoin(dateCurrent, ID.EXCHANGE_COINONE); }
 		if(SET.ENABLED_BITHUMB) { loadTimelyCoin(dateCurrent, ID.EXCHANGE_BITHUMB); }
 		if(SET.ENABLED_UPBIT) { loadTimelyCoin(dateCurrent, ID.EXCHANGE_UPBIT); }
+		if(SET.ENABLED_COINNEST) { loadTimelyCoin(dateCurrent, ID.EXCHANGE_COINNEST); }
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("HH");
 		String hourStr = formatter.format(dateCurrent);
@@ -71,6 +72,7 @@ public class TimelyScheduler {
 		if(SET.ENABLED_COINONE){sendCoinInfo(dateCurrent, ID.EXCHANGE_COINONE, timeLoop);}
 		if(SET.ENABLED_BITHUMB){sendCoinInfo(dateCurrent, ID.EXCHANGE_BITHUMB, timeLoop);}
 		if(SET.ENABLED_UPBIT){sendCoinInfo(dateCurrent, ID.EXCHANGE_UPBIT, timeLoop);}
+		if(SET.ENABLED_COINNEST){sendCoinInfo(dateCurrent, ID.EXCHANGE_COINNEST, timeLoop);}
 	}
 	
 	public void sendCoinInfo(Date dateCurrent, String exchange, int timeLoop){

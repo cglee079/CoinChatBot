@@ -20,6 +20,9 @@ public class CoinManager {
 	private UpbitPooler upbitPooler;
 	
 	@Autowired
+	private CoinnestPooler coinnestPooler;
+	
+	@Autowired
 	private BitfinexPooler bitfinexPooler;
 
 	@Autowired
@@ -64,6 +67,8 @@ public class CoinManager {
 			coinObj = bithumbPooler.getCoin(coin);
 		} else if(exchange.equals(ID.EXCHANGE_UPBIT) && SET.ENABLED_UPBIT){
 			coinObj = upbitPooler.getCoin(coin);
+		} else if(exchange.equals(ID.EXCHANGE_COINNEST) && SET.ENABLED_COINNEST){
+			coinObj = coinnestPooler.getCoin(coin);
 		}
 		return coinObj;
 	}

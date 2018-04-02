@@ -24,6 +24,9 @@ public class ClientVo {
 	private String closeDate;
 
 	public ClientVo() {
+		if (SET.ENABLED_COINNEST) {
+			exchange = ID.EXCHANGE_COINNEST;
+		}
 		if (SET.ENABLED_UPBIT) {
 			exchange = ID.EXCHANGE_UPBIT;
 		}

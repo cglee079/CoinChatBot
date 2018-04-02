@@ -291,6 +291,11 @@ public class TelegramBot extends AbilityBot  {
 			msg = "거래소가 업비트로 설정 되었습니다.\n";
 		}
 		
+		if(SET.ENABLED_COINNEST && cmd.equals(CMD.SET_EXCHANGE_COINNEST)) {
+			exchange = ID.EXCHANGE_COINNEST;
+			msg = "거래소가 코인네스트로 설정 되었습니다.\n";
+		}
+		
 		if(exchange != null) {
 			if(clientService.updateExchange(userId.toString(), exchange)) {
 				//Success Update
@@ -525,6 +530,7 @@ public class TelegramBot extends AbilityBot  {
 		if(client.getExchange().equals(ID.EXCHANGE_COINONE)){ msg += "거래소     = 코인원\n";} 
 		else if(client.getExchange().equals(ID.EXCHANGE_BITHUMB)){ msg += "거래소     = 빗썸\n";}
 		else if(client.getExchange().equals(ID.EXCHANGE_UPBIT)){ msg += "거래소     = 업비트\n";}
+		else if(client.getExchange().equals(ID.EXCHANGE_COINNEST)){ msg += "거래소     = 코인네스트\n";}
 		
 		if(client.getDayLoop() != 0){ msg += "일일알림 = 매 " + client.getDayLoop() + " 일 주기 알림\n";} 
 		else{ msg += "일일알림 = 알람 없음\n";}
@@ -581,10 +587,30 @@ public class TelegramBot extends AbilityBot  {
 	public String messageBtc(Integer userId) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String date = format.format(new Date());
-
 		JSONObject coin = null;
 		JSONObject btc = null;
+		String msg = "";
+		
 		String exchange = clientService.getExchange(userId);
+		if(exchange.equals(ID.EXCHANGE_COINNEST)) {
+			msg += "코인네스트 API는 해당 정보를 제공하지 않습니다.\n";
+			if(SET.ENABLED_COINONE) {
+				msg += "코인원 기준 정보로 대체합니다.\n";
+				exchange = ID.EXCHANGE_COINONE;
+			} else if(SET.ENABLED_BITHUMB) {
+				msg += "빗썸 기준 정보로 대체합니다.\n";
+				exchange = ID.EXCHANGE_BITHUMB;
+			} else if(SET.ENABLED_UPBIT) {
+				msg += "업비트 기준 정보로 대체합니다.\n";
+				exchange = ID.EXCHANGE_UPBIT;
+			} else {
+				msg += MSG.TO_MAIN;
+				return msg;
+			}
+			
+			msg += "\n";
+		}
+		
 		try {
 			coin = coinManager.getCoin(SET.MY_COIN, exchange);
 			btc = coinManager.getCoin(ID.COIN_BTC, exchange);
@@ -600,7 +626,6 @@ public class TelegramBot extends AbilityBot  {
 			double btcCV = btc.getDouble("last");
 			double btcBV = btc.getDouble("first");
 			
-			String msg = "";
 			msg += "현재시각 : " + date + "\n";
 			msg += "BTC 가격 : " + toCommaStr(btcCV) +" 원 \n";
 			msg += coinname + " 가격 : " + toCommaStr(coinCV) +" 원 \n";

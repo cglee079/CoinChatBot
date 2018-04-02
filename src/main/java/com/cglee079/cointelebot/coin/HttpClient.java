@@ -18,6 +18,7 @@ public class HttpClient {
 		try {
 			URL obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
 
 			// optional default is GET
 			con.setRequestMethod("GET");
@@ -30,6 +31,7 @@ public class HttpClient {
 				response.append(inputLine);
 			}
 			in.close();
+			
 			return response.toString();
 		} catch (MalformedURLException e) {
 			Log.i("HTTP Client Error");

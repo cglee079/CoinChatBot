@@ -44,6 +44,7 @@ public class DailyScheduler {
 		if(SET.ENABLED_COINONE) { loadDailyCoin(dateCurrent, ID.EXCHANGE_COINONE);}
 		if(SET.ENABLED_BITHUMB) { loadDailyCoin(dateCurrent, ID.EXCHANGE_BITHUMB);}
 		if(SET.ENABLED_UPBIT) { loadDailyCoin(dateCurrent, ID.EXCHANGE_UPBIT);}
+		if(SET.ENABLED_COINNEST) { loadDailyCoin(dateCurrent, ID.EXCHANGE_COINNEST);}
 				
 		SimpleDateFormat formatter = new SimpleDateFormat("dd");
 		String dayStr = formatter.format(dateCurrent);
@@ -80,6 +81,7 @@ public class DailyScheduler {
 		if(SET.ENABLED_COINONE){sendDailyInfo(dateCurrent, ID.EXCHANGE_COINONE, dayLoop);}
 		if(SET.ENABLED_BITHUMB){sendDailyInfo(dateCurrent, ID.EXCHANGE_BITHUMB, dayLoop);}
 		if(SET.ENABLED_UPBIT){sendDailyInfo(dateCurrent, ID.EXCHANGE_UPBIT, dayLoop);}
+		if(SET.ENABLED_COINNEST){sendDailyInfo(dateCurrent, ID.EXCHANGE_COINNEST, dayLoop);}
 	}
 	
 	public void sendDailyInfo(Date dateCurrent, String exchange, int dayLoop) {

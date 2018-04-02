@@ -4,6 +4,7 @@ public class ID {
 	public final static String EXCHANGE_COINONE = "101";
 	public final static String EXCHANGE_BITHUMB	= "102";
 	public final static String EXCHANGE_UPBIT	= "103";
+	public final static String EXCHANGE_COINNEST= "104";
 	
 	public final static String COIN_BTC = "11";
 	public final static String COIN_XRP = "12";
@@ -17,6 +18,7 @@ public class ID {
 	public final static String COIN_XLM = "20";
 	public final static String COIN_NEO = "21";
 	public final static String COIN_XVG = "22";
+	public final static String COIN_TRX = "23";
 
 	
     public static final String STATE_MAIN = "ST000";

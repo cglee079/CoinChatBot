@@ -21,6 +21,7 @@ public class BitfinexPooler extends ApiPooler{
 		case ID.COIN_BCH : param = "tBCHUSD"; break;
 		case ID.COIN_ETC : param = "tETCUSD"; break;
 		case ID.COIN_NEO : param = "tNEOUSD"; break;
+		case ID.COIN_TRX : param = "tTRXUSD"; break;
 		}
 		
 		String url = "https://api.bitfinex.com/v2/ticker/" + param;

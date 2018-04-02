@@ -36,6 +36,12 @@ public class SetExchangeKeyboard extends ReplyKeyboardMarkup {
 			keyboardThirdRow.add(CMD.SET_EXCHANGE_UPBIT);
 			keyboard.add(keyboardThirdRow);
 		}
+		
+		if (SET.ENABLED_COINNEST) {
+			KeyboardRow keyboardThirdRow = new KeyboardRow();
+			keyboardThirdRow.add(CMD.SET_EXCHANGE_COINNEST);
+			keyboard.add(keyboardThirdRow);
+		}
 
 		KeyboardRow keyboardForthRow = new KeyboardRow();
 		keyboardForthRow.add(CMD.SET_EXCHANGE_OUT);

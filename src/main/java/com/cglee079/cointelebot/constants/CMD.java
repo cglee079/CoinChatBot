@@ -22,6 +22,7 @@ public class CMD {
 	public static final String SET_EXCHANGE_COINONE = "코인원";
 	public static final String SET_EXCHANGE_BITHUMB = "빗썸";
 	public static final String SET_EXCHANGE_UPBIT = "업비트";
+	public static final String SET_EXCHANGE_COINNEST = "코인네스트";
 	public static final String SET_EXCHANGE_OUT = "나가기";
 
 	public static final String SET_DAYLOOP_OFF = "끄기";
@@ -53,5 +54,4 @@ public class CMD {
 	
 	public static final String CONFIRM_STOP_YES = "네";
 	public static final String CONFIRM_STOP_NO = "아니오";
-
 }

@@ -47,6 +47,7 @@ public class Explainer {
 
         //
         String exchange = "";
+        if(SET.ENABLED_COINNEST) {exchange = "코인네스트";}
         if(SET.ENABLED_UPBIT) {exchange = "업비트";}
         if(SET.ENABLED_BITHUMB) {exchange = "빗썸";}
         if(SET.ENABLED_COINONE) {exchange = "코인원";}
@@ -79,7 +80,8 @@ public class Explainer {
         helpMsg += "국내정보 By ";
         if(SET.ENABLED_COINONE) { helpMsg += "코인원, ";}
         if(SET.ENABLED_BITHUMB) { helpMsg += "빗썸, ";}
-        if(SET.ENABLED_UPBIT) { helpMsg += "업비트";}
+        if(SET.ENABLED_UPBIT) { helpMsg += "업비트, ";}
+        if(SET.ENABLED_COINNEST) { helpMsg += "코인네스트";}
         helpMsg += "\n";
         //
 
