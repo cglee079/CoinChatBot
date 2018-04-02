@@ -219,7 +219,7 @@ public class TelegramBot extends AbilityBot  {
 				if(dayloop == 0) {
 					msg = "일일 알림이 전송되지 않습니다.\n";
 				} else {
-					msg = "일일 알림가 매 " +  dayloop + " 일주기로 전송됩니다.\n";
+					msg = "일일 알림이 매 " +  dayloop + " 일주기로 전송됩니다.\n";
 				}
 			} else {
 				msg = "일일 알림 주기가 설정 되지 않았습니다.\n";
