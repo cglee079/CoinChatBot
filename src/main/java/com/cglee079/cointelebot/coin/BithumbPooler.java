@@ -35,10 +35,10 @@ public class BithumbPooler extends ApiPooler{
 				coinObj.put("errorMsg", "");
 				coinObj.put("result", "success");
 				coinObj.put("volume", data.getDouble("volume_1day"));
-				coinObj.put("first", (int)data.getDouble("opening_price"));
-				coinObj.put("last", (int)data.getDouble("closing_price"));
-				coinObj.put("high", (int)data.getDouble("max_price"));
-				coinObj.put("low", (int)data.getDouble("min_price"));
+				coinObj.put("first", data.getDouble("opening_price"));
+				coinObj.put("last", data.getDouble("closing_price"));
+				coinObj.put("high", data.getDouble("max_price"));
+				coinObj.put("low", data.getDouble("min_price"));
 				
 				retryCnt = 0;
 				return coinObj;				
