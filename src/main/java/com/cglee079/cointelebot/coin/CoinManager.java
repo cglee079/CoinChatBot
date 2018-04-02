@@ -31,7 +31,7 @@ public class CoinManager {
 	@Autowired
 	private ExchangePooler exchangePooler;
 
-	private double exchangeRate = 1073;
+	private double exchangeRate = 1064;
 
 	public CoinManager() {
 	}
@@ -79,9 +79,9 @@ public class CoinManager {
 			new ServerErrorException("미국 코인정보를 받아 올 수 없습니다");
 		}
 		
-		int coinPriceKR = coinKR.getInt("last");
-		int coinPriceUS = (int) (coinUS.getDouble("last") * exchangeRate);
-		int gap = coinPriceKR - coinPriceUS;
+		double coinPriceKR = coinKR.getDouble("last");
+		double coinPriceUS = (coinUS.getDouble("last") * exchangeRate);
+		double gap = coinPriceKR - coinPriceUS;
 		double kimp = ((double)gap / (double)coinPriceUS) * 100;
 		coinKR.put("kimp", kimp);
 		coinKR.put("usd", coinUS.getDouble("last"));

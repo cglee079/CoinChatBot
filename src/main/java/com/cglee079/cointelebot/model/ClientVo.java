@@ -13,8 +13,8 @@ public class ClientVo {
 	private String exchange = null;
 	private Integer timeLoop = null;
 	private Integer dayLoop = null;
-	private Integer targetUpPrice = null;
-	private Integer targetDownPrice = null;
+	private Double targetUpPrice = null;
+	private Double targetDownPrice = null;
 	private Integer price = null;
 	private Double coinCount = null;
 	private String enabled = "Y";
@@ -84,19 +84,19 @@ public class ClientVo {
 		this.dayLoop = dayLoop;
 	}
 
-	public Integer getTargetUpPrice() {
+	public Double getTargetUpPrice() {
 		return targetUpPrice;
 	}
 
-	public void setTargetUpPrice(Integer targetPrice) {
+	public void setTargetUpPrice(Double targetPrice) {
 		this.targetUpPrice = targetPrice;
 	}
 
-	public Integer getTargetDownPrice() {
+	public Double getTargetDownPrice() {
 		return targetDownPrice;
 	}
 
-	public void setTargetDownPrice(Integer targetPrice) {
+	public void setTargetDownPrice(Double targetPrice) {
 		this.targetDownPrice = targetPrice;
 	}
 

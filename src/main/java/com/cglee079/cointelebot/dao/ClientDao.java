@@ -32,7 +32,7 @@ public class ClientDao {
 		return sqlSession.selectList(namespace + ".list", map);
 	}
 	
-	public List<ClientVo> list(String exchange, Integer timeLoop, Integer dayLoop, Integer currentPrice){
+	public List<ClientVo> list(String exchange, Integer timeLoop, Integer dayLoop, Double currentPrice){
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("exchange", exchange);
 		map.put("timeLoop", timeLoop);

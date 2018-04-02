@@ -6,12 +6,12 @@ import java.util.Date;
 public class DailyInfoVo {
 	private String date;
 	private String exchange;
-	private int high;
-	private int low;
-	private int last;
+	private double high;
+	private double low;
+	private double last;
 	private long volume;
 	private double usd;
-	private int usd2krw;
+	private double usd2krw;
 	private double kimp;
 	private int exchangeRate;
 	private String result;
@@ -38,27 +38,27 @@ public class DailyInfoVo {
 		this.exchange = exchange;
 	}
 
-	public int getHigh() {
+	public double getHigh() {
 		return high;
 	}
 
-	public void setHigh(int high) {
-		this.high = high;
+	public void setHigh(double d) {
+		this.high = d;
 	}
 
-	public int getLow() {
+	public double getLow() {
 		return low;
 	}
 
-	public void setLow(int low) {
+	public void setLow(double low) {
 		this.low = low;
 	}
 
-	public int getLast() {
+	public double getLast() {
 		return last;
 	}
 
-	public void setLast(int last) {
+	public void setLast(double last) {
 		this.last = last;
 	}
 
@@ -78,11 +78,11 @@ public class DailyInfoVo {
 		this.usd = usd;
 	}
 
-	public int getUsd2krw() {
+	public double getUsd2krw() {
 		return usd2krw;
 	}
 
-	public void setUsd2krw(int usd2krw) {
+	public void setUsd2krw(double usd2krw) {
 		this.usd2krw = usd2krw;
 	}
 

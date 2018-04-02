@@ -6,14 +6,14 @@ import java.util.Date;
 public class TimelyInfoVo {
 	private String date;
 	private String exchange;
-	private int high;
-	private int low;
-	private int last;
+	private double high;
+	private double low;
+	private double last;
 	private long volume;
 	private String result;
 	private String errorCode;
 	private String errorMsg;
-	
+
 	public String getDate() {
 		return date;
 	}
@@ -25,7 +25,7 @@ public class TimelyInfoVo {
 	public void setDate(Date date) {
 		this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);
 	}
-	
+
 	public String getExchange() {
 		return exchange;
 	}
@@ -34,27 +34,27 @@ public class TimelyInfoVo {
 		this.exchange = exchange;
 	}
 
-	public int getHigh() {
+	public double getHigh() {
 		return high;
 	}
 
-	public void setHigh(int high) {
+	public void setHigh(double high) {
 		this.high = high;
 	}
 
-	public int getLow() {
+	public double getLow() {
 		return low;
 	}
 
-	public void setLow(int low) {
+	public void setLow(double low) {
 		this.low = low;
 	}
 
-	public int getLast() {
+	public double getLast() {
 		return last;
 	}
 
-	public void setLast(int last) {
+	public void setLast(double last) {
 		this.last = last;
 	}
 
@@ -90,5 +90,4 @@ public class TimelyInfoVo {
 		this.errorMsg = errorMsg;
 	}
 
-	
 }

@@ -34,6 +34,7 @@ public class TimelyScheduler {
 	private CoinManager coinManager;
 	
 	@Scheduled(cron = "10 00 0/1 * * *")
+	@Scheduled(cron = "0/10 * * * * *")
 	public void loadTimelyCoins(){
 		Date dateCurrent = new Date();
 		
@@ -58,7 +59,6 @@ public class TimelyScheduler {
 		} catch (ServerErrorException e) {
 			Log.i("ERROR loadDailyCoin : " + e.getMessage());
 			Log.i(e.getStackTrace());
-			
 			coinObj = timelyInfoService.getBefore(dateCurrent, exchange);
 			coinObj.put("result", "error");
 			coinObj.put("errorCode", e.getErrCode());

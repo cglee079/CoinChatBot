@@ -30,9 +30,9 @@ public class TimelyInfoService {
 		TimelyInfoVo timelyInfo = new TimelyInfoVo();
 		timelyInfo.setDate(formatter.format(d));
 		timelyInfo.setExchange(exchange);
-		timelyInfo.setHigh(coin.getInt("high"));
-		timelyInfo.setLow(coin.getInt("low"));
-		timelyInfo.setLast(coin.getInt("last"));
+		timelyInfo.setHigh(coin.getDouble("high"));
+		timelyInfo.setLow(coin.getDouble("low"));
+		timelyInfo.setLast(coin.getDouble("last"));
 		timelyInfo.setVolume((long) coin.getDouble("volume"));
 		timelyInfo.setResult(coin.getString("result"));
 		timelyInfo.setErrorCode(String.valueOf(coin.getInt("errorCode")));

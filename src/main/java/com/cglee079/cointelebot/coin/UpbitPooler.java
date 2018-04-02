@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
-import com.cglee079.cointelebot.log.Log;
 
 public class UpbitPooler extends ApiPooler{
 	
@@ -55,7 +54,7 @@ public class UpbitPooler extends ApiPooler{
 			coinObj.put("errorMsg", "");
 			coinObj.put("errorCode", "0");
 			coinObj.put("result", "success");
-			coinObj.put("last", (int)jsonObj.getDouble("tradePrice"));
+			coinObj.put("last", jsonObj.getDouble("tradePrice"));
 			return coinObj;				
 		} catch (IOException e) {
 			retryCnt++;
@@ -83,10 +82,9 @@ public class UpbitPooler extends ApiPooler{
 		String response;
 		try {
 			response = httpClient.get(url);
-			;
 			JSONObject jsonObj = new JSONArray(response).getJSONObject(0);
 			JSONObject info = new JSONObject();
-			info.put("first", (int)jsonObj.getDouble("tradePrice"));
+			info.put("first", jsonObj.getDouble("tradePrice"));
 			
 			return info;				
 		} catch (IOException e) {
@@ -184,6 +182,7 @@ public class UpbitPooler extends ApiPooler{
 				throw new ServerErrorException("업비트 서버 에러 : " + e.getMessage());
 			}
 		}
+		
 		
 		JSONObject oneDayInfo = new JSONObject();
 		oneDayInfo.put("high", Collections.max(maxs));

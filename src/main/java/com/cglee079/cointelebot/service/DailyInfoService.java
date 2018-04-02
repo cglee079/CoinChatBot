@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cglee079.cointelebot.dao.DailyInfoDao;
-import com.cglee079.cointelebot.model.ClientVo;
 import com.cglee079.cointelebot.model.DailyInfoVo;
-import com.cglee079.cointelebot.model.TimelyInfoVo;
 import com.google.gson.Gson;
 
 @Service
@@ -29,13 +27,13 @@ public class DailyInfoService {
 		DailyInfoVo dailyInfo = new DailyInfoVo();
 		dailyInfo.setDate(formatter.format(d));
 		dailyInfo.setExchange(exchange);
-		dailyInfo.setHigh(coin.getInt("high"));
-		dailyInfo.setLow(coin.getInt("low"));
-		dailyInfo.setLast(coin.getInt("last"));
-		dailyInfo.setVolume((long) coin.getDouble("volume"));
+		dailyInfo.setHigh(coin.getDouble("high"));
+		dailyInfo.setLow(coin.getDouble("low"));
+		dailyInfo.setLast(coin.getDouble("last"));
+		dailyInfo.setVolume(coin.getLong("volume"));
 		dailyInfo.setKimp(coin.getDouble("kimp"));
 		dailyInfo.setUsd(coin.getDouble("usd"));
-		dailyInfo.setUsd2krw(coin.getInt("usd2krw"));
+		dailyInfo.setUsd2krw(coin.getDouble("usd2krw"));
 		dailyInfo.setExchangeRate(coin.getInt("rate"));
 		dailyInfo.setResult(coin.getString("result"));
 		dailyInfo.setErrorCode(String.valueOf(coin.getInt("errorCode")));

@@ -29,7 +29,7 @@ public class ClientService {
 		return clientDao.list(exchange);
 	}
 	
-	public List<ClientVo> list(String exchange, Integer timeLoop, Integer dayLoop, Integer currentPrice) {
+	public List<ClientVo> list(String exchange, Integer timeLoop, Integer dayLoop, Double currentPrice) {
 		return clientDao.list(exchange, timeLoop, dayLoop, currentPrice);
 	}
 	
@@ -157,21 +157,21 @@ public class ClientService {
 		}
 	}
 	
-	public boolean updateTargetUpPrice(String userId, Integer targetPrice) {
+	public boolean updateTargetUpPrice(String userId, Double targetPrice) {
 		ClientVo client = clientDao.get(userId);
 		if(client != null){
 			client.setTargetUpPrice(targetPrice);
-			client.setTargetDownPrice(0);
+			client.setTargetDownPrice(0.0);
 			return clientDao.update(client);
 		} else{
 			return false;
 		}
 	}
 	
-	public boolean updateTargetDownPrice(String userId, Integer targetPrice) {
+	public boolean updateTargetDownPrice(String userId, Double targetPrice) {
 		ClientVo client = clientDao.get(userId);
 		if(client != null){
-			client.setTargetUpPrice(0);
+			client.setTargetUpPrice(0.0);
 			client.setTargetDownPrice(targetPrice);
 			return clientDao.update(client);
 		} else{
@@ -182,8 +182,8 @@ public class ClientService {
 	public boolean clearTargetPrice(String userId) {
 		ClientVo client = clientDao.get(userId);
 		if(client != null){
-			client.setTargetUpPrice(0);
-			client.setTargetDownPrice(0);
+			client.setTargetUpPrice(0.0);
+			client.setTargetDownPrice(0.0);
 			return clientDao.update(client);
 		} else{
 			return false;

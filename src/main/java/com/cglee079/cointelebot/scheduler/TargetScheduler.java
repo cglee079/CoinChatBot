@@ -39,7 +39,7 @@ public class TargetScheduler {
 		
 		try {
 			coinObj = coinManager.getCoin(SET.MY_COIN, exchange);
-			clients = clientService.list(exchange, null, null, coinObj.getInt("last"));
+			clients = clientService.list(exchange, null, null, coinObj.getDouble("last"));
 			telegramBot.sendTargetPriceMessage(clients, coinObj);
 		} catch (ServerErrorException e) {
 			Log.i("Load TargetPrice  " + e.log());
