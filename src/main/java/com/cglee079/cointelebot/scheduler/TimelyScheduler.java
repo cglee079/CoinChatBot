@@ -34,7 +34,6 @@ public class TimelyScheduler {
 	private CoinManager coinManager;
 	
 	@Scheduled(cron = "10 00 0/1 * * *")
-	@Scheduled(cron = "0/10 * * * * *")
 	public void loadTimelyCoins(){
 		Date dateCurrent = new Date();
 		

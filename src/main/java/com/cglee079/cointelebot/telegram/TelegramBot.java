@@ -1,6 +1,5 @@
 package com.cglee079.cointelebot.telegram;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -314,9 +313,9 @@ public class TelegramBot extends AbilityBot  {
 		String msg = "";
 		boolean valid = false;
 		
-		int currentPrice = -1;
+		double currentPrice = -1;
 		try {
-			currentPrice = coinManager.getCoin(SET.MY_COIN, exchange).getInt("last");
+			currentPrice = coinManager.getCoin(SET.MY_COIN, exchange).getDouble("last");
 		}
 		catch (ServerErrorException e) {
 			Log.i(e.log());
@@ -326,10 +325,10 @@ public class TelegramBot extends AbilityBot  {
 		
 		if(currentPrice != -1) {
 			String priceStr = cmd;
-			int targetPrice = -1;
+			double targetPrice = -1;
 
-			if(priceStr.matches("^\\d*$")) {
-				targetPrice = Integer.valueOf(priceStr);
+			if(priceStr.matches("^\\d*.\\d*$")) {
+				targetPrice = Double.valueOf(priceStr);
 				
 				if (targetPrice == 0) {  // case4. 초기화
 					if(clientService.clearTargetPrice(userId.toString())) {
@@ -339,7 +338,7 @@ public class TelegramBot extends AbilityBot  {
 					valid = true;
 				}
 				
-			} else if( priceStr.matches("^[+-]?\\d*%$")) {
+			} else if( priceStr.matches("^[+-]?\\d*.\\d*%$")) {
 				priceStr = priceStr.replace("%", "");
 				double percent = (Double.valueOf(priceStr)/100);
 				
@@ -348,10 +347,10 @@ public class TelegramBot extends AbilityBot  {
 					targetPrice = 0;
 				} else if(percent > 0) {
 					valid = true;
-					targetPrice = currentPrice + (int)((double)currentPrice * percent);
+					targetPrice = currentPrice + currentPrice * percent;
 				}  else if( percent < 0 && percent >= -100) {
 					valid = true;
-					int a = ((int)((double)currentPrice * percent) * -1);
+					double a = (currentPrice * percent) * -1;
 					targetPrice = currentPrice - a;
 				} else if( percent < -100) {
 					msg = "목표가격 백분율을 -100% 이하로 설정 할 수 없습니다.\n";
@@ -489,7 +488,7 @@ public class TelegramBot extends AbilityBot  {
 		String date = format.format(new Date());
 
 		JSONObject coin = null;
-		int currentValue = 0;
+		double currentValue = 0;
 		String exchange = clientService.getExchange(userId);
 		try {
 			coin = coinManager.getCoin(SET.MY_COIN, exchange);
@@ -505,7 +504,7 @@ public class TelegramBot extends AbilityBot  {
 			return MSG.WAIT_SECONDS + "Coin NULL";
 		}
 		
-		currentValue = coin.getInt("last");
+		currentValue = coin.getDouble("last");
 		String msg = "";
 		msg += "현재시각 : " + date + "\n";
 		msg += "현재가격 : " + toCommaStr(currentValue) + " 원\n";
@@ -551,7 +550,7 @@ public class TelegramBot extends AbilityBot  {
 		String date = format.format(new Date());
 
 		JSONObject coin = null;
-		int currentValue = 0;
+		double currentValue = 0;
 		try {
 			String exchange = clientService.getExchange(userId);
 			coin = coinManager.getCoinWithKimp(SET.MY_COIN, exchange);
@@ -563,14 +562,14 @@ public class TelegramBot extends AbilityBot  {
 		} 
 		
 		if(coin != null){
-			currentValue = coin.getInt("last");
+			currentValue = coin.getDouble("last");
 			
 			String msg = "";
 			msg += "현재시각 : " + date + "\n";
 			msg += "달러환율 : $ 1 = " + toCommaStr(coin.getInt("rate")) +" 원 \n";
 			msg += "--------------------\n";
 			msg += "현재가격 : " + toCommaStr(currentValue) + " 원\n";
-			msg += "미국가격 : " + toCommaStr(coin.getInt("usd2krw")) + " 원 ($ " + toStr(coin.getDouble("usd")) + ")\n";
+			msg += "미국가격 : " + toCommaStr(coin.getDouble("usd2krw")) + " 원 ($ " + toStr(coin.getDouble("usd")) + ")\n";
 			msg += "프리미엄 : " + toSignStr(coin.getDouble("kimp")) + " %\n";
 			
 			return msg;
@@ -596,10 +595,10 @@ public class TelegramBot extends AbilityBot  {
 		}
 	
 		if(coin != null && btc != null){
-			int coinCV = coin.getInt("last");
-			int coinBV = coin.getInt("first");
-			int btcCV = btc.getInt("last");
-			int btcBV = btc.getInt("first");
+			double coinCV = coin.getDouble("last");
+			double coinBV = coin.getDouble("first");
+			double btcCV = btc.getDouble("last");
+			double btcBV = btc.getDouble("first");
 			
 			String msg = "";
 			msg += "현재시각 : " + date + "\n";
@@ -623,7 +622,7 @@ public class TelegramBot extends AbilityBot  {
 			if( client.getPrice() != null && client.getCoinCount() != null){
 				try {
 					JSONObject coin = coinManager.getCoin(SET.MY_COIN,client.getExchange());
-					return calcResult(client, coin.getInt("last"));
+					return calcResult(client, coin.getDouble("last"));
 				} catch (ServerErrorException e) {
 					Log.i(e.log());
 					Log.i(e.getStackTrace());
@@ -638,10 +637,10 @@ public class TelegramBot extends AbilityBot  {
 	}
 	
 
-	public String calcResult(ClientVo client, int coinVal){
+	public String calcResult(ClientVo client, double coinVal){
 		double cnt = client.getCoinCount();
 		int price = client.getPrice();
-		int avgPrice = (int) ((double)price / cnt);
+		double avgPrice = (double)((double)price / cnt);
 		
 		String msg = "";
 		msg += "평균단가 : " + toCommaStr(avgPrice) + " 원\n";
@@ -713,8 +712,8 @@ public class TelegramBot extends AbilityBot  {
 		int clientLength = clients.size();
 		ClientVo client = null;
 		
-		int currentValue = coinCurrent.getLast();
-		int beforeValue = coinBefore.getLast();
+		double currentValue = coinCurrent.getLast();
+		double beforeValue = coinBefore.getLast();
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String date = format.format(new Date());
@@ -743,14 +742,14 @@ public class TelegramBot extends AbilityBot  {
 		long currentVolume = coinCurrent.getVolume();
 		long beforeVolume  = coinBefore.getVolume();
 		
-		int currentHigh = coinCurrent.getHigh();
-		int beforeHigh = coinBefore.getHigh();
+		double currentHigh = coinCurrent.getHigh();
+		double beforeHigh = coinBefore.getHigh();
 
-		int currentLow = coinCurrent.getLow();
-		int beforeLow = coinBefore.getLow();
+		double currentLow = coinCurrent.getLow();
+		double beforeLow = coinBefore.getLow();
 
-		int currentLast = coinCurrent.getLast();
-		int beforeLast = coinBefore.getLast();
+		double currentLast = coinCurrent.getLast();
+		double beforeLast = coinBefore.getLast();
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일");
 		String date = format.format(new Date());
@@ -801,20 +800,21 @@ public class TelegramBot extends AbilityBot  {
 	/*
 	 * Formatting Str
 	 */
-	public String toCommaStr(long i){
+	private DecimalFormat df = new DecimalFormat("#,###.#");
+	private String toCommaStr(double i){
+			return df.format(i);
+	}
+	
+	private String toCommaStr(long i){
 		return String.format("%,d", i);
 	}
 	
-	public String toCommaStr(BigDecimal bd){
-		return String.format("%,d", bd);
-	}
-	
-	public String toStr(double d){
+	private String toStr(double d){
 		DecimalFormat df = new DecimalFormat("#.##");
 		return df.format(d);
 	}
 	
-	public String toSignStr(long i){
+	private String toSignStr(long i){
 		String prefix = "";
 		if(i > 0){ prefix = "+";}
 		return prefix + toCommaStr(i);
@@ -826,10 +826,10 @@ public class TelegramBot extends AbilityBot  {
 		return prefix + toStr(d);
 	}
 	
-	public String getPercent(long c, long b){
+	public String getPercent(double c, double b){
 		String prefix = "";
-		long gap = c - b;
-		double percent = ((double)gap/(double)b) * 100;
+		double gap = c - b;
+		double percent = (gap / b) * 100;
 		if (percent > 0) {
 			prefix = "+";
 		}
