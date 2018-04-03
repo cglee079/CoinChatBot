@@ -10,7 +10,7 @@ import com.cglee079.cointelebot.service.CoinInfoService;
 
 @Component
 public class SET {
-	public final static String MY_COIN = ID.COIN_EOS;
+	public final static String MY_COIN = ID.COIN_BCH;
 	
 	public final static Integer CLNT_MAX_ERRCNT = 10;
 	
@@ -36,15 +36,15 @@ public class SET {
 
 	@PostConstruct
 	public void init() {
-		CoinInfoVo coinInfo = coinInfoService.get(MY_COIN);
-		SET.ENABLED_COINONE = coinInfo.isEnabledCoinone();
-		SET.ENABLED_BITHUMB = coinInfo.isEnabledBithumb();
-		SET.ENABLED_UPBIT	= coinInfo.isEnabledUpbit();
-		SET.ENABLED_COINNEST= coinInfo.isEnabledCoinnest();
-		SET.ENABLED_KORBIT 	= coinInfo.isEnabledKorbit();
-		SET.ENABLED_BITFINEX= coinInfo.isEnabledBitfinex();
-		SET.ENABLED_BITTREX	= coinInfo.isEnabledBittrex();
-		SET.ENABLED_POLONIEX= coinInfo.isEnabledPoloniex();
+		CoinInfoVo coinInfo 	= coinInfoService.get(MY_COIN);
+		SET.ENABLED_COINONE 	= coinInfo.isEnabledCoinone();
+		SET.ENABLED_BITHUMB 	= coinInfo.isEnabledBithumb();
+		SET.ENABLED_UPBIT		= coinInfo.isEnabledUpbit();
+		SET.ENABLED_COINNEST	= coinInfo.isEnabledCoinnest();
+		SET.ENABLED_KORBIT 		= coinInfo.isEnabledKorbit();
+		SET.ENABLED_BITFINEX	= coinInfo.isEnabledBitfinex();
+		SET.ENABLED_BITTREX		= coinInfo.isEnabledBittrex();
+		SET.ENABLED_POLONIEX	= coinInfo.isEnabledPoloniex();
 		
 		SET.COIN_NAME	= coinInfo.getCoinname();
 		SET.VERSION		= coinInfo.getVersion();
