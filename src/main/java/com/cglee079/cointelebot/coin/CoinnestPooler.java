@@ -31,7 +31,7 @@ public class CoinnestPooler extends ApiPooler{
 			response = httpClient.get(url);
 			JSONObject coinObj = new JSONObject();
 			JSONObject data = new JSONObject(response);
-			coinObj.put("errorCode", "");
+			coinObj.put("errorCode", 0);
 			coinObj.put("errorMsg", "");
 			coinObj.put("result", "success");
 			coinObj.put("volume", data.getLong("vol"));
