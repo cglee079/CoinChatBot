@@ -38,7 +38,6 @@ public class DailyScheduler {
 	private CoinManager coinManager;
 	
 	@Scheduled(cron = "00 58 23 * * *")
-	@Scheduled(cron = "0/10 * * * * *")
 	public void loadDailyCoins(){
 		Date dateCurrent = new Date();
 		
