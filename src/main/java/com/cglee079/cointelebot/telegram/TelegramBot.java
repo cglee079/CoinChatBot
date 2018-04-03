@@ -296,6 +296,11 @@ public class TelegramBot extends AbilityBot  {
 			msg = "거래소가 코인네스트로 설정 되었습니다.\n";
 		}
 		
+		if(SET.ENABLED_KORBIT && cmd.equals(CMD.SET_EXCHANGE_KORTBIT)) {
+			exchange = ID.EXCHANGE_KORBIT;
+			msg = "거래소가 코빗으로 설정 되었습니다.\n";
+		}
+		
 		if(exchange != null) {
 			if(clientService.updateExchange(userId.toString(), exchange)) {
 				//Success Update
@@ -531,6 +536,7 @@ public class TelegramBot extends AbilityBot  {
 		else if(client.getExchange().equals(ID.EXCHANGE_BITHUMB)){ msg += "거래소     = 빗썸\n";}
 		else if(client.getExchange().equals(ID.EXCHANGE_UPBIT)){ msg += "거래소     = 업비트\n";}
 		else if(client.getExchange().equals(ID.EXCHANGE_COINNEST)){ msg += "거래소     = 코인네스트\n";}
+		else if(client.getExchange().equals(ID.EXCHANGE_KORBIT)){ msg += "거래소     = 코빗\n";}
 		
 		if(client.getDayLoop() != 0){ msg += "일일알림 = 매 " + client.getDayLoop() + " 일 주기 알림\n";} 
 		else{ msg += "일일알림 = 알람 없음\n";}
@@ -592,8 +598,10 @@ public class TelegramBot extends AbilityBot  {
 		String msg = "";
 		
 		String exchange = clientService.getExchange(userId);
-		if(exchange.equals(ID.EXCHANGE_COINNEST)) {
-			msg += "코인네스트 API는 해당 정보를 제공하지 않습니다.\n";
+		if(exchange.equals(ID.EXCHANGE_COINNEST) || exchange.equals(ID.EXCHANGE_KORBIT)) {
+			if(exchange.equals(ID.EXCHANGE_COINNEST)) { msg += "코인네스트 API는 해당 정보를 제공하지 않습니다.\n"; }
+			if(exchange.equals(ID.EXCHANGE_KORBIT)) { msg += "코빗  API는 해당 정보를 제공하지 않습니다.\n"; }
+			
 			if(SET.ENABLED_COINONE) {
 				msg += "코인원 기준 정보로 대체합니다.\n";
 				exchange = ID.EXCHANGE_COINONE;

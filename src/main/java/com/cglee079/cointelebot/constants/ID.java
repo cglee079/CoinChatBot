@@ -5,6 +5,7 @@ public class ID {
 	public final static String EXCHANGE_BITHUMB	= "102";
 	public final static String EXCHANGE_UPBIT	= "103";
 	public final static String EXCHANGE_COINNEST= "104";
+	public final static String EXCHANGE_KORBIT	= "105";
 	
 	public final static String COIN_BTC = "11";
 	public final static String COIN_XRP = "12";

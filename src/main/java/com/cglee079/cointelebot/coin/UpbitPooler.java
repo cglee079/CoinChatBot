@@ -101,7 +101,7 @@ public class UpbitPooler extends ApiPooler{
 	public JSONObject getOnedayInfo(String param) throws ServerErrorException {
 		ArrayList<Double> maxs = new ArrayList<Double>();
 		ArrayList<Double> mins = new ArrayList<Double>();
-		Long volume = (long) 0;
+		double volume = 0;
 
 		HttpClient httpClient = new HttpClient();
 		String url = null;
@@ -124,7 +124,7 @@ public class UpbitPooler extends ApiPooler{
 				jsonObj = jsonArr.getJSONObject(i);
 				maxs.add(jsonObj.getDouble("highPrice"));
 				mins.add(jsonObj.getDouble("lowPrice"));
-				volume += (long)jsonObj.getDouble("candleAccTradeVolume");
+				volume += jsonObj.getDouble("candleAccTradeVolume");
 			}
 		} catch (IOException e) {
 			retryCnt++;
@@ -171,7 +171,7 @@ public class UpbitPooler extends ApiPooler{
 				jsonObj = jsonArr.getJSONObject(i);
 				maxs.add(jsonObj.getDouble("highPrice"));
 				mins.add(jsonObj.getDouble("lowPrice"));
-				volume += (long)jsonObj.getDouble("candleAccTradeVolume");
+				volume += jsonObj.getDouble("candleAccTradeVolume");
 			}
 		} catch (IOException e) {
 			retryCnt++;

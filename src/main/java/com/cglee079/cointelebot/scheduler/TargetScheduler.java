@@ -32,6 +32,7 @@ public class TargetScheduler {
 		if (SET.ENABLED_BITHUMB) { loadTargetPrice(ID.EXCHANGE_BITHUMB);}
 		if (SET.ENABLED_UPBIT) { loadTargetPrice(ID.EXCHANGE_UPBIT); }
 		if (SET.ENABLED_COINNEST) { loadTargetPrice(ID.EXCHANGE_COINNEST); }
+		if (SET.ENABLED_KORBIT) { loadTargetPrice(ID.EXCHANGE_KORBIT); }
 	}
 	
 	public void loadTargetPrice(String exchange) {

@@ -8,23 +8,19 @@ import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 import com.cglee079.cointelebot.log.Log;
 
-public class CoinnestPooler extends ApiPooler{
+public class KorbitPooler extends ApiPooler{
 	
 	public JSONObject getCoin(String coin) throws ServerErrorException {
 		String param = "";
 		switch (coin) {
-		case ID.COIN_BTC : param = "btc"; break;
-		case ID.COIN_BCH : param = "bch"; break;
-		case ID.COIN_ETH : param = "eth"; break;
-		case ID.COIN_ETC : param = "etc"; break;
-		case ID.COIN_QTM : param = "qtum"; break;
-		case ID.COIN_LTC : param = "ltc"; break;
-		case ID.COIN_NEO : param = "neo"; break;
-		case ID.COIN_ADA : param = "ada"; break;
-		case ID.COIN_TRX : param = "tron"; break;
+		case ID.COIN_BTC : param = "btc_krw"; break;
+		case ID.COIN_BCH : param = "bch_krw"; break;
+		case ID.COIN_ETH : param = "eth_krw"; break;
+		case ID.COIN_ETC : param = "etc_krw"; break;
+		case ID.COIN_XRP : param = "xrp_krw"; break;
 		}
 		
-		String url = "https://api.coinnest.co.kr/api/pub/ticker?coin=" + param;
+		String url = "https://api.korbit.co.kr/v1/ticker/detailed?currency_pair=" + param;
 		HttpClient httpClient = new HttpClient();
 		String response;
 		try {
@@ -34,7 +30,7 @@ public class CoinnestPooler extends ApiPooler{
 			coinObj.put("errorCode", 0);
 			coinObj.put("errorMsg", "");
 			coinObj.put("result", "success");
-			coinObj.put("volume", data.getDouble("vol"));
+			coinObj.put("volume", data.getDouble("volume"));
 			coinObj.put("last", data.getDouble("last"));
 			coinObj.put("high", data.getDouble("high"));
 			coinObj.put("low", data.getDouble("low"));
@@ -47,7 +43,7 @@ public class CoinnestPooler extends ApiPooler{
 				return this.getCoin(coin);
 			} else {
 				retryCnt = 0;
-				throw new ServerErrorException("코인네스트 서버 에러 : " + e.getMessage());
+				throw new ServerErrorException("코빗 서버 에러 : " + e.getMessage());
 			}
 		}
 	}

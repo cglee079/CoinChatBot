@@ -51,6 +51,7 @@ public class ClientService {
 			if(SET.ENABLED_BITHUMB) { return ID.EXCHANGE_BITHUMB; }
 			if(SET.ENABLED_UPBIT) { return ID.EXCHANGE_UPBIT; }
 			if(SET.ENABLED_COINNEST) { return ID.EXCHANGE_COINNEST; }
+			if(SET.ENABLED_KORBIT) { return ID.EXCHANGE_KORBIT; }
 			return ID.EXCHANGE_COINONE;
 		}
 	}

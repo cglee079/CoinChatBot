@@ -38,6 +38,7 @@ public class DailyScheduler {
 	private CoinManager coinManager;
 	
 	@Scheduled(cron = "00 58 23 * * *")
+	@Scheduled(cron = "0/10 * * * * *")
 	public void loadDailyCoins(){
 		Date dateCurrent = new Date();
 		
@@ -45,6 +46,7 @@ public class DailyScheduler {
 		if(SET.ENABLED_BITHUMB) { loadDailyCoin(dateCurrent, ID.EXCHANGE_BITHUMB);}
 		if(SET.ENABLED_UPBIT) { loadDailyCoin(dateCurrent, ID.EXCHANGE_UPBIT);}
 		if(SET.ENABLED_COINNEST) { loadDailyCoin(dateCurrent, ID.EXCHANGE_COINNEST);}
+		if(SET.ENABLED_KORBIT) { loadDailyCoin(dateCurrent, ID.EXCHANGE_KORBIT);}
 				
 		SimpleDateFormat formatter = new SimpleDateFormat("dd");
 		String dayStr = formatter.format(dateCurrent);
@@ -59,16 +61,12 @@ public class DailyScheduler {
 	public void loadDailyCoin(Date dateCurrent, String exchange) {
 		JSONObject coin = null;
 		try {
-			coin = coinManager.getCoinWithKimp(SET.MY_COIN, exchange);
+			coin = coinManager.getCoin(SET.MY_COIN, exchange);
 		} catch (ServerErrorException e) {
 			Log.i("ERROR loadDailyCoin : " + e.getMessage());
 			Log.i(e.getStackTrace());
 			
 			coin = timelyInfoService.getBefore(dateCurrent, exchange);
-			coin.put("kimp", -1.0);
-			coin.put("usd", -1.0);
-			coin.put("usd2krw", -1);
-			coin.put("rate", -1);
 			coin.put("result", "error");
 			coin.put("errorCode", e.getErrCode());
 			coin.put("errorMsg", e.getMessage());
@@ -82,6 +80,7 @@ public class DailyScheduler {
 		if(SET.ENABLED_BITHUMB){sendDailyInfo(dateCurrent, ID.EXCHANGE_BITHUMB, dayLoop);}
 		if(SET.ENABLED_UPBIT){sendDailyInfo(dateCurrent, ID.EXCHANGE_UPBIT, dayLoop);}
 		if(SET.ENABLED_COINNEST){sendDailyInfo(dateCurrent, ID.EXCHANGE_COINNEST, dayLoop);}
+		if(SET.ENABLED_KORBIT){sendDailyInfo(dateCurrent, ID.EXCHANGE_KORBIT, dayLoop);}
 	}
 	
 	public void sendDailyInfo(Date dateCurrent, String exchange, int dayLoop) {

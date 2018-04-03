@@ -25,6 +25,9 @@ public class ClientVo {
 
 	public ClientVo() {
 		if (SET.ENABLED_COINNEST) {
+			exchange = ID.EXCHANGE_KORBIT;
+		}
+		if (SET.ENABLED_COINNEST) {
 			exchange = ID.EXCHANGE_COINNEST;
 		}
 		if (SET.ENABLED_UPBIT) {

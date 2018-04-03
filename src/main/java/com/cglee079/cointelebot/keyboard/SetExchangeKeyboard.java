@@ -19,33 +19,54 @@ public class SetExchangeKeyboard extends ReplyKeyboardMarkup {
 
 		List<KeyboardRow> keyboard = new ArrayList<>();
 		
+		KeyboardRow keyboardRow = null;
+		int exchangeCnt = 0;
+		
 		if (SET.ENABLED_COINONE) {
-			KeyboardRow keyboardFirstRow = new KeyboardRow();
-			keyboardFirstRow.add(CMD.SET_EXCHANGE_COINONE);
-			keyboard.add(keyboardFirstRow);
+			if(exchangeCnt%2 == 0) { keyboardRow = new KeyboardRow();}
+			exchangeCnt ++;
+			
+			keyboardRow.add(CMD.SET_EXCHANGE_COINONE);
+			if(exchangeCnt%2 == 0) { keyboard.add(keyboardRow);}
+			
 		}
 
 		if (SET.ENABLED_BITHUMB) {
-			KeyboardRow keyboardSecondRow = new KeyboardRow();
-			keyboardSecondRow.add(CMD.SET_EXCHANGE_BITHUMB);
-			keyboard.add(keyboardSecondRow);
+			if(exchangeCnt%2 == 0) { keyboardRow = new KeyboardRow();}
+			exchangeCnt ++;
+			
+			keyboardRow.add(CMD.SET_EXCHANGE_BITHUMB);
+			if(exchangeCnt%2 == 0) { keyboard.add(keyboardRow);}
 		}
 
 		if (SET.ENABLED_UPBIT) {
-			KeyboardRow keyboardThirdRow = new KeyboardRow();
-			keyboardThirdRow.add(CMD.SET_EXCHANGE_UPBIT);
-			keyboard.add(keyboardThirdRow);
+			if(exchangeCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
+			exchangeCnt ++;
+			
+			keyboardRow.add(CMD.SET_EXCHANGE_UPBIT);
+			if(exchangeCnt%2 == 0) { keyboard.add(keyboardRow);}
 		}
 		
 		if (SET.ENABLED_COINNEST) {
-			KeyboardRow keyboardThirdRow = new KeyboardRow();
-			keyboardThirdRow.add(CMD.SET_EXCHANGE_COINNEST);
-			keyboard.add(keyboardThirdRow);
+			if(exchangeCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
+			exchangeCnt ++;
+			
+			keyboardRow.add(CMD.SET_EXCHANGE_COINNEST);
+			if(exchangeCnt%2 == 0) { keyboard.add(keyboardRow);}
+		}
+		
+		if (SET.ENABLED_KORBIT) {
+			if(exchangeCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
+			exchangeCnt ++;
+			
+			keyboardRow.add(CMD.SET_EXCHANGE_KORTBIT);
+			if(exchangeCnt%2 == 0) { keyboard.add(keyboardRow);}
 		}
 
-		KeyboardRow keyboardForthRow = new KeyboardRow();
-		keyboardForthRow.add(CMD.SET_EXCHANGE_OUT);
-		keyboard.add(keyboardForthRow);
+		if(exchangeCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
+		exchangeCnt ++;
+		keyboardRow.add(CMD.SET_EXCHANGE_OUT);
+		keyboard.add(keyboardRow);
 		
 		this.setKeyboard(keyboard);
 	}

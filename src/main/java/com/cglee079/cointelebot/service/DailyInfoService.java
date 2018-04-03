@@ -30,11 +30,7 @@ public class DailyInfoService {
 		dailyInfo.setHigh(coin.getDouble("high"));
 		dailyInfo.setLow(coin.getDouble("low"));
 		dailyInfo.setLast(coin.getDouble("last"));
-		dailyInfo.setVolume(coin.getLong("volume"));
-		dailyInfo.setKimp(coin.getDouble("kimp"));
-		dailyInfo.setUsd(coin.getDouble("usd"));
-		dailyInfo.setUsd2krw(coin.getDouble("usd2krw"));
-		dailyInfo.setExchangeRate(coin.getInt("rate"));
+		dailyInfo.setVolume((long) coin.getDouble("volume"));
 		dailyInfo.setResult(coin.getString("result"));
 		dailyInfo.setErrorCode(String.valueOf(coin.getInt("errorCode")));
 		dailyInfo.setErrorMsg(coin.getString("errorMsg"));

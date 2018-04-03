@@ -10,10 +10,6 @@ public class DailyInfoVo {
 	private double low;
 	private double last;
 	private long volume;
-	private double usd;
-	private double usd2krw;
-	private double kimp;
-	private int exchangeRate;
 	private String result;
 	private String errorCode;
 	private String errorMsg;
@@ -68,38 +64,6 @@ public class DailyInfoVo {
 
 	public void setVolume(long d) {
 		this.volume = d;
-	}
-
-	public double getUsd() {
-		return usd;
-	}
-
-	public void setUsd(double usd) {
-		this.usd = usd;
-	}
-
-	public double getUsd2krw() {
-		return usd2krw;
-	}
-
-	public void setUsd2krw(double usd2krw) {
-		this.usd2krw = usd2krw;
-	}
-
-	public double getKimp() {
-		return kimp;
-	}
-
-	public void setKimp(double kimp) {
-		this.kimp = kimp;
-	}
-
-	public int getExchangeRate() {
-		return exchangeRate;
-	}
-
-	public void setExchangeRate(int exchangeRate) {
-		this.exchangeRate = exchangeRate;
 	}
 
 	public String getResult() {

@@ -11,14 +11,10 @@
 		DINFO_LOW as 'low',
 		DINFO_LAST as 'last',
 		DINFO_VOLUME as 'volume',
-		DINFO_USD as 'usd',
-		DINFO_USD2KRW as 'usd2krw',
-		DINFO_KOREA_PRM as 'kimp',
-		DINFO_EXCHANGE_RATE as 'exchagneRate',
 		DINFO_RESULT as 'result',
 		DINFO_ERRCODE as 'errorCode',
 		DINFO_ERRMSG as 'errorMsg'
-		FROM TB_XVGBOT_DAILYINFO
+		FROM TB_TESTBOT_DAILYINFO
 		WHERE 1 = 1
 		AND DINFO_DATE = #{date}
 		<if test="exchange != null">
@@ -30,8 +26,8 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO TB_XVGBOT_DAILYINFO(DINFO_DATE, DINFO_EXCHANGE, DINFO_HIGH, DINFO_LOW, DINFO_LAST, DINFO_VOLUME, DINFO_USD, DINFO_USD2KRW, DINFO_KOREA_PRM, DINFO_EXCHANGE_RATE, DINFO_RESULT, DINFO_ERRCODE, DINFO_ERRMSG)
-		VALUES (#{date}, #{exchange}, #{high}, #{low}, #{last}, #{volume}, #{usd}, #{usd2krw}, #{kimp}, #{exchangeRate}, #{result}, #{errorCode}, #{errorMsg})
+		INSERT INTO TB_TESTBOT_DAILYINFO(DINFO_DATE, DINFO_EXCHANGE, DINFO_HIGH, DINFO_LOW, DINFO_LAST, DINFO_VOLUME, DINFO_RESULT, DINFO_ERRCODE, DINFO_ERRMSG)
+		VALUES (#{date}, #{exchange}, #{high}, #{low}, #{last}, #{volume}, #{result}, #{errorCode}, #{errorMsg})
 	</insert>
 	
 	<delete id="delete" parameterType="map">

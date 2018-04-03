@@ -153,6 +153,7 @@ public class Explainer {
 		msg += "\n";
 		
 		msg += "* 목표가격은 숫자 또는 백분율로 입력해주세요.\n";
+		msg += "* ex) " + 0 + "  : 목표가격 초기화\n";
 		msg += "* ex) " + targetEx + "  : 목표가격 " + targetEx + "원\n";
 		msg += "* ex) " + rateEx + "    : 현재가 +" + rateEx + "\n";
 		msg += "* ex) -" + rateEx + "  : 현재가 -" + rateEx + "\n";
