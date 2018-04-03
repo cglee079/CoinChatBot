@@ -21,7 +21,7 @@
 			CLNT_OPEN_DATE as 'openDate',
 			CLNT_REOPEN_DATE as 'reopenDate',
 			CLNT_CLOSE_DATE as 'closeDate'
-			FROM TB_TESTBOT_CLIENT
+			FROM TB_XLMBOT_CLIENT
 			WHERE CLNT_USERID = #{userId}
 	</select>
 	
@@ -42,7 +42,7 @@
 			CLNT_OPEN_DATE as 'openDate',
 			CLNT_REOPEN_DATE as 'reopenDate',
 			CLNT_CLOSE_DATE as 'closeDate'
-			FROM TB_TESTBOT_CLIENT
+			FROM TB_XLMBOT_CLIENT
 			WHERE 1 = 1
 			<if test="exchange != null">
 			AND CLNT_EXCHANGE = #{exchange}
@@ -61,17 +61,17 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO TB_TESTBOT_CLIENT(CLNT_USERID, CLNT_USERNAME, CLNT_STATE, CLNT_EXCHANGE, CLNT_TIMELOOP, CLNT_DAYLOOP, CLNT_TGUP_PRICE, CLNT_TGDOWN_PRICE, CLNT_PRICE, CLNT_COIN_COUNT, CLNT_ENABLED, CLNT_ERRCNT, CLNT_OPEN_DATE, CLNT_REOPEN_DATE, CLNT_CLOSE_DATE)
+		INSERT INTO TB_XLMBOT_CLIENT(CLNT_USERID, CLNT_USERNAME, CLNT_STATE, CLNT_EXCHANGE, CLNT_TIMELOOP, CLNT_DAYLOOP, CLNT_TGUP_PRICE, CLNT_TGDOWN_PRICE, CLNT_PRICE, CLNT_COIN_COUNT, CLNT_ENABLED, CLNT_ERRCNT, CLNT_OPEN_DATE, CLNT_REOPEN_DATE, CLNT_CLOSE_DATE)
 		VALUES (#{userId}, #{username}, #{state}, #{exchange}, #{timeLoop}, #{dayLoop}, #{targetUpPrice}, #{targetDownPrice}, #{price}, #{coinCount}, #{enabled}, #{errCnt}, #{openDate}, #{reopenDate}, #{closeDate})
 	</insert>
 	
 	<delete id="delete" parameterType="map">
-		DELETE FROM TB_TESTBOT_CLIENT
+		DELETE FROM TB_XLMBOT_CLIENT
 		WHERE CLNT_USERID = #{userId}
 	</delete>
 	
 	<update id="update">
-		UPDATE TB_TESTBOT_CLIENT
+		UPDATE TB_XLMBOT_CLIENT
 		SET 
 		CLNT_USERNAME = #{username},
 		CLNT_STATE = #{state},

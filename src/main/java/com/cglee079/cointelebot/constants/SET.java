@@ -10,7 +10,7 @@ import com.cglee079.cointelebot.service.CoinInfoService;
 
 @Component
 public class SET {
-	public final static String MY_COIN = ID.COIN_BCH;
+	public final static String MY_COIN = ID.COIN_XLM;
 	
 	public final static Integer CLNT_MAX_ERRCNT = 10;
 	
@@ -53,6 +53,4 @@ public class SET {
 		SET.EX_TARGET	= coinInfo.getTargetEx();
 		SET.EX_RATE		= "5%";
 	}
-	
-	
 }
