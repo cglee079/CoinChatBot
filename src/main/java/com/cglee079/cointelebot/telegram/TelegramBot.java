@@ -60,8 +60,6 @@ public class TelegramBot extends AbilityBot  {
 	private SetExchangeKeyboard setExchangeKeyboard;
 	private ConfirmStopKeyboard confirmStopKeyboard;
 	
-	private String coinname;
-	
 	protected TelegramBot(String botToken, String botUsername) {
 		super(botToken, botUsername);
 		
@@ -71,11 +69,6 @@ public class TelegramBot extends AbilityBot  {
 		setTimeloopKeyboard = new SetTimeloopKeyboard();
 		setExchangeKeyboard = new SetExchangeKeyboard();
 		confirmStopKeyboard = new ConfirmStopKeyboard();
-	}
-	
-	@PostConstruct
-	public void init() {
-		coinname = exp.getCoinname();
 	}
 	
 	@Override
@@ -105,11 +98,11 @@ public class TelegramBot extends AbilityBot  {
 		if(message.getText().equals("/start") || client == null) {
 			String msg = "";
 			if (clientService.openChat(userId, username)) {
-				msg = coinname + " 알림이 시작되었습니다.\n\n";
+				msg = SET.COIN_NAME + " 알림이 시작되었습니다.\n\n";
 				msg += exp.explainHelp();
 				sendMessage(userId, null, msg, mainKeyboard);
 			} else {
-				msg = "이미 " + coinname + " 알리미에 설정 정보가 기록되어있습니다.";
+				msg = "이미 " + SET.COIN_NAME + " 알리미에 설정 정보가 기록되어있습니다.";
 				sendMessage(userId, null, msg, mainKeyboard);
 				sendMessage(userId, messageId, messageInfo(userId), mainKeyboard);
 			}
@@ -334,10 +327,10 @@ public class TelegramBot extends AbilityBot  {
 		}
 		
 		if(currentPrice != -1) {
-			String priceStr = cmd;
+			String priceStr = cmd.trim();
 			double targetPrice = -1;
 
-			if(priceStr.matches("^\\d*.\\d*$")) {
+			if(priceStr.matches("^\\d*(\\.?\\d*)$")) {
 				targetPrice = Double.valueOf(priceStr);
 				
 				if (targetPrice == 0) {  // case4. 초기화
@@ -348,13 +341,17 @@ public class TelegramBot extends AbilityBot  {
 					valid = true;
 				}
 				
-			} else if( priceStr.matches("^[+-]?\\d*.\\d*%$")) {
+			} else if( priceStr.matches("^[+-]?\\d*(\\.?\\d*)%$")) {
+				if(priceStr.equals("%")) {
+					priceStr = "0%";
+				}
+					
 				priceStr = priceStr.replace("%", "");
 				double percent = (Double.valueOf(priceStr)/100);
 				
 				if(percent == 0) {
 					valid = true;
-					targetPrice = 0;
+					targetPrice =  currentPrice;
 				} else if(percent > 0) {
 					valid = true;
 					targetPrice = currentPrice + currentPrice * percent;
@@ -476,7 +473,7 @@ public class TelegramBot extends AbilityBot  {
 		switch(cmd) {
 		case CMD.CONFIRM_STOP_YES :
 			if (clientService.stopChat(userId)) {
-				msg = coinname + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n";
+				msg = SET.COIN_NAME + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n";
 			} else {
 				msg = MSG.NEED_TO_START;
 			}
@@ -636,9 +633,9 @@ public class TelegramBot extends AbilityBot  {
 			
 			msg += "현재시각 : " + date + "\n";
 			msg += "BTC 가격 : " + toCommaStr(btcCV) +" 원 \n";
-			msg += coinname + " 가격 : " + toCommaStr(coinCV) +" 원 \n";
+			msg += SET.COIN_NAME + " 가격 : " + toCommaStr(coinCV) +" 원 \n";
 			msg += "BTC 24시간 변화량 : " + getPercent(btcCV, btcBV) + "\n";
-			msg += coinname + " 24시간 변화량 : " + getPercent(coinCV, coinBV) + "\n";
+			msg += SET.COIN_NAME + " 24시간 변화량 : " + getPercent(coinCV, coinBV) + "\n";
 			
 			return msg;
 		} else {
@@ -869,6 +866,6 @@ public class TelegramBot extends AbilityBot  {
 		DecimalFormat df = new DecimalFormat("#.##");
 		return prefix + df.format(percent) + "%";
 	}
-
 }
+
 

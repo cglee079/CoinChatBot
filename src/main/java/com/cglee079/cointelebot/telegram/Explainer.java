@@ -17,26 +17,12 @@ public class Explainer {
 	private CoinInfoService coinInfoService;
 
 	private String helpMsg;
-	private String coinname;
-	private String version;
-	private String priceEx;
-	private String targetEx;
-	private String numberEx;
-	private String rateEx;
 	
 	@PostConstruct
 	public void init() {
-	    CoinInfoVo coinInfo = coinInfoService.get(SET.MY_COIN);
-	    priceEx = coinInfo.getPriceEx();
-	    numberEx  = coinInfo.getNumberEx();
-	    targetEx = coinInfo.getTargetEx();
-		version = coinInfo.getVersion();
-		coinname = coinInfo.getCoinname();
-		rateEx = "5%";
-		
 		helpMsg = "";
         helpMsg += "별도의 시간 알림 주기 설정을 안하셨다면,\n";
-        helpMsg += "3시간 주기로 " + coinname + " 가격 알림이 전송됩니다.\n";
+        helpMsg += "3시간 주기로 " + SET.COIN_NAME + " 가격 알림이 전송됩니다.\n";
         helpMsg += "\n";
 
         helpMsg += "별도의 일일 알림 주기 설정을 안하셨다면,\n";
@@ -47,6 +33,7 @@ public class Explainer {
 
         //
         String exchange = "";
+        if(SET.ENABLED_KORBIT) {exchange = "코빗";}
         if(SET.ENABLED_COINNEST) {exchange = "코인네스트";}
         if(SET.ENABLED_UPBIT) {exchange = "업비트";}
         if(SET.ENABLED_BITHUMB) {exchange = "빗썸";}
@@ -66,7 +53,7 @@ public class Explainer {
         helpMsg += "목표가격을 위한 가격정보는 각 거래소에서 1분 주기로 갱신됩니다.\n";
         helpMsg += "\n";
 
-        helpMsg += "톡을 보내시면 현재 " + coinname + " 가격을 확인 하실 수 있습니다.\n";
+        helpMsg += "톡을 보내시면 현재 " + SET.COIN_NAME + " 가격을 확인 하실 수 있습니다.\n";
         helpMsg += "\n";
 
         helpMsg += "한국 프리미엄 정보를 확인 하실 수 있습니다.\n";
@@ -81,7 +68,8 @@ public class Explainer {
         if(SET.ENABLED_COINONE) { helpMsg += "코인원, ";}
         if(SET.ENABLED_BITHUMB) { helpMsg += "빗썸, ";}
         if(SET.ENABLED_UPBIT) { helpMsg += "업비트, ";}
-        if(SET.ENABLED_COINNEST) { helpMsg += "코인네스트";}
+        if(SET.ENABLED_COINNEST) { helpMsg += "코인네스트,";}
+        if(SET.ENABLED_KORBIT) { helpMsg += "코빗";}
         helpMsg += "\n";
         //
 
@@ -96,13 +84,9 @@ public class Explainer {
         helpMsg += "Developed By CGLEE ( cglee079@gmail.com )\n";
 	}
 	
-	public String getCoinname() {
-		return coinname;
-	}
-	
 	public String explainHelp() {
 		String msg = "";
-		msg += coinname + " 알리미 ver" + version + "\n";
+		msg += SET.COIN_NAME + " 알리미 ver" + SET.VERSION + "\n";
 		msg += "\n";
 		msg += helpMsg;
 		return msg;
@@ -154,9 +138,9 @@ public class Explainer {
 		
 		msg += "* 목표가격은 숫자 또는 백분율로 입력해주세요.\n";
 		msg += "* ex) " + 0 + "  : 목표가격 초기화\n";
-		msg += "* ex) " + targetEx + "  : 목표가격 " + targetEx + "원\n";
-		msg += "* ex) " + rateEx + "    : 현재가 +" + rateEx + "\n";
-		msg += "* ex) -" + rateEx + "  : 현재가 -" + rateEx + "\n";
+		msg += "* ex) " + SET.EX_TARGET + "  : 목표가격 " + SET.EX_TARGET + "원\n";
+		msg += "* ex) " + SET.EX_RATE + "    : 현재가 +" + SET.EX_RATE + "\n";
+		msg += "* ex) -" + SET.EX_RATE + "  : 현재가 -" + SET.EX_RATE + "\n";
 		msg += "\n";
 		msg += "\n";
 		msg += "# 메인으로 돌아가시려면 문자를 입력해주세요.\n";
@@ -173,7 +157,7 @@ public class Explainer {
 		msg += "* 투자금액은 숫자로만 입력해주세요.\n";
 		msg += "* 0을 입력하시면 초기화됩니다.\n";
 		msg += "* ex) " + 0 + " : 초기화\n";
-		msg += "* ex) " + priceEx + " : 투자금액 " + priceEx +" 원 설정\n";
+		msg += "* ex) " + SET.EX_PRICE + " : 투자금액 " + SET.EX_PRICE +" 원 설정\n";
 		msg += "\n";
 		msg += "\n";
 		msg += "# 메인으로 돌아가시려면 문자를 입력해주세요.\n";
@@ -188,7 +172,7 @@ public class Explainer {
 		msg += "* 코인개수는 숫자로만 입력해주세요.\n";
 		msg += "* 0을 입력하시면 초기화됩니다.\n";
 		msg += "* ex) " + 0 + " : 초기화\n";
-		msg += "* ex) " + numberEx + " : 코인개수 " + numberEx +" 개 설정\n";
+		msg += "* ex) " + SET.EX_NUMBER + " : 코인개수 " + SET.EX_NUMBER +" 개 설정\n";
 		msg += "\n";
 		msg += "\n";
 		msg += "# 메인으로 돌아가시려면 문자를 입력해주세요.\n";

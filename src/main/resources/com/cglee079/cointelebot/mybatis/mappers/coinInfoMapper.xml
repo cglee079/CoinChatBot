@@ -9,9 +9,6 @@
 			CINFO_COINID as 'coinId',
 			CINFO_COINNAME as 'coinname',
 			CINFO_CHAT_ADDR as 'chatAddr',
-			CINFO_EX_PRICE as 'priceEx',
-			CINFO_EX_NUMBER as 'numberEx',
-			CINFO_EX_TARGET as 'targetEx',
 			CINFO_VERSION as 'version'
 			FROM TB_COINBOT_INFO
 			<![CDATA[WHERE CINFO_COINID <> #{coinId}]]>
@@ -25,7 +22,15 @@
 			CINFO_EX_PRICE as 'priceEx',
 			CINFO_EX_NUMBER as 'numberEx',
 			CINFO_EX_TARGET as 'targetEx',
-			CINFO_VERSION as 'version'
+			CINFO_VERSION as 'version',
+			CINFO_ENABLED_COINONE as 'enabledCoinone',
+			CINFO_ENABLED_BITHUMB as 'enabledBithumb',
+			CINFO_ENABLED_UPBIT as 'enabledUpbit',
+			CINFO_ENABLED_COINNEST as 'enabledCoinnest',
+			CINFO_ENABLED_KORBIT as 'enabledKorbit',
+			CINFO_ENABLED_BITFINEX as 'enabledBitfinex',
+			CINFO_ENABLED_BITTREX as 'enabledBittrex',
+			CINFO_ENABLED_POLONIEX as 'enabledPoloniex'
 			FROM TB_COINBOT_INFO
 			WHERE CINFO_COINID = #{coinId}
 	</select>
