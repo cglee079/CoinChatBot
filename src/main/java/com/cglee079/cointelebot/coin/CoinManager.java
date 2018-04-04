@@ -35,6 +35,9 @@ public class CoinManager {
 	private PoloniexPooler poloniexPooler;
 	
 	@Autowired
+	private BinancePooler binancePooler;
+	
+	@Autowired
 	private ExchangePooler exchangePooler;
 
 	private double exchangeRate = 1064;
@@ -84,6 +87,7 @@ public class CoinManager {
 		if(SET.ENABLED_BITFINEX) {coinUS = bitfinexPooler.getCoin(coin);}
 		if(SET.ENABLED_BITTREX) {coinUS = bittrexPooler.getCoin(coin);}
 		if(SET.ENABLED_POLONIEX) {coinUS = poloniexPooler.getCoin(coin);}
+		if(SET.ENABLED_BINANCE) {coinUS = binancePooler.getCoin(coin);}
 		
 		if(coinUS == null) {
 			new ServerErrorException("미국 코인정보를 받아 올 수 없습니다");

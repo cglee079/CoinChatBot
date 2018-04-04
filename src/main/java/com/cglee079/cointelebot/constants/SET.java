@@ -10,7 +10,7 @@ import com.cglee079.cointelebot.service.CoinInfoService;
 
 @Component
 public class SET {
-	public final static String MY_COIN = ID.COIN_TRX;
+	public final static String MY_COIN = ID.COIN_STM;
 	
 	public final static Integer CLNT_MAX_ERRCNT = 10;
 	
@@ -23,6 +23,7 @@ public class SET {
 	public static boolean ENABLED_BITFINEX;
 	public static boolean ENABLED_BITTREX;
 	public static boolean ENABLED_POLONIEX;
+	public static boolean ENABLED_BINANCE = true;
 	
 	public static String COIN_NAME;
 	public static String VERSION;

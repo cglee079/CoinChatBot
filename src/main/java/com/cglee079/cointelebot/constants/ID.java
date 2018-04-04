@@ -20,6 +20,7 @@ public class ID {
 	public final static String COIN_NEO = "21";
 	public final static String COIN_XVG = "22";
 	public final static String COIN_TRX = "23";
+	public final static String COIN_STM = "24";
 
 	
     public static final String STATE_MAIN 			= "ST000";
