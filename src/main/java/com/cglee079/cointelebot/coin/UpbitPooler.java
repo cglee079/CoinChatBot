@@ -17,18 +17,19 @@ public class UpbitPooler extends ApiPooler{
 	public JSONObject getCoin(String coin) throws ServerErrorException {
 		String param = "";
 		switch (coin) {
-		case ID.COIN_BTC : param = "BTC"; break;
-		case ID.COIN_XRP : param = "XRP"; break;
-		case ID.COIN_ETH : param = "ETH"; break;
-		case ID.COIN_EOS : param = "EOS"; break;
-		case ID.COIN_QTM : param = "QTUM"; break;
-		case ID.COIN_LTC : param = "LTC"; break;
-		case ID.COIN_BCH : param = "BCH"; break;
-		case ID.COIN_ETC : param = "ETC"; break;
-		case ID.COIN_ADA : param = "ADA"; break;
-		case ID.COIN_XLM : param = "XLM"; break;
-		case ID.COIN_NEO : param = "NEO"; break;
-		case ID.COIN_XVG : param = "XVG"; break;
+		case ID.COIN_BTC : param = "KRW-BTC"; break;
+		case ID.COIN_XRP : param = "KRW-XRP"; break;
+		case ID.COIN_ETH : param = "KRW-ETH"; break;
+		case ID.COIN_EOS : param = "KRW-EOS"; break;
+		case ID.COIN_QTM : param = "KRW-QTUM"; break;
+		case ID.COIN_LTC : param = "KRW-LTC"; break;
+		case ID.COIN_BCH : param = "KRW-BCH"; break;
+		case ID.COIN_ETC : param = "KRW-ETC"; break;
+		case ID.COIN_ADA : param = "KRW-ADA"; break;
+		case ID.COIN_XLM : param = "KRW-XLM"; break;
+		case ID.COIN_NEO : param = "KRW-NEO"; break;
+		case ID.COIN_TRX : param = "BTC-TRX"; break;
+		case ID.COIN_XVG : param = "BTC-XVG"; break;
 		}
 		
 		JSONObject coinObj = getCurrentCoin(param);
@@ -38,13 +39,26 @@ public class UpbitPooler extends ApiPooler{
 		coinObj.put("volume", onedayInfo.get("volume"));
 		coinObj.put("first", this.getFirst(param).get("first"));		
 		
-		retryCnt = 0;
 		
+		if(param.contains("BTC-")) {
+			JSONObject btcObj = getCurrentCoin("KRW-BTC");
+			double high 	= coinObj.getDouble("high") * btcObj.getDouble("last");
+			double low		= coinObj.getDouble("low")* btcObj.getDouble("last");
+			double first 	= coinObj.getDouble("first") * btcObj.getDouble("last");
+			double last 	= coinObj.getDouble("last") * btcObj.getDouble("last");
+			
+			coinObj.put("high", high);
+			coinObj.put("low", low);
+			coinObj.put("last", last);
+			coinObj.put("first",first);	
+		}
+		
+		retryCnt = 0;
 		return coinObj;
 	}
 	
 	public JSONObject getCurrentCoin(String param) throws ServerErrorException {
-		String url = "https://crix-api-endpoint.upbit.com/v1/crix/candles/minutes/1?code=CRIX.UPBIT.KRW-" + param;
+		String url = "https://crix-api-endpoint.upbit.com/v1/crix/candles/minutes/1?code=CRIX.UPBIT." + param;
 		HttpClient httpClient = new HttpClient();
 		String response;
 		try {
@@ -68,7 +82,7 @@ public class UpbitPooler extends ApiPooler{
 	}
 	
 	public JSONObject getFirst(String param) throws ServerErrorException {
-		String url = "https://crix-api-endpoint.upbit.com/v1/crix/candles/minutes/1?code=CRIX.UPBIT.KRW-" + param;
+		String url = "https://crix-api-endpoint.upbit.com/v1/crix/candles/minutes/1?code=CRIX.UPBIT." + param;
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss");
 		Date dateBefore = new Date();
@@ -112,7 +126,7 @@ public class UpbitPooler extends ApiPooler{
 		
 		
 		//get hours
-		url = "https://crix-api-endpoint.upbit.com/v1/crix/candles/minutes/60?code=CRIX.UPBIT.KRW-" + param + "&count=24";
+		url = "https://crix-api-endpoint.upbit.com/v1/crix/candles/minutes/60?code=CRIX.UPBIT." + param + "&count=24";
 		
 		try {
 			response = httpClient.get(url);
@@ -137,7 +151,7 @@ public class UpbitPooler extends ApiPooler{
 		}
 		
 		//get minutes
-		url = "https://crix-api-endpoint.upbit.com/v1/crix/candles/minutes/1?code=CRIX.UPBIT.KRW-" + param;
+		url = "https://crix-api-endpoint.upbit.com/v1/crix/candles/minutes/1?code=CRIX.UPBIT." + param;
 		Date d = new Date();
 		int hour = d.getHours();
 		int minute = d.getMinutes();

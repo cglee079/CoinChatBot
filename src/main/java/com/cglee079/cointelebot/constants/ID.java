@@ -22,14 +22,14 @@ public class ID {
 	public final static String COIN_TRX = "23";
 
 	
-    public static final String STATE_MAIN = "ST000";
-    public static final String STATE_SET_PRICE  = "ST012";
-    public static final String STATE_SET_NUMBER = "ST013";
-    public static final String STATE_SET_TARGET = "ST014";
-    public static final String STATE_SET_EXCHANGE = "ST015";
-    public static final String STATE_SET_DAYLOOP = "ST016";
-    public static final String STATE_SET_TIMELOOP = "ST017";
-    public static final String STATE_SEND_MSG = "ST018";
-    public static final String STATE_CONFIRM_STOP = "ST019";
+    public static final String STATE_MAIN 			= "ST000";
+    public static final String STATE_SET_PRICE  	= "ST012";
+    public static final String STATE_SET_NUMBER 	= "ST013";
+    public static final String STATE_SET_TARGET 	= "ST014";
+    public static final String STATE_SET_EXCHANGE 	= "ST015";
+    public static final String STATE_SET_DAYLOOP 	= "ST016";
+    public static final String STATE_SET_TIMELOOP	= "ST017";
+    public static final String STATE_SEND_MSG 		= "ST018";
+    public static final String STATE_CONFIRM_STOP 	= "ST019";
 	
 }

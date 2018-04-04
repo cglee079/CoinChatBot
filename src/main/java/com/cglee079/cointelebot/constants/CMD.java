@@ -37,22 +37,22 @@ public class CMD {
 	public static final String SET_DAYLOOP_OUT 	= "나가기";
 
 	public static final String SET_TIMELOOP_OFF = "끄기";
-	public static final String SET_TIMELOOP_01 = "1시간";
-	public static final String SET_TIMELOOP_02 = "2시간";
-	public static final String SET_TIMELOOP_03 = "3시간";
-	public static final String SET_TIMELOOP_04 = "4시간";
-	public static final String SET_TIMELOOP_05 = "5시간";
-	public static final String SET_TIMELOOP_06 = "6시간";
-	public static final String SET_TIMELOOP_07 = "7시간";
-	public static final String SET_TIMELOOP_08 = "8시간";
-	public static final String SET_TIMELOOP_09 = "9시간";
-	public static final String SET_TIMELOOP_10 = "10시간";
-	public static final String SET_TIMELOOP_11 = "11시간";
-	public static final String SET_TIMELOOP_12 = "12시간";
+	public static final String SET_TIMELOOP_01 	= "1시간";
+	public static final String SET_TIMELOOP_02 	= "2시간";
+	public static final String SET_TIMELOOP_03 	= "3시간";
+	public static final String SET_TIMELOOP_04 	= "4시간";
+	public static final String SET_TIMELOOP_05 	= "5시간";
+	public static final String SET_TIMELOOP_06 	= "6시간";
+	public static final String SET_TIMELOOP_07 	= "7시간";
+	public static final String SET_TIMELOOP_08 	= "8시간";
+	public static final String SET_TIMELOOP_09 	= "9시간";
+	public static final String SET_TIMELOOP_10 	= "10시간";
+	public static final String SET_TIMELOOP_11 	= "11시간";
+	public static final String SET_TIMELOOP_12 	= "12시간";
 	public static final String SET_TIMELOOP_OUT = "나가기";
 	
 	public static final String SEND_MSG_OUT = "0";
 	
 	public static final String CONFIRM_STOP_YES = "네";
-	public static final String CONFIRM_STOP_NO = "아니오";
+	public static final String CONFIRM_STOP_NO 	= "아니오";
 }
