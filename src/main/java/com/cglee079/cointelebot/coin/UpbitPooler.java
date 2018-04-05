@@ -31,6 +31,7 @@ public class UpbitPooler extends ApiPooler{
 		case ID.COIN_TRX : param = "BTC-TRX"; break;
 		case ID.COIN_XVG : param = "BTC-XVG"; break;
 		case ID.COIN_STM : param = "KRW-STORM"; break;
+		case ID.COIN_SIA : param = "BTC-SC"; break;
 		}
 		
 		JSONObject coinObj = getCurrentCoin(param);
@@ -48,6 +49,8 @@ public class UpbitPooler extends ApiPooler{
 			double first 	= coinObj.getDouble("first") * btcObj.getDouble("last");
 			double last 	= coinObj.getDouble("last") * btcObj.getDouble("last");
 			
+			coinObj.put("lastBTC", coinObj.getDouble("last"));
+			coinObj.put("firstBTC", coinObj.getDouble("first"));
 			coinObj.put("high", high);
 			coinObj.put("low", low);
 			coinObj.put("last", last);
