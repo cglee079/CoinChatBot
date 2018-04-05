@@ -712,7 +712,7 @@ public class TelegramBot extends AbilityBot  {
 	}
 	
 	public void sendTargetPriceMessage(List<ClientVo> clients, JSONObject coinObj) {
-		Integer currentPrice = coinObj.getInt("last");
+		double currentPrice = coinObj.getDouble("last");
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String date = format.format(new Date());
