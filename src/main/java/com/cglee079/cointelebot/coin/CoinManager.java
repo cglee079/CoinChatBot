@@ -60,7 +60,7 @@ public class CoinManager {
 			this.exchangeRate = exchangePooler.usd2krw();
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
-			Log.i(e.getStackTrace());
+			e.printStackTrace();
 		}
 	}
 

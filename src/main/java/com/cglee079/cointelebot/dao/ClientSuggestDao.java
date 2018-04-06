@@ -19,7 +19,8 @@ public class ClientSuggestDao {
 	public boolean insert(ClientSuggestVo clientSuggest){
 		try { return sqlSession.insert(namespace + ".insert", clientSuggest) == 1; }
 		catch (Exception e){
-			Log.i(e.getStackTrace());
+			Log.i("ERROR\t:\t" + e.getMessage());
+			e.printStackTrace();
 			return false; 
 		}
 	}

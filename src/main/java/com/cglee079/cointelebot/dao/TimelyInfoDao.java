@@ -21,7 +21,8 @@ public class TimelyInfoDao {
 	public boolean insert(TimelyInfoVo timelyInfo){
 		try { return sqlSession.insert(namespace + ".insert", timelyInfo) == 1; }
 		catch (Exception e){
-			Log.i(e.getStackTrace());
+			Log.i("ERROR\t:\t" + e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
 	}

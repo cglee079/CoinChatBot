@@ -45,7 +45,7 @@ public class TargetScheduler {
 			telegramBot.sendTargetPriceMessage(clients, coinObj);
 		} catch (ServerErrorException e) {
 			Log.i("Load TargetPrice  " + e.log());
-			Log.i(e.getStackTrace());
+			e.printStackTrace();
 		}
 	}
 }

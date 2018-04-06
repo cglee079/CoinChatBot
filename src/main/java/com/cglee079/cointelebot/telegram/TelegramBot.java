@@ -322,7 +322,7 @@ public class TelegramBot extends AbilityBot  {
 		}
 		catch (ServerErrorException e) {
 			Log.i(e.log());
-			Log.i(e.getStackTrace());
+			e.printStackTrace();
 			msg = MSG.WAIT_SECONDS + e.getTelegramMsg();
 		}
 		
@@ -501,7 +501,7 @@ public class TelegramBot extends AbilityBot  {
 			coin = coinManager.getCoin(SET.MY_COIN, exchange);
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
-			Log.i(e.getStackTrace());
+			e.printStackTrace();
 			return MSG.WAIT_SECONDS + e.getTelegramMsg();
 		}
 		
@@ -566,7 +566,7 @@ public class TelegramBot extends AbilityBot  {
 		} catch (ServerErrorException e) {
 			e.printStackTrace();
 			Log.i(e.log());
-			Log.i(e.getStackTrace());
+			e.printStackTrace();
 			return MSG.WAIT_SECONDS + e.getTelegramMsg();
 		} 
 		
@@ -621,7 +621,7 @@ public class TelegramBot extends AbilityBot  {
 			btc = coinManager.getCoin(ID.COIN_BTC, exchange);
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
-			Log.i(e.getStackTrace());			
+			e.printStackTrace();			
 			return MSG.WAIT_SECONDS + e.getTelegramMsg();
 		}
 	
@@ -655,7 +655,7 @@ public class TelegramBot extends AbilityBot  {
 					return calcResult(client, coin.getDouble("last"));
 				} catch (ServerErrorException e) {
 					Log.i(e.log());
-					Log.i(e.getStackTrace());
+					e.printStackTrace();
 					return MSG.WAIT_SECONDS + e.getTelegramMsg();
 				}
 			}
@@ -704,7 +704,7 @@ public class TelegramBot extends AbilityBot  {
 			sender.execute(sendMessage);
 		} catch (TelegramApiException e) {
 			Log.i("To Client Error\t:\t[id :" + id + " ]  에게 메세지를 보낼 수 없습니다.  :" + e.getMessage());
-			Log.i(e.getStackTrace());
+			e.printStackTrace();
 			clientService.increaseErrCnt(id);
 			return ;
 		}

@@ -19,7 +19,8 @@ public class DailyInfoDao {
 	public boolean insert(DailyInfoVo dailyInfo){
 		try { return sqlSession.insert(namespace + ".insert", dailyInfo) == 1; }
 		catch (Exception e){
-			Log.i(e.getStackTrace());
+			Log.i("ERROR\t:\t" + e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
 	}

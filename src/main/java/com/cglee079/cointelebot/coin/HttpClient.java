@@ -35,7 +35,7 @@ public class HttpClient {
 			return response.toString();
 		} catch (MalformedURLException e) {
 			Log.i("HTTP Client Error");
-			Log.i(e.getStackTrace());
+			e.printStackTrace();
 		}
 		
 		return null;

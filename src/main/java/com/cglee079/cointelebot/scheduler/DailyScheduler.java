@@ -63,7 +63,7 @@ public class DailyScheduler {
 			coin = coinManager.getCoin(SET.MY_COIN, exchange);
 		} catch (ServerErrorException e) {
 			Log.i("ERROR loadDailyCoin : " + e.getMessage());
-			Log.i(e.getStackTrace());
+			e.printStackTrace();
 			
 			coin = timelyInfoService.getBefore(dateCurrent, exchange);
 			coin.put("result", "error");

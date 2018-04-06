@@ -59,7 +59,8 @@ public class TimelyScheduler {
 			coinObj = coinManager.getCoin(SET.MY_COIN, exchange);
 		} catch (ServerErrorException e) {
 			Log.i("ERROR loadDailyCoin : " + e.getMessage());
-			Log.i(e.getStackTrace());
+			e.printStackTrace();
+			
 			coinObj = timelyInfoService.getBefore(dateCurrent, exchange);
 			coinObj.put("result", "error");
 			coinObj.put("errorCode", e.getErrCode());

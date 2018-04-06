@@ -18,7 +18,8 @@ public class ClientMsgDao {
 	public boolean insert(ClientMsgVo clientMsg){
 		try { return sqlSession.insert(namespace + ".insert", clientMsg) == 1; }
 		catch (Exception e){
-			Log.i(e.getStackTrace());
+			Log.i("ERROR\t:\t" + e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
 	}
