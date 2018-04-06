@@ -11,7 +11,7 @@ public class ClientSuggestVo {
 	private String date;
 
 	public ClientSuggestVo() {
-		coinId = SET.COIN_NAME;
+		coinId = SET.MY_COIN;
 	}
 
 	public int getSeq() {

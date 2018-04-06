@@ -5,8 +5,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.cglee079.cointelebot.model.CoinInfoVo;
-import com.cglee079.cointelebot.service.CoinInfoService;
+import com.cglee079.cointelebot.model.CoinConfigVo;
+import com.cglee079.cointelebot.service.CoinConfigService;
 
 @Component
 public class SET {
@@ -23,9 +23,8 @@ public class SET {
 	public static boolean ENABLED_BITFINEX;
 	public static boolean ENABLED_BITTREX;
 	public static boolean ENABLED_POLONIEX;
-	public static boolean ENABLED_BINANCE = false;
+	public static boolean ENABLED_BINANCE;
 	
-	public static String COIN_NAME;
 	public static String VERSION;
 	public static String EX_PRICE;
 	public static String EX_TARGET;
@@ -33,25 +32,25 @@ public class SET {
 	public static String EX_RATE;
 	
 	@Autowired
-	private CoinInfoService coinInfoService;
+	private CoinConfigService coinConfigService;
 
 	@PostConstruct
 	public void init() {
-		CoinInfoVo coinInfo 	= coinInfoService.get(MY_COIN);
-		SET.ENABLED_COINONE 	= coinInfo.isEnabledCoinone();
-		SET.ENABLED_BITHUMB 	= coinInfo.isEnabledBithumb();
-		SET.ENABLED_UPBIT		= coinInfo.isEnabledUpbit();
-		SET.ENABLED_COINNEST	= coinInfo.isEnabledCoinnest();
-		SET.ENABLED_KORBIT 		= coinInfo.isEnabledKorbit();
-		SET.ENABLED_BITFINEX	= coinInfo.isEnabledBitfinex();
-		SET.ENABLED_BITTREX		= coinInfo.isEnabledBittrex();
-		SET.ENABLED_POLONIEX	= coinInfo.isEnabledPoloniex();
+		CoinConfigVo config 	= coinConfigService.get(MY_COIN);
+		SET.ENABLED_COINONE 	= config.isEnabledCoinone();
+		SET.ENABLED_BITHUMB 	= config.isEnabledBithumb();
+		SET.ENABLED_UPBIT		= config.isEnabledUpbit();
+		SET.ENABLED_COINNEST	= config.isEnabledCoinnest();
+		SET.ENABLED_KORBIT 		= config.isEnabledKorbit();
+		SET.ENABLED_BITFINEX	= config.isEnabledBitfinex();
+		SET.ENABLED_BITTREX		= config.isEnabledBittrex();
+		SET.ENABLED_POLONIEX	= config.isEnabledPoloniex();
+		SET.ENABLED_BINANCE		= config.isEnabledBinance();
 		
-		SET.COIN_NAME	= coinInfo.getCoinname();
-		SET.VERSION		= coinInfo.getVersion();
-		SET.EX_PRICE 	= coinInfo.getPriceEx();
-		SET.EX_NUMBER	= coinInfo.getNumberEx();
-		SET.EX_TARGET	= coinInfo.getTargetEx();
+		SET.VERSION		= config.getVersion();
+		SET.EX_PRICE 	= config.getPriceEx();
+		SET.EX_NUMBER	= config.getNumberEx();
+		SET.EX_TARGET	= config.getTargetEx();
 		SET.EX_RATE		= "5%";
 	}
 }

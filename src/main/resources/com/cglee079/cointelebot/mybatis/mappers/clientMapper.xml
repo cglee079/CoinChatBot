@@ -21,7 +21,7 @@
 			CLNT_OPEN_DATE as 'openDate',
 			CLNT_REOPEN_DATE as 'reopenDate',
 			CLNT_CLOSE_DATE as 'closeDate'
-			FROM TB_TESTBOT_hCLIENT
+			FROM TB_TESTBOT_CLIENT
 			WHERE CLNT_USERID = #{userId}
 	</select>
 	

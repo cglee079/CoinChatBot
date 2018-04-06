@@ -22,7 +22,7 @@ public class Explainer {
 	public void init() {
 		helpMsg = "";
         helpMsg += "별도의 시간 알림 주기 설정을 안하셨다면,\n";
-        helpMsg += "3시간 주기로 " + SET.COIN_NAME + " 가격 알림이 전송됩니다.\n";
+        helpMsg += "3시간 주기로 " + SET.MY_COIN + " 가격 알림이 전송됩니다.\n";
         helpMsg += "\n";
 
         helpMsg += "별도의 일일 알림 주기 설정을 안하셨다면,\n";
@@ -53,7 +53,7 @@ public class Explainer {
         helpMsg += "목표가격을 위한 가격정보는 각 거래소에서 1분 주기로 갱신됩니다.\n";
         helpMsg += "\n";
 
-        helpMsg += "톡을 보내시면 현재 " + SET.COIN_NAME + " 가격을 확인 하실 수 있습니다.\n";
+        helpMsg += "톡을 보내시면 현재 " + SET.MY_COIN + " 가격을 확인 하실 수 있습니다.\n";
         helpMsg += "\n";
 
         helpMsg += "한국 프리미엄 정보를 확인 하실 수 있습니다.\n";
@@ -86,7 +86,7 @@ public class Explainer {
 	
 	public String explainHelp() {
 		String msg = "";
-		msg += SET.COIN_NAME + " 알리미 ver" + SET.VERSION + "\n";
+		msg += SET.MY_COIN + " 알리미 ver" + SET.VERSION + "\n";
 		msg += "\n";
 		msg += helpMsg;
 		return msg;
@@ -102,7 +102,9 @@ public class Explainer {
 	    int coinInfosLen = coinInfos.size();
 			for(int i =0; i < coinInfosLen; i++) {
 	        coinInfo = coinInfos.get(i);
-	        msg += coinInfo.getCoinname() + "  :  " + coinInfo.getChatAddr() + "\n";
+	        msg += coinInfo.getUsName() + " (" + coinInfo.getKrName() + ") \n";
+	        msg += coinInfo.getChatAddr() + "\n";
+	        msg +="\n";
 	    }
 		msg += "\n";
 		return msg;

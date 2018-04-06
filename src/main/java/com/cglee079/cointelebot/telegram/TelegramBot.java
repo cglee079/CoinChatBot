@@ -98,11 +98,11 @@ public class TelegramBot extends AbilityBot  {
 		if(message.getText().equals("/start") || client == null) {
 			String msg = "";
 			if (clientService.openChat(userId, username)) {
-				msg = SET.COIN_NAME + " 알림이 시작되었습니다.\n\n";
+				msg = SET.MY_COIN + " 알림이 시작되었습니다.\n\n";
 				msg += exp.explainHelp();
 				sendMessage(userId, null, msg, mainKeyboard);
 			} else {
-				msg = "이미 " + SET.COIN_NAME + " 알리미에 설정 정보가 기록되어있습니다.";
+				msg = "이미 " + SET.MY_COIN + " 알리미에 설정 정보가 기록되어있습니다.";
 				sendMessage(userId, null, msg, mainKeyboard);
 				sendMessage(userId, messageId, messageInfo(userId), mainKeyboard);
 			}
@@ -473,7 +473,7 @@ public class TelegramBot extends AbilityBot  {
 		switch(cmd) {
 		case CMD.CONFIRM_STOP_YES :
 			if (clientService.stopChat(userId)) {
-				msg = SET.COIN_NAME + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n";
+				msg = SET.MY_COIN + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n";
 			} else {
 				msg = MSG.NEED_TO_START;
 			}
@@ -633,9 +633,9 @@ public class TelegramBot extends AbilityBot  {
 			
 			msg += "현재시각 : " + date + "\n";
 			msg += "BTC 가격 : " + toCommaStr(btcCV) +" 원 \n";
-			msg += SET.COIN_NAME + " 가격 : " + toCommaStr(coinCV) +" 원 \n";
+			msg += SET.MY_COIN + " 가격 : " + toCommaStr(coinCV) +" 원 \n";
 			msg += "BTC 24시간 변화량 : " + getPercent(btcCV, btcBV) + "\n";
-			msg += SET.COIN_NAME + " 24시간 변화량 : " + getPercent(coinCV, coinBV) + "\n";
+			msg += SET.MY_COIN + " 24시간 변화량 : " + getPercent(coinCV, coinBV) + "\n";
 			
 			return msg;
 		} else {

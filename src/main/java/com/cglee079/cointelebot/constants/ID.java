@@ -7,21 +7,21 @@ public class ID {
 	public final static String EXCHANGE_COINNEST= "104";
 	public final static String EXCHANGE_KORBIT	= "105";
 	
-	public final static String COIN_BTC = "11";
-	public final static String COIN_XRP = "12";
-	public final static String COIN_ETH = "13";
-	public final static String COIN_EOS = "14";
-	public final static String COIN_QTM = "15";
-	public final static String COIN_LTC = "16";
-	public final static String COIN_BCH = "17";
-	public final static String COIN_ETC = "18";
-	public final static String COIN_ADA = "19";
-	public final static String COIN_XLM = "20";
-	public final static String COIN_NEO = "21";
-	public final static String COIN_XVG = "22";
-	public final static String COIN_TRX = "23";
-	public final static String COIN_STM = "24";
-	public final static String COIN_SIA = "25";
+	public final static String COIN_BTC = "BTC";
+	public final static String COIN_XRP = "XRP";
+	public final static String COIN_ETH = "ETH";
+	public final static String COIN_EOS = "EOS";
+	public final static String COIN_QTM = "QTM";
+	public final static String COIN_LTC = "LTC";
+	public final static String COIN_BCH = "BCH";
+	public final static String COIN_ETC = "ETC";
+	public final static String COIN_ADA = "ADA";
+	public final static String COIN_XLM = "XLM";
+	public final static String COIN_NEO = "NEO";
+	public final static String COIN_XVG = "XVG";
+	public final static String COIN_TRX = "TRX";
+	public final static String COIN_STM = "STM";
+	public final static String COIN_SIA = "SIA";
 
 	
     public static final String STATE_MAIN 			= "ST000";

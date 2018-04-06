@@ -2,20 +2,10 @@ package com.cglee079.cointelebot.model;
 
 public class CoinInfoVo {
 	private String coinId;
-	private String coinname;
-	private String priceEx;
-	private String targetEx;
-	private String numberEx;
+	private String usName;
+	private String krName;
 	private String chatAddr;
-	private String version;
-	private boolean enabledCoinone;
-	private boolean enabledBithumb;
-	private boolean enabledUpbit;
-	private boolean enabledCoinnest;
-	private boolean enabledKorbit;
-	private boolean enabledBitfinex;
-	private boolean enabledBittrex;
-	private boolean enabledPoloniex;
+	private String enabeld;
 
 	public String getCoinId() {
 		return coinId;
@@ -25,36 +15,20 @@ public class CoinInfoVo {
 		this.coinId = coinId;
 	}
 
-	public String getCoinname() {
-		return coinname;
+	public String getUsName() {
+		return usName;
 	}
 
-	public void setCoinname(String coinname) {
-		this.coinname = coinname;
+	public void setUsName(String usName) {
+		this.usName = usName;
 	}
 
-	public String getPriceEx() {
-		return priceEx;
+	public String getKrName() {
+		return krName;
 	}
 
-	public void setPriceEx(String priceEx) {
-		this.priceEx = priceEx;
-	}
-
-	public String getTargetEx() {
-		return targetEx;
-	}
-
-	public void setTargetEx(String targetEx) {
-		this.targetEx = targetEx;
-	}
-
-	public String getNumberEx() {
-		return numberEx;
-	}
-
-	public void setNumberEx(String numberEx) {
-		this.numberEx = numberEx;
+	public void setKrName(String krName) {
+		this.krName = krName;
 	}
 
 	public String getChatAddr() {
@@ -65,76 +39,11 @@ public class CoinInfoVo {
 		this.chatAddr = chatAddr;
 	}
 
-	public String getVersion() {
-		return version;
+	public String getEnabeld() {
+		return enabeld;
 	}
 
-	public void setVersion(String version) {
-		this.version = version;
+	public void setEnabeld(String enabeld) {
+		this.enabeld = enabeld;
 	}
-
-	public boolean isEnabledCoinone() {
-		return enabledCoinone;
-	}
-
-	public void setEnabledCoinone(boolean enabledCoinone) {
-		this.enabledCoinone = enabledCoinone;
-	}
-
-	public boolean isEnabledBithumb() {
-		return enabledBithumb;
-	}
-
-	public void setEnabledBithumb(boolean enabledBithumb) {
-		this.enabledBithumb = enabledBithumb;
-	}
-
-	public boolean isEnabledUpbit() {
-		return enabledUpbit;
-	}
-
-	public void setEnabledUpbit(boolean enabledUpbit) {
-		this.enabledUpbit = enabledUpbit;
-	}
-
-	public boolean isEnabledCoinnest() {
-		return enabledCoinnest;
-	}
-
-	public void setEnabledCoinnest(boolean enabledCoinnest) {
-		this.enabledCoinnest = enabledCoinnest;
-	}
-
-	public boolean isEnabledKorbit() {
-		return enabledKorbit;
-	}
-
-	public void setEnabledKorbit(boolean enabledKorbit) {
-		this.enabledKorbit = enabledKorbit;
-	}
-
-	public boolean isEnabledBitfinex() {
-		return enabledBitfinex;
-	}
-
-	public void setEnabledBitfinex(boolean enabledBitfinex) {
-		this.enabledBitfinex = enabledBitfinex;
-	}
-
-	public boolean isEnabledBittrex() {
-		return enabledBittrex;
-	}
-
-	public void setEnabledBittrex(boolean enabledBittrex) {
-		this.enabledBittrex = enabledBittrex;
-	}
-
-	public boolean isEnabledPoloniex() {
-		return enabledPoloniex;
-	}
-
-	public void setEnabledPoloniex(boolean enabledPoloniex) {
-		this.enabledPoloniex = enabledPoloniex;
-	}
-
 }

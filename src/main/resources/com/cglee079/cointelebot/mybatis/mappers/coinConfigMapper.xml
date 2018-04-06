@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.cointelebot.mapper.CoinConfigMapper">
+
+	<select id="get" resultType="com.cglee079.cointelebot.model.CoinConfigVo">
+			SELECT 
+			CONFIG_COINID as 'coinId',
+			CONFIG_EX_PRICE as 'priceEx',
+			CONFIG_EX_NUMBER as 'numberEx',
+			CONFIG_EX_TARGET as 'targetEx',
+			CONFIG_VERSION as 'version',
+			CONFIG_ENABLED_COINONE as 'enabledCoinone',
+			CONFIG_ENABLED_BITHUMB as 'enabledBithumb',
+			CONFIG_ENABLED_UPBIT as 'enabledUpbit',
+			CONFIG_ENABLED_COINNEST as 'enabledCoinnest',
+			CONFIG_ENABLED_KORBIT as 'enabledKorbit',
+			CONFIG_ENABLED_BITFINEX as 'enabledBitfinex',
+			CONFIG_ENABLED_BITTREX as 'enabledBittrex',
+			CONFIG_ENABLED_POLONIEX as 'enabledPoloniex',
+			CONFIG_ENABLED_BINANCE as 'enabledBinance'
+			FROM TB_COINBOT_CONFIG
+			WHERE 1 = 1
+			AND CONFIG_COINID = #{coinId}
+	</select>
+	
+</mapper>
