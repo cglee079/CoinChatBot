@@ -6,9 +6,12 @@ import java.util.Date;
 public class DailyInfoVo {
 	private String date;
 	private String exchange;
-	private double high;
-	private double low;
-	private double last;
+	private Double high;
+	private Double highBTC;
+	private Double low;
+	private Double lowBTC;
+	private Double last;
+	private Double lastBTC;
 	private long volume;
 	private String result;
 	private String errorCode;
@@ -34,28 +37,52 @@ public class DailyInfoVo {
 		this.exchange = exchange;
 	}
 
-	public double getHigh() {
+	public Double getHigh() {
 		return high;
 	}
 
-	public void setHigh(double d) {
+	public void setHigh(Double d) {
 		this.high = d;
 	}
 
-	public double getLow() {
+	public Double getHighBTC() {
+		return highBTC;
+	}
+
+	public void setHighBTC(Double highBTC) {
+		this.highBTC = highBTC;
+	}
+
+	public Double getLow() {
 		return low;
 	}
 
-	public void setLow(double low) {
+	public void setLow(Double low) {
 		this.low = low;
 	}
+	
+	public Double getLowBTC() {
+		return lowBTC;
+	}
 
-	public double getLast() {
+	public void setLowBTC(Double lowBTC) {
+		this.lowBTC = lowBTC;
+	}
+
+	public Double getLast() {
 		return last;
 	}
 
-	public void setLast(double last) {
+	public void setLast(Double last) {
 		this.last = last;
+	}
+
+	public Double getLastBTC() {
+		return lastBTC;
+	}
+
+	public void setLastBTC(Double lastBTC) {
+		this.lastBTC = lastBTC;
 	}
 
 	public long getVolume() {

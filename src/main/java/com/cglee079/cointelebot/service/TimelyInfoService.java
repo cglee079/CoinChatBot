@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.dao.TimelyInfoDao;
 import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.TimelyInfoVo;
@@ -37,6 +38,9 @@ public class TimelyInfoService {
 		timelyInfo.setResult(coin.getString("result"));
 		timelyInfo.setErrorCode(String.valueOf(coin.getInt("errorCode")));
 		timelyInfo.setErrorMsg(coin.getString("errorMsg"));
+		if(SET.ISIN_BTCMARKET) {
+			timelyInfo.setLastBTC(coin.getDouble("lastBTC"));
+		}
 		return timelyInfoDao.insert(timelyInfo);
 	}
 

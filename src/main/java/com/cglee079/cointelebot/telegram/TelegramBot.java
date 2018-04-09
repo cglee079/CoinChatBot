@@ -505,7 +505,6 @@ public class TelegramBot extends AbilityBot  {
 			return MSG.WAIT_SECONDS + e.getTelegramMsg();
 		}
 		
-		
 		if(coin == null) {
 			Log.i("가격정보를 보낼 수 없습니다. : return NULL");
 			return MSG.WAIT_SECONDS + "Coin NULL";
@@ -514,7 +513,11 @@ public class TelegramBot extends AbilityBot  {
 		currentValue = coin.getDouble("last");
 		String msg = "";
 		msg += "현재시각 : " + date + "\n";
-		msg += "현재가격 : " + toCommaStr(currentValue) + " 원\n";
+		msg += "현재가격 : " + toCommaStr(currentValue) + " 원";
+		
+		if(SET.ISIN_BTCMARKET) {
+			msg += " [" + toBtcStr(coin.getDouble("lastBTC")) + " BTC]\n";
+		}
 		
 		return msg;
 	}
@@ -632,8 +635,26 @@ public class TelegramBot extends AbilityBot  {
 			double btcBV = btc.getDouble("first");
 			
 			msg += "현재시각 : " + date + "\n";
-			msg += "BTC 가격 : " + toCommaStr(btcCV) +" 원 \n";
-			msg += SET.MY_COIN + " 가격 : " + toCommaStr(coinCV) +" 원 \n";
+			msg += "-------------------------\n";
+			
+			msg += "BTC 현재 시각 가격 : " + toCommaStr(btcCV) +" 원 \n";
+			msg += "BTC 24시간전 가격 : " + toCommaStr(btcBV) +" 원 \n";
+			msg += "\n";
+			
+			if(SET.ISIN_BTCMARKET) {
+				double coinCB = coin.getDouble("lastBTC");
+				double coinBB = coin.getDouble("firstBTC");
+				
+				msg += SET.MY_COIN + " 현재 시각 가격 : " + toCommaStr(coinCV) + " 원 [" + toBtcStr(coinCB) + " BTC]\n";
+				msg += SET.MY_COIN + " 24시간전 가격 : " + toCommaStr(coinBV) + " 원 [" + toBtcStr(coinBB) + " BTC]\n";
+			} else {
+				msg += SET.MY_COIN + " 현재 시각 가격 : " + toCommaStr(coinCV) + " 원\n";
+				msg += SET.MY_COIN + " 24시간전 가격 : " + toCommaStr(coinBV) + " 원\n";
+			}
+			msg += "\n";
+			
+			
+			
 			msg += "BTC 24시간 변화량 : " + getPercent(btcCV, btcBV) + "\n";
 			msg += SET.MY_COIN + " 24시간 변화량 : " + getPercent(coinCV, coinBV) + "\n";
 			
@@ -652,7 +673,10 @@ public class TelegramBot extends AbilityBot  {
 			if( client.getPrice() != null && client.getCoinCount() != null){
 				try {
 					JSONObject coin = coinManager.getCoin(SET.MY_COIN,client.getExchange());
-					return calcResult(client, coin.getDouble("last"));
+					double last = coin.getDouble("last");
+					double lastBTC = 0;
+					if(SET.ISIN_BTCMARKET) { lastBTC = coin.getDouble("lastBTC"); }
+					return calcResult(client, last, lastBTC);
 				} catch (ServerErrorException e) {
 					Log.i(e.log());
 					e.printStackTrace();
@@ -667,19 +691,44 @@ public class TelegramBot extends AbilityBot  {
 	}
 	
 
-	public String calcResult(ClientVo client, double coinVal){
+	public String calcResult(ClientVo client, Double coinKRW, Double coinBTC) {
 		double cnt = client.getCoinCount();
 		int price = client.getPrice();
 		double avgPrice = (double)((double)price / cnt);
 		
 		String msg = "";
-		msg += "평균단가 : " + toCommaStr(avgPrice) + " 원\n";
-		msg += "현재가격 : " + toCommaStr(coinVal)+ " 원\n";
+		
+		
+		if(SET.ISIN_BTCMARKET) {
+			JSONObject btcObj = null;
+			double btcVal = -1;
+			double avgBtc = -1;
+			double coinBtc = coinBTC;
+			
+			try {
+				btcObj = coinManager.getCoin(ID.COIN_BTC, client.getExchange());
+			} catch (ServerErrorException e) {
+				Log.i(e.log());
+				e.printStackTrace();
+				return MSG.WAIT_SECONDS + e.getTelegramMsg();
+			}
+			
+			btcVal = btcObj.getDouble("last");
+			avgBtc = avgPrice / btcVal;
+			
+			msg += "평균단가 : " + toCommaStr(avgPrice) + " 원  [" + toBtcStr(avgBtc) + " BTC]\n";
+			msg += "현재가격 : " + toCommaStr(coinKRW)+ " 원  [" + toBtcStr(coinBtc) + " BTC]\n";
+		} else {
+			msg += "평균단가 : " + toCommaStr(avgPrice) + " 원\n";
+			msg += "현재가격 : " + toCommaStr(coinKRW)+ " 원\n";
+		}
+		
+		
 		msg += "코인개수 : " + toStr(cnt) + " 개\n";
 		msg += "---------------------\n";
 		msg += "투자금액 : " + toCommaStr(price) + "원\n"; 
-		msg += "현재금액 : " + toCommaStr((int)(coinVal * cnt)) + "원\n";
-		msg += "손익금액 : " + toSignStr((int)((coinVal * cnt) - (cnt * avgPrice))) + "원 (" + getPercent((int)(coinVal * cnt), (int)(cnt * avgPrice)) + ")\n";
+		msg += "현재금액 : " + toCommaStr((int)(coinKRW * cnt)) + "원\n";
+		msg += "손익금액 : " + toSignStr((int)((coinKRW * cnt) - (cnt * avgPrice))) + "원 (" + getPercent((int)(coinKRW * cnt), (int)(cnt * avgPrice)) + ")\n";
 		msg += "\n";
 		return msg;
 	}
@@ -742,8 +791,8 @@ public class TelegramBot extends AbilityBot  {
 		int clientLength = clients.size();
 		ClientVo client = null;
 		
-		double currentValue = coinCurrent.getLast();
-		double beforeValue = coinBefore.getLast();
+		double currentKRW = coinCurrent.getLast();
+		double beforeKRW = coinBefore.getLast();
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String date = format.format(new Date());
@@ -755,11 +804,25 @@ public class TelegramBot extends AbilityBot  {
 			String currentErrorCode = coinCurrent.getErrorCode();
 			msg += "에러발생: " + currentErrorMsg +"\n";
 			msg += "에러코드: " + currentErrorCode +"\n";
-			msg += timeLoop + " 시간 전: " + toCommaStr(beforeValue) + " 원\n";
+			
+			if(SET.ISIN_BTCMARKET) {
+				double beforeBTC = coinBefore.getLastBTC();
+				msg += timeLoop + " 시간 전: " + toCommaStr(beforeKRW) + " 원 [" + toBtcStr(beforeBTC) + " BTC]\n";
+			} else {
+				msg += timeLoop + " 시간 전: " + toCommaStr(beforeKRW) + " 원\n";
+			}
 		} else{
-			msg += "현재가격: " + toCommaStr(currentValue) + " 원\n";
-			msg += timeLoop + " 시간 전: " + toCommaStr(beforeValue) + " 원\n";
-			msg += "가격차이: " + toSignStr(currentValue - beforeValue) + " 원 (" + getPercent(currentValue, beforeValue) + ")\n";
+			if(SET.ISIN_BTCMARKET) {
+				double currentBTC = coinCurrent.getLastBTC();
+				double beforeBTC = coinBefore.getLastBTC();
+				msg += "현재가격: " + toCommaStr(currentKRW) + " 원 [" + toBtcStr(currentBTC)+ " BTC]\n";
+				msg += timeLoop + " 시간 전: " + toCommaStr(beforeKRW) + " 원 [" + toBtcStr(beforeBTC) + " BTC]\n";
+			} else {
+				msg += "현재가격: " + toCommaStr(currentKRW) + " 원\n";
+				msg += timeLoop + " 시간 전: " + toCommaStr(beforeKRW) + " 원\n";
+			}
+			
+			msg += "가격차이: " + toSignStr(currentKRW - beforeKRW) + " 원 (" + getPercent(currentKRW, beforeKRW) + ")\n";
 		}
 		
 		for (int i = 0; i < clientLength; i++) {
@@ -780,7 +843,14 @@ public class TelegramBot extends AbilityBot  {
 
 		double currentLast = coinCurrent.getLast();
 		double beforeLast = coinBefore.getLast();
-
+		
+		double currentHighBTC	= 0;
+		double beforeHighBTC	= 0;
+		double currentLowBTC	= 0;
+		double beforeLowBTC		= 0;
+		double currentLastBTC 	= 0;
+		double beforeLastBTC	= 0;
+		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일");
 		String date = format.format(new Date());
 
@@ -797,23 +867,61 @@ public class TelegramBot extends AbilityBot  {
 		
 		String msg = "";
 		msg += date + "\n";
-		msg += "---------------------\n";
-		msg += "금일의 거래량 : " + toCommaStr(currentVolume) + " \n";
-		msg += dayLoopStr + "전 거래량 : " + toCommaStr(beforeVolume) + " \n";
-		msg += "거래량의 차이 : " + toSignStr(currentVolume - beforeVolume) + " (" + getPercent(currentVolume, beforeVolume) + ")\n";
-		msg += "\n";
-		msg += "금일의 상한가 : " + toCommaStr(currentHigh) + " 원\n";
-		msg += dayLoopStr + "전 상한가 : " + toCommaStr(beforeHigh) + " 원\n";
-		msg += "상한가의 차이 : " + toSignStr(currentHigh - beforeHigh) + "원 (" + getPercent(currentHigh, beforeHigh) + ")\n";
-		msg += "\n";
-		msg += "금일의 하한가 : " + toCommaStr(currentLow) + " 원\n";
-		msg += dayLoopStr + "전 하한가 : " + toCommaStr(beforeLow) + " 원\n";
-		msg += "하한가의 차이 : " + toSignStr(currentLow - beforeLow) + " 원 (" + getPercent(currentLow, beforeLow) + ")\n";
-		msg += "\n";
-		msg += "금일의 종가 : " + toCommaStr(currentLast) + " 원\n";
-		msg += dayLoopStr + "전 종가 : " + toCommaStr(beforeLast) + " 원\n";
-		msg += "종가의 차이 : " + toSignStr(currentLast - beforeLast) + " 원 (" + getPercent(currentLast, beforeLast) + ")\n";
-		msg += "\n";
+		
+		if(SET.ISIN_BTCMARKET) {
+			currentHighBTC = coinCurrent.getHighBTC();
+			beforeHighBTC = coinBefore.getHighBTC();
+			
+			currentLowBTC = coinCurrent.getLowBTC();
+			beforeLowBTC = coinBefore.getLowBTC();
+			
+			currentLastBTC = coinCurrent.getLastBTC();
+			beforeLastBTC = coinBefore.getLastBTC();
+			
+			msg += "---------------------\n";
+			msg += "금일의 거래량 : " + toCommaStr(currentVolume) + " \n";
+			msg += dayLoopStr + "전 거래량 : " + toCommaStr(beforeVolume) + " \n";
+			msg += "거래량의 차이 : " + toSignStr(currentVolume - beforeVolume) + " (" + getPercent(currentVolume, beforeVolume) + ")\n";
+			msg += "\n";
+			
+			msg += "금일의 상한가 : " + toCommaStr(currentHigh) + " 원 ["+ toBtcStr(currentHighBTC) + " BTC]\n";
+			msg += dayLoopStr + "전 상한가 : " + toCommaStr(beforeHigh) + " 원 ["+ toBtcStr(beforeHighBTC) + " BTC]\n";
+			msg += "상한가의 차이 : " + toSignStr(currentHigh - beforeHigh) + "원 (" + getPercent(currentHigh, beforeHigh) + ")\n";
+			msg += "\n";
+			
+			msg += "금일의 하한가 : " + toCommaStr(currentLow) + " 원 ["+ toBtcStr(currentLowBTC) + " BTC]\n";
+			msg += dayLoopStr + "전 하한가 : " + toCommaStr(beforeLow) + " 원 ["+ toBtcStr(beforeLowBTC) + " BTC]\n";
+			msg += "하한가의 차이 : " + toSignStr(currentLow - beforeLow) + " 원 (" + getPercent(currentLow, beforeLow) + ")\n";
+			msg += "\n";
+			
+			
+			msg += "금일의 종가 : " + toCommaStr(currentLast) + " 원 ["+ toBtcStr(currentLastBTC) + " BTC]\n";
+			msg += dayLoopStr + "전 종가 : " + toCommaStr(beforeLast) + " 원 ["+ toBtcStr(beforeLastBTC) + " BTC]\n";
+			msg += "종가의 차이 : " + toSignStr(currentLast - beforeLast) + " 원 (" + getPercent(currentLast, beforeLast) + ")\n";
+			msg += "\n";
+		} else {
+			msg += "---------------------\n";
+			msg += "금일의 거래량 : " + toCommaStr(currentVolume) + " \n";
+			msg += dayLoopStr + "전 거래량 : " + toCommaStr(beforeVolume) + " \n";
+			msg += "거래량의 차이 : " + toSignStr(currentVolume - beforeVolume) + " (" + getPercent(currentVolume, beforeVolume) + ")\n";
+			msg += "\n";
+			
+			msg += "금일의 상한가 : " + toCommaStr(currentHigh) + " 원\n";
+			msg += dayLoopStr + "전 상한가 : " + toCommaStr(beforeHigh) + " 원\n";
+			msg += "상한가의 차이 : " + toSignStr(currentHigh - beforeHigh) + "원 (" + getPercent(currentHigh, beforeHigh) + ")\n";
+			msg += "\n";
+			
+			msg += "금일의 하한가 : " + toCommaStr(currentLow) + " 원\n";
+			msg += dayLoopStr + "전 하한가 : " + toCommaStr(beforeLow) + " 원\n";
+			msg += "하한가의 차이 : " + toSignStr(currentLow - beforeLow) + " 원 (" + getPercent(currentLow, beforeLow) + ")\n";
+			msg += "\n";
+			
+			
+			msg += "금일의 종가 : " + toCommaStr(currentLast) + " 원\n";
+			msg += dayLoopStr + "전 종가 : " + toCommaStr(beforeLast) + " 원\n";
+			msg += "종가의 차이 : " + toSignStr(currentLast - beforeLast) + " 원 (" + getPercent(currentLast, beforeLast) + ")\n";
+			msg += "\n";
+		}
 		
 		ClientVo client = null;
 		int clientLength = clients.size();
@@ -822,7 +930,7 @@ public class TelegramBot extends AbilityBot  {
 			sendMessage(client.getUserId(), null, msg, null);
 			
 			if(client.getCoinCount() != null && client.getPrice() != null){
-				sendMessage(client.getUserId(), null, calcResult(client, currentLast), null);
+				sendMessage(client.getUserId(), null, calcResult(client, currentLast, currentLastBTC), null);
 			}
 		}
 	}
@@ -830,6 +938,13 @@ public class TelegramBot extends AbilityBot  {
 	/*
 	 * Formatting Str
 	 */
+	private DecimalFormat df2 = new DecimalFormat("#.#");
+	private String toBtcStr(double i) {
+		df2.setMinimumFractionDigits(8);
+		df2.setMaximumFractionDigits(8);
+		return df2.format(i);
+	}
+	
 	private DecimalFormat df = new DecimalFormat("#,###.#");
 	private String toCommaStr(double i){
 			return df.format(i);

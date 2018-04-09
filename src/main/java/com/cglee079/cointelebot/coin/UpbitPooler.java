@@ -51,6 +51,9 @@ public class UpbitPooler extends ApiPooler{
 			
 			coinObj.put("lastBTC", coinObj.getDouble("last"));
 			coinObj.put("firstBTC", coinObj.getDouble("first"));
+			coinObj.put("highBTC", coinObj.getDouble("high"));
+			coinObj.put("lowBTC", coinObj.getDouble("low"));
+			
 			coinObj.put("high", high);
 			coinObj.put("low", low);
 			coinObj.put("last", last);

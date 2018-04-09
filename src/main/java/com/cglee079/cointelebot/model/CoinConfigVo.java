@@ -6,6 +6,7 @@ public class CoinConfigVo {
 	private String targetEx;
 	private String numberEx;
 	private String version;
+	private boolean inBTCMarket;
 	private boolean enabledCoinone;
 	private boolean enabledBithumb;
 	private boolean enabledUpbit;
@@ -15,6 +16,16 @@ public class CoinConfigVo {
 	private boolean enabledBittrex;
 	private boolean enabledPoloniex;
 	private boolean enabledBinance;
+
+	
+	@Override
+	public String toString() {
+		return "CoinConfigVo [coinId=" + coinId + ", priceEx=" + priceEx + ", targetEx=" + targetEx + ", numberEx="
+				+ numberEx + ", version=" + version + ", enabledCoinone=" + enabledCoinone + ", enabledBithumb="
+				+ enabledBithumb + ", enabledUpbit=" + enabledUpbit + ", enabledCoinnest=" + enabledCoinnest
+				+ ", enabledKorbit=" + enabledKorbit + ", enabledBitfinex=" + enabledBitfinex + ", enabledBittrex="
+				+ enabledBittrex + ", enabledPoloniex=" + enabledPoloniex + ", enabledBinance=" + enabledBinance + "]";
+	}
 
 	public String getCoinId() {
 		return coinId;
@@ -50,6 +61,14 @@ public class CoinConfigVo {
 
 	public String getVersion() {
 		return version;
+	}
+	
+	public boolean isInBTCMarket() {
+		return inBTCMarket;
+	}
+
+	public void setInBTCMarket(boolean inBTCMarket) {
+		this.inBTCMarket = inBTCMarket;
 	}
 
 	public void setVersion(String version) {

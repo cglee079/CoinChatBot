@@ -10,10 +10,11 @@ import com.cglee079.cointelebot.service.CoinConfigService;
 
 @Component
 public class SET {
-	public final static String MY_COIN = ID.COIN_TRX;
+	public final static String MY_COIN = ID.COIN_XVG;
 	
 	public final static Integer CLNT_MAX_ERRCNT = 10;
 	
+	public static boolean ISIN_BTCMARKET;
 	public static boolean ENABLED_COINONE;
 	public static boolean ENABLED_BITHUMB;	
 	public static boolean ENABLED_UPBIT;
@@ -37,6 +38,9 @@ public class SET {
 	@PostConstruct
 	public void init() {
 		CoinConfigVo config 	= coinConfigService.get(MY_COIN);
+		
+		SET.ISIN_BTCMARKET 		= config.isInBTCMarket();
+		
 		SET.ENABLED_COINONE 	= config.isEnabledCoinone();
 		SET.ENABLED_BITHUMB 	= config.isEnabledBithumb();
 		SET.ENABLED_UPBIT		= config.isEnabledUpbit();
@@ -52,5 +56,6 @@ public class SET {
 		SET.EX_NUMBER	= config.getNumberEx();
 		SET.EX_TARGET	= config.getTargetEx();
 		SET.EX_RATE		= "5%";
+		
 	}
 }

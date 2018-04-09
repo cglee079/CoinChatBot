@@ -11,6 +11,7 @@
 			CONFIG_EX_NUMBER as 'numberEx',
 			CONFIG_EX_TARGET as 'targetEx',
 			CONFIG_VERSION as 'version',
+			CONFIG_ISIN_BTCMARKET as 'inBTCMarket',
 			CONFIG_ENABLED_COINONE as 'enabledCoinone',
 			CONFIG_ENABLED_BITHUMB as 'enabledBithumb',
 			CONFIG_ENABLED_UPBIT as 'enabledUpbit',

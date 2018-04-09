@@ -20,6 +20,7 @@ public class BithumbPooler extends ApiPooler{
 		case ID.COIN_LTC : param = "ltc"; break;
 		case ID.COIN_BCH : param = "bch"; break;
 		case ID.COIN_ETC : param = "etc"; break;
+		case ID.COIN_TRX : param = "trx"; break;
 		}
 		
 		String url = "https://api.bithumb.com/public/ticker/" + param;

@@ -6,9 +6,10 @@ import java.util.Date;
 public class TimelyInfoVo {
 	private String date;
 	private String exchange;
-	private double high;
-	private double low;
-	private double last;
+	private Double high;
+	private Double low;
+	private Double last;
+	private Double lastBTC;
 	private long volume;
 	private String result;
 	private String errorCode;
@@ -34,28 +35,36 @@ public class TimelyInfoVo {
 		this.exchange = exchange;
 	}
 
-	public double getHigh() {
+	public Double getHigh() {
 		return high;
 	}
 
-	public void setHigh(double high) {
+	public void setHigh(Double high) {
 		this.high = high;
 	}
 
-	public double getLow() {
+	public Double getLow() {
 		return low;
 	}
 
-	public void setLow(double low) {
+	public void setLow(Double low) {
 		this.low = low;
 	}
 
-	public double getLast() {
+	public Double getLast() {
 		return last;
 	}
 
-	public void setLast(double last) {
+	public void setLast(Double last) {
 		this.last = last;
+	}
+
+	public Double getLastBTC() {
+		return lastBTC;
+	}
+
+	public void setLastBTC(Double lastBTC) {
+		this.lastBTC = lastBTC;
 	}
 
 	public long getVolume() {
