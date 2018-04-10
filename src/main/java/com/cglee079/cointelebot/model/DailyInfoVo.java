@@ -7,11 +7,8 @@ public class DailyInfoVo {
 	private String date;
 	private String exchange;
 	private Double high;
-	private Double highBTC;
 	private Double low;
-	private Double lowBTC;
 	private Double last;
-	private Double lastBTC;
 	private long volume;
 	private String result;
 	private String errorCode;
@@ -45,14 +42,6 @@ public class DailyInfoVo {
 		this.high = d;
 	}
 
-	public Double getHighBTC() {
-		return highBTC;
-	}
-
-	public void setHighBTC(Double highBTC) {
-		this.highBTC = highBTC;
-	}
-
 	public Double getLow() {
 		return low;
 	}
@@ -61,28 +50,12 @@ public class DailyInfoVo {
 		this.low = low;
 	}
 	
-	public Double getLowBTC() {
-		return lowBTC;
-	}
-
-	public void setLowBTC(Double lowBTC) {
-		this.lowBTC = lowBTC;
-	}
-
 	public Double getLast() {
 		return last;
 	}
 
 	public void setLast(Double last) {
 		this.last = last;
-	}
-
-	public Double getLastBTC() {
-		return lastBTC;
-	}
-
-	public void setLastBTC(Double lastBTC) {
-		this.lastBTC = lastBTC;
 	}
 
 	public long getVolume() {

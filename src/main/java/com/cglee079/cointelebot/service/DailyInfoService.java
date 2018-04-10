@@ -35,12 +35,6 @@ public class DailyInfoService {
 		dailyInfo.setResult(coin.getString("result"));
 		dailyInfo.setErrorCode(String.valueOf(coin.getInt("errorCode")));
 		dailyInfo.setErrorMsg(coin.getString("errorMsg"));
-		
-		if(SET.ISIN_BTCMARKET) {
-			dailyInfo.setLastBTC(coin.getDouble("lastBTC"));
-			dailyInfo.setLowBTC(coin.getDouble("lowBTC"));
-			dailyInfo.setHighBTC(coin.getDouble("highBTC"));
-		}
 		return dailyInfoDao.insert(dailyInfo);
 	}
 

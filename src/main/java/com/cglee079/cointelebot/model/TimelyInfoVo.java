@@ -9,7 +9,6 @@ public class TimelyInfoVo {
 	private Double high;
 	private Double low;
 	private Double last;
-	private Double lastBTC;
 	private long volume;
 	private String result;
 	private String errorCode;
@@ -57,14 +56,6 @@ public class TimelyInfoVo {
 
 	public void setLast(Double last) {
 		this.last = last;
-	}
-
-	public Double getLastBTC() {
-		return lastBTC;
-	}
-
-	public void setLastBTC(Double lastBTC) {
-		this.lastBTC = lastBTC;
 	}
 
 	public long getVolume() {

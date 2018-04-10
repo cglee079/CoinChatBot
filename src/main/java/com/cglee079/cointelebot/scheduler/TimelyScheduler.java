@@ -89,7 +89,7 @@ public class TimelyScheduler {
 			
 			TimelyInfoVo coinCurrent = timelyInfoService.get(dateCurrent, exchange);
 			TimelyInfoVo coinBefore = timelyInfoService.get(dateBefore, exchange);
-			telegramBot.sendTimelyMessage(clients, coinCurrent, coinBefore, timeLoop);
+			telegramBot.sendTimelyMessage(clients, exchange, coinCurrent, coinBefore, timeLoop);
 		}
 	}
 }

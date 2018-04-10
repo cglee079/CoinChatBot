@@ -28,7 +28,7 @@ public class UpbitPooler extends ApiPooler{
 		case ID.COIN_ADA : param = "KRW-ADA"; break;
 		case ID.COIN_XLM : param = "KRW-XLM"; break;
 		case ID.COIN_NEO : param = "KRW-NEO"; break;
-		case ID.COIN_TRX : param = "BTC-TRX"; break;
+		case ID.COIN_TRX : param = "KRW-TRX"; break;
 		case ID.COIN_XVG : param = "BTC-XVG"; break;
 		case ID.COIN_STM : param = "KRW-STORM"; break;
 		case ID.COIN_SIA : param = "BTC-SC"; break;
@@ -40,25 +40,6 @@ public class UpbitPooler extends ApiPooler{
 		coinObj.put("low", onedayInfo.get("low"));
 		coinObj.put("volume", onedayInfo.get("volume"));
 		coinObj.put("first", this.getFirst(param).get("first"));		
-		
-		
-		if(param.contains("BTC-")) {
-			JSONObject btcObj = getCurrentCoin("KRW-BTC");
-			double high 	= coinObj.getDouble("high") * btcObj.getDouble("last");
-			double low		= coinObj.getDouble("low")* btcObj.getDouble("last");
-			double first 	= coinObj.getDouble("first") * btcObj.getDouble("last");
-			double last 	= coinObj.getDouble("last") * btcObj.getDouble("last");
-			
-			coinObj.put("lastBTC", coinObj.getDouble("last"));
-			coinObj.put("firstBTC", coinObj.getDouble("first"));
-			coinObj.put("highBTC", coinObj.getDouble("high"));
-			coinObj.put("lowBTC", coinObj.getDouble("low"));
-			
-			coinObj.put("high", high);
-			coinObj.put("low", low);
-			coinObj.put("last", last);
-			coinObj.put("first",first);	
-		}
 		
 		retryCnt = 0;
 		return coinObj;

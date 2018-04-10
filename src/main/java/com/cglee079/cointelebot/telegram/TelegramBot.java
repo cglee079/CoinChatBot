@@ -494,29 +494,34 @@ public class TelegramBot extends AbilityBot  {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String date = format.format(new Date());
 
-		JSONObject coin = null;
+		JSONObject coinObj = null;
 		double currentValue = 0;
 		String exchange = clientService.getExchange(userId);
 		try {
-			coin = coinManager.getCoin(SET.MY_COIN, exchange);
+			coinObj = coinManager.getCoin(SET.MY_COIN, exchange);
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
 			e.printStackTrace();
 			return MSG.WAIT_SECONDS + e.getTelegramMsg();
 		}
 		
-		if(coin == null) {
+		if(coinObj == null) {
 			Log.i("가격정보를 보낼 수 없습니다. : return NULL");
 			return MSG.WAIT_SECONDS + "Coin NULL";
 		}
 		
-		currentValue = coin.getDouble("last");
+		currentValue = coinObj.getDouble("last");
 		String msg = "";
 		msg += "현재시각 : " + date + "\n";
-		msg += "현재가격 : " + toCommaStr(currentValue) + " 원";
+			
 		
 		if(SET.ISIN_BTCMARKET) {
-			msg += " [" + toBtcStr(coin.getDouble("lastBTC")) + " BTC]\n";
+			JSONObject coinKRW;
+			coinKRW = this.getKRW(coinObj, exchange);
+			
+			msg += "현재가격 : " + toCommaStr(coinKRW.getDouble("last")) +  " 원 [" + toBtcStr(currentValue) + " BTC]\n";
+		} else {
+			msg += "현재가격 : " + toCommaStr(currentValue) + " 원\n";
 		}
 		
 		return msg;
@@ -642,18 +647,15 @@ public class TelegramBot extends AbilityBot  {
 			msg += "\n";
 			
 			if(SET.ISIN_BTCMARKET) {
-				double coinCB = coin.getDouble("lastBTC");
-				double coinBB = coin.getDouble("firstBTC");
-				
-				msg += SET.MY_COIN + " 현재 시각 가격 : " + toCommaStr(coinCV) + " 원 [" + toBtcStr(coinCB) + " BTC]\n";
-				msg += SET.MY_COIN + " 24시간전 가격 : " + toCommaStr(coinBV) + " 원 [" + toBtcStr(coinBB) + " BTC]\n";
+				JSONObject coinKRW = null;
+				coinKRW = this.getKRW(coin, exchange);
+				msg += SET.MY_COIN + " 현재 시각 가격 : " + toCommaStr(coinKRW.getDouble("last")) + " 원 [" + toBtcStr(coinCV) + " BTC]\n";
+				msg += SET.MY_COIN + " 24시간전 가격 : " + toCommaStr(coinKRW.getDouble("first")) + " 원 [" + toBtcStr(coinBV) + " BTC]\n";
 			} else {
 				msg += SET.MY_COIN + " 현재 시각 가격 : " + toCommaStr(coinCV) + " 원\n";
 				msg += SET.MY_COIN + " 24시간전 가격 : " + toCommaStr(coinBV) + " 원\n";
 			}
 			msg += "\n";
-			
-			
 			
 			msg += "BTC 24시간 변화량 : " + getPercent(btcCV, btcBV) + "\n";
 			msg += SET.MY_COIN + " 24시간 변화량 : " + getPercent(coinCV, coinBV) + "\n";
@@ -787,12 +789,12 @@ public class TelegramBot extends AbilityBot  {
 	}
 	
 	
-	public void sendTimelyMessage(List<ClientVo> clients, TimelyInfoVo coinCurrent, TimelyInfoVo coinBefore, int timeLoop){
+	public void sendTimelyMessage(List<ClientVo> clients, String exchange, TimelyInfoVo coinCurrent, TimelyInfoVo coinBefore, int timeLoop){
 		int clientLength = clients.size();
 		ClientVo client = null;
 		
-		double currentKRW = coinCurrent.getLast();
-		double beforeKRW = coinBefore.getLast();
+		double currentValue = coinCurrent.getLast();
+		double beforeValue = coinBefore.getLast();
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String date = format.format(new Date());
@@ -806,23 +808,34 @@ public class TelegramBot extends AbilityBot  {
 			msg += "에러코드: " + currentErrorCode +"\n";
 			
 			if(SET.ISIN_BTCMARKET) {
-				double beforeBTC = coinBefore.getLastBTC();
-				msg += timeLoop + " 시간 전: " + toCommaStr(beforeKRW) + " 원 [" + toBtcStr(beforeBTC) + " BTC]\n";
+				double beforeBTC = beforeValue;
+				
+				JSONObject coinBeforeKRW = this.getKRW(coinBefore, exchange);
+				beforeValue = coinBeforeKRW.getDouble("last");
+				
+				msg += timeLoop + " 시간 전: " + toCommaStr(beforeValue) + " 원 [" + toBtcStr(beforeBTC) + " BTC]\n";
 			} else {
-				msg += timeLoop + " 시간 전: " + toCommaStr(beforeKRW) + " 원\n";
+				msg += timeLoop + " 시간 전: " + toCommaStr(beforeValue) + " 원\n";
 			}
 		} else{
 			if(SET.ISIN_BTCMARKET) {
-				double currentBTC = coinCurrent.getLastBTC();
-				double beforeBTC = coinBefore.getLastBTC();
-				msg += "현재가격: " + toCommaStr(currentKRW) + " 원 [" + toBtcStr(currentBTC)+ " BTC]\n";
-				msg += timeLoop + " 시간 전: " + toCommaStr(beforeKRW) + " 원 [" + toBtcStr(beforeBTC) + " BTC]\n";
+				double currentBTC = currentValue;
+				double beforeBTC = beforeValue;
+				
+				JSONObject coinCurrentKRW = this.getKRW(coinCurrent, exchange);
+				currentValue = coinCurrentKRW.getDouble("last");
+				
+				JSONObject coinBeforeKRW = this.getKRW(coinBefore, exchange);
+				beforeValue = coinBeforeKRW.getDouble("last");
+				
+				msg += "현재가격: " + toCommaStr(currentValue) + " 원 [" + toBtcStr(currentBTC)+ " BTC]\n";
+				msg += timeLoop + " 시간 전: " + toCommaStr(beforeValue) + " 원 [" + toBtcStr(beforeBTC) + " BTC]\n";
 			} else {
-				msg += "현재가격: " + toCommaStr(currentKRW) + " 원\n";
-				msg += timeLoop + " 시간 전: " + toCommaStr(beforeKRW) + " 원\n";
+				msg += "현재가격: " + toCommaStr(currentValue) + " 원\n";
+				msg += timeLoop + " 시간 전: " + toCommaStr(beforeValue) + " 원\n";
 			}
 			
-			msg += "가격차이: " + toSignStr(currentKRW - beforeKRW) + " 원 (" + getPercent(currentKRW, beforeKRW) + ")\n";
+			msg += "가격차이: " + toSignStr(currentValue - beforeValue) + " 원 (" + getPercent(currentValue, beforeValue) + ")\n";
 		}
 		
 		for (int i = 0; i < clientLength; i++) {
@@ -831,7 +844,7 @@ public class TelegramBot extends AbilityBot  {
 		}
 	}
 	
-	public void sendDailyMessage(List<ClientVo> clients, DailyInfoVo coinCurrent, DailyInfoVo coinBefore, int dayLoop){
+	public void sendDailyMessage(List<ClientVo> clients, String exchange, DailyInfoVo coinCurrent, DailyInfoVo coinBefore, int dayLoop){
 		long currentVolume = coinCurrent.getVolume();
 		long beforeVolume  = coinBefore.getVolume();
 		
@@ -869,14 +882,22 @@ public class TelegramBot extends AbilityBot  {
 		msg += date + "\n";
 		
 		if(SET.ISIN_BTCMARKET) {
-			currentHighBTC = coinCurrent.getHighBTC();
-			beforeHighBTC = coinBefore.getHighBTC();
+			currentHighBTC	= currentHigh;
+			beforeHighBTC	= beforeHigh;
+			currentLowBTC	= currentLow;
+			beforeLowBTC	= beforeLow;
+			currentLastBTC 	= currentLast;
+			beforeLastBTC	= beforeLast;
 			
-			currentLowBTC = coinCurrent.getLowBTC();
-			beforeLowBTC = coinBefore.getLowBTC();
+			JSONObject coinCurrentKRW = this.getKRW(coinCurrent, exchange);
+			currentLast = coinCurrentKRW.getDouble("last");
+			currentHigh = coinCurrentKRW.getDouble("high");
+			currentLow = coinCurrentKRW.getDouble("low");
 			
-			currentLastBTC = coinCurrent.getLastBTC();
-			beforeLastBTC = coinBefore.getLastBTC();
+			JSONObject coinBeforeKRW = this.getKRW(coinBefore, exchange);
+			beforeLast = coinBeforeKRW.getDouble("last");
+			beforeHigh = coinBeforeKRW.getDouble("high");
+			beforeLow = coinBeforeKRW.getDouble("low");
 			
 			msg += "---------------------\n";
 			msg += "금일의 거래량 : " + toCommaStr(currentVolume) + " \n";
@@ -935,6 +956,47 @@ public class TelegramBot extends AbilityBot  {
 		}
 	}
 	
+	private JSONObject getKRW(TimelyInfoVo timelyInfo, String exchage){
+		JSONObject coinObj = new JSONObject();
+		coinObj.put("last", timelyInfo.getLast());
+		coinObj.put("first", 0);
+		coinObj.put("high", timelyInfo.getHigh());
+		coinObj.put("low", timelyInfo.getLow());
+		return this.getKRW(coinObj, exchage);
+	}
+	
+	private JSONObject getKRW(DailyInfoVo dailyInfo, String exchage){
+		JSONObject coinObj = new JSONObject();
+		coinObj.put("last", dailyInfo.getLast());
+		coinObj.put("first", 0);
+		coinObj.put("high", dailyInfo.getHigh());
+		coinObj.put("low", dailyInfo.getLow());
+		return this.getKRW(coinObj, exchage);
+	}
+	
+	private JSONObject getKRW(JSONObject coinObj, String exchange){
+		JSONObject btcObj;
+		try {
+			btcObj = coinManager.getCoin(ID.COIN_BTC, exchange);
+		} catch (ServerErrorException e) {
+			Log.i(e.log());
+			e.printStackTrace();
+			return null;
+		}
+		
+		double last = coinObj.getDouble("last") * btcObj.getDouble("last");
+		double first = coinObj.getDouble("first") * btcObj.getDouble("last");
+		double high = coinObj.getDouble("high") * btcObj.getDouble("last");
+		double low = coinObj.getDouble("low") * btcObj.getDouble("last");
+		
+		JSONObject coinKRW = new JSONObject();
+		coinKRW.put("last", last);
+		coinKRW.put("first", first);
+		coinKRW.put("high", high);
+		coinKRW.put("low", low);
+		
+		return coinKRW;
+	}
 	/*
 	 * Formatting Str
 	 */

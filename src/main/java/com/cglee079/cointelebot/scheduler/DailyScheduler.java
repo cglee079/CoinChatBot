@@ -93,7 +93,7 @@ public class DailyScheduler {
 			
 			DailyInfoVo coinCurrent  = dailyInfoService.get(dateCurrent, exchange);
 			DailyInfoVo coinBefore = dailyInfoService.get(dateBefore, exchange);
-			telegramBot.sendDailyMessage(clients, coinCurrent, coinBefore, dayLoop);
+			telegramBot.sendDailyMessage(clients, exchange, coinCurrent, coinBefore, dayLoop);
 		}
 	}
 }

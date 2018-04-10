@@ -38,9 +38,6 @@ public class TimelyInfoService {
 		timelyInfo.setResult(coin.getString("result"));
 		timelyInfo.setErrorCode(String.valueOf(coin.getInt("errorCode")));
 		timelyInfo.setErrorMsg(coin.getString("errorMsg"));
-		if(SET.ISIN_BTCMARKET) {
-			timelyInfo.setLastBTC(coin.getDouble("lastBTC"));
-		}
 		return timelyInfoDao.insert(timelyInfo);
 	}
 

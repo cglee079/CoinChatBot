@@ -8,16 +8,13 @@
 		SELECT 
 		DINFO_DATE as 'date',
 		DINFO_HIGH as 'high',
-		DINFO_HIGHBTC as 'highBTC',
 		DINFO_LOW as 'low',
-		DINFO_LOWBTC as 'lowBTC',
 		DINFO_LAST as 'last',
-		DINFO_LASTBTC as 'lastBTC',
 		DINFO_VOLUME as 'volume',
 		DINFO_RESULT as 'result',
 		DINFO_ERRCODE as 'errorCode',
 		DINFO_ERRMSG as 'errorMsg'
-		FROM TB_XVGBOT_DAILYINFO
+		FROM TB_TESTBOT_DAILYINFO
 		WHERE 1 = 1
 		AND DINFO_DATE = #{date}
 		<if test="exchange != null">
@@ -29,8 +26,8 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO TB_XVGBOT_DAILYINFO(DINFO_DATE, DINFO_EXCHANGE, DINFO_HIGH, DINFO_HIGHBTC, DINFO_LOW, DINFO_LOWBTC, DINFO_LAST, DINFO_LASTBTC, DINFO_VOLUME, DINFO_RESULT, DINFO_ERRCODE, DINFO_ERRMSG)
-		VALUES (#{date}, #{exchange}, #{high}, #{highBTC}, #{low}, #{lowBTC}, #{last}, #{lastBTC}, #{volume}, #{result}, #{errorCode}, #{errorMsg})
+		INSERT INTO TB_TESTBOT_DAILYINFO(DINFO_DATE, DINFO_EXCHANGE, DINFO_HIGH, DINFO_LOW, DINFO_LAST,  DINFO_VOLUME, DINFO_RESULT, DINFO_ERRCODE, DINFO_ERRMSG)
+		VALUES (#{date}, #{exchange}, #{high}, #{low}, #{last}, #{volume}, #{result}, #{errorCode}, #{errorMsg})
 	</insert>
 	
 	<delete id="delete" parameterType="map">
