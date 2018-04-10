@@ -42,9 +42,11 @@ public class TargetScheduler {
 		try {
 			coinObj = coinManager.getCoin(SET.MY_COIN, exchange);
 			double coinValue = coinObj.getDouble("last");
+			
 			if(SET.ISIN_BTCMARKET) {
 				coinValue = coinValue * coinManager.getCoin(ID.COIN_BTC, exchange).getDouble("last");
 			}
+			
 			clients = clientService.list(exchange, null, null, coinValue);
 			telegramBot.sendTargetPriceMessage(clients, exchange, coinObj);
 		} catch (ServerErrorException e) {
