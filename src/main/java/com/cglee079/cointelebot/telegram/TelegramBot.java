@@ -149,6 +149,9 @@ public class TelegramBot extends AbilityBot  {
 		case CMD.MAIN_HELP:
 			sendMessage(userId, messageId, exp.explainHelp(), mainKeyboard);
 			break;
+		case CMD.MAIN_SUPPORT:
+			sendMessage(userId, messageId, exp.explainSupport(), mainKeyboard);
+			break;
 	
 			
 		//One more Menu

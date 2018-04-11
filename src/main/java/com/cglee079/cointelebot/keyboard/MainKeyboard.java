@@ -41,7 +41,7 @@ public class MainKeyboard extends ReplyKeyboardMarkup{
 	    keyboardForthRow.add(CMD.MAIN_COIN_LIST);
 	    keyboardForthRow.add(CMD.MAIN_HELP);
 	    keyboardForthRow.add(CMD.MAIN_SEND_MSG);
-	    
+	    keyboardForthRow.add(CMD.MAIN_SUPPORT);
 	    
 	    
 	    keyboard.add(keyboardFirstRow);

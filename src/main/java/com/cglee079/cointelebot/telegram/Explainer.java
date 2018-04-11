@@ -7,15 +7,25 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cglee079.cointelebot.constants.CMD;
+import com.cglee079.cointelebot.constants.COMM_ID;
 import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.model.CoinInfoVo;
+import com.cglee079.cointelebot.model.CoinWalletVo;
 import com.cglee079.cointelebot.service.CoinInfoService;
+import com.cglee079.cointelebot.service.CoinWalletService;
+import com.cglee079.cointelebot.service.CommonService;
 
 public class Explainer {
 	@Autowired
 	private CoinInfoService coinInfoService;
 
+	@Autowired 
+	CoinWalletService coinWalletService;
+	
+	@Autowired
+	CommonService commonService;
+	
 	private String helpMsg;
 	
 	@PostConstruct
@@ -201,6 +211,67 @@ public class Explainer {
 		msg += "1. 모든알림이 중지되더라도 공지사항은 전송됩니다.\n";
 		msg += "2. 모든알림이 중지되더라도 버튼을 통해 코인관련정보를 받을 수 있습니다.\n";
 		msg += "3. 서비스를 완전히 중지하시려면 대화방을 삭제해주세요!\n";
+		return msg;
+	}
+
+	public String explainSupport() {
+		String msg = "";
+		msg += "안녕하세요. 개발자 CGLEE 입니다.\n";
+		msg += "본 서비스는 무료 서비스 임을 다시 한번 알려드리며,\n";
+		msg += "절대로! 후원하지 않는다하여 사용자 여러분에게 불이익을 제공하지 않습니다.^^\n";
+		msg += "\n";
+		msg += "후원된 금액은 다음 용도로 소중히 사용하겠습니다\n";
+		msg += "\n";
+		msg += "1 순위. 서버 업그레이드 (타 코인 알리미 추가)\n";
+		msg += "2 순위. 서버 운영비 (전기세...^^)\n";
+		msg += "3 순위. 취업자금\n";
+		msg += "4 순위. 개발보상 (치킨 냠냠)\n";
+		msg += "\n";
+		
+		msg += "감사합니다.\n";
+		msg += "하단에 지갑 주소를 참고하여주세요^^\n";
+		msg += "\n";
+	
+		msg += "----------------------------------\n";
+		msg += "\n";
+		
+		
+		CoinWalletVo wallet = null;
+		
+		wallet = coinWalletService.get(SET.MY_COIN);
+		if(wallet != null) {
+			msg += "* " + wallet.getUsName() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n"; 
+			msg += wallet.getAddr1() + "\n";
+			if(SET.MY_COIN.equals(ID.COIN_XRP)) {
+				msg += "데스티네이션 태그 :  " + wallet.getAddr2() + "\n";
+			}
+		} else {
+			msg += "해당 코인은 지갑을 개설 할 수 없어,\n";
+			msg += "타 코인 지갑 정보를 전송합니다.\n";
+			msg += "\n";
+			
+			List<CoinWalletVo> wallets = coinWalletService.list();
+			for(int i =0; i < wallets.size(); i++) {
+				wallet = wallets.get(i);
+				msg += "* " + wallet.getUsName() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n"; 
+				msg += wallet.getAddr1() + "\n";
+				if(wallet.getCoinId().equals(ID.COIN_XRP)) {
+					msg += "데스티네이션 태그 :  " + wallet.getAddr2() + "\n";
+				}
+				msg += "\n";
+			}
+		}
+		
+		msg += "\n";
+		msg += "* 지갑 출금 방법 도움말\n";
+		msg += "코인원  : " + commonService.get(COMM_ID.EXPLAIN_SUPPORT_COINONE_ADDR) + "\n";
+		msg += "빗썸     : " + commonService.get(COMM_ID.EXPLAIN_SUPPORT_BITHUMB_ADDR) + "\n";
+		msg += "업비트  : " + commonService.get(COMM_ID.EXPLAIN_SUPPORT_UPBIT_ADDR) + "\n";
+		msg += "코빗     : " + commonService.get(COMM_ID.EXPLAIN_SUPPORT_KORBIT_ADDR) + "\n";
+		msg += "코인네스트 : " + commonService.get(COMM_ID.EXPLAIN_SUPPORT_COINNEST_ADDR) + "\n";
+		
+		
+		
 		return msg;
 	}
 
