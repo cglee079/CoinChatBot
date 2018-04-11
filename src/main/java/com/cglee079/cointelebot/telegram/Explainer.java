@@ -224,8 +224,7 @@ public class Explainer {
 		msg += "\n";
 		msg += "1 순위. 서버 업그레이드 (타 코인 알리미 추가)\n";
 		msg += "2 순위. 서버 운영비 (전기세...^^)\n";
-		msg += "3 순위. 취업자금\n";
-		msg += "4 순위. 개발보상 (치킨 냠냠)\n";
+		msg += "3 순위. 개발보상 (치킨 냠냠)\n";
 		msg += "\n";
 		
 		msg += "감사합니다.\n";
@@ -250,26 +249,17 @@ public class Explainer {
 			msg += "타 코인 지갑 정보를 전송합니다.\n";
 			msg += "\n";
 			
-			List<CoinWalletVo> wallets = coinWalletService.list();
-			for(int i =0; i < wallets.size(); i++) {
-				wallet = wallets.get(i);
-				msg += "* " + wallet.getUsName() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n"; 
-				msg += wallet.getAddr1() + "\n";
-				if(wallet.getCoinId().equals(ID.COIN_XRP)) {
-					msg += "데스티네이션 태그 :  " + wallet.getAddr2() + "\n";
-				}
-				msg += "\n";
+			wallet = coinWalletService.get(ID.COIN_XRP);
+			msg += "* " + wallet.getUsName() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n"; 
+			msg += wallet.getAddr1() + "\n";
+			if(SET.MY_COIN.equals(ID.COIN_XRP)) {
+				msg += "데스티네이션 태그 :  " + wallet.getAddr2() + "\n";
 			}
 		}
 		
 		msg += "\n";
-		msg += "* 지갑 출금 방법 도움말\n";
-		msg += "코인원  : " + commonService.get(COMM_ID.EXPLAIN_SUPPORT_COINONE_ADDR) + "\n";
-		msg += "빗썸     : " + commonService.get(COMM_ID.EXPLAIN_SUPPORT_BITHUMB_ADDR) + "\n";
-		msg += "업비트  : " + commonService.get(COMM_ID.EXPLAIN_SUPPORT_UPBIT_ADDR) + "\n";
-		msg += "코빗     : " + commonService.get(COMM_ID.EXPLAIN_SUPPORT_KORBIT_ADDR) + "\n";
-		msg += "코인네스트 : " + commonService.get(COMM_ID.EXPLAIN_SUPPORT_COINNEST_ADDR) + "\n";
-		
+		msg += "\n";
+			
 		
 		
 		return msg;
