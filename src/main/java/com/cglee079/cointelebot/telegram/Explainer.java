@@ -224,16 +224,17 @@ public class Explainer {
 		msg += "\n";
 		msg += "1 순위. 서버 업그레이드 (타 코인 알리미 추가)\n";
 		msg += "2 순위. 서버 운영비 (전기세...^^)\n";
-		msg += "3 순위. 개발보상 (치킨 냠냠)\n";
+		msg += "3 순위. 취업자금\n";
+		msg += "4 순위. 개발보상 (치킨 냠냠)\n";
 		msg += "\n";
 		
 		msg += "감사합니다.\n";
-		msg += "하단에 지갑 주소를 참고하여주세요^^\n";
-		msg += "\n";
-	
-		msg += "----------------------------------\n";
-		msg += "\n";
-		
+		msg += "하단에 정보를 참고하여주세요^^\n";
+		return msg;
+	}
+
+	public String explainSupportWallet() {
+		String msg = "";
 		
 		CoinWalletVo wallet = null;
 		
@@ -252,16 +253,18 @@ public class Explainer {
 			wallet = coinWalletService.get(ID.COIN_XRP);
 			msg += "* " + wallet.getUsName() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n"; 
 			msg += wallet.getAddr1() + "\n";
-			if(SET.MY_COIN.equals(ID.COIN_XRP)) {
-				msg += "데스티네이션 태그 :  " + wallet.getAddr2() + "\n";
-			}
+			msg += "데스티네이션 태그 :  " + wallet.getAddr2() + "\n";
 		}
 		
-		msg += "\n";
-		msg += "\n";
-			
-		
-		
+		return msg;
+	}
+
+	public String explainSupportAN() {
+		String msg = "";
+		msg += "* 후원계좌\n";
+		msg += "예금주: 이찬구\n";
+		msg += "은행   : 신한은행 \n";
+		msg += "번호   : 110 409 338434";
 		return msg;
 	}
 

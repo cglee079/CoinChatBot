@@ -6,7 +6,7 @@ public class CMD {
 	public static final String MAIN_BTC 			= "비트대비 변화량";
 	public static final String MAIN_CALCULATE 		= "손익금계산";
 	public static final String MAIN_HELP 			= "도움말";
-	public static final String MAIN_SUPPORT			= "후원하기 (지갑주소)";
+	public static final String MAIN_SUPPORT			= "후원하기";
 
 	public static final String MAIN_SET_PRICE 		= "투자금액 설정";
 	public static final String MAIN_SET_NUMBER 		= "코인개수 설정";
