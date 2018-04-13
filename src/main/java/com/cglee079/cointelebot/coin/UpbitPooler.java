@@ -30,9 +30,10 @@ public class UpbitPooler extends ApiPooler{
 		case ID.COIN_NEO : param = "KRW-NEO"; break;
 		case ID.COIN_TRX : param = "KRW-TRX"; break;
 		case ID.COIN_SNT : param = "KRW-SNT"; break;
-		case ID.COIN_NXT : param = "KRW-NXT"; break;
+		case ID.COIN_NXT : param = "BTC-NXT"; break;
 		case ID.COIN_EMC : param = "KRW-EMC2"; break;
 		case ID.COIN_ARD : param = "KRW-ARDR"; break;
+		case ID.COIN_GRS : param = "KRW-GRS"; break;
 		case ID.COIN_XVG : param = "BTC-XVG"; break;
 		case ID.COIN_STM : param = "KRW-STORM"; break;
 		case ID.COIN_SIA : param = "BTC-SC"; break;

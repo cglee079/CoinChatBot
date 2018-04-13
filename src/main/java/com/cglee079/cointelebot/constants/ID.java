@@ -31,6 +31,7 @@ public class ID {
 	public static final String COIN_NXT = "NXT";
 	public static final String COIN_EMC = "EMC";
 	public static final String COIN_ARD = "ARD";
+	public static final String COIN_GRS = "GRS";
 	
     public static final String STATE_MAIN 			= "ST000";
     public static final String STATE_SET_PRICE  	= "ST012";
@@ -41,7 +42,5 @@ public class ID {
     public static final String STATE_SET_TIMELOOP	= "ST017";
     public static final String STATE_SEND_MSG 		= "ST018";
     public static final String STATE_CONFIRM_STOP 	= "ST019";
-	
-	
 	
 }
