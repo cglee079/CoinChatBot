@@ -7,6 +7,11 @@ public class ID {
 	public final static String EXCHANGE_COINNEST= "104";
 	public final static String EXCHANGE_KORBIT	= "105";
 	
+	public final static String EXCHANGE_BITFINNEX	= "201";
+	public final static String EXCHANGE_BITTREX		= "202";
+	public final static String EXCHANGE_POLONIEX	= "203";
+	public final static String EXCHANGE_BINANCE		= "204";
+	
 	public final static String COIN_BTC = "BTC";
 	public final static String COIN_XRP = "XRP";
 	public final static String COIN_ETH = "ETH";
@@ -22,7 +27,10 @@ public class ID {
 	public final static String COIN_TRX = "TRX";
 	public final static String COIN_STM = "STM";
 	public final static String COIN_SIA = "SIA";
-
+	public static final String COIN_SNT = "SNT";
+	public static final String COIN_NXT = "NXT";
+	public static final String COIN_EMC = "EMC";
+	public static final String COIN_ARD = "ARD";
 	
     public static final String STATE_MAIN 			= "ST000";
     public static final String STATE_SET_PRICE  	= "ST012";
@@ -33,5 +41,7 @@ public class ID {
     public static final String STATE_SET_TIMELOOP	= "ST017";
     public static final String STATE_SEND_MSG 		= "ST018";
     public static final String STATE_CONFIRM_STOP 	= "ST019";
+	
+	
 	
 }

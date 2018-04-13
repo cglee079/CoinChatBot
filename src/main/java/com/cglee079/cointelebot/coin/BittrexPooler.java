@@ -15,6 +15,9 @@ public class BittrexPooler extends ApiPooler{
 		case ID.COIN_BTC : param = "USDT-BTC"; break;
 		case ID.COIN_ADA : param = "USDT-ADA"; break;
 		case ID.COIN_XVG : param = "USDT-XVG"; break;
+		case ID.COIN_NXT : param = "USDT-NXT"; break;
+		case ID.COIN_EMC : param = "BTC-EMC2"; break;
+		case ID.COIN_ARD : param = "BTC-ARDR"; break;
 		case ID.COIN_SIA : param = "BTC-SC"; break;
 		}
 

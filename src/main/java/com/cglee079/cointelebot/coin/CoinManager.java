@@ -75,11 +75,12 @@ public class CoinManager {
 			coinObj = upbitPooler.getCoin(coin);
 		} else if(exchange.equals(ID.EXCHANGE_COINNEST) && SET.ENABLED_COINNEST){
 			coinObj = coinnestPooler.getCoin(coin);
-		}	else if(exchange.equals(ID.EXCHANGE_KORBIT) && SET.ENABLED_KORBIT){
+		} else if(exchange.equals(ID.EXCHANGE_KORBIT) && SET.ENABLED_KORBIT){
 			coinObj = korbitPooler.getCoin(coin);
 		}
 		return coinObj;
 	}
+	
 	
 	public JSONObject getCoinWithKimp(String coin, String exchange) throws ServerErrorException{
 		JSONObject coinKR = this.getCoin(coin, exchange);
@@ -99,6 +100,7 @@ public class CoinManager {
 		coinKR.put("rate", exchangeRate);
 		return coinKR;
 	}
+	
 	
 }
 

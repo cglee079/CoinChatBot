@@ -19,7 +19,7 @@ public class CMD {
 	public static final String MAIN_INFO 		= "설정정보";
 	public static final String MAIN_STOP 		= "모든알림중지";
 	public static final String MAIN_COIN_LIST 	= "타 코인 알리미";
-
+	
 	public static final String SET_EXCHANGE_COINONE = "코인원";
 	public static final String SET_EXCHANGE_BITHUMB = "빗썸";
 	public static final String SET_EXCHANGE_UPBIT 	= "업비트";
