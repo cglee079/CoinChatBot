@@ -5,73 +5,122 @@
 <mapper namespace="com.cglee079.cointelebot.mapper.ClientMapper">
 
 	<select id="get" resultType="com.cglee079.cointelebot.model.ClientVo">
-			SELECT 
-			CLNT_USERID as 'userId',
-			CLNT_USERNAME as 'username',
-			CLNT_STATE as 'state',
-			CLNT_EXCHANGE as 'exchange',
-			CLNT_TIMELOOP as 'timeLoop',
-			CLNT_DAYLOOP as 'dayLoop',
-			CLNT_TGUP_PRICE as 'targetUpPrice',
-			CLNT_TGDOWN_PRICE as 'targetDownPrice',
-			CLNT_PRICE as 'price',
-			CLNT_COIN_COUNT  as 'coinCount',
-			CLNT_ENABLED as 'enabled',
-			CLNT_ERRCNT as 'errCnt',
-			CLNT_OPEN_DATE as 'openDate',
-			CLNT_REOPEN_DATE as 'reopenDate',
-			CLNT_CLOSE_DATE as 'closeDate'
-			FROM TB_TESTBOT_CLIENT
-			WHERE CLNT_USERID = #{userId}
+		SELECT 
+		CLNT_USERID as 'userId',
+		CLNT_USERNAME as 'username',
+		CLNT_STATE as 'state',
+		CLNT_EXCHANGE as 'exchange',
+		CLNT_TIMELOOP as 'timeLoop',
+		CLNT_DAYLOOP as 'dayLoop',
+		CLNT_TGUP_PRICE as 'targetUpPrice',
+		CLNT_TGDOWN_PRICE as 'targetDownPrice',
+		CLNT_PRICE as 'price',
+		CLNT_COIN_COUNT  as 'coinCount',
+		CLNT_ENABLED as 'enabled',
+		CLNT_ERRCNT as 'errCnt',
+		CLNT_OPEN_DATE as 'openDate',
+		CLNT_REOPEN_DATE as 'reopenDate',
+		CLNT_CLOSE_DATE as 'closeDate'
+		FROM TB_EMCBOT_CLIENT
+		WHERE CLNT_USERID = #{userId}
 	</select>
 	
-	<select id="list" resultType="com.cglee079.cointelebot.model.ClientVo" parameterType="map">
-			SELECT 
-			CLNT_USERID as 'userId',
-			CLNT_USERNAME as 'username',
-			CLNT_STATE as 'state',
-			CLNT_EXCHANGE as 'exchange',
-			CLNT_TIMELOOP as 'timeLoop',
-			CLNT_DAYLOOP as 'dayLoop',
-			CLNT_TGUP_PRICE as 'targetUpPrice',
-			CLNT_TGDOWN_PRICE as 'targetDownPrice',
-			CLNT_PRICE as 'price',
-			CLNT_COIN_COUNT  as 'coinCount',
-			CLNT_ENABLED as 'enabled',
-			CLNT_ERRCNT as 'errCnt',
-			CLNT_OPEN_DATE as 'openDate',
-			CLNT_REOPEN_DATE as 'reopenDate',
-			CLNT_CLOSE_DATE as 'closeDate'
-			FROM TB_TESTBOT_CLIENT
-			WHERE 1 = 1
-			<if test="exchange != null">
-			AND CLNT_EXCHANGE = #{exchange}
-			</if>
-			<if test="timeLoop != null">
-			AND CLNT_TIMELOOP = #{timeLoop}
-			</if>
-			<if test="dayLoop != null">
-			AND CLNT_DAYLOOP = #{dayLoop}
-			</if>
-			<if test="currentPrice != null">
-			<![CDATA[ AND  #{currentPrice} >= CLNT_TGUP_PRICE ]]>
-			<![CDATA[ OR  #{currentPrice} <= CLNT_TGDOWN_PRICE ]]>
-			</if>
-			AND CLNT_ENABLED = 'Y'
+	<select id="S01" resultType="com.cglee079.cointelebot.model.ClientVo" parameterType="map">
+		/* 거래소, 시간주기, 일일주기 별 사용자 리스트 */
+		SELECT 
+		CLNT_USERID as 'userId',
+		CLNT_USERNAME as 'username',
+		CLNT_STATE as 'state',
+		CLNT_EXCHANGE as 'exchange',
+		CLNT_TIMELOOP as 'timeLoop',
+		CLNT_DAYLOOP as 'dayLoop',
+		CLNT_TGUP_PRICE as 'targetUpPrice',
+		CLNT_TGDOWN_PRICE as 'targetDownPrice',
+		CLNT_PRICE as 'price',
+		CLNT_COIN_COUNT  as 'coinCount',
+		CLNT_ENABLED as 'enabled',
+		CLNT_ERRCNT as 'errCnt',
+		CLNT_OPEN_DATE as 'openDate',
+		CLNT_REOPEN_DATE as 'reopenDate',
+		CLNT_CLOSE_DATE as 'closeDate'
+		FROM TB_EMCBOT_CLIENT
+		WHERE 1 = 1
+		AND CLNT_ENABLED = 'Y'
+		<if test="exchange != null">
+		AND CLNT_EXCHANGE = #{exchange}
+		</if>
+		<if test="timeLoop != null">
+		AND CLNT_TIMELOOP = #{timeLoop}
+		</if>
+		<if test="dayLoop != null">
+		AND CLNT_DAYLOOP = #{dayLoop}
+		</if>
 	</select>
+	
+	<select id="S02" resultType="com.cglee079.cointelebot.model.ClientVo" parameterType="map">
+		/* 목표가격 현재가 이상 설정, 사용자 리스트*/
+		SELECT 
+		CLNT_USERID as 'userId',
+		CLNT_USERNAME as 'username',
+		CLNT_STATE as 'state',
+		CLNT_EXCHANGE as 'exchange',
+		CLNT_TIMELOOP as 'timeLoop',
+		CLNT_DAYLOOP as 'dayLoop',
+		CLNT_TGUP_PRICE as 'targetUpPrice',
+		CLNT_TGDOWN_PRICE as 'targetDownPrice',
+		CLNT_PRICE as 'price',
+		CLNT_COIN_COUNT  as 'coinCount',
+		CLNT_ENABLED as 'enabled',
+		CLNT_ERRCNT as 'errCnt',
+		CLNT_OPEN_DATE as 'openDate',
+		CLNT_REOPEN_DATE as 'reopenDate',
+		CLNT_CLOSE_DATE as 'closeDate'
+		FROM TB_EMCBOT_CLIENT
+		WHERE 1 = 1
+		AND CLNT_ENABLED = 'Y'
+		AND CLNT_EXCHANGE = #{exchange}
+		<![CDATA[ AND  #{coinValue} >= CLNT_TGUP_PRICE ]]>
+	</select>
+	
+	
+	<select id="S03" resultType="com.cglee079.cointelebot.model.ClientVo" parameterType="map">
+		/* 목표가격 현재가 이하 설정, 사용자 리스트 */
+		SELECT 
+		CLNT_USERID as 'userId',
+		CLNT_USERNAME as 'username',
+		CLNT_STATE as 'state',
+		CLNT_EXCHANGE as 'exchange',
+		CLNT_TIMELOOP as 'timeLoop',
+		CLNT_DAYLOOP as 'dayLoop',
+		CLNT_TGUP_PRICE as 'targetUpPrice',
+		CLNT_TGDOWN_PRICE as 'targetDownPrice',
+		CLNT_PRICE as 'price',
+		CLNT_COIN_COUNT  as 'coinCount',
+		CLNT_ENABLED as 'enabled',
+		CLNT_ERRCNT as 'errCnt',
+		CLNT_OPEN_DATE as 'openDate',
+		CLNT_REOPEN_DATE as 'reopenDate',
+		CLNT_CLOSE_DATE as 'closeDate'
+		FROM TB_EMCBOT_CLIENT
+		WHERE 1 = 1
+		AND CLNT_ENABLED = 'Y'
+		AND CLNT_EXCHANGE = #{exchange}
+		<![CDATA[ AND  #{coinValue} <= CLNT_TGDOWN_PRICE ]]>
+	</select>
+	
 	
 	<insert id="insert">
-		INSERT INTO TB_TESTBOT_CLIENT(CLNT_USERID, CLNT_USERNAME, CLNT_STATE, CLNT_EXCHANGE, CLNT_TIMELOOP, CLNT_DAYLOOP, CLNT_TGUP_PRICE, CLNT_TGDOWN_PRICE, CLNT_PRICE, CLNT_COIN_COUNT, CLNT_ENABLED, CLNT_ERRCNT, CLNT_OPEN_DATE, CLNT_REOPEN_DATE, CLNT_CLOSE_DATE)
+		INSERT INTO TB_EMCBOT_CLIENT(CLNT_USERID, CLNT_USERNAME, CLNT_STATE, CLNT_EXCHANGE, CLNT_TIMELOOP, CLNT_DAYLOOP, CLNT_TGUP_PRICE, CLNT_TGDOWN_PRICE, CLNT_PRICE, CLNT_COIN_COUNT, CLNT_ENABLED, CLNT_ERRCNT, CLNT_OPEN_DATE, CLNT_REOPEN_DATE, CLNT_CLOSE_DATE)
 		VALUES (#{userId}, #{username}, #{state}, #{exchange}, #{timeLoop}, #{dayLoop}, #{targetUpPrice}, #{targetDownPrice}, #{price}, #{coinCount}, #{enabled}, #{errCnt}, #{openDate}, #{reopenDate}, #{closeDate})
 	</insert>
 	
 	<delete id="delete" parameterType="map">
-		DELETE FROM TB_TESTBOT_CLIENT
+		DELETE FROM TB_EMCBOT_CLIENT
 		WHERE CLNT_USERID = #{userId}
 	</delete>
 	
 	<update id="update">
-		UPDATE TB_TESTBOT_CLIENT
+		UPDATE TB_EMCBOT_CLIENT
 		SET 
 		CLNT_USERNAME = #{username},
 		CLNT_STATE = #{state},

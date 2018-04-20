@@ -11,7 +11,7 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO TB_TESTBOT_CLIENT_MSG (MSG_USERID, MSG_USERNAME, MSG_TEXT, MSG_DATE)
+		INSERT INTO TB_EMCBOT_CLIENT_MSG (MSG_USERID, MSG_USERNAME, MSG_TEXT, MSG_DATE)
  		VALUES (#{userId}, #{username}, #{msg}, #{date})
 	</insert>
 	

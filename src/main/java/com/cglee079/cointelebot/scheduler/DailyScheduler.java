@@ -83,7 +83,7 @@ public class DailyScheduler {
 	}
 	
 	public void sendDailyInfo(Date dateCurrent, String exchange, int dayLoop) {
-		List<ClientVo> clients = clientService.list(exchange, null, dayLoop, null);
+		List<ClientVo> clients = clientService.list(exchange, null, dayLoop);
 		if(clients.size() > 0 ) {
 			Date dateBefore = null;
 			dateBefore = new Date();

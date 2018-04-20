@@ -17,28 +17,29 @@ public class ClientDao {
 	private SqlSessionTemplate sqlSession;
 	
 	public List<ClientVo> list() {
-		return sqlSession.selectList(namespace + ".list");
+		return sqlSession.selectList(namespace + ".S01");
 	}
 	
-	public List<ClientVo> list(String exchange) {
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("exchange", exchange);
-		return sqlSession.selectList(namespace + ".list", map);
-	}
-	
-	public List<ClientVo> list(int timeLoop) {
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("timeLoop", timeLoop);
-		return sqlSession.selectList(namespace + ".list", map);
-	}
-	
-	public List<ClientVo> list(String exchange, Integer timeLoop, Integer dayLoop, Double currentPrice){
+	public List<ClientVo> list(String exchange, Integer timeLoop, Integer dayLoop){
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("exchange", exchange);
 		map.put("timeLoop", timeLoop);
 		map.put("dayLoop", dayLoop);
-		map.put("currentPrice", currentPrice);
-		return sqlSession.selectList(namespace + ".list", map);
+		return sqlSession.selectList(namespace + ".S01", map);
+	}
+	
+	public List<ClientVo> listTargetUp(String exchange, double coinValue) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("exchange", exchange);
+		map.put("coinValue", coinValue);
+		return sqlSession.selectList(namespace + ".S02", map);
+	}
+	
+	public List<ClientVo> listTargetDown(String exchange, double coinValue) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("exchange", exchange);
+		map.put("coinValue", coinValue);
+		return sqlSession.selectList(namespace + ".S03", map);
 	}
 	
 	public boolean insert(ClientVo client){

@@ -1,5 +1,6 @@
 package com.cglee079.cointelebot.scheduler;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -47,8 +48,12 @@ public class TargetScheduler {
 				coinValue = coinValue * coinManager.getCoin(ID.COIN_BTC, exchange).getDouble("last");
 			}
 			
-			clients = clientService.list(exchange, null, null, coinValue);
+			clients = clientService.list(exchange, coinValue, true); //TargetUp
 			telegramBot.sendTargetPriceMessage(clients, exchange, coinObj);
+			
+			clients = clientService.list(exchange, coinValue, false); //TagetDown
+			telegramBot.sendTargetPriceMessage(clients, exchange, coinObj);
+			
 		} catch (ServerErrorException e) {
 			Log.i("Load TargetPrice  " + e.log());
 			e.printStackTrace();

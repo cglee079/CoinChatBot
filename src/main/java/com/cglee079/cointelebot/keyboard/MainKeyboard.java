@@ -24,6 +24,7 @@ public class MainKeyboard extends ReplyKeyboardMarkup{
 	    keyboardFirstRow.add(CMD.MAIN_KOREA_PREMIUM);
 	    keyboardFirstRow.add(CMD.MAIN_BTC);
 	    keyboardFirstRow.add(CMD.MAIN_CALCULATE);
+	    keyboardFirstRow.add(CMD.MAIN_HAPPY_LINE);
 	    
 	    KeyboardRow keyboardSecondRow = new KeyboardRow();
 	    keyboardSecondRow.add(CMD.MAIN_SET_TARGET);

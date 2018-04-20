@@ -21,16 +21,16 @@ public class ClientService {
 		return clientDao.list();
 	}
 	
-	public List<ClientVo> list(int timeLoop) {
-		return clientDao.list(timeLoop);
+	public List<ClientVo> list(String exchange, double coinValue, boolean isUp) {
+		if(isUp) {
+			return clientDao.listTargetUp(exchange, coinValue);
+		} else {
+			return clientDao.listTargetDown(exchange, coinValue);
+		}
 	}
 	
-	public List<ClientVo> list(String exchange) {
-		return clientDao.list(exchange);
-	}
-	
-	public List<ClientVo> list(String exchange, Integer timeLoop, Integer dayLoop, Double currentPrice) {
-		return clientDao.list(exchange, timeLoop, dayLoop, currentPrice);
+	public List<ClientVo> list(String exchange, Integer timeLoop, Integer dayLoop) {
+		return clientDao.list(exchange, timeLoop, dayLoop);
 	}
 	
 	public String getState(Integer id) {

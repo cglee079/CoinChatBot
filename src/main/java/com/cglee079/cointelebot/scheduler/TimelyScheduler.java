@@ -79,7 +79,7 @@ public class TimelyScheduler {
 	}
 	
 	public void sendCoinInfo(Date dateCurrent, String exchange, int timeLoop){
-		List<ClientVo> clients = clientService.list(exchange, timeLoop, null, null);
+		List<ClientVo> clients = clientService.list(exchange, timeLoop, null);
 		if(clients.size() > 0) {
 			Date dateBefore = null;
 			dateBefore = new Date();

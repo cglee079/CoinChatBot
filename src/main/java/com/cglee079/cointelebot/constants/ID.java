@@ -42,5 +42,6 @@ public class ID {
     public static final String STATE_SET_TIMELOOP	= "ST017";
     public static final String STATE_SEND_MSG 		= "ST018";
     public static final String STATE_CONFIRM_STOP 	= "ST019";
+    public static final String STATE_HAPPY_LINE 	= "ST020";
 	
 }

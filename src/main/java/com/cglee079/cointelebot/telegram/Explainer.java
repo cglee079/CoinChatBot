@@ -84,9 +84,10 @@ public class Explainer {
         //
 
         helpMsg += "미국정보 By ";
-        if(SET.ENABLED_BITTREX) { helpMsg += "Bittrex, ";}
-        if(SET.ENABLED_BITFINEX) { helpMsg += "Bitfinex, ";}
-        if(SET.ENABLED_POLONIEX) { helpMsg += "Poloniex, ";}
+        if(SET.ENABLED_BITTREX) { helpMsg += "Bittrex ";}
+        if(SET.ENABLED_BITFINEX) { helpMsg += "Bitfinex ";}
+        if(SET.ENABLED_POLONIEX) { helpMsg += "Poloniex ";}
+        if(SET.ENABLED_BINANCE) { helpMsg += "Binance ";}
         helpMsg += "\n";
 
         helpMsg += "환율정보 By the European Central Bank\n";
@@ -265,6 +266,19 @@ public class Explainer {
 		msg += "예금주: 이찬구\n";
 		msg += "은행   : 신한은행 \n";
 		msg += "번호   : 110 409 338434";
+		return msg;
+	}
+
+	public String explainHappyLine() {
+		String msg = "";
+		msg += "원하시는 코인가격을 입력해주세요.\n";
+		msg += "희망 손익금을 확인 하실 수 있습니다.\n";
+		msg += "\n";
+		msg += "* 코인가격은 숫자로 입력해주세요.\n";
+		msg += "* ex) " + SET.EX_TARGET + "  : 희망 코인가격 " + SET.EX_TARGET + "원\n";
+		msg += "\n";
+		msg += "\n";
+		msg += "# 메인으로 돌아가시려면 문자를 입력해주세요.\n";
 		return msg;
 	}
 
