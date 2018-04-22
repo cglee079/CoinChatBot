@@ -121,6 +121,7 @@ public class TelegramBot extends AbilityBot  {
 		case ID.STATE_SET_NUMBER : handleSetNumber(userId, messageId, cmd); break;
 		case ID.STATE_SEND_MSG : handleSendMsg(userId, username, messageId, cmd); break;
 		case ID.STATE_CONFIRM_STOP : handleConfirmStop(userId, username, messageId, cmd); break;
+		case ID.STATE_HAPPY_LINE : handleHappyLine(userId, username, messageId, cmd); break;
 		}
 	}
 
@@ -189,13 +190,16 @@ public class TelegramBot extends AbilityBot  {
 			sendMessage(userId, messageId, exp.explainStop(), confirmStopKeyboard);
 			state = ID.STATE_CONFIRM_STOP;
 			break;
-	
+		case CMD.MAIN_HAPPY_LINE:
+			state = checkHappyLine(userId, messageId);
+			break;
 		default :
 			sendMessage(userId, messageId, messageCurrentPrice(userId), mainKeyboard);	
 		}
 		
 		clientService.updateState(userId.toString(), state);
 	}
+
 
 	private void handleSetDayloop(Integer userId, Integer messageId, String cmd) {
 		int dayloop = -1;
@@ -460,6 +464,9 @@ public class TelegramBot extends AbilityBot  {
 		case CMD.SEND_MSG_OUT :
 			sendMessage(userId, messageId, MSG.TO_MAIN, mainKeyboard);
 			break;
+		case CMD.OUT :
+			sendMessage(userId, messageId, MSG.TO_MAIN, mainKeyboard);
+			break;
 		default:
 			clientSuggestService.insert(userId, username, message);
 			sendMessage(userId, messageId, "의견 감사드립니다.\n성투하세요!", mainKeyboard);
@@ -500,6 +507,63 @@ public class TelegramBot extends AbilityBot  {
 		
 		sendMessage(userId, messageId, msg, mainKeyboard);
 		clientService.updateState(userId.toString(), ID.STATE_MAIN);
+	}
+	
+
+	private String checkHappyLine(Integer userId, Integer messageId) {
+		String state = ID.STATE_MAIN;
+		String msg = "";
+		ClientVo client = clientService.get(userId);
+		if(client != null){
+			if( client.getPrice() == null){ 
+				msg = "먼저 투자금액을 설정해주세요.\n메뉴에서 '" + CMD.MAIN_SET_PRICE  + "'을 클릭해주세요.";
+				sendMessage(userId, messageId, msg, mainKeyboard);
+			} else if( client.getCoinCount() == null){ 
+				msg = "먼저 코인개수를 설정해주세요.\n메뉴에서 '" + CMD.MAIN_SET_NUMBER  + "'을 클릭해주세요.";
+				sendMessage(userId, messageId, msg, mainKeyboard);
+			} else {
+				msg = exp.explainHappyLine();
+				sendMessage(userId, messageId, msg, defaultKeyboard);
+				state = ID.STATE_HAPPY_LINE;
+			}
+		} 
+		
+		return state;
+	}
+	
+	private void handleHappyLine(Integer userId, String username, Integer messageId, String cmd) {
+		String msg = "";
+		String priceStr = cmd;
+		double happyPrice = -1;
+
+		try { // case1. 평균단가에 문자가 포함될때
+			happyPrice = Double.parseDouble(priceStr);
+		} catch (NumberFormatException e) {
+			msg = "코인가격은 숫자로만 입력해주세요.\n";
+		}
+
+		if(happyPrice != -1) {
+			ClientVo client = clientService.get(userId);
+			int price = client.getPrice();
+			double coinCnt = client.getCoinCount();
+			double avgPrice = (double) price / coinCnt;
+			
+			msg = "";
+			msg += "평균단가 : " + toKRWStr(avgPrice) + " 원\n";;
+			msg += "희망가격 : " + toKRWStr(happyPrice) + " 원\n";; 
+			msg += "코인개수 : " + toCoinCntStr(coinCnt) + " 개\n";
+			msg += "---------------------\n";
+			msg += "투자금액 : " + toKRWStr(price) + " 원\n"; 
+			msg += "희망금액 : " + toKRWStr((long)(happyPrice * coinCnt)) + " 원\n";
+			msg += "손익금액 : " + toSignKRWStr((long)((happyPrice * coinCnt) - (price))) + " 원 (" + toSignPercent((int)(happyPrice * coinCnt), price) + ")\n";
+			msg += "\n";
+		}
+		
+		msg += MSG.TO_MAIN;
+		
+		sendMessage(userId, messageId, msg, mainKeyboard);
+		clientService.updateState(userId.toString(), ID.STATE_MAIN);
+		
 	}
 	
 	private String messageCurrentPrice(Integer userId) {

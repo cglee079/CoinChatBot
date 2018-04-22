@@ -54,7 +54,9 @@ public class CMD {
 	public static final String SET_TIMELOOP_OUT = "나가기";
 	
 	public static final String SEND_MSG_OUT = "0";
-	
+
 	public static final String CONFIRM_STOP_YES = "네";
 	public static final String CONFIRM_STOP_NO 	= "아니오";
+	
+	public static final String OUT = "/out";
 }
