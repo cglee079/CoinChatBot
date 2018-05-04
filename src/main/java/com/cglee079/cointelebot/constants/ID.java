@@ -32,6 +32,8 @@ public class ID {
 	public static final String COIN_EMC = "EMC";
 	public static final String COIN_ARD = "ARD";
 	public static final String COIN_GRS = "GRS";
+	public static final String COIN_OMG = "OMG";
+	public static final String COIN_GTO = "GTO";
 	
     public static final String STATE_MAIN 			= "ST000";
     public static final String STATE_SET_PRICE  	= "ST012";

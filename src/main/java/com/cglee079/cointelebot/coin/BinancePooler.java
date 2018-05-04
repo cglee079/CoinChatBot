@@ -14,6 +14,7 @@ public class BinancePooler extends ApiPooler{
 		String param = "";
 		switch (coin) {
 		case ID.COIN_STM : param = "STORMBTC"; break;
+		case ID.COIN_GTO : param = "GTOBTC"; break;
 		}
 		
 		JSONObject coinObj = getCurrentCoin(param);

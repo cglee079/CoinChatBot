@@ -37,6 +37,8 @@ public class UpbitPooler extends ApiPooler{
 		case ID.COIN_XVG : param = "BTC-XVG"; break;
 		case ID.COIN_STM : param = "KRW-STORM"; break;
 		case ID.COIN_SIA : param = "BTC-SC"; break;
+		case ID.COIN_GTO : param = "KRW-GTO"; break;
+		case ID.COIN_OMG : param = "KRW-OMG"; break;
 		}
 		
 		JSONObject coinObj = getCurrentCoin(param);
