@@ -19,6 +19,7 @@ public class CoinonePooler extends ApiPooler{
 		case ID.COIN_LTC : param = "ltc"; break;
 		case ID.COIN_BCH : param = "bch"; break;
 		case ID.COIN_ETC : param = "etc"; break;
+		case ID.COIN_EOS : param = "eos"; break;
 		}
 		
 		String url = "https://api.coinone.co.kr/ticker/?format=json&currency=" + param;
