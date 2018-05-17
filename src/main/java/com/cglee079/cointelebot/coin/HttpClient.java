@@ -5,16 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
-import org.json.JSONObject;
-
-import com.cglee079.cointelebot.exception.ServerErrorException;
 import com.cglee079.cointelebot.log.Log;
 
 public class HttpClient {
-	public String get(String url) throws IOException {
+	public String get(String url) throws Exception {
 		try {
 			URL obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -22,6 +18,8 @@ public class HttpClient {
 			
 			// optional default is GET
 			con.setRequestMethod("GET");
+			con.setConnectTimeout(30 * 1000);
+			con.setReadTimeout(30 * 1000);
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String inputLine;
@@ -36,8 +34,7 @@ public class HttpClient {
 		} catch (MalformedURLException e) {
 			Log.i("HTTP Client Error");
 			e.printStackTrace();
-		}
-		
+		} 		
 		return null;
 	}
 }

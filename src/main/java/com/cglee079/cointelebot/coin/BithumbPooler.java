@@ -48,7 +48,7 @@ public class BithumbPooler extends ApiPooler{
 			} else{
 				throw new ServerErrorException("빗썸 서버 에러", jsonObj.getInt("status"));
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			retryCnt++;
 			if(retryCnt < MAX_RETRY_CNT) {
 				return this.getCoin(coin);

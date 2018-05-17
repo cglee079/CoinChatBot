@@ -16,7 +16,7 @@ public class ExchangePooler extends ApiPooler{
 			
 			retryCnt = 0;
 			return new JSONObject(response).getJSONObject("rates").getDouble("KRW");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			retryCnt++;
 			if(retryCnt < MAX_RETRY_CNT) {
 				return this.usd2krw();

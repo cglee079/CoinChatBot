@@ -43,7 +43,7 @@ public class BinancePooler extends ApiPooler{
 
 			retryCnt = 0;
 			return jsonObj;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			retryCnt++;
 			if(retryCnt < MAX_RETRY_CNT) {
 				return this.getCurrentCoin(param);

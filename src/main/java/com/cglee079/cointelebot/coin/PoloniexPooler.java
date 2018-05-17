@@ -27,7 +27,7 @@ public class PoloniexPooler extends ApiPooler{
 			
 			retryCnt = 0;
 			return coinObj;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			retryCnt++;
 			if(retryCnt < MAX_RETRY_CNT) {
 				return this.getCoin(coin);

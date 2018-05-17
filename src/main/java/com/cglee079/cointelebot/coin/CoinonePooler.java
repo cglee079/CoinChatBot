@@ -36,7 +36,7 @@ public class CoinonePooler extends ApiPooler{
 			} else {
 				throw new ServerErrorException("코인원 서버 에러", jsonObj.getInt("errorCode"));
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			retryCnt++;
 			if(retryCnt < MAX_RETRY_CNT) {
 				return this.getCoin(coin);

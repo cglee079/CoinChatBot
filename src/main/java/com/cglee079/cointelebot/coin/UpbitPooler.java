@@ -65,7 +65,7 @@ public class UpbitPooler extends ApiPooler{
 			coinObj.put("result", "success");
 			coinObj.put("last", jsonObj.getDouble("tradePrice"));
 			return coinObj;				
-		} catch (IOException e) {
+		} catch (Exception e) {
 			retryCnt++;
 			if(retryCnt < MAX_RETRY_CNT) {
 				return this.getCurrentCoin(param);
@@ -96,7 +96,7 @@ public class UpbitPooler extends ApiPooler{
 			info.put("first", jsonObj.getDouble("tradePrice"));
 			
 			return info;				
-		} catch (IOException e) {
+		} catch (Exception e) {
 			retryCnt++;
 			if(retryCnt < MAX_RETRY_CNT) {
 				return this.getFirst(param);
@@ -135,7 +135,7 @@ public class UpbitPooler extends ApiPooler{
 				mins.add(jsonObj.getDouble("lowPrice"));
 				volume += jsonObj.getDouble("candleAccTradeVolume");
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			retryCnt++;
 			if(retryCnt < MAX_RETRY_CNT) {
 				return this.getOnedayInfo(param);
@@ -182,7 +182,7 @@ public class UpbitPooler extends ApiPooler{
 				mins.add(jsonObj.getDouble("lowPrice"));
 				volume += jsonObj.getDouble("candleAccTradeVolume");
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			retryCnt++;
 			if(retryCnt < MAX_RETRY_CNT) {
 				return this.getOnedayInfo(param);
