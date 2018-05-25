@@ -1,16 +1,18 @@
 package com.cglee079.cointelebot.constants;
 
 public class ID {
-	public final static String EXCHANGE_COINONE = "101";
-	public final static String EXCHANGE_BITHUMB	= "102";
-	public final static String EXCHANGE_UPBIT	= "103";
-	public final static String EXCHANGE_COINNEST= "104";
-	public final static String EXCHANGE_KORBIT	= "105";
+	public final static String MARKET_KR		= "10";
+	public final static String MARKET_COINONE	= "101";
+	public final static String MARKET_BITHUMB	= "102";
+	public final static String MARKET_UPBIT		= "103";
+	public final static String MARKET_COINNEST	= "104";
+	public final static String MARKET_KORBIT	= "105";
 	
-	public final static String EXCHANGE_BITFINNEX	= "201";
-	public final static String EXCHANGE_BITTREX		= "202";
-	public final static String EXCHANGE_POLONIEX	= "203";
-	public final static String EXCHANGE_BINANCE		= "204";
+	public final static String MARKET_US		= "20";
+	public final static String MARKET_BITFINNEX	= "201";
+	public final static String MARKET_BITTREX	= "202";
+	public final static String MARKET_POLONIEX	= "203";
+	public final static String MARKET_BINANCE	= "204";
 	
 	public final static String COIN_BTC = "BTC";
 	public final static String COIN_XRP = "XRP";
@@ -40,11 +42,18 @@ public class ID {
     public static final String STATE_SET_PRICE  	= "ST012";
     public static final String STATE_SET_NUMBER 	= "ST013";
     public static final String STATE_SET_TARGET 	= "ST014";
-    public static final String STATE_SET_EXCHANGE 	= "ST015";
+    public static final String STATE_SET_MARKET 	= "ST015";
     public static final String STATE_SET_DAYLOOP 	= "ST016";
     public static final String STATE_SET_TIMELOOP	= "ST017";
     public static final String STATE_SEND_MSG 		= "ST018";
     public static final String STATE_CONFIRM_STOP 	= "ST019";
     public static final String STATE_HAPPY_LINE 	= "ST020";
+    public static final String STATE_PREFERENCE 	= "ST021";
+    public static final String STATE_PREF_LANGUAGE 	= "ST022";
+    public static final String STATE_PREF_TIMEADJUST= "ST023";
+    
+    public static final String LANG_KR 	= "kr";
+    public static final String LANG_US 	= "us";
+	
 	
 }

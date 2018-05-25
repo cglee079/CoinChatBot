@@ -1,5 +1,7 @@
 package com.cglee079.cointelebot.coin;
 
+import javax.annotation.PostConstruct;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -8,8 +10,13 @@ import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 import com.cglee079.cointelebot.log.Log;
+import com.cglee079.cointelebot.model.TimelyInfoVo;
+import com.cglee079.cointelebot.service.CoinMarketParamService;
 
 public class CoinManager {
+	@Autowired
+	private CoinMarketParamService coinMarketParamService;
+	
 	@Autowired
 	private CoinonePooler coinonePooler;
 
@@ -40,11 +47,21 @@ public class CoinManager {
 	@Autowired
 	private ExchangePooler exchangePooler;
 
-	private double exchangeRate = 1068;
-
-	public CoinManager() {
+	@PostConstruct
+	public void init() {
+		coinonePooler.setCoinParam(coinMarketParamService.get(ID.MARKET_COINONE));
+		bithumbPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BITHUMB));
+		upbitPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_UPBIT));
+		coinnestPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_COINNEST));
+		korbitPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_KORBIT));
+		bitfinexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BITFINNEX));
+		bittrexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BITTREX));
+		poloniexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_POLONIEX));
+		binancePooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BINANCE));
 	}
 	
+	private double exchangeRate = 1081;
+
 	public double getExchangeRate() {
 		return exchangeRate;
 	}
@@ -64,43 +81,80 @@ public class CoinManager {
 		}
 	}
 
-	public JSONObject getCoin(String coin, String exchange) throws ServerErrorException{
+	public JSONObject getCoin(String coin, String market) throws ServerErrorException{
 		JSONObject coinObj = null;
 		
-		if(exchange.equals(ID.EXCHANGE_COINONE) && SET.ENABLED_COINONE) { 
+		if(market.equals(ID.MARKET_COINONE) && SET.ENABLED_COINONE) { 
 			coinObj = coinonePooler.getCoin(coin);
-		} else if(exchange.equals(ID.EXCHANGE_BITHUMB) && SET.ENABLED_BITHUMB){
+		} else if(market.equals(ID.MARKET_BITHUMB) && SET.ENABLED_BITHUMB){
 			coinObj = bithumbPooler.getCoin(coin);
-		} else if(exchange.equals(ID.EXCHANGE_UPBIT) && SET.ENABLED_UPBIT){
+		} else if(market.equals(ID.MARKET_UPBIT) && SET.ENABLED_UPBIT){
 			coinObj = upbitPooler.getCoin(coin);
-		} else if(exchange.equals(ID.EXCHANGE_COINNEST) && SET.ENABLED_COINNEST){
+		} else if(market.equals(ID.MARKET_COINNEST) && SET.ENABLED_COINNEST){
 			coinObj = coinnestPooler.getCoin(coin);
-		} else if(exchange.equals(ID.EXCHANGE_KORBIT) && SET.ENABLED_KORBIT){
+		} else if(market.equals(ID.MARKET_KORBIT) && SET.ENABLED_KORBIT){
 			coinObj = korbitPooler.getCoin(coin);
+		} else if(market.equals(ID.MARKET_BITFINNEX) && SET.ENABLED_BITFINEX){
+			coinObj = bitfinexPooler.getCoin(coin);
+		} else if(market.equals(ID.MARKET_BITTREX) && SET.ENABLED_BITTREX){
+			coinObj = bittrexPooler.getCoin(coin);
+		} else if(market.equals(ID.MARKET_POLONIEX) && SET.ENABLED_POLONIEX){
+			coinObj = poloniexPooler.getCoin(coin);
+		} else if(market.equals(ID.MARKET_BINANCE) && SET.ENABLED_BINANCE){
+			coinObj = binancePooler.getCoin(coin);
 		}
 		return coinObj;
 	}
 	
-	
-	public JSONObject getCoinWithKimp(String coin, String exchange) throws ServerErrorException{
-		JSONObject coinKR = this.getCoin(coin, exchange);
-		JSONObject coinUS = null;
-		if(SET.ENABLED_BITFINEX) {coinUS = bitfinexPooler.getCoin(coin);}
-		if(SET.ENABLED_BITTREX) {coinUS = bittrexPooler.getCoin(coin);}
-		if(SET.ENABLED_POLONIEX) {coinUS = poloniexPooler.getCoin(coin);}
-		if(SET.ENABLED_BINANCE) {coinUS = binancePooler.getCoin(coin);}
-		
-		if(coinUS == null) {
-			new ServerErrorException("미국 코인정보를 받아 올 수 없습니다");
+	public Double getCoinLast(String market) {
+		try {
+			double last = -1;
+			JSONObject coinObj = null;
+			coinObj = this.getCoin(SET.MY_COIN, market);
+			
+			last = coinObj.getDouble("last");
+			if(SET.isInBtcMarket(market)) {
+				last = this.getMoney(coinObj, market).getDouble("last");
+			}
+			return last;
+		} catch (ServerErrorException e) {
+			Log.i(e.log());
+			e.printStackTrace();
+			return -1.0;
 		}
-		
-		double coinPriceUS = (coinUS.getDouble("last") * exchangeRate);
-		coinKR.put("usd", coinUS.getDouble("last"));
-		coinKR.put("usd2krw", coinPriceUS);
-		coinKR.put("rate", exchangeRate);
-		return coinKR;
 	}
 	
+	public JSONObject getMoney(TimelyInfoVo timelyInfo, String market){
+		JSONObject coinObj = new JSONObject();
+		coinObj.put("last", timelyInfo.getLast());
+		coinObj.put("first", 0);
+		coinObj.put("high", timelyInfo.getHigh());
+		coinObj.put("low", timelyInfo.getLow());
+		return this.getMoney(coinObj, market);
+	}
 	
+	public JSONObject getMoney(JSONObject coinObj, String market){
+		JSONObject btcObj;
+		try {
+			btcObj = this.getCoin(ID.COIN_BTC, market);
+		} catch (ServerErrorException e) {
+			Log.i(e.log());
+			e.printStackTrace();
+			return null;
+		}
+		
+		double last = coinObj.getDouble("last") * btcObj.getDouble("last");
+		double first = coinObj.getDouble("first") * btcObj.getDouble("last");
+		double high = coinObj.getDouble("high") * btcObj.getDouble("last");
+		double low = coinObj.getDouble("low") * btcObj.getDouble("last");
+		
+		JSONObject coinKRW = new JSONObject();
+		coinKRW.put("last", last);
+		coinKRW.put("first", first);
+		coinKRW.put("high", high);
+		coinKRW.put("low", low);
+		
+		return coinKRW;
+	}
 }
 

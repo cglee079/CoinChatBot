@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.cglee079.cointelebot.log.Log;
-import com.cglee079.cointelebot.model.ClientMsgVo;
 import com.cglee079.cointelebot.model.ClientSuggestVo;
-import com.cglee079.cointelebot.model.DailyInfoVo;
 
 @Repository
 public class ClientSuggestDao {

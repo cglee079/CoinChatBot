@@ -23,14 +23,14 @@ public class TimelyInfoService {
 
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH");
 
-	public TimelyInfoVo get(Date d, String exchange) {
-		return timelyInfoDao.get(formatter.format(d), exchange);
+	public TimelyInfoVo get(Date d, String market) {
+		return timelyInfoDao.get(formatter.format(d), market);
 	}
 
-	public boolean insert(Date d, String exchange, JSONObject coin) {
+	public boolean insert(Date d, String market, JSONObject coin) {
 		TimelyInfoVo timelyInfo = new TimelyInfoVo();
 		timelyInfo.setDate(formatter.format(d));
-		timelyInfo.setExchange(exchange);
+		timelyInfo.setMarket(market);
 		timelyInfo.setHigh(coin.getDouble("high"));
 		timelyInfo.setLow(coin.getDouble("low"));
 		timelyInfo.setLast(coin.getDouble("last"));
@@ -41,17 +41,17 @@ public class TimelyInfoService {
 		return timelyInfoDao.insert(timelyInfo);
 	}
 
-	public JSONObject getBefore(Date dateCurrent, String exchange) {
+	public JSONObject getBefore(Date dateCurrent, String market) {
 		Date dateBefore = new Date();
 		dateBefore.setTime(dateCurrent.getTime() - (1000 * 60 * 60));
-		TimelyInfoVo timelyInfo = timelyInfoDao.get(formatter.format(dateBefore), exchange);
+		TimelyInfoVo timelyInfo = timelyInfoDao.get(formatter.format(dateBefore), market);
 		Gson gson = new Gson();
 		String jsonString = gson.toJson(timelyInfo);
 		return new JSONObject(jsonString);
 	}
 
-	public List<JSONObject> list(String exchange, int cnt) {
-		List<TimelyInfoVo> timelyInfos = timelyInfoDao.list(exchange, cnt);
+	public List<JSONObject> list(String market, int cnt) {
+		List<TimelyInfoVo> timelyInfos = timelyInfoDao.list(market, cnt);
 		List<JSONObject> jsons = new ArrayList<>();
 		String jsonString = null; 
 		Gson gson = new Gson();

@@ -1,29 +1,13 @@
 package com.cglee079.cointelebot.coin;
 
-import java.io.IOException;
-
 import org.json.JSONObject;
 
-import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 
 public class BithumbPooler extends ApiPooler{
 	
 	public JSONObject getCoin(String coin) throws ServerErrorException {
-		String param = "";
-		switch (coin) {
-		case ID.COIN_BTC : param = "btc"; break;
-		case ID.COIN_XRP : param = "xrp"; break;
-		case ID.COIN_ETH : param = "eth"; break;
-		case ID.COIN_EOS : param = "eos"; break;
-		case ID.COIN_QTM : param = "qtum"; break;
-		case ID.COIN_LTC : param = "ltc"; break;
-		case ID.COIN_BCH : param = "bch"; break;
-		case ID.COIN_ETC : param = "etc"; break;
-		case ID.COIN_TRX : param = "trx"; break;
-		case ID.COIN_OMG : param = "omg"; break;
-		case ID.COIN_KNC : param = "knc"; break;
-		}
+		String param = coinParam.get(coin);
 		
 		String url = "https://api.bithumb.com/public/ticker/" + param;
 		HttpClient httpClient = new HttpClient();
@@ -46,7 +30,7 @@ public class BithumbPooler extends ApiPooler{
 				retryCnt = 0;
 				return coinObj;				
 			} else{
-				throw new ServerErrorException("빗썸 서버 에러", jsonObj.getInt("status"));
+				throw new ServerErrorException("Bithumb Server Error", jsonObj.getInt("status"));
 			}
 		} catch (Exception e) {
 			retryCnt++;
@@ -54,7 +38,7 @@ public class BithumbPooler extends ApiPooler{
 				return this.getCoin(coin);
 			} else {
 				retryCnt = 0;
-				throw new ServerErrorException("빗썸 서버 에러 : " + e.getMessage());
+				throw new ServerErrorException("Bithumb Server Error : " + e.getMessage());
 			}
 		}
 	}

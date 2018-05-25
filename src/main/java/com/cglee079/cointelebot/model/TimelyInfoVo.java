@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class TimelyInfoVo {
 	private String date;
-	private String exchange;
+	private String market;
 	private Double high;
 	private Double low;
 	private Double last;
@@ -26,12 +26,12 @@ public class TimelyInfoVo {
 		this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);
 	}
 
-	public String getExchange() {
-		return exchange;
+	public String getMarket() {
+		return market;
 	}
 
-	public void setExchange(String exchange) {
-		this.exchange = exchange;
+	public void setMarket(String market) {
+		this.market = market;
 	}
 
 	public Double getHigh() {

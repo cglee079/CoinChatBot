@@ -8,8 +8,8 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import com.cglee079.cointelebot.cmd.CMDER;
 
-public class SetDayloopKeyboard extends ReplyKeyboardMarkup{
-	public SetDayloopKeyboard(String lang) {
+public class SetLanguageKeyboard extends ReplyKeyboardMarkup{
+	public SetLanguageKeyboard(String lang) {
 		super();
 		
 	    this.setSelective(true);
@@ -18,23 +18,14 @@ public class SetDayloopKeyboard extends ReplyKeyboardMarkup{
 
 	    List<KeyboardRow> keyboard = new ArrayList<>();
 	    KeyboardRow keyboardFirstRow = new KeyboardRow();
-	    keyboardFirstRow.add(CMDER.getSetDayloop01(lang));
-	    keyboardFirstRow.add(CMDER.getSetDayloop02(lang));
-	    keyboardFirstRow.add(CMDER.getSetDayloop03(lang));
+	    keyboardFirstRow.add(CMDER.getSetLanguageKR(lang));
+	    keyboardFirstRow.add(CMDER.getSetLanguageUS(lang));
 	    
 	    KeyboardRow keyboardSecondRow = new KeyboardRow();
-	    keyboardSecondRow.add(CMDER.getSetDayloop04(lang));
-	    keyboardSecondRow.add(CMDER.getSetDayloop05(lang));
-	    keyboardSecondRow.add(CMDER.getSetDayloop06(lang));
-	    
-	    KeyboardRow keyboardThirdRow = new KeyboardRow();
-	    keyboardThirdRow.add(CMDER.getSetDayloop07(lang));
-	    keyboardThirdRow.add(CMDER.getSetDayloopOff(lang));
-	    keyboardThirdRow.add(CMDER.getSetDayloopOut(lang));
+	    keyboardSecondRow.add(CMDER.getSetLanguageOut(lang));
 	    
 	    keyboard.add(keyboardFirstRow);
 	    keyboard.add(keyboardSecondRow);
-	    keyboard.add(keyboardThirdRow);
 	    
 	    this.setKeyboard(keyboard);
 	}

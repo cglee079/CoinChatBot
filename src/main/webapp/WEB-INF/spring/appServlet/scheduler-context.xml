@@ -9,7 +9,7 @@
 	
 	<task:annotation-driven />
 	
-	<bean id="DailyScheduler" class="com.cglee079.cointelebot.scheduler.DailyScheduler"></bean>
+	<!-- <bean id="DailyScheduler" class="com.cglee079.cointelebot.scheduler.DailyScheduler"></bean> -->
 	<bean id="TimelyScheduler" class="com.cglee079.cointelebot.scheduler.TimelyScheduler"></bean>
 	<bean id="TargetScheduler" class="com.cglee079.cointelebot.scheduler.TargetScheduler"></bean>
 	

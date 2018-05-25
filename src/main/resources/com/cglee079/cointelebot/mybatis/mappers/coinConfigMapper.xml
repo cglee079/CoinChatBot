@@ -7,20 +7,15 @@
 	<select id="get" resultType="com.cglee079.cointelebot.model.CoinConfigVo">
 			SELECT 
 			CONFIG_COINID as 'coinId',
-			CONFIG_EX_PRICE as 'priceEx',
+			CONFIG_EX_PRICE_KR as 'priceKREx',
+			CONFIG_EX_PRICE_US as 'priceUSEx',
+			CONFIG_EX_TARGET_KR as 'targetKREx',
+			CONFIG_EX_TARGET_US as 'targetUSEx',
 			CONFIG_EX_NUMBER as 'numberEx',
-			CONFIG_EX_TARGET as 'targetEx',
-			CONFIG_VERSION as 'version',
-			CONFIG_ISIN_BTCMARKET as 'inBTCMarket',
-			CONFIG_ENABLED_COINONE as 'enabledCoinone',
-			CONFIG_ENABLED_BITHUMB as 'enabledBithumb',
-			CONFIG_ENABLED_UPBIT as 'enabledUpbit',
-			CONFIG_ENABLED_COINNEST as 'enabledCoinnest',
-			CONFIG_ENABLED_KORBIT as 'enabledKorbit',
-			CONFIG_ENABLED_BITFINEX as 'enabledBitfinex',
-			CONFIG_ENABLED_BITTREX as 'enabledBittrex',
-			CONFIG_ENABLED_POLONIEX as 'enabledPoloniex',
-			CONFIG_ENABLED_BINANCE as 'enabledBinance'
+			CONFIG_DIGIT_KRW as 'digitKRW',
+			CONFIG_DIGIT_USD as 'digitUSD',
+			CONFIG_DIGIT_BTC as 'digitBTC',
+			CONFIG_VERSION as 'version'
 			FROM TB_COINBOT_CONFIG
 			WHERE 1 = 1
 			AND CONFIG_COINID = #{coinId}

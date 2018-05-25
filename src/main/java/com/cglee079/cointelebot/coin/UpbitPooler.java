@@ -1,6 +1,5 @@
 package com.cglee079.cointelebot.coin;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,37 +8,12 @@ import java.util.Date;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 
 public class UpbitPooler extends ApiPooler{
 	
 	public JSONObject getCoin(String coin) throws ServerErrorException {
-		String param = "";
-		switch (coin) {
-		case ID.COIN_BTC : param = "KRW-BTC"; break;
-		case ID.COIN_XRP : param = "KRW-XRP"; break;
-		case ID.COIN_ETH : param = "KRW-ETH"; break;
-		case ID.COIN_EOS : param = "KRW-EOS"; break;
-		case ID.COIN_QTM : param = "KRW-QTUM"; break;
-		case ID.COIN_LTC : param = "KRW-LTC"; break;
-		case ID.COIN_BCH : param = "KRW-BCH"; break;
-		case ID.COIN_ETC : param = "KRW-ETC"; break;
-		case ID.COIN_ADA : param = "KRW-ADA"; break;
-		case ID.COIN_XLM : param = "KRW-XLM"; break;
-		case ID.COIN_NEO : param = "KRW-NEO"; break;
-		case ID.COIN_TRX : param = "KRW-TRX"; break;
-		case ID.COIN_SNT : param = "KRW-SNT"; break;
-		case ID.COIN_NXT : param = "BTC-NXT"; break;
-		case ID.COIN_EMC : param = "KRW-EMC2"; break;
-		case ID.COIN_ARD : param = "KRW-ARDR"; break;
-		case ID.COIN_GRS : param = "KRW-GRS"; break;
-		case ID.COIN_XVG : param = "BTC-XVG"; break;
-		case ID.COIN_STM : param = "KRW-STORM"; break;
-		case ID.COIN_SIA : param = "BTC-SC"; break;
-		case ID.COIN_GTO : param = "KRW-GTO"; break;
-		case ID.COIN_OMG : param = "KRW-OMG"; break;
-		}
+		String param = coinParam.get(coin);
 		
 		JSONObject coinObj = getCurrentCoin(param);
 		JSONObject onedayInfo = getOnedayInfo(param);

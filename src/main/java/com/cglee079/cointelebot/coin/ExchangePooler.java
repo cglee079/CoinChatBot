@@ -1,7 +1,5 @@
 package com.cglee079.cointelebot.coin;
 
-import java.io.IOException;
-
 import org.json.JSONObject;
 
 import com.cglee079.cointelebot.exception.ServerErrorException;

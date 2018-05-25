@@ -27,16 +27,16 @@ public class TimelyInfoDao {
 		}
 	}
 
-	public TimelyInfoVo get(String date, String exchange) {
+	public TimelyInfoVo get(String date, String market) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("date", date);
-		map.put("exchange", exchange);
+		map.put("market", market);
 		return sqlSession.selectOne(namespace + ".get", map);
 	}
 
-	public List<TimelyInfoVo> list(String exchange, int cnt) {
+	public List<TimelyInfoVo> list(String market, int cnt) {
 		HashMap<String, Object> map = new HashMap<>();
-		map.put("exchange", exchange);
+		map.put("market", market);
 		map.put("cnt", cnt);
 		return sqlSession.selectList(namespace + ".list", map);
 	}

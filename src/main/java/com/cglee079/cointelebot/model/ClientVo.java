@@ -7,41 +7,32 @@ import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.constants.ID;
 
 public class ClientVo {
-	private String userId = null;
-	private String username = null;
-	private String state = null;
-	private String exchange = null;
-	private Integer timeLoop = null;
-	private Integer dayLoop = null;
-	private Double targetUpPrice = null;
-	private Double targetDownPrice = null;
-	private Integer price = null;
-	private Double coinCount = null;
-	private String enabled = "Y";
-	private Integer errCnt = 0;
+	private String userId 			= null;
+	private String username 		= null;
+	private Long localTime 			= null;
+	private String lang 			= "kr";
+	private String state 			= null;
+	private String market 			= null;
+	private Integer timeLoop 		= null;
+	private Integer dayLoop 		= null;
+	private Double targetUpPrice 	= null;
+	private Double targetDownPrice 	= null;
+	private Double price 			= null;
+	private Double coinCount 		= null;
+	private String enabled 			= "Y";
+	private Integer errCnt 			= 0;
 	private String openDate;
 	private String reopenDate;
 	private String closeDate;
 
 	public ClientVo() {
-		if (SET.ENABLED_COINNEST) {
-			exchange = ID.EXCHANGE_KORBIT;
-		}
-		if (SET.ENABLED_COINNEST) {
-			exchange = ID.EXCHANGE_COINNEST;
-		}
-		if (SET.ENABLED_UPBIT) {
-			exchange = ID.EXCHANGE_UPBIT;
-		}
-		if (SET.ENABLED_BITHUMB) {
-			exchange = ID.EXCHANGE_BITHUMB;
-		}
-		if (SET.ENABLED_COINONE) {
-			exchange = ID.EXCHANGE_COINONE;
-		}
+		if (SET.ENABLED_KORBIT) { market = ID.MARKET_KORBIT; }
+		if (SET.ENABLED_COINNEST) { market = ID.MARKET_COINNEST; }
+		if (SET.ENABLED_UPBIT) { market = ID.MARKET_UPBIT; }
+		if (SET.ENABLED_BITHUMB) { market = ID.MARKET_BITHUMB; }
+		if (SET.ENABLED_COINONE) { market = ID.MARKET_COINONE; }
 	}
 
-	
 	public String getUserId() {
 		return userId;
 	}
@@ -58,6 +49,23 @@ public class ClientVo {
 		this.username = username;
 	}
 
+	
+	public Long getLocalTime() {
+		return localTime;
+	}
+
+	public void setLocalTime(Long localTime) {
+		this.localTime = localTime;
+	}
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
+
 	public String getState() {
 		return state;
 	}
@@ -66,12 +74,12 @@ public class ClientVo {
 		this.state = state;
 	}
 
-	public String getExchange() {
-		return exchange;
+	public String getMarket() {
+		return market;
 	}
 
-	public void setExchange(String exchange) {
-		this.exchange = exchange;
+	public void setMarket(String market) {
+		this.market = market;
 	}
 
 	public Integer getTimeLoop() {
@@ -106,12 +114,12 @@ public class ClientVo {
 		this.targetDownPrice = targetPrice;
 	}
 
-	public Integer getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Integer avgPrice) {
-		this.price = avgPrice;
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
 	public Double getCoinCount() {

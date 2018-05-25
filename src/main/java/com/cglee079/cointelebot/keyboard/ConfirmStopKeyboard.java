@@ -6,11 +6,10 @@ import java.util.List;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import com.cglee079.cointelebot.constants.SET;
-import com.cglee079.cointelebot.constants.CMD;
+import com.cglee079.cointelebot.cmd.CMDER;
 
 public class ConfirmStopKeyboard extends ReplyKeyboardMarkup {
-	public ConfirmStopKeyboard() {
+	public ConfirmStopKeyboard(String lang) {
 		super();
 
 		this.setSelective(true);
@@ -20,8 +19,8 @@ public class ConfirmStopKeyboard extends ReplyKeyboardMarkup {
 		List<KeyboardRow> keyboard = new ArrayList<>();
 		
 		KeyboardRow keyboardFirstRow = new KeyboardRow();
-		keyboardFirstRow.add(CMD.CONFIRM_STOP_YES);
-		keyboardFirstRow.add(CMD.CONFIRM_STOP_NO);
+		keyboardFirstRow.add(CMDER.getConfirmStopYes(lang));
+		keyboardFirstRow.add(CMDER.getConfirmStopNo(lang));
 		keyboard.add(keyboardFirstRow);
 
 		this.setKeyboard(keyboard);

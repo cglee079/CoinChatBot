@@ -20,24 +20,24 @@ public class ClientDao {
 		return sqlSession.selectList(namespace + ".S01");
 	}
 	
-	public List<ClientVo> list(String exchange, Integer timeLoop, Integer dayLoop){
+	public List<ClientVo> list(String market, Integer timeLoop, Integer dayLoop){
 		HashMap<String, Object> map = new HashMap<>();
-		map.put("exchange", exchange);
+		map.put("market", market);
 		map.put("timeLoop", timeLoop);
 		map.put("dayLoop", dayLoop);
 		return sqlSession.selectList(namespace + ".S01", map);
 	}
 	
-	public List<ClientVo> listTargetUp(String exchange, double coinValue) {
+	public List<ClientVo> listTargetUp(String market, double coinValue) {
 		HashMap<String, Object> map = new HashMap<>();
-		map.put("exchange", exchange);
+		map.put("market", market);
 		map.put("coinValue", coinValue);
 		return sqlSession.selectList(namespace + ".S02", map);
 	}
 	
-	public List<ClientVo> listTargetDown(String exchange, double coinValue) {
+	public List<ClientVo> listTargetDown(String market, double coinValue) {
 		HashMap<String, Object> map = new HashMap<>();
-		map.put("exchange", exchange);
+		map.put("market", market);
 		map.put("coinValue", coinValue);
 		return sqlSession.selectList(namespace + ".S03", map);
 	}

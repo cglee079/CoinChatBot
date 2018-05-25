@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.cointelebot.mapper.CoinMarketConfigMapper">
+
+	<select id="list" resultType="com.cglee079.cointelebot.model.CoinMarketConfigVo">
+			SELECT 
+			MCONFIG_COINID as 'coinId',
+			MCONFIG_MARKET as 'market',
+			MCONFIG_INBTC as 'inBtc',
+			MCONFIG_ENABLED as 'enabled'
+			FROM TB_COINBOT_MARKET_CONFIG
+			WHERE 1 = 1
+			AND MCONFIG_ENABLED = 'Y'
+			AND MCONFIG_COINID = #{coinId}
+	</select>
+	
+</mapper>

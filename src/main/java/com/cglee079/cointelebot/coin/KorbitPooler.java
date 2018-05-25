@@ -1,24 +1,13 @@
 package com.cglee079.cointelebot.coin;
 
-import java.io.IOException;
-
 import org.json.JSONObject;
 
-import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
-import com.cglee079.cointelebot.log.Log;
 
 public class KorbitPooler extends ApiPooler{
 	
 	public JSONObject getCoin(String coin) throws ServerErrorException {
-		String param = "";
-		switch (coin) {
-		case ID.COIN_BTC : param = "btc_krw"; break;
-		case ID.COIN_BCH : param = "bch_krw"; break;
-		case ID.COIN_ETH : param = "eth_krw"; break;
-		case ID.COIN_ETC : param = "etc_krw"; break;
-		case ID.COIN_XRP : param = "xrp_krw"; break;
-		}
+		String param = coinParam.get(coin);
 		
 		String url = "https://api.korbit.co.kr/v1/ticker/detailed?currency_pair=" + param;
 		HttpClient httpClient = new HttpClient();

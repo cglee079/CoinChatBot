@@ -6,14 +6,15 @@
 
 	<context:annotation-config></context:annotation-config>
 
+
+
 	<bean class="org.telegram.telegrambots.ApiContextInitializer" init-method="init"></bean>
 
-	<bean id="Explainer" class="com.cglee079.cointelebot.telegram.Explainer">
-	</bean>
+	<bean id="Explainer" class="com.cglee079.cointelebot.telegram.MessageMaker"></bean>
 	
 	<bean id="TelegramBot" class="com.cglee079.cointelebot.telegram.TelegramBot">
-		<constructor-arg index="0" value="479906834:AAF7r7lKl4o-iRtig36WB8oHSv0IOmMIDaw"></constructor-arg>
-		<constructor-arg index="1" value="cg_tst_bot"></constructor-arg>
+		<constructor-arg index="0" value="509885308:AAGqgiMXRfkXWeamsta6N0nFkF0d9I_SFOI"></constructor-arg>
+		<constructor-arg index="1" value="changoos_bot"></constructor-arg>
 	</bean>
 	
 	<bean id="TelegramClient" class="com.cglee079.cointelebot.telegram.TelegramClient">

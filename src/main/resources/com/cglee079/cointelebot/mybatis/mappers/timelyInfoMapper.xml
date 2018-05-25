@@ -14,11 +14,11 @@
 		TINFO_RESULT as 'result',
 		TINFO_ERRCODE as 'errorCode',
 		TINFO_ERRMSG as 'errorMsg'
-		FROM TB_EOSBOT_TIMELYINFO
+		FROM TB_SNTBOT_TIMELYINFO
 		WHERE 1 = 1
 		AND TINFO_DATE = #{date}
-		<if test="exchange != null">
-		AND TINFO_EXCHANGE = #{exchange}
+		<if test="market != null">
+		AND TINFO_MARKET = #{market}
 		</if>
 	</select>
 	
@@ -32,18 +32,18 @@
 		TINFO_RESULT as 'result',
 		TINFO_ERRCODE as 'errorCode',
 		TINFO_ERRMSG as 'errorMsg'
-		FROM TB_EOSBOT_TIMELYINFO
+		FROM TB_SNTBOT_TIMELYINFO
 		WHERE 1 = 1
-		<if test="exchange != null">
-		AND TINFO_EXCHANGE = #{exchange}
+		<if test="market != null">
+		AND TINFO_MARKET = #{market}
 		</if>
 		ORDER BY TINFO_DATE DESC
 		LIMIT 0, #{cnt}
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO TB_EOSBOT_TIMELYINFO
-		VALUES (#{date}, #{exchange}, #{high}, #{low}, #{last}, #{volume}, #{result}, #{errorCode}, #{errorMsg})
+		INSERT INTO TB_SNTBOT_TIMELYINFO
+		VALUES (#{date}, #{market}, #{high}, #{low}, #{last}, #{volume}, #{result}, #{errorCode}, #{errorMsg})
 	</insert>
 	
 	<delete id="delete" parameterType="map">

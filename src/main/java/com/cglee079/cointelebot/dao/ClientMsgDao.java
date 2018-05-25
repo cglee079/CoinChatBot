@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.ClientMsgVo;
-import com.cglee079.cointelebot.model.DailyInfoVo;
 
 @Repository
 public class ClientMsgDao {
