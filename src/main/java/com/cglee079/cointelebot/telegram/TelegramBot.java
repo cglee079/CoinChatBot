@@ -486,7 +486,7 @@ public class TelegramBot extends AbilityBot  {
 			sendMessage(userId, messageId, msgMaker.msgToMain(lang), km.getMainKeyboard(lang));
 		} else if(message.equals(CMDER.getOut(lang))){
 			sendMessage(userId, messageId, msgMaker.msgToMain(lang), km.getMainKeyboard(lang));
-		} else if(message.equals(CMDER.getOut(lang))){
+		} else {
 			clientSuggestService.insert(userId, username, message);
 			sendMessage(userId, messageId, msgMaker.msgThankyouSuggest(lang), km.getMainKeyboard(lang));
 			
