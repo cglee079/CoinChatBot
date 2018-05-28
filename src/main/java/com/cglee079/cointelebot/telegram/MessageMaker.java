@@ -624,10 +624,8 @@ public class MessageMaker {
 		switch(lang) {
 		case ID.LANG_KR :
 			msg += "코인개수 : " + toCoinCntStr(coinCnt, lang) + "\n";
-			msg += "---------------------\n";
 			msg += "평균단가 : " + toMoneyStr(avgPrice, market) + "\n";
 			msg += "희망단가 : " + toMoneyStr(happyPrice, market) + "\n";
-			msg += "단가차이 : " + toSignMoneyStr(happyPrice - avgPrice, market) + " (" + toSignPercent(happyPrice, avgPrice) + ")\n";
 			msg += "---------------------\n";
 			msg += "투자금액 : " + toInvestAmountStr(price, market) + "\n"; 
 			msg += "희망금액 : " + toInvestAmountStr((long)(happyPrice * coinCnt), market) + "\n";
@@ -635,10 +633,8 @@ public class MessageMaker {
 			break;
 		case ID.LANG_US :
 			msg += "The number of coins : " + toCoinCntStr(coinCnt, lang) + "\n";
-			msg += "---------------------\n";
-			msg += "Average Coin Price : " + toMoneyStr(avgPrice, market) + "\n";
-			msg += "Desired Coin Price : " + toMoneyStr(happyPrice, market) + "\n";
-			msg += "Difference Coin Price : " + toSignMoneyStr(happyPrice - avgPrice, market) + " (" + toSignPercent(happyPrice, avgPrice) + ")\n";
+			msg += "Average Coin Price  : " + toMoneyStr(avgPrice, market) + "\n";
+			msg += "Desired Coin Price  : " + toMoneyStr(happyPrice, market) + "\n";
 			msg += "---------------------\n";
 			msg += "Investment Amount : " + toInvestAmountStr(price, market) + "\n"; 
 			msg += "Desired Amount : " + toInvestAmountStr((long)(happyPrice * coinCnt), market) + "\n";
@@ -1475,7 +1471,7 @@ public class MessageMaker {
 		msg += "\n";
 		msg += "* Please enter in the following format.\n";
 		msg += "* if you entered 0, time adjust initialized.\n";
-		msg += "* example) 0\n  : init time adjust\n";
+		msg += "* example) 0 : init time adjust\n";
 		msg += "* example) " + TimeStamper.getDateBefore() + " 23:00 \n";
 		msg += "* example) " + TimeStamper.getDate() + " 00:33 \n";
 		msg += "* example) " + TimeStamper.getDate() +  " 14:30 \n";
@@ -1498,11 +1494,11 @@ public class MessageMaker {
 		return msg;
 	}
 	
-	public String msgToPreference() {
-		String msg = "";
-		msg += "\n# Changed to Preference menu\n";
-		return msg;
-	}
+//	public String msgToPreference() {
+//		String msg = "";
+//		msg += "\n# Changed to Preference menu\n";
+//		return msg;
+//	}
 	
 	/**********************************/
 	/** Daily Notification Message ***/

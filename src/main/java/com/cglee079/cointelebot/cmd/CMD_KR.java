@@ -5,7 +5,7 @@ public class CMD_KR {
 	public static final String MAIN_KOREA_PREMIUM 	= "거래소별 현재가";
 	public static final String MAIN_BTC 			= "비트대비 변화량";
 	public static final String MAIN_CALCULATE 		= "손익금 계산";
-	public static final String MAIN_HELP 			= "도움말";
+	public static final String MAIN_HELP 			= "Help";
 	public static final String MAIN_SUPPORT			= "후원하기";
 
 	public static final String MAIN_SET_PRICE 		= "투자금액 설정";

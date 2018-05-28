@@ -631,6 +631,8 @@ public class TelegramBot extends AbilityBot  {
 		
 		if(cmd.equals("0")) {
 			clientService.updateLocalTime(userId.toString(), (long)0);
+			msg += msgMaker.msgTimeAdjustSuccess(new Date());
+			msg += msgMaker.msgToMain(lang);
 		} else {
 			try {
 				Date enteredDate = format.parse(enteredDateStr);
@@ -640,10 +642,10 @@ public class TelegramBot extends AbilityBot  {
 				clientService.updateLocalTime(userId.toString(), time);
 				
 				msg += msgMaker.msgTimeAdjustSuccess(enteredDate);
-				msg += msgMaker.msgToPreference();
+				msg += msgMaker.msgToMain(lang);
 			} catch (ParseException e) {
 				msg += msgMaker.warningTimeAdjustFormat("");
-				msg += msgMaker.msgToPreference();
+				msg += msgMaker.msgToMain(lang);
 			}
 		}
 		
@@ -738,11 +740,13 @@ public class TelegramBot extends AbilityBot  {
 			msg += "\n";
 		}
 		
-		if(market.startsWith(ID.MARKET_US) && (market.equals(ID.MARKET_BITFINNEX) || market.equals(ID.MARKET_BITTREX))) {
-			if(market.equals(ID.MARKET_BITFINNEX)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_BITFINNEX, lang); }
+		if(market.startsWith(ID.MARKET_US) && (market.equals(ID.MARKET_BITTREX))) {
 			if(market.equals(ID.MARKET_BITTREX)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_BITTREX, lang); }
 			
-			if(SET.ENABLED_POLONIEX) {
+			if(SET.ENABLED_BITFINEX) {
+				msg += msgMaker.msgBTCReplaceAnotherMarket(ID.MARKET_BITFINNEX, lang);
+				market = ID.MARKET_POLONIEX;
+			} else if(SET.ENABLED_POLONIEX) {
 				msg += msgMaker.msgBTCReplaceAnotherMarket(ID.MARKET_POLONIEX, lang);
 				market = ID.MARKET_POLONIEX;
 			} else if(SET.ENABLED_BINANCE) {

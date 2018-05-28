@@ -43,9 +43,9 @@ public class MainKeyboard_US extends ReplyKeyboardMarkup{
 	    
 	    KeyboardRow keyboardFifthRow = new KeyboardRow();
 	    keyboardFifthRow.add(CMDER.getMainCoinList(lang));
-	    keyboardFifthRow.add(CMDER.getMainHelp(lang));
 	    keyboardFifthRow.add(CMDER.getMainSendMsg(lang));
 	    keyboardFifthRow.add(CMDER.getMainSupport(lang));
+	    keyboardFifthRow.add(CMDER.getMainHelp(lang));
 	    keyboardFifthRow.add(CMDER.getMainPref(lang));
 	    
 	    

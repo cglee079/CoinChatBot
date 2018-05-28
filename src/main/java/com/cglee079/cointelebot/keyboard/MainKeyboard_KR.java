@@ -38,9 +38,9 @@ public class MainKeyboard_KR extends ReplyKeyboardMarkup{
 	    
 	    KeyboardRow keyboardForthRow = new KeyboardRow();
 	    keyboardForthRow.add(CMDER.getMainCoinList(lang));
-	    keyboardForthRow.add(CMDER.getMainHelp(lang));
 	    keyboardForthRow.add(CMDER.getMainSendMsg(lang));
 	    keyboardForthRow.add(CMDER.getMainSupport(lang));
+	    keyboardForthRow.add(CMDER.getMainHelp(lang));
 	    keyboardForthRow.add(CMDER.getMainPref(lang));
 	    
 	    

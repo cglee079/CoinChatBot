@@ -23,7 +23,7 @@ public class BitfinexPooler extends ApiPooler{
 //			coinObj.put("ask_size", jsonArr.get(3));
 //			coinObj.put("bid", jsonArr.get(4));
 //			coinObj.put("bid", jsonArr.get(5));
-			coinObj.put("first", 0);
+			coinObj.put("first", jsonArr.getDouble(6) / ( 1 + jsonArr.getDouble(5)));
 			coinObj.put("last", jsonArr.get(6));
 			coinObj.put("volume", jsonArr.get(7));
 			coinObj.put("high", jsonArr.get(8));
