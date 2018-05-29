@@ -32,7 +32,7 @@ public class KorbitPooler extends ApiPooler{
 				return this.getCoin(coin);
 			} else {
 				retryCnt = 0;
-				throw new ServerErrorException("코빗 서버 에러 : " + e.getMessage());
+				throw new ServerErrorException("Kobit server error: " + e.getMessage());
 			}
 		}
 	}

@@ -6,6 +6,7 @@ public class CoinConfigVo {
 	private String priceUSEx;
 	private String targetKREx;
 	private String targetUSEx;
+	private String targetRateEx;
 	private String numberEx;
 	private Integer digitKRW;
 	private Integer digitUSD;
@@ -50,6 +51,14 @@ public class CoinConfigVo {
 
 	public void setTargetUSEx(String targetUSEx) {
 		this.targetUSEx = targetUSEx;
+	}
+
+	public String getTargetRateEx() {
+		return targetRateEx;
+	}
+
+	public void setTargetRateEx(String targetRateEx) {
+		this.targetRateEx = targetRateEx;
 	}
 
 	public String getNumberEx() {

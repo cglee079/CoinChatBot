@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,6 +23,8 @@ import com.cglee079.cointelebot.telegram.TelegramBot;
 
 public class TimelyScheduler {
 
+	private List<String> enabledMarkets;
+	
 	@Autowired
 	private TelegramBot telegramBot;
 
@@ -33,19 +37,18 @@ public class TimelyScheduler {
 	@Autowired
 	private CoinManager coinManager;
 	
+	@PostConstruct
+	public void init() {
+		enabledMarkets = SET.getEnabledMarkets();
+	}
+	
 	@Scheduled(cron = "10 00 0/1 * * *")
 	public void loadTimelyCoins(){
 		Date dateCurrent = new Date();
 		
-		if(SET.ENABLED_COINONE) { loadTimelyCoin(dateCurrent, ID.MARKET_COINONE); }
-		if(SET.ENABLED_BITHUMB) { loadTimelyCoin(dateCurrent, ID.MARKET_BITHUMB); }
-		if(SET.ENABLED_UPBIT) { loadTimelyCoin(dateCurrent, ID.MARKET_UPBIT); }
-		if(SET.ENABLED_COINNEST) { loadTimelyCoin(dateCurrent, ID.MARKET_COINNEST); }
-		if(SET.ENABLED_KORBIT) { loadTimelyCoin(dateCurrent, ID.MARKET_KORBIT); }
-		if(SET.ENABLED_BITFINEX) { loadTimelyCoin(dateCurrent, ID.MARKET_BITFINNEX); }
-		if(SET.ENABLED_BITTREX) { loadTimelyCoin(dateCurrent, ID.MARKET_BITTREX); }
-		if(SET.ENABLED_POLONIEX) { loadTimelyCoin(dateCurrent, ID.MARKET_POLONIEX); }
-		if(SET.ENABLED_BINANCE) { loadTimelyCoin(dateCurrent, ID.MARKET_BINANCE); }
+		for(int i = 0; i <enabledMarkets.size(); i++) {
+			loadTimelyCoin(dateCurrent, enabledMarkets.get(i));
+		}
 		
 		/* Send Timely Message */
 		SimpleDateFormat formatter = new SimpleDateFormat("HH");
@@ -53,7 +56,9 @@ public class TimelyScheduler {
 		Integer hour = Integer.valueOf(hourStr);
 		for(int timeloop = 1; timeloop <= 12; timeloop++) {
 			if(hour % timeloop == 0) {
-				sendTimelyInfos(dateCurrent, timeloop);
+				for(int i = 0; i <enabledMarkets.size(); i++) {
+					sendTimelyInfo(dateCurrent, enabledMarkets.get(i), timeloop);
+				}
 			}
 		}
 		
@@ -63,7 +68,9 @@ public class TimelyScheduler {
 		Integer day = Integer.valueOf(dayStr);
 		for(int dayloop = 1; dayloop <= 7; dayloop++) {
 			if(day % dayloop == 0) {
-				sendDailyInfos(dateCurrent, dayloop);
+				for(int i = 0; i <enabledMarkets.size(); i++) {
+					sendDailyInfo(dateCurrent, enabledMarkets.get(i), dayloop);
+				}
 			}
 		}
 		
@@ -90,18 +97,6 @@ public class TimelyScheduler {
 	/************************/
 	/** Timely Send Message **/
 	/************************/
-	public void sendTimelyInfos(Date dateCurrent, int timeLoop) {
-		if(SET.ENABLED_COINONE){ sendTimelyInfo(dateCurrent, ID.MARKET_COINONE, timeLoop); }
-		if(SET.ENABLED_BITHUMB){ sendTimelyInfo(dateCurrent, ID.MARKET_BITHUMB, timeLoop); }
-		if(SET.ENABLED_UPBIT){ sendTimelyInfo(dateCurrent, ID.MARKET_UPBIT, timeLoop); }
-		if(SET.ENABLED_COINNEST){ sendTimelyInfo(dateCurrent, ID.MARKET_COINNEST, timeLoop); }
-		if(SET.ENABLED_KORBIT){ sendTimelyInfo(dateCurrent, ID.MARKET_KORBIT, timeLoop); }
-		if(SET.ENABLED_BITFINEX){ sendTimelyInfo(dateCurrent, ID.MARKET_BITFINNEX, timeLoop); }
-		if(SET.ENABLED_BITTREX){ sendTimelyInfo(dateCurrent, ID.MARKET_BITTREX, timeLoop); }
-		if(SET.ENABLED_POLONIEX){ sendTimelyInfo(dateCurrent, ID.MARKET_POLONIEX, timeLoop); }
-		if(SET.ENABLED_BINANCE){ sendTimelyInfo(dateCurrent, ID.MARKET_BINANCE, timeLoop); }
-	}
-	
 	public void sendTimelyInfo(Date dateCurrent, String market, int timeLoop){
 		List<ClientVo> clients = clientService.list(market, timeLoop, null);
 		if(clients.size() > 0) {
@@ -120,18 +115,6 @@ public class TimelyScheduler {
 	/************************/
 	/** Daily Send Message **/
 	/************************/
-	public void sendDailyInfos(Date dateCurrent, int dayLoop) {
-		if(SET.ENABLED_COINONE){ sendDailyInfo(dateCurrent, ID.MARKET_COINONE, dayLoop); }
-		if(SET.ENABLED_BITHUMB){ sendDailyInfo(dateCurrent, ID.MARKET_BITHUMB, dayLoop); }
-		if(SET.ENABLED_UPBIT){ sendDailyInfo(dateCurrent, ID.MARKET_UPBIT, dayLoop); }
-		if(SET.ENABLED_COINNEST){ sendDailyInfo(dateCurrent, ID.MARKET_COINNEST, dayLoop); }
-		if(SET.ENABLED_KORBIT){ sendDailyInfo(dateCurrent, ID.MARKET_KORBIT, dayLoop); }
-		if(SET.ENABLED_BITFINEX){ sendDailyInfo(dateCurrent, ID.MARKET_BITFINNEX, dayLoop); }
-		if(SET.ENABLED_BITTREX){ sendDailyInfo(dateCurrent, ID.MARKET_BITTREX, dayLoop); }
-		if(SET.ENABLED_POLONIEX){ sendDailyInfo(dateCurrent, ID.MARKET_POLONIEX, dayLoop); }
-		if(SET.ENABLED_BINANCE){ sendDailyInfo(dateCurrent, ID.MARKET_BINANCE, dayLoop); }
-	}
-	
 	public void sendDailyInfo(Date dateCurrent, String market, int dayLoop) {
 		List<ClientVo> clients = clientService.listAtMidnight(market, null, dayLoop, dateCurrent);
 		if(clients.size() > 0 ) {

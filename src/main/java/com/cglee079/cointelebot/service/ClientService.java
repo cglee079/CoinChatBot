@@ -61,12 +61,7 @@ public class ClientService {
 		if(client != null) {
 			return client.getMarket();
 		} else {
-			if(SET.ENABLED_COINONE) { return ID.MARKET_COINONE; }
-			if(SET.ENABLED_BITHUMB) { return ID.MARKET_BITHUMB; }
-			if(SET.ENABLED_UPBIT) { return ID.MARKET_UPBIT; }
-			if(SET.ENABLED_COINNEST) { return ID.MARKET_COINNEST; }
-			if(SET.ENABLED_KORBIT) { return ID.MARKET_KORBIT; }
-			return ID.MARKET_COINONE;
+			return SET.getEnabledMarkets().get(0);
 		}
 	}
 	

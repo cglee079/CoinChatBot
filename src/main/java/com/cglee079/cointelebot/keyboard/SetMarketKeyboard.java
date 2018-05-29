@@ -22,78 +22,15 @@ public class SetMarketKeyboard extends ReplyKeyboardMarkup {
 		KeyboardRow keyboardRow = null;
 		int marketCnt = 0;
 		
-		if (SET.ENABLED_COINONE) {
+		List<String> enabledMarkets = SET.getEnabledMarkets();
+		for(int i = 0; i < enabledMarkets.size(); i++) {
 			if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow();}
 			marketCnt ++;
 			
-			keyboardRow.add(CMDER.getSetMarketCoinone(lang));
-			if(marketCnt%2 == 0) { keyboard.add(keyboardRow);}
-			
-		}
-
-		if (SET.ENABLED_BITHUMB) {
-			if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow();}
-			marketCnt ++;
-			
-			keyboardRow.add(CMDER.getSetMarketBithumb(lang));
+			keyboardRow.add(CMDER.getSetMarket(enabledMarkets.get(i), lang));
 			if(marketCnt%2 == 0) { keyboard.add(keyboardRow);}
 		}
 
-		if (SET.ENABLED_UPBIT) {
-			if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
-			marketCnt ++;
-			
-			keyboardRow.add(CMDER.getSetMarketUpbit(lang));
-			if(marketCnt%2 == 0) { keyboard.add(keyboardRow);}
-		}
-		
-		if (SET.ENABLED_COINNEST) {
-			if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
-			marketCnt ++;
-			
-			keyboardRow.add(CMDER.getSetMarketCoinnest(lang));
-			if(marketCnt%2 == 0) { keyboard.add(keyboardRow);}
-		}
-		
-		if (SET.ENABLED_KORBIT) {
-			if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
-			marketCnt ++;
-			
-			keyboardRow.add(CMDER.getSetMarketKorbit(lang));
-			if(marketCnt%2 == 0) { keyboard.add(keyboardRow);}
-		}
-		
-		if (SET.ENABLED_BITFINEX) {
-			if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
-			marketCnt ++;
-			
-			keyboardRow.add(CMDER.getSetMarketBitfinex(lang));
-			if(marketCnt%2 == 0) { keyboard.add(keyboardRow);}
-		}
-		
-		if (SET.ENABLED_BITTREX) {
-			if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
-			marketCnt ++;
-			
-			keyboardRow.add(CMDER.getSetMarketBittrex(lang));
-			if(marketCnt%2 == 0) { keyboard.add(keyboardRow);}
-		}
-		
-		if (SET.ENABLED_POLONIEX) {
-			if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
-			marketCnt ++;
-			
-			keyboardRow.add(CMDER.getSetMarketPoloniex(lang));
-			if(marketCnt%2 == 0) { keyboard.add(keyboardRow);}
-		}
-		
-		if (SET.ENABLED_BINANCE) {
-			if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
-			marketCnt ++;
-			
-			keyboardRow.add(CMDER.getSetMarketBinance(lang));
-			if(marketCnt%2 == 0) { keyboard.add(keyboardRow);}
-		}
 
 		if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow(); }
 		marketCnt ++;

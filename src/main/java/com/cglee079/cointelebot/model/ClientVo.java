@@ -26,11 +26,7 @@ public class ClientVo {
 	private String closeDate;
 
 	public ClientVo() {
-		if (SET.ENABLED_KORBIT) { market = ID.MARKET_KORBIT; }
-		if (SET.ENABLED_COINNEST) { market = ID.MARKET_COINNEST; }
-		if (SET.ENABLED_UPBIT) { market = ID.MARKET_UPBIT; }
-		if (SET.ENABLED_BITHUMB) { market = ID.MARKET_BITHUMB; }
-		if (SET.ENABLED_COINONE) { market = ID.MARKET_COINONE; }
+		market = SET.getEnabledMarkets().get(0);
 	}
 
 	public String getUserId() {

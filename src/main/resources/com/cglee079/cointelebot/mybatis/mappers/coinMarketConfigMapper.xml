@@ -14,6 +14,7 @@
 			WHERE 1 = 1
 			AND MCONFIG_ENABLED = 'Y'
 			AND MCONFIG_COINID = #{coinId}
+			ORDER BY MCONFIG_MARKET ASC;
 	</select>
 	
 </mapper>

@@ -9,7 +9,6 @@
 	<configs>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/scheduler-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/telegram-context.xml</config>
-		<config>src/main/webapp/WEB-INF/spring/appServlet/security-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin-context.xml</config>
 	</configs>
 	<autoconfigs>

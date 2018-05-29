@@ -165,6 +165,26 @@ public class CMDER {
 		}
 		return str;
 	}
+	
+	public static String getSetMarket(String market, String lang) {
+		String str = "";
+		switch(market) {
+		case ID.MARKET_COINONE 	: str = getSetMarketCoinone(lang);break;
+		case ID.MARKET_BITHUMB 	: str = getSetMarketBithumb(lang);break;
+		case ID.MARKET_UPBIT 	: str = getSetMarketUpbit(lang);break;
+		case ID.MARKET_COINNEST : str = getSetMarketCoinnest(lang);break;
+		case ID.MARKET_KORBIT 	: str = getSetMarketKorbit(lang);break;
+		case ID.MARKET_BITFINEX : str = getSetMarketBitfinex(lang);break;
+		case ID.MARKET_BITTREX 	: str = getSetMarketBittrex(lang);break;
+		case ID.MARKET_POLONIEX : str = getSetMarketPoloniex(lang);break;
+		case ID.MARKET_BINANCE 	: str = getSetMarketBinance(lang);break;
+		case ID.MARKET_HUOBI 	: str = getSetMarketHuobi(lang);break;
+		case ID.MARKET_HADAX 	: str = getSetMarketHadax(lang);break;
+		}
+		return str;
+	}
+
+	
 
 	public static String getSetMarketCoinone(String lang) {
 		String str = "";
@@ -243,6 +263,24 @@ public class CMDER {
 		switch(lang){
 		case ID.LANG_KR : str = CMD_KR.SET_MARKET_BINANCE; break;
 		case ID.LANG_US : str = CMD_US.SET_MARKET_BINANCE; break;
+		}
+		return str;
+	}
+	
+	public static String getSetMarketHuobi(String lang) {
+		String str = "";
+		switch(lang){
+		case ID.LANG_KR : str = CMD_KR.SET_MARKET_HUOBI; break;
+		case ID.LANG_US : str = CMD_US.SET_MARKET_HUOBI; break;
+		}
+		return str;
+	}
+	
+	public static String getSetMarketHadax(String lang) {
+		String str = "";
+		switch(lang){
+		case ID.LANG_KR : str = CMD_KR.SET_MARKET_HADAX; break;
+		case ID.LANG_US : str = CMD_US.SET_MARKET_HADAX; break;
 		}
 		return str;
 	}
@@ -553,6 +591,4 @@ public class CMDER {
 		}
 		return str;
 	}
-
-
 }

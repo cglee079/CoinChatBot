@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,9 +15,11 @@ import com.cglee079.cointelebot.cmd.CMDER;
 import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.model.ClientVo;
+import com.cglee079.cointelebot.model.CoinConfigVo;
 import com.cglee079.cointelebot.model.CoinInfoVo;
 import com.cglee079.cointelebot.model.CoinWalletVo;
 import com.cglee079.cointelebot.model.TimelyInfoVo;
+import com.cglee079.cointelebot.service.CoinConfigService;
 import com.cglee079.cointelebot.service.CoinInfoService;
 import com.cglee079.cointelebot.service.CoinWalletService;
 import com.cglee079.cointelebot.service.CommonService;
@@ -26,18 +30,44 @@ public class MessageMaker {
 	private CoinInfoService coinInfoService;
 
 	@Autowired
-	CoinWalletService coinWalletService;
+	private CoinWalletService coinWalletService;
 
 	@Autowired
-	CommonService commonService;
+	private CoinConfigService coinConfigService;
+	
+	private String version;
+	private String priceKREx;
+	private String priceUSEx;
+	private String coinCntEx;
+	private String targetKREx;
+	private String targetUSEx;
+	private String targetRateEx;
+	private int digitKRW;
+	private int digitUSD;
+	private int digitBTC;
+	
+	@PostConstruct
+	public void init() {
+		CoinConfigVo config = coinConfigService.get(SET.MY_COIN);
+		version			= config.getVersion();
+		priceKREx 		= config.getPriceKREx();
+		priceUSEx 		= config.getPriceUSEx();
+		coinCntEx 		= config.getNumberEx();
+		targetKREx 		= config.getTargetKREx();
+		targetUSEx 		= config.getTargetUSEx();
+		targetRateEx 	= config.getTargetRateEx();
+		digitKRW 		= config.getDigitKRW();
+		digitUSD 		= config.getDigitUSD();
+		digitBTC 		= config.getDigitBTC();
+	}
 
 	/*******************/
 	/*** Formatter *****/
 	/*******************/
 	private String toBTCStr(double i) {
 		DecimalFormat df = new DecimalFormat("#.#");
-		df.setMinimumFractionDigits(SET.DIGIT_BTC);
-		df.setMaximumFractionDigits(SET.DIGIT_BTC);
+		df.setMinimumFractionDigits(digitBTC);
+		df.setMaximumFractionDigits(digitBTC);
 		df.setPositiveSuffix(" BTC");
 		df.setNegativeSuffix(" BTC");
 		return df.format(i);
@@ -120,8 +150,8 @@ public class MessageMaker {
 	
 	private String toKRWStr(double i){
 		DecimalFormat df = new DecimalFormat("#,###.#"); 
-		df.setMinimumFractionDigits(SET.DIGIT_KRW);
-		df.setMaximumFractionDigits(SET.DIGIT_KRW);
+		df.setMinimumFractionDigits(digitKRW);
+		df.setMaximumFractionDigits(digitKRW);
 		df.setPositiveSuffix("원");
 		df.setNegativeSuffix("원");
 		return df.format(i);
@@ -129,8 +159,8 @@ public class MessageMaker {
 	
 	private String toSignKRWStr(double i) {
 		DecimalFormat df = new DecimalFormat("#,###.#");
-		df.setMinimumFractionDigits(SET.DIGIT_KRW);
-		df.setMaximumFractionDigits(SET.DIGIT_KRW);
+		df.setMinimumFractionDigits(digitKRW);
+		df.setMaximumFractionDigits(digitKRW);
 		df.setPositivePrefix("+");
 		df.setNegativePrefix("-");
 		df.setPositiveSuffix("원");
@@ -140,16 +170,16 @@ public class MessageMaker {
 	
 	private String toUSDStr(double d){
 		DecimalFormat df = new DecimalFormat("#.#");
-		df.setMinimumFractionDigits(SET.DIGIT_USD);
-		df.setMaximumFractionDigits(SET.DIGIT_USD);
+		df.setMinimumFractionDigits(digitUSD);
+		df.setMaximumFractionDigits(digitUSD);
 		df.setPositivePrefix("$");
 		return df.format(d);
 	}
 	
 	private String toSignUSDStr(double d){
 		DecimalFormat df = new DecimalFormat("#.#");
-		df.setMinimumFractionDigits(SET.DIGIT_USD);
-		df.setMaximumFractionDigits(SET.DIGIT_USD);
+		df.setMinimumFractionDigits(digitUSD);
+		df.setMaximumFractionDigits(digitUSD);
 		df.setPositivePrefix("+$");
 		df.setNegativePrefix("-$");
 		return df.format(d);
@@ -208,10 +238,12 @@ public class MessageMaker {
 			case ID.MARKET_UPBIT 		: market = "업비트"; break;
 			case ID.MARKET_COINNEST 	: market = "코인네스트"; break;
 			case ID.MARKET_KORBIT 		: market = "코빗"; break;
-			case ID.MARKET_BITFINNEX 	: market = "비트파이넥스"; break;
+			case ID.MARKET_BITFINEX 	: market = "비트파이넥스"; break;
 			case ID.MARKET_BITTREX 		: market = "비트렉스"; break;
 			case ID.MARKET_POLONIEX 	: market = "폴로닉스"; break;
 			case ID.MARKET_BINANCE 		: market = "바이낸스"; break;
+			case ID.MARKET_HUOBI 		: market = "후오비"; break;
+			case ID.MARKET_HADAX 		: market = "하닥스"; break;
 			}
 		} else if(lang.equals(ID.LANG_US)) {
 			switch(marketID) {
@@ -220,10 +252,12 @@ public class MessageMaker {
 			case ID.MARKET_UPBIT 		: market = "Upbit"; break;
 			case ID.MARKET_COINNEST 	: market = "Coinnest"; break;
 			case ID.MARKET_KORBIT 		: market = "Korbit"; break;
-			case ID.MARKET_BITFINNEX 	: market = "Bitfinex"; break;
+			case ID.MARKET_BITFINEX 	: market = "Bitfinex"; break;
 			case ID.MARKET_BITTREX 		: market = "Bittrex"; break;
 			case ID.MARKET_POLONIEX 	: market = "Poloniex"; break;
 			case ID.MARKET_BINANCE 		: market = "Binance"; break;
+			case ID.MARKET_HUOBI 		: market = "Huobi"; break;
+			case ID.MARKET_HADAX 		: market = "Hadax"; break;
 			}
 		}
 		return market;
@@ -338,11 +372,11 @@ public class MessageMaker {
 	/** Each Market Price Message *****/
 	/**********************************/
 	public String msgEachMarketPrice(double exchangeRate, LinkedHashMap<String, Double> lasts, ClientVo client) {
-		String msg = "";
+		String msg 		= "";
 		String market 	= client.getMarket();
 		String lang 	= client.getLang();
 		String date		= TimeStamper.getDateTime(client.getLocalTime());
-		double mylast = lasts.get(market);
+		double mylast 	= lasts.get(market);
 		
 		switch(lang) {
 		case ID.LANG_KR :
@@ -588,8 +622,8 @@ public class MessageMaker {
 	public String explainHappyLine(String market, String lang) {
 		String msg = "";
 		String exampleTarget = null;
-		if(market.startsWith(ID.MARKET_KR)) { exampleTarget = SET.EX_TARGET_KR;}
-		if(market.startsWith(ID.MARKET_US)) { exampleTarget = SET.EX_TARGET_US;}
+		if(market.startsWith(ID.MARKET_KR)) { exampleTarget = targetKREx;}
+		if(market.startsWith(ID.MARKET_US)) { exampleTarget = targetUSEx;}
 		
 		switch(lang) {
 		case ID.LANG_KR :
@@ -650,8 +684,8 @@ public class MessageMaker {
 	/********************************/
 	public String explainSetPrice(String lang, String market) {
 		String examplePrice = null;
-		if(market.startsWith(ID.MARKET_KR)) { examplePrice = SET.EX_PRICE_KR;}
-		if(market.startsWith(ID.MARKET_US)) { examplePrice = SET.EX_PRICE_US;}
+		if(market.startsWith(ID.MARKET_KR)) { examplePrice = priceKREx;}
+		if(market.startsWith(ID.MARKET_US)) { examplePrice = priceUSEx;}
 		
 		String msg = "";
 		switch(lang) {
@@ -723,7 +757,7 @@ public class MessageMaker {
 			msg += "* 코인개수는 숫자로만 입력해주세요.\n";
 			msg += "* 0을 입력하시면 초기화됩니다.\n";
 			msg += "* ex) " + 0 + " : 초기화\n";
-			msg += "* ex) " + SET.EX_NUMBER + " : 코인개수 " + toCoinCntStr(Double.parseDouble(SET.EX_NUMBER), lang) + " 설정\n";
+			msg += "* ex) " + coinCntEx + " : 코인개수 " + toCoinCntStr(Double.parseDouble(coinCntEx), lang) + " 설정\n";
 			msg += "\n";
 			msg += "\n";
 			msg += "# 메인으로 돌아가시려면 문자를 입력해주세요.\n";
@@ -735,7 +769,7 @@ public class MessageMaker {
 			msg += "* Please enter the number of coins in numbers only.\n";
 			msg += "* If you enter 0, it is initialized.\n";
 			msg += "* example) " + 0 + " : Init the number of coins\n";
-			msg += "* example) " + SET.EX_NUMBER + " : the number of coins " + toCoinCntStr(Double.parseDouble(SET.EX_NUMBER), lang) + " set\n";
+			msg += "* example) " + coinCntEx + " : the number of coins " + toCoinCntStr(Double.parseDouble(coinCntEx), lang) + " set\n";
 			msg += "\n";
 			msg += "\n";
 			msg += "# To return to main, enter a character.\n";
@@ -821,17 +855,17 @@ public class MessageMaker {
 			case ID.LANG_KR:
 				msg += "변경하신 거래소의 화폐단위가 변경되어,\n";
 				msg += "설정하신 투자금액/목표가를 환율에 맞추어 변동하였습니다.\n";
-				if(currentPrice != null) { msg += "투자금액 : " + toInvestAmountStr(currentPrice, market) + " ->" + toInvestAmountStr(changePrice, changeMarket) + "\n"; }
-				if(currentTargetUp != null) { msg += "목표가격 : " + toMoneyStr(currentTargetUp, market) + " ->" + toMoneyStr(changeTargetUp, changeMarket) + "\n"; }
-				if(currentTargetDown != null) { msg += "목표가격 : " + toMoneyStr(currentTargetDown, market) + " ->" + toMoneyStr(changeTargetDown, changeMarket) + "\n"; }
+				if(currentPrice != null) { msg += "투자금액 : " + toInvestAmountStr(currentPrice, market) + " -> " + toInvestAmountStr(changePrice, changeMarket) + "\n"; }
+				if(currentTargetUp != null) { msg += "목표가격 : " + toMoneyStr(currentTargetUp, market) + " -> " + toMoneyStr(changeTargetUp, changeMarket) + "\n"; }
+				if(currentTargetDown != null) { msg += "목표가격 : " + toMoneyStr(currentTargetDown, market) + " -> " + toMoneyStr(changeTargetDown, changeMarket) + "\n"; }
 				break;
 			case ID.LANG_US:
 				msg += "* The currency unit of the exchange has been changed,\n";
 				msg += "the investment amount / target price you set has been changed to match the exchange rate.\n";
 				msg += "\n";
-				if(currentPrice != null) { msg += "Investment amount : " + toInvestAmountStr(currentPrice, market) + " ->" + toInvestAmountStr(changePrice, changeMarket) + "\n"; }
-				if(currentTargetUp != null) { msg += "Target Price: " + toMoneyStr(currentTargetUp, market) + " ->" + toMoneyStr(changeTargetUp, changeMarket) + "\n"; }
-				if(currentTargetDown != null) { msg += "Target Price : " + toMoneyStr(currentTargetDown, market) + " ->" + toMoneyStr(changeTargetDown, changeMarket) + "\n"; }
+				if(currentPrice != null) { msg += "Investment amount : " + toInvestAmountStr(currentPrice, market) + " -> " + toInvestAmountStr(changePrice, changeMarket) + "\n"; }
+				if(currentTargetUp != null) { msg += "Target Price: " + toMoneyStr(currentTargetUp, market) + " -> " + toMoneyStr(changeTargetUp, changeMarket) + "\n"; }
+				if(currentTargetDown != null) { msg += "Target Price : " + toMoneyStr(currentTargetDown, market) + " -> " + toMoneyStr(changeTargetDown, changeMarket) + "\n"; }
 				break;
 			}
 		}
@@ -847,8 +881,8 @@ public class MessageMaker {
 	public String explainTargetPriceSet(String lang, String market) {
 		String msg = "";
 		String exampleTarget = null;
-		if(market.startsWith(ID.MARKET_KR)) { exampleTarget = SET.EX_TARGET_KR;}
-		if(market.startsWith(ID.MARKET_US)) { exampleTarget = SET.EX_TARGET_US;}
+		if(market.startsWith(ID.MARKET_KR)) { exampleTarget = targetKREx;}
+		if(market.startsWith(ID.MARKET_US)) { exampleTarget = targetUSEx;}
 		
 		switch(lang) {
 		case ID.LANG_KR :
@@ -859,8 +893,8 @@ public class MessageMaker {
 			msg += "* 목표가격은 숫자 또는 백분율로 입력해주세요.\n";
 			msg += "* ex) " + 0 + "  : 목표가격 초기화\n";
 			msg += "* ex) " + exampleTarget + "  : 목표가격 " + toMoneyStr(Double.parseDouble(exampleTarget), market) + "\n";
-			msg += "* ex) " + SET.EX_RATE + "    : 현재가 +" + SET.EX_RATE + "\n";
-			msg += "* ex) -" + SET.EX_RATE + "  : 현재가 -" + SET.EX_RATE + "\n";
+			msg += "* ex) " + targetRateEx + "    : 현재가 +" + targetRateEx + "\n";
+			msg += "* ex) -" + targetRateEx + "  : 현재가 -" + targetRateEx + "\n";
 			msg += "\n";
 			msg += "\n";
 			msg += "# 메인으로 돌아가시려면 문자를 입력해주세요.\n";
@@ -874,8 +908,8 @@ public class MessageMaker {
 			msg += "* If you enter 0, it is initialized.\n";
 			msg += "* example)  " + 0 + "  : Initial target Price\n";
 			msg += "* example)  " + exampleTarget + "  : Target price " + toMoneyStr(Double.parseDouble(exampleTarget), market)+ "\n";
-			msg += "* example)  " + SET.EX_RATE + "   : Current Price +" + SET.EX_RATE + "\n";
-			msg += "* example)  -" + SET.EX_RATE + "  : Current Prcie -" + SET.EX_RATE + "\n";
+			msg += "* example)  " + targetRateEx + "   : Current Price +" + targetRateEx + "\n";
+			msg += "* example)  -" + targetRateEx + "  : Current Prcie -" + targetRateEx + "\n";
 			msg += "\n";
 			msg += "\n";
 			msg += "# To return to main, enter a character.\n";
@@ -1053,15 +1087,9 @@ public class MessageMaker {
 			msg += "현재 설정은 다음과 같습니다.\n";
 			msg += "-----------------\n";
 			
-			if(client.getMarket().equals(ID.MARKET_COINONE)){ 		msg += "거래소     = 코인원\n";} 
-			else if(client.getMarket().equals(ID.MARKET_BITHUMB)){	msg += "거래소     = 빗썸\n";}
-			else if(client.getMarket().equals(ID.MARKET_UPBIT)){ 	msg += "거래소     = 업비트\n";}
-			else if(client.getMarket().equals(ID.MARKET_COINNEST)){ msg += "거래소     = 코인네스트\n";}
-			else if(client.getMarket().equals(ID.MARKET_KORBIT)){ 	msg += "거래소     = 코빗\n";}
-			else if(client.getMarket().equals(ID.MARKET_BITFINNEX)){msg += "거래소     = 비트파이넥스\n";}
-			else if(client.getMarket().equals(ID.MARKET_BITTREX)){ 	msg += "거래소     = 비트렉스\n";}
-			else if(client.getMarket().equals(ID.MARKET_POLONIEX)){ msg += "거래소     = 폴로닉스\n";}
-			else if(client.getMarket().equals(ID.MARKET_BINANCE)){ 	msg += "거래소     = 바이낸스\n";}
+			msg += "거래소     = ";
+			msg += toMarketStr(client.getMarket(), lang) + "\n";
+					
 			
 			if(client.getDayLoop() != 0){ msg += "일일알림 = 매 " + client.getDayLoop() + " 일 주기 알림\n";} 
 			else{ msg += "일일알림 = 알람 없음\n";}
@@ -1085,15 +1113,8 @@ public class MessageMaker {
 			msg += "The current setting is as follows.\n";
 			msg += "-----------------\n";
 			
-			if(client.getMarket().equals(ID.MARKET_COINONE)){ 		msg += "Market = Coinone\n";} 
-			else if(client.getMarket().equals(ID.MARKET_BITHUMB)){ 	msg += "Market = Bithumb\n";}
-			else if(client.getMarket().equals(ID.MARKET_UPBIT)){ 	msg += "Market = Upbit\n";}
-			else if(client.getMarket().equals(ID.MARKET_COINNEST)){ msg += "Market = Coinnest\n";}
-			else if(client.getMarket().equals(ID.MARKET_KORBIT)){ 	msg += "Market = Korbit\n";}
-			else if(client.getMarket().equals(ID.MARKET_BITFINNEX)){msg += "Market = Bitfinex\n";}
-			else if(client.getMarket().equals(ID.MARKET_BITTREX)){ 	msg += "Market = Bittrex\n";}
-			else if(client.getMarket().equals(ID.MARKET_POLONIEX)){ msg += "Market = Poloniex\n";}
-			else if(client.getMarket().equals(ID.MARKET_BINANCE)){ 	msg += "Market = Binance\n";}
+			msg += "Market = ";
+			msg += toMarketStr(client.getMarket(), lang) + "\n";
 			
 			if(client.getDayLoop() != 0){ msg += "Daily Notification = every " + client.getDayLoop() + " days\n";} 
 			else{ msg += "Daily Notification = No notifications.\n";}
@@ -1195,9 +1216,11 @@ public class MessageMaker {
 	/** Help  **/
 	/***********/
 	public String explainHelp(String lang) {
+		List<String> enabledMarkets = SET.getEnabledMarkets();
+		
 		String msg = "";
 		if (lang.equals(ID.LANG_KR)) {
-			msg += SET.MY_COIN + " 알리미 ver" + SET.VERSION + "\n";
+			msg += SET.MY_COIN + " 알리미 ver" + version + "\n";
 			msg += "\n";
 			msg += "별도의 시간 알림 주기 설정을 안하셨다면,\n";
 			msg += "3시간 주기로 " + SET.MY_COIN + " 가격 알림이 전송됩니다.\n";
@@ -1208,13 +1231,7 @@ public class MessageMaker {
 			msg += "별도의 거래소 설정을 안하셨다면,\n";
 	
 			//
-			String market = "";
-			if (SET.ENABLED_KORBIT) { market = "코빗"; }
-			if (SET.ENABLED_COINNEST) { market = "코인네스트"; }
-			if (SET.ENABLED_UPBIT) { market = "업비트"; }
-			if (SET.ENABLED_BITHUMB) { market = "빗썸"; }
-			if (SET.ENABLED_COINONE) { market = "코인원"; }
-			msg += market + " 기준의 정보가 전송됩니다.\n";
+			msg += toMarketStr(enabledMarkets.get(0), lang) + " 기준의 정보가 전송됩니다.\n";
 			msg += "\n";
 			msg += "투자금액,코인개수를 설정하시면,\n";
 			msg += "원금, 현재금액, 손익금을 확인 하실 수 있습니다.\n";
@@ -1229,21 +1246,15 @@ public class MessageMaker {
 			msg += "\n";
 			
 			msg += "거래소 By ";
-			if (SET.ENABLED_COINONE) { msg += "코인원, "; } 
-			if (SET.ENABLED_BITHUMB) { msg += "빗썸, "; }
-			if (SET.ENABLED_UPBIT) { msg += "업비트, "; }
-			if (SET.ENABLED_COINNEST) { msg += "코인네스트,"; }
-			if (SET.ENABLED_KORBIT) { msg += "코빗,"; }
-			if (SET.ENABLED_BITTREX) { msg += "Bittrex, "; }
-			if (SET.ENABLED_BITFINEX) { msg += "Bitfinex, "; }
-			if (SET.ENABLED_POLONIEX) { msg += "Poloniex, "; }
-			if (SET.ENABLED_BINANCE) { msg += "Binance, "; }
+			for(int i = 0; i < enabledMarkets.size(); i++) {
+				msg += toMarketStr(enabledMarkets.get(i), lang) + ", ";
+			}
 			msg += "\n";
 			msg += "환율정보 By the European Central Bank\n";
 			msg += "\n";
 			msg += "Developed By CGLEE ( cglee079@gmail.com )\n";
 		} else if(lang.equals(ID.LANG_US)) {
-			msg += SET.MY_COIN + " Coin Noticer Ver" + SET.VERSION + "\n";
+			msg += SET.MY_COIN + " Coin Noticer Ver" + version + "\n";
 			msg += "\n";
 			msg += "If you are using this service for the first time,\n";
 			msg += SET.MY_COIN + " price are sent every 3 hours.\n";
@@ -1255,12 +1266,7 @@ public class MessageMaker {
 			msg += "Information based on ";
 			//
 			String market = "";
-			if (SET.ENABLED_KORBIT) { market = "Korbit"; }
-			if (SET.ENABLED_COINNEST) { market = "Coinnest"; }
-			if (SET.ENABLED_UPBIT) { market = "Upbit"; }
-			if (SET.ENABLED_BITHUMB) { market = "Bithumb"; }
-			if (SET.ENABLED_COINONE) { market = "Coinone"; }
-			msg += market + "  market will be sent.\n";
+			msg += toMarketStr(enabledMarkets.get(0), lang) + "  market will be sent.\n";
 			msg += "\n";
 			msg += "If you set the amount of investment and the number of coins,\n";
 			msg += "you can check the current amount of profit and loss.\n";
@@ -1275,15 +1281,9 @@ public class MessageMaker {
 			msg += "\n";
 			
 			msg += "* Markets : ";
-			if (SET.ENABLED_COINONE) { msg += "Coinone, "; } 
-			if (SET.ENABLED_BITHUMB) { msg += "Bithumb, "; }
-			if (SET.ENABLED_UPBIT) { msg += "Upbit, "; }
-			if (SET.ENABLED_COINNEST) { msg += "Coinnest,"; }
-			if (SET.ENABLED_KORBIT) { msg += "Korbit,"; }
-			if (SET.ENABLED_BITTREX) { msg += "Bittrex, "; }
-			if (SET.ENABLED_BITFINEX) { msg += "Bitfinex, "; }
-			if (SET.ENABLED_POLONIEX) { msg += "Poloniex, "; }
-			if (SET.ENABLED_BINANCE) { msg += "Binance, "; }
+			for(int i = 0; i < enabledMarkets.size(); i++) {
+				msg += toMarketStr(enabledMarkets.get(i), lang) + ", ";
+			}
 			msg += "\n";
 			msg += "* Exchange Rate Information By the European Central Bank\n";
 			msg += "\n";
@@ -1619,37 +1619,37 @@ public class MessageMaker {
 				
 				msg += "---------------------\n";
 				msg += "Volume at today : " + toVolumeStr(currentVolume) + " \n";
-				msg += "Volume before " + dayLoop + "day : " + toVolumeStr(beforeVolume) + " \n";
+				msg += "Volume before " + dayLoop + " day : " + toVolumeStr(beforeVolume) + " \n";
 				msg += "Volume difference : " + toSignVolumeStr(currentVolume - beforeVolume) + " (" + toSignPercent(currentVolume, beforeVolume) + ")\n";
 				msg += "\n";
 				msg += "High at Today : " + toMoneyStr(currentHigh, market) + " ["+ toBTCStr(currentHighBTC) + "]\n";
-				msg += "High before " + dayLoop + "day : " + toMoneyStr(beforeHigh, market) + " ["+ toBTCStr(beforeHighBTC) + "]\n";
+				msg += "High before " + dayLoop + " day : " + toMoneyStr(beforeHigh, market) + " ["+ toBTCStr(beforeHighBTC) + "]\n";
 				msg += "High difference : " + toSignMoneyStr(currentHigh - beforeHigh, market) + " (" + toSignPercent(currentHigh, beforeHigh) + ")\n";
 				msg += "\n";
 				msg += "Low at Today : " + toMoneyStr(currentLow, market) + " ["+ toBTCStr(currentLowBTC) + "]\n";
-				msg += "Low before " + dayLoop + "day : "+ toMoneyStr(beforeLow, market) + " ["+ toBTCStr(beforeLowBTC) + "]\n";
+				msg += "Low before " + dayLoop + " day : "+ toMoneyStr(beforeLow, market) + " ["+ toBTCStr(beforeLowBTC) + "]\n";
 				msg += "Low difference : " + toSignMoneyStr(currentLow - beforeLow, market) + " (" + toSignPercent(currentLow, beforeLow) + ")\n";
 				msg += "\n";
 				msg += "Last at Today : " + toMoneyStr(currentLast, market) + " ["+ toBTCStr(currentLastBTC) + "]\n";
-				msg += "Last before " + dayLoop + "day : "+ toMoneyStr(beforeLast, market) + " ["+ toBTCStr(beforeLastBTC) + "]\n";
+				msg += "Last before " + dayLoop + " day : "+ toMoneyStr(beforeLast, market) + " ["+ toBTCStr(beforeLastBTC) + "]\n";
 				msg += "Last difference : " + toSignMoneyStr(currentLast - beforeLast, market) + " (" + toSignPercent(currentLast, beforeLast) + ")\n";
 				msg += "\n";
 			} else {
 				msg += "---------------------\n";
 				msg += "Volume at today : " + toVolumeStr(currentVolume) + " \n";
-				msg += "Volume before " + dayLoop + "day : " + toVolumeStr(beforeVolume) + " \n";
+				msg += "Volume before " + dayLoop + " day : " + toVolumeStr(beforeVolume) + " \n";
 				msg += "Volume difference : " + toSignVolumeStr(currentVolume - beforeVolume) + " (" + toSignPercent(currentVolume, beforeVolume) + ")\n";
 				msg += "\n";
 				msg += "High at Today : " + toMoneyStr(currentHigh, market) + "\n";
-				msg += "High before " + dayLoop + "day : " + toMoneyStr(beforeHigh, market) + "\n";
+				msg += "High before " + dayLoop + " day : " + toMoneyStr(beforeHigh, market) + "\n";
 				msg += "High difference : " + toSignMoneyStr(currentHigh - beforeHigh, market) + " (" + toSignPercent(currentHigh, beforeHigh) + ")\n";
 				msg += "\n";
 				msg += "Low at Today : " + toMoneyStr(currentLow, market) + "\n";
-				msg += "Low before " + dayLoop + "day : " + toMoneyStr(beforeLow, market) + "\n";
+				msg += "Low before " + dayLoop + " day : " + toMoneyStr(beforeLow, market) + "\n";
 				msg += "Low difference : " + toSignMoneyStr(currentLow - beforeLow, market) + " (" + toSignPercent(currentLow, beforeLow) + ")\n";
 				msg += "\n";
 				msg += "Last at Today : "  + toMoneyStr(currentLast, market) + "\n";
-				msg += "Last before " + dayLoop + "day : " + toMoneyStr(beforeLast, market) + "\n";
+				msg += "Last before " + dayLoop + " day : " + toMoneyStr(beforeLast, market) + "\n";
 				msg += "Last difference : " + toSignMoneyStr(currentLast - beforeLast, market) + " (" + toSignPercent(currentLast, beforeLast) + ")\n";
 				msg += "\n";
 			}

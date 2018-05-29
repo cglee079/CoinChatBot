@@ -9,34 +9,32 @@ public class ID {
 	public final static String MARKET_KORBIT	= "105";
 	
 	public final static String MARKET_US		= "20";
-	public final static String MARKET_BITFINNEX	= "201";
+	public final static String MARKET_BITFINEX	= "201";
 	public final static String MARKET_BITTREX	= "202";
 	public final static String MARKET_POLONIEX	= "203";
 	public final static String MARKET_BINANCE	= "204";
+	public final static String MARKET_HUOBI		= "205";
+	public final static String MARKET_HADAX		= "206";
 	
-	public final static String COIN_BTC = "BTC";
-	public final static String COIN_XRP = "XRP";
-	public final static String COIN_ETH = "ETH";
-	public final static String COIN_EOS = "EOS";
-	public final static String COIN_QTM = "QTM";
-	public final static String COIN_LTC = "LTC";
-	public final static String COIN_BCH = "BCH";
-	public final static String COIN_ETC = "ETC";
 	public final static String COIN_ADA = "ADA";
-	public final static String COIN_XLM = "XLM";
-	public final static String COIN_NEO = "NEO";
-	public final static String COIN_XVG = "XVG";
-	public final static String COIN_TRX = "TRX";
-	public final static String COIN_STM = "STM";
-	public final static String COIN_SIA = "SIA";
-	public static final String COIN_SNT = "SNT";
-	public static final String COIN_NXT = "NXT";
-	public static final String COIN_EMC = "EMC";
-	public static final String COIN_ARD = "ARD";
-	public static final String COIN_GRS = "GRS";
-	public static final String COIN_OMG = "OMG";
+	public final static String COIN_BCH = "BCH";
+	public final static String COIN_BTC = "BTC";
+	public static final String COIN_CNN = "CNN";
+	public final static String COIN_EOS = "EOS";
+	public final static String COIN_ETC = "ETC";
+	public final static String COIN_ETH = "ETH";
 	public static final String COIN_GTO = "GTO";
 	public static final String COIN_KNC = "KNC";
+	public final static String COIN_LTC = "LTC";
+	public final static String COIN_NEO = "NEO";
+	public final static String COIN_QTM = "QTM";
+	public final static String COIN_SIA = "SIA";
+	public static final String COIN_SNT = "SNT";
+	public final static String COIN_TRX = "TRX";
+	public final static String COIN_XLM = "XLM";
+	public final static String COIN_XRP = "XRP";
+	public final static String COIN_XVG = "XVG";
+	
 	
     public static final String STATE_MAIN 			= "ST000";
     public static final String STATE_SET_PRICE  	= "ST012";

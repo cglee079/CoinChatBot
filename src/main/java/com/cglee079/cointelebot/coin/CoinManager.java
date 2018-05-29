@@ -45,6 +45,12 @@ public class CoinManager {
 	private BinancePooler binancePooler;
 	
 	@Autowired
+	private HuobiPooler huobiPooler;
+	
+	@Autowired
+	private HadaxPooler hadaxPooler;
+	
+	@Autowired
 	private ExchangePooler exchangePooler;
 
 	@PostConstruct
@@ -54,10 +60,12 @@ public class CoinManager {
 		upbitPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_UPBIT));
 		coinnestPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_COINNEST));
 		korbitPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_KORBIT));
-		bitfinexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BITFINNEX));
+		bitfinexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BITFINEX));
 		bittrexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BITTREX));
 		poloniexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_POLONIEX));
 		binancePooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BINANCE));
+		huobiPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_HUOBI));
+		hadaxPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_HADAX));
 	}
 	
 	private double exchangeRate = 1081;
@@ -84,25 +92,21 @@ public class CoinManager {
 	public JSONObject getCoin(String coin, String market) throws ServerErrorException{
 		JSONObject coinObj = null;
 		
-		if(market.equals(ID.MARKET_COINONE) && SET.ENABLED_COINONE) { 
-			coinObj = coinonePooler.getCoin(coin);
-		} else if(market.equals(ID.MARKET_BITHUMB) && SET.ENABLED_BITHUMB){
-			coinObj = bithumbPooler.getCoin(coin);
-		} else if(market.equals(ID.MARKET_UPBIT) && SET.ENABLED_UPBIT){
-			coinObj = upbitPooler.getCoin(coin);
-		} else if(market.equals(ID.MARKET_COINNEST) && SET.ENABLED_COINNEST){
-			coinObj = coinnestPooler.getCoin(coin);
-		} else if(market.equals(ID.MARKET_KORBIT) && SET.ENABLED_KORBIT){
-			coinObj = korbitPooler.getCoin(coin);
-		} else if(market.equals(ID.MARKET_BITFINNEX) && SET.ENABLED_BITFINEX){
-			coinObj = bitfinexPooler.getCoin(coin);
-		} else if(market.equals(ID.MARKET_BITTREX) && SET.ENABLED_BITTREX){
-			coinObj = bittrexPooler.getCoin(coin);
-		} else if(market.equals(ID.MARKET_POLONIEX) && SET.ENABLED_POLONIEX){
-			coinObj = poloniexPooler.getCoin(coin);
-		} else if(market.equals(ID.MARKET_BINANCE) && SET.ENABLED_BINANCE){
-			coinObj = binancePooler.getCoin(coin);
+		if(market.equals(ID.MARKET_COINONE))		{ coinObj = coinonePooler.getCoin(coin); } 
+		else if(market.equals(ID.MARKET_BITHUMB))	{ coinObj = bithumbPooler.getCoin(coin); } 
+		else if(market.equals(ID.MARKET_UPBIT))		{ coinObj = upbitPooler.getCoin(coin); } 
+		else if(market.equals(ID.MARKET_COINNEST))	{ coinObj = coinnestPooler.getCoin(coin); } 
+		else if(market.equals(ID.MARKET_KORBIT))	{ coinObj = korbitPooler.getCoin(coin); } 
+		else if(market.equals(ID.MARKET_BITFINEX) )	{ coinObj = bitfinexPooler.getCoin(coin); } 
+		else if(market.equals(ID.MARKET_BITTREX))	{ coinObj = bittrexPooler.getCoin(coin); } 
+		else if(market.equals(ID.MARKET_POLONIEX))	{ coinObj = poloniexPooler.getCoin(coin); } 
+		else if(market.equals(ID.MARKET_BINANCE))	{ coinObj = binancePooler.getCoin(coin); } 
+		else if(market.equals(ID.MARKET_HUOBI))		{ coinObj = huobiPooler.getCoin(coin); } 
+		else if(market.equals(ID.MARKET_HADAX)){
+			if(coin.equals(ID.COIN_BTC)) { coinObj = huobiPooler.getCoin(coin); } 
+			else { coinObj = hadaxPooler.getCoin(coin); }
 		}
+		
 		return coinObj;
 	}
 	

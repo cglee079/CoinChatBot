@@ -249,52 +249,16 @@ public class TelegramBot extends AbilityBot  {
 		String market = null;
 		String msg = "";
 		msg = msgMaker.msgMarketNoSet(lang);
-		
-		if(SET.ENABLED_COINONE && cmd.equals(CMDER.getSetMarketCoinone(lang))) {
-			market = ID.MARKET_COINONE;
-			msg = msgMaker.msgMarketSet( ID.MARKET_COINONE, lang);
+
+		String marketID;
+		List<String> enabledMarkets = SET.getEnabledMarkets();
+		for(int i = 0; i < enabledMarkets.size(); i++) {
+			marketID = enabledMarkets.get(i);
+			if(CMDER.getSetMarket(marketID, lang).equals(cmd)){
+				market = marketID;
+				msg = msgMaker.msgMarketSet(marketID, lang);
+			}
 		}
-		
-		if(SET.ENABLED_BITHUMB && cmd.equals(CMDER.getSetMarketBithumb(lang))) {
-			market = ID.MARKET_BITHUMB;
-			msg = msgMaker.msgMarketSet( ID.MARKET_BITHUMB, lang);
-		}
-		
-		if(SET.ENABLED_UPBIT && cmd.equals(CMDER.getSetMarketUpbit(lang))) {
-			market = ID.MARKET_UPBIT;
-			msg = msgMaker.msgMarketSet(ID.MARKET_UPBIT, lang);
-		}
-		
-		if(SET.ENABLED_COINNEST && cmd.equals(CMDER.getSetMarketCoinnest(lang))) {
-			market = ID.MARKET_COINNEST;
-			msg = msgMaker.msgMarketSet(ID.MARKET_COINNEST, lang);
-		}
-		
-		if(SET.ENABLED_KORBIT && cmd.equals(CMDER.getSetMarketKorbit(lang))) {
-			market = ID.MARKET_KORBIT;
-			msg = msgMaker.msgMarketSet(ID.MARKET_KORBIT, lang);
-		}
-		
-		if(SET.ENABLED_BITFINEX && cmd.equals(CMDER.getSetMarketBitfinex(lang))) {
-			market = ID.MARKET_BITFINNEX;
-			msg = msgMaker.msgMarketSet(ID.MARKET_BITFINNEX, lang);
-		}
-		
-		if(SET.ENABLED_BITTREX && cmd.equals(CMDER.getSetMarketBittrex(lang))) {
-			market = ID.MARKET_BITTREX;
-			msg = msgMaker.msgMarketSet(ID.MARKET_BITTREX, lang);
-		}
-		
-		if(SET.ENABLED_POLONIEX && cmd.equals(CMDER.getSetMarketPoloniex(lang))) {
-			market = ID.MARKET_POLONIEX;
-			msg = msgMaker.msgMarketSet(ID.MARKET_POLONIEX, lang);
-		}
-		
-		if(SET.ENABLED_BINANCE && cmd.equals(CMDER.getSetMarketBinance(lang))) {
-			market = ID.MARKET_BINANCE;
-			msg = msgMaker.msgMarketSet(ID.MARKET_BINANCE, lang);
-		}
-		
 		
 		if(market != null) {
 			ClientVo client = clientService.get(userId);
@@ -692,15 +656,12 @@ public class TelegramBot extends AbilityBot  {
 	public String messageEachMarketPrice(Integer userId) {
 		LinkedHashMap<String, Double> lasts = new LinkedHashMap<>();
 		
-		if(SET.ENABLED_COINONE) { lasts.put(ID.MARKET_COINONE, coinManager.getCoinLast(ID.MARKET_COINONE));}
-		if(SET.ENABLED_BITHUMB) { lasts.put(ID.MARKET_BITHUMB, coinManager.getCoinLast(ID.MARKET_BITHUMB));}
-		if(SET.ENABLED_UPBIT)	{ lasts.put(ID.MARKET_UPBIT, coinManager.getCoinLast(ID.MARKET_UPBIT));}
-		if(SET.ENABLED_COINNEST){ lasts.put(ID.MARKET_COINNEST, coinManager.getCoinLast(ID.MARKET_COINNEST));}
-		if(SET.ENABLED_KORBIT) 	{ lasts.put(ID.MARKET_KORBIT, coinManager.getCoinLast(ID.MARKET_KORBIT));}
-		if(SET.ENABLED_BITFINEX){ lasts.put(ID.MARKET_BITFINNEX, coinManager.getCoinLast(ID.MARKET_BITFINNEX));}
-		if(SET.ENABLED_BITTREX) { lasts.put(ID.MARKET_BITTREX, coinManager.getCoinLast(ID.MARKET_BITTREX));}
-		if(SET.ENABLED_POLONIEX){ lasts.put(ID.MARKET_POLONIEX, coinManager.getCoinLast(ID.MARKET_POLONIEX));}
-		if(SET.ENABLED_BINANCE) { lasts.put(ID.MARKET_BINANCE, coinManager.getCoinLast(ID.MARKET_BINANCE));}
+		String marketID = null;
+		List<String> enabledMakets = SET.getEnabledMarkets();
+		for(int i = 0; i < enabledMakets.size(); i++) {
+			marketID = enabledMakets.get(i);
+			lasts.put(marketID, coinManager.getCoinLast(marketID));
+		}
 		
 		ClientVo client = clientService.get(userId);
 		double exchangeRate = coinManager.getExchangeRate();
@@ -720,22 +681,20 @@ public class TelegramBot extends AbilityBot  {
 		
 		msg += msgMaker.msgBTCCurrentTime(date, lang);
 		
+		
 		if(market.startsWith(ID.MARKET_KR) && (market.equals(ID.MARKET_COINNEST) || market.equals(ID.MARKET_KORBIT))) {
 			if(market.equals(ID.MARKET_COINNEST)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_COINNEST, lang); }
 			if(market.equals(ID.MARKET_KORBIT)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_KORBIT, lang); }
 			
-			if(SET.ENABLED_COINONE) {
-				msg += msgMaker.msgBTCReplaceAnotherMarket(ID.MARKET_COINONE, lang);
-				market = ID.MARKET_COINONE;
-			} else if(SET.ENABLED_BITHUMB) {
-				msg += msgMaker.msgBTCReplaceAnotherMarket(ID.MARKET_BITHUMB, lang);
-				market = ID.MARKET_BITHUMB;
-			} else if(SET.ENABLED_UPBIT) {
-				msg += msgMaker.msgBTCReplaceAnotherMarket(ID.MARKET_UPBIT, lang);
-				market = ID.MARKET_UPBIT;
-			} else {
-				msg += msgMaker.msgToMain(lang);
-				return msg;
+			String marketID = null;
+			List<String> enabledMakets = SET.getEnabledMarkets();
+			for(int i = 0; i < enabledMakets.size(); i++) {
+				marketID = enabledMakets.get(i);
+				if(marketID.startsWith(ID.MARKET_KR) && marketID != ID.MARKET_COINNEST && marketID != ID.MARKET_KORBIT) {
+					msg += msgMaker.msgBTCReplaceAnotherMarket(marketID, lang);
+					market = marketID;
+					break;
+				}
 			}
 			msg += "\n";
 		}
@@ -743,16 +702,17 @@ public class TelegramBot extends AbilityBot  {
 		if(market.startsWith(ID.MARKET_US) && (market.equals(ID.MARKET_BITTREX))) {
 			if(market.equals(ID.MARKET_BITTREX)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_BITTREX, lang); }
 			
-			if(SET.ENABLED_BITFINEX) {
-				msg += msgMaker.msgBTCReplaceAnotherMarket(ID.MARKET_BITFINNEX, lang);
-				market = ID.MARKET_POLONIEX;
-			} else if(SET.ENABLED_POLONIEX) {
-				msg += msgMaker.msgBTCReplaceAnotherMarket(ID.MARKET_POLONIEX, lang);
-				market = ID.MARKET_POLONIEX;
-			} else if(SET.ENABLED_BINANCE) {
-				msg += msgMaker.msgBTCReplaceAnotherMarket(ID.MARKET_BINANCE, lang);
-				market = ID.MARKET_BINANCE;
+			String marketID = null;
+			List<String> enabledMakets = SET.getEnabledMarkets();
+			for(int i = 0; i < enabledMakets.size(); i++) {
+				marketID = enabledMakets.get(i);
+				if(marketID.startsWith(ID.MARKET_US) && marketID != ID.MARKET_BITTREX) {
+					msg += msgMaker.msgBTCReplaceAnotherMarket(marketID, lang);
+					market = marketID;
+					break;
+				}
 			}
+			
 			msg += "\n";
 		}
 		
