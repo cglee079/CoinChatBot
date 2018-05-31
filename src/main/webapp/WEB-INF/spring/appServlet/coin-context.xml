@@ -19,8 +19,6 @@
 	<bean id="BinancePooler" 	class="com.cglee079.cointelebot.coin.BinancePooler"/>
 	<bean id="HuobiPooler" 		class="com.cglee079.cointelebot.coin.HuobiPooler"/>
 	<bean id="HadaxPooler" 		class="com.cglee079.cointelebot.coin.HadaxPooler"/>
-	<bean id="CoinbasePooler" 	class="com.cglee079.cointelebot.coin.CoinbasePooler"/>
-	
 	
 
 </beans>

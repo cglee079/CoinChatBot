@@ -23,7 +23,7 @@
 		CLNT_OPEN_DATE as 'openDate',
 		CLNT_REOPEN_DATE as 'reopenDate',
 		CLNT_CLOSE_DATE as 'closeDate'
-		FROM TB_TESTBOT_CLIENT
+		FROM TB_ETCBOT_CLIENT
 		WHERE CLNT_USERID = #{userId}
 	</select>
 	
@@ -47,7 +47,7 @@
 		CLNT_OPEN_DATE as 'openDate',
 		CLNT_REOPEN_DATE as 'reopenDate',
 		CLNT_CLOSE_DATE as 'closeDate'
-		FROM TB_TESTBOT_CLIENT
+		FROM TB_ETCBOT_CLIENT
 		WHERE 1 = 1
 		AND CLNT_ENABLED = 'Y'
 		<if test="market != null">
@@ -81,7 +81,7 @@
 		CLNT_OPEN_DATE as 'openDate',
 		CLNT_REOPEN_DATE as 'reopenDate',
 		CLNT_CLOSE_DATE as 'closeDate'
-		FROM TB_TESTBOT_CLIENT
+		FROM TB_ETCBOT_CLIENT
 		WHERE 1 = 1
 		AND CLNT_ENABLED = 'Y'
 		AND CLNT_MARKET = #{market}
@@ -109,7 +109,7 @@
 		CLNT_OPEN_DATE as 'openDate',
 		CLNT_REOPEN_DATE as 'reopenDate',
 		CLNT_CLOSE_DATE as 'closeDate'
-		FROM TB_TESTBOT_CLIENT
+		FROM TB_ETCBOT_CLIENT
 		WHERE 1 = 1
 		AND CLNT_ENABLED = 'Y'
 		AND CLNT_MARKET = #{market}
@@ -118,17 +118,17 @@
 	
 	
 	<insert id="insert">
-		INSERT INTO TB_TESTBOT_CLIENT(CLNT_USERID, CLNT_USERNAME, CLNT_LOCAL_TIME, CLNT_LANG, CLNT_STATE, CLNT_MARKET, CLNT_TIMELOOP, CLNT_DAYLOOP, CLNT_TGUP_PRICE, CLNT_TGDOWN_PRICE, CLNT_PRICE, CLNT_COIN_COUNT, CLNT_ENABLED, CLNT_ERRCNT, CLNT_OPEN_DATE, CLNT_REOPEN_DATE, CLNT_CLOSE_DATE)
+		INSERT INTO TB_ETCBOT_CLIENT(CLNT_USERID, CLNT_USERNAME, CLNT_LOCAL_TIME, CLNT_LANG, CLNT_STATE, CLNT_MARKET, CLNT_TIMELOOP, CLNT_DAYLOOP, CLNT_TGUP_PRICE, CLNT_TGDOWN_PRICE, CLNT_PRICE, CLNT_COIN_COUNT, CLNT_ENABLED, CLNT_ERRCNT, CLNT_OPEN_DATE, CLNT_REOPEN_DATE, CLNT_CLOSE_DATE)
 		VALUES (#{userId}, #{username}, #{localTime}, #{lang}, #{state}, #{market}, #{timeLoop}, #{dayLoop}, #{targetUpPrice}, #{targetDownPrice}, #{price}, #{coinCount}, #{enabled}, #{errCnt}, #{openDate}, #{reopenDate}, #{closeDate})
 	</insert>
 	
 	<delete id="delete" parameterType="map">
-		DELETE FROM TB_TESTBOT_CLIENT
+		DELETE FROM TB_ETCBOT_CLIENT
 		WHERE CLNT_USERID = #{userId}
 	</delete>
 	
 	<update id="update">
-		UPDATE TB_TESTBOT_CLIENT
+		UPDATE TB_ETCBOT_CLIENT
 		SET 
 		CLNT_USERNAME = #{username},
 		CLNT_LOCAL_TIME = #{localTime},

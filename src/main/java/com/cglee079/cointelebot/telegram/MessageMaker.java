@@ -1289,13 +1289,16 @@ public class MessageMaker {
 			msg += "\n";
 			msg += "Developed By CGLEE ( cglee079@gmail.com )\n";
 		}
-		
-		msg += "\n";
-		msg += "------------------------------\n";
-		msg += "★  If not korean, Must read!!\n";
+		return msg;
+	}
+	
+	public String explainSetForeginer(String lang) {
+		String msg = "";
+		msg += "★  If you are not Korean, Must read!!\n";
 		msg += "* Use the " + CMDER.getMainPref(ID.LANG_US) + " Menu.\n";
 		msg += "* First. Please set language to English.\n";
 		msg += "* Second. Set the time adjustment for accurate notifications. Because of time difference by country.\n";
+		msg += "* Last. if you set market in USA using '" +CMDER.getMainSetMarket(ID.LANG_US) + "' menu, the currency unit is changed to USD.\n";
 		return msg;
 	}
 	
@@ -1464,7 +1467,7 @@ public class MessageMaker {
 	/*********************/
 	public String explainTimeAdjust(String lang) {
 		String msg = "";
-		msg += "한국분이시라면 별도의 시차조절을 필요로하지 않습니다.^^ (for korean)\n";
+		msg += "한국분이시라면 별도의 시차조절을 필요로하지 않습니다.^^  <- for korean\n";
 		msg += "\n";
 		msg += "Please enter the current time for accurate time notification.\n";
 		msg += "because the time differs for each country.\n";

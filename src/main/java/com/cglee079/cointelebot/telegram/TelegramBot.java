@@ -83,6 +83,7 @@ public class TelegramBot extends AbilityBot  {
 				msg = msgMaker.msgStartService(lang);
 				msg += msgMaker.explainHelp(lang);
 				sendMessage(userId, null, msg, km.getMainKeyboard(lang));
+				sendMessage(userId, null, msgMaker.explainSetForeginer(lang), km.getMainKeyboard(lang));
 			} else {
 				msg = msgMaker.msgAlreadyStartService(lang);
 				sendMessage(userId, null, msg, km.getMainKeyboard(lang));
@@ -130,6 +131,7 @@ public class TelegramBot extends AbilityBot  {
 			sendMessage(userId, messageId, msgMaker.explainCoinList(lang), km.getMainKeyboard(lang));
 		} else if(cmd.equals(CMDER.getMainHelp(lang))) { // 도움말
 			sendMessage(userId, messageId, msgMaker.explainHelp(lang), km.getMainKeyboard(lang));
+			sendMessage(userId, null, msgMaker.explainSetForeginer(lang), km.getMainKeyboard(lang));
 		} else if(cmd.equals(CMDER.getMainSupport(lang))){ // 후원하기
 			sendMessage(userId, messageId, msgMaker.explainSupport(lang), null);
 			sendMessage(userId, null, msgMaker.explainSupportWallet(lang), null);

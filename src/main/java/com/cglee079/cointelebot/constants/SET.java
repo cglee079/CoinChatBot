@@ -14,7 +14,7 @@ import com.cglee079.cointelebot.service.CoinMarketConfigService;
 
 @Component
 public class SET {
-	public final static String MY_COIN = ID.COIN_BTC;
+	public final static String MY_COIN = ID.COIN_ETC;
 	public final static Integer CLNT_MAX_ERRCNT = 10;
 	
 	private static HashMap<String, Boolean> inBtcs = new HashMap<>();
