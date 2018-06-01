@@ -38,6 +38,7 @@ public class CMD_KR {
 	public static final String SET_MARKET_BINANCE 	= "바이낸스";
 	public static final String SET_MARKET_HUOBI 	= "후오비";
 	public static final String SET_MARKET_HADAX 	= "하닥스";
+	public static final String SET_MARKET_OKEX 		= "오케이엑스";
 	public static final String SET_MARKET_OUT 	=	 "나가기";
 
 	public static final String SET_DAYLOOP_OFF 	= "끄기";

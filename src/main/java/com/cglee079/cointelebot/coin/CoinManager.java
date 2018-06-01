@@ -1,5 +1,7 @@
 package com.cglee079.cointelebot.coin;
 
+import java.util.HashMap;
+
 import javax.annotation.PostConstruct;
 
 import org.json.JSONObject;
@@ -51,6 +53,9 @@ public class CoinManager {
 	private HadaxPooler hadaxPooler;
 	
 	@Autowired
+	private OkexPooler okexPooler;
+	
+	@Autowired
 	private ExchangePooler exchangePooler;
 
 	@PostConstruct
@@ -66,6 +71,7 @@ public class CoinManager {
 		binancePooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BINANCE));
 		huobiPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_HUOBI));
 		hadaxPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_HADAX));
+		okexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_OKEX));
 	}
 	
 	private double exchangeRate = 1081;
@@ -106,18 +112,19 @@ public class CoinManager {
 			if(coin.equals(ID.COIN_BTC)) { coinObj = huobiPooler.getCoin(coin); } 
 			else { coinObj = hadaxPooler.getCoin(coin); }
 		}
+		else if(market.equals(ID.MARKET_OKEX))		{ coinObj = okexPooler.getCoin(coin); } 
 		
 		return coinObj;
 	}
 	
-	public Double getCoinLast(String market) {
+	public Double getCoinLast(String myCoin, String market, boolean isInBtc) {
 		try {
 			double last = -1;
 			JSONObject coinObj = null;
-			coinObj = this.getCoin(SET.MY_COIN, market);
+			coinObj = this.getCoin(myCoin, market);
 			
 			last = coinObj.getDouble("last");
-			if(SET.isInBtcMarket(market)) {
+			if(isInBtc) {
 				last = this.getMoney(coinObj, market).getDouble("last");
 			}
 			return last;

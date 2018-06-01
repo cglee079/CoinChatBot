@@ -180,12 +180,11 @@ public class CMDER {
 		case ID.MARKET_BINANCE 	: str = getSetMarketBinance(lang);break;
 		case ID.MARKET_HUOBI 	: str = getSetMarketHuobi(lang);break;
 		case ID.MARKET_HADAX 	: str = getSetMarketHadax(lang);break;
+		case ID.MARKET_OKEX 	: str = getSetMarketOkex(lang);break;
 		}
 		return str;
 	}
-
 	
-
 	public static String getSetMarketCoinone(String lang) {
 		String str = "";
 		switch(lang){
@@ -281,6 +280,15 @@ public class CMDER {
 		switch(lang){
 		case ID.LANG_KR : str = CMD_KR.SET_MARKET_HADAX; break;
 		case ID.LANG_US : str = CMD_US.SET_MARKET_HADAX; break;
+		}
+		return str;
+	}
+	
+	public static String getSetMarketOkex(String lang) {
+		String str = "";
+		switch(lang){
+		case ID.LANG_KR : str = CMD_KR.SET_MARKET_OKEX; break;
+		case ID.LANG_US : str = CMD_US.SET_MARKET_OKEX; break;
 		}
 		return str;
 	}

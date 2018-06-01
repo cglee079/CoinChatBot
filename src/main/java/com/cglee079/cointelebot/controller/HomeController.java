@@ -19,13 +19,6 @@ import com.cglee079.cointelebot.telegram.TelegramBot;
 
 @Controller
 public class HomeController {
-
-	@Autowired
-	private ClientService clientService;
-	
-	@Autowired
-	private TelegramBot telegramBot;
-	
 	@Autowired
 	private CoinManager coinManager;
 	
@@ -52,26 +45,6 @@ public class HomeController {
 	@RequestMapping(value = "/init")
 	public String init() {
 		return "coin_init";
-	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/notice.do")
-	public String DoNotice(String text) throws IOException {
-		List<ClientVo> clients = clientService.list();
-		int size = clients.size();
-		ClientVo client = null;
-		for(int i =0; i < size; i++){
-			client = clients.get(i);
-			telegramBot.sendMessage(client.getUserId(), null, text, null);
-		}
-		return new JSONObject().put("result", true).toString();
-	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/send.do")
-	public String DoSend(String id, String text) throws IOException {
-		telegramBot.sendMessage(id, null, text, null);
-		return new JSONObject().put("result", true).toString();
 	}
 	
 	@ResponseBody

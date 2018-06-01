@@ -2,6 +2,7 @@ package com.cglee079.cointelebot.model;
 
 public class ClientMsgVo {
 	private int seq;
+	private String coinId;
 	private String userId;
 	private String username;
 	private String msg;
@@ -13,6 +14,14 @@ public class ClientMsgVo {
 
 	public void setSeq(int seq) {
 		this.seq = seq;
+	}
+	
+	public String getCoinId() {
+		return coinId;
+	}
+
+	public void setCoinId(String coinId) {
+		this.coinId = coinId;
 	}
 
 	public String getUserId() {
@@ -47,8 +56,8 @@ public class ClientMsgVo {
 		this.date = date;
 	}
 
-	public String log() {
-		return "From Client\t:\t[id: " + userId + " : " + username + " ]  " + msg;
+	public String log(String myCoin) {
+		return "From Client\t:\t" + myCoin + "\t[id: " + userId + " : " + username + " ]  " + msg;
 	}
 
 }

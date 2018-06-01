@@ -8,13 +8,14 @@
 	<enableImports><![CDATA[true]]></enableImports>
 	<configs>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/scheduler-context.xml</config>
-		<config>src/main/webapp/WEB-INF/spring/appServlet/telegram-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin_test/telegram-context.xml</config>
 	</configs>
 	<autoconfigs>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/service-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/dao-context.xml</config>
-		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin_test/coin-xrp-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/root-context.xml</config>
 	</autoconfigs>
 	<configSets>

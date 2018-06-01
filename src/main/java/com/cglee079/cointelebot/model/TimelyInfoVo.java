@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TimelyInfoVo {
+	private String coinId;
 	private String date;
 	private String market;
 	private Double high;
@@ -13,6 +14,14 @@ public class TimelyInfoVo {
 	private String result;
 	private String errorCode;
 	private String errorMsg;
+
+	public String getCoinId() {
+		return coinId;
+	}
+
+	public void setCoinId(String coinId) {
+		this.coinId = coinId;
+	}
 
 	public String getDate() {
 		return date;

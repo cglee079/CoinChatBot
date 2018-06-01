@@ -19,7 +19,7 @@ public class ClientMsgService {
 	@Autowired
 	private ClientMsgDao clientMsgDao;
 
-	public boolean insert(Update update) {
+	public boolean insert(String coinId, Update update) {
 		ClientMsgVo clientMsg = new ClientMsgVo();
 		Message message = null;
 		if(update.getMessage() != null) {
@@ -29,12 +29,13 @@ public class ClientMsgService {
 		}
 		
 		User user = message.getFrom();
+		clientMsg.setCoinId(coinId);
 		clientMsg.setUserId(user.getId().toString());
 		clientMsg.setUsername(user.getLastName() + " " + user.getFirstName());
 		clientMsg.setMsg(message.getText());
 		clientMsg.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		
-		Log.i(clientMsg.log());
+		Log.i(clientMsg.log(coinId));
 		return clientMsgDao.insert(clientMsg);
 	}
 

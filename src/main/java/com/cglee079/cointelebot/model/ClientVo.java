@@ -7,6 +7,7 @@ import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.constants.ID;
 
 public class ClientVo {
+	private String coinId			= null;
 	private String userId 			= null;
 	private String username 		= null;
 	private Long localTime 			= null;
@@ -25,9 +26,14 @@ public class ClientVo {
 	private String reopenDate;
 	private String closeDate;
 
-	public ClientVo() {
-		market = SET.getEnabledMarkets().get(0);
+	public String getCoinId() {
+		return coinId;
 	}
+
+	public void setCoinId(String coinId) {
+		this.coinId = coinId;
+	}
+
 
 	public String getUserId() {
 		return userId;

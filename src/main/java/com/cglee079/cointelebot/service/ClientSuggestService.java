@@ -17,8 +17,9 @@ public class ClientSuggestService {
 	@Autowired
 	private ClientSuggestDao clientSuggestDao;
 
-	public boolean insert(Integer userId, String userame, String message) {
+	public boolean insert(String coinId, Integer userId, String userame, String message) {
 		ClientSuggestVo clientSuggest = new ClientSuggestVo();
+		clientSuggest.setCoinId(coinId);
 		clientSuggest.setUserId(userId.toString());
 		clientSuggest.setUsername(userame);
 		clientSuggest.setMsg(message);

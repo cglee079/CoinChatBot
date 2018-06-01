@@ -2,14 +2,12 @@ package com.cglee079.cointelebot.telegram;
 
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cglee079.cointelebot.cmd.CMDER;
 import com.cglee079.cointelebot.constants.ID;
@@ -19,22 +17,10 @@ import com.cglee079.cointelebot.model.CoinConfigVo;
 import com.cglee079.cointelebot.model.CoinInfoVo;
 import com.cglee079.cointelebot.model.CoinWalletVo;
 import com.cglee079.cointelebot.model.TimelyInfoVo;
-import com.cglee079.cointelebot.service.CoinConfigService;
-import com.cglee079.cointelebot.service.CoinInfoService;
-import com.cglee079.cointelebot.service.CoinWalletService;
-import com.cglee079.cointelebot.service.CommonService;
 import com.cglee079.cointelebot.util.TimeStamper;
 
 public class MessageMaker {
-	@Autowired
-	private CoinInfoService coinInfoService;
-
-	@Autowired
-	private CoinWalletService coinWalletService;
-
-	@Autowired
-	private CoinConfigService coinConfigService;
-	
+	private String myCoin;
 	private String version;
 	private String priceKREx;
 	private String priceUSEx;
@@ -45,10 +31,12 @@ public class MessageMaker {
 	private int digitKRW;
 	private int digitUSD;
 	private int digitBTC;
+	private HashMap<String, Boolean> inBtcs;
 	
-	@PostConstruct
-	public void init() {
-		CoinConfigVo config = coinConfigService.get(SET.MY_COIN);
+		
+	public MessageMaker(String myCoin, CoinConfigVo config, HashMap<String, Boolean> inBtcs) {
+		this.myCoin		= myCoin;
+		this.inBtcs		= inBtcs;
 		version			= config.getVersion();
 		priceKREx 		= config.getPriceKREx();
 		priceUSEx 		= config.getPriceUSEx();
@@ -244,6 +232,7 @@ public class MessageMaker {
 			case ID.MARKET_BINANCE 		: market = "바이낸스"; break;
 			case ID.MARKET_HUOBI 		: market = "후오비"; break;
 			case ID.MARKET_HADAX 		: market = "하닥스"; break;
+			case ID.MARKET_OKEX 		: market = "오케이엑스"; break;
 			}
 		} else if(lang.equals(ID.LANG_US)) {
 			switch(marketID) {
@@ -258,6 +247,7 @@ public class MessageMaker {
 			case ID.MARKET_BINANCE 		: market = "Binance"; break;
 			case ID.MARKET_HUOBI 		: market = "Huobi"; break;
 			case ID.MARKET_HADAX 		: market = "Hadax"; break;
+			case ID.MARKET_OKEX 		: market = "OKEx"; break;
 			}
 		}
 		return market;
@@ -318,8 +308,8 @@ public class MessageMaker {
 	public String msgStartService(String lang) {
 		String msg = "";
 		switch(lang) {
-		case ID.LANG_KR : msg = SET.MY_COIN + " 알림이 시작되었습니다.\n\n"; break;
-		case ID.LANG_US : msg = SET.MY_COIN + " Noticer Start.\n\n"; break; 
+		case ID.LANG_KR : msg = myCoin + " 알림이 시작되었습니다.\n\n"; break;
+		case ID.LANG_US : msg = myCoin + " Noticer Start.\n\n"; break; 
 		}
 		return msg;
 	}
@@ -327,8 +317,8 @@ public class MessageMaker {
 	public String msgAlreadyStartService(String lang) {
 		String msg = "";
 		switch(lang) {
-		case ID.LANG_KR : msg = "이미 " + SET.MY_COIN + " 알리미에 설정 정보가 기록되어있습니다."; break;
-		case ID.LANG_US : msg = "Already " + SET.MY_COIN + " Noticer Started.\n Database have your setting information."; break; 
+		case ID.LANG_KR : msg = "이미 " + myCoin + " 알리미에 설정 정보가 기록되어있습니다."; break;
+		case ID.LANG_US : msg = "Already " + myCoin + " Noticer Started.\n Database have your setting information."; break; 
 		}
 		return msg;
 	}
@@ -345,7 +335,7 @@ public class MessageMaker {
 		switch(lang) {
 		case ID.LANG_KR :
 			msg += "현재시각 : " +date + "\n";
-			if(SET.isInBtcMarket(market)) {
+			if(inBtcs.get(market)) {
 				double currentMoney = coinMoney.getDouble("last");
 				double currentBTC = currentValue;
 				msg += "현재가격 : " + toMoneyStr(currentMoney, market) + " [" + toBTCStr(currentBTC) + "]\n";
@@ -356,7 +346,7 @@ public class MessageMaker {
 			
 		case ID.LANG_US :
 			msg += "Current Time  : " + date + "\n";
-			if(SET.isInBtcMarket(market)) {
+			if(inBtcs.get(market)) {
 				double currentMoney = coinMoney.getDouble("last");
 				double currentBTC = currentValue;
 				msg += "Current Price : " + toMoneyStr(currentMoney, market) + " [" + toBTCStr(currentBTC) + "]\n";
@@ -505,32 +495,32 @@ public class MessageMaker {
 			msg += "BTC 현재 시각 가격 : " + toOnlyBTCMoneyStr(btcCV, market) +"\n";
 			msg += "BTC 24시간전 가격 : " + toOnlyBTCMoneyStr(btcBV, market) +"\n";
 			msg += "\n";
-			if(SET.isInBtcMarket(market)) {
-				msg += SET.MY_COIN + " 현재 시각 가격 : " + toMoneyStr(coinMoney.getDouble("last"), market) + " [" + toBTCStr(coinCV) + "]\n";
-				msg += SET.MY_COIN + " 24시간전 가격 : " + toMoneyStr(coinMoney.getDouble("first"), market) + " [" + toBTCStr(coinBV) + "]\n";
+			if(inBtcs.get(market)) {
+				msg += myCoin + " 현재 시각 가격 : " + toMoneyStr(coinMoney.getDouble("last"), market) + " [" + toBTCStr(coinCV) + "]\n";
+				msg += myCoin + " 24시간전 가격 : " + toMoneyStr(coinMoney.getDouble("first"), market) + " [" + toBTCStr(coinBV) + "]\n";
 			} else {
-				msg += SET.MY_COIN + " 현재 시각 가격 : " + toMoneyStr(coinCV, market) + "\n";
-				msg += SET.MY_COIN + " 24시간전 가격 : " + toMoneyStr(coinBV, market) + "\n";
+				msg += myCoin + " 현재 시각 가격 : " + toMoneyStr(coinCV, market) + "\n";
+				msg += myCoin + " 24시간전 가격 : " + toMoneyStr(coinBV, market) + "\n";
 			}
 			msg += "\n";
 			msg += "BTC 24시간 변화량 : " + toSignPercent(btcCV, btcBV) + "\n";
-			msg += SET.MY_COIN + " 24시간 변화량 : " + toSignPercent(coinCV, coinBV) + "\n";
+			msg += myCoin + " 24시간 변화량 : " + toSignPercent(coinCV, coinBV) + "\n";
 			break;
 			
 		case ID.LANG_US : 
 			msg += "BTC Price at current time : " + toMoneyStr(btcCV, market) +"\n";
 			msg += "BTC Price before 24 hours : " + toMoneyStr(btcBV, market) +"\n";
 			msg += "\n";
-			if(SET.isInBtcMarket(market)) {
-				msg += SET.MY_COIN + " Price at current time : " + toMoneyStr(coinMoney.getDouble("last"), market) + " [" + toBTCStr(coinCV) + "]\n";
-				msg += SET.MY_COIN + " Price before 24 hours : " + toMoneyStr(coinMoney.getDouble("first"), market) + " [" + toBTCStr(coinBV) + "]\n";
+			if(inBtcs.get(market)) {
+				msg += myCoin + " Price at current time : " + toMoneyStr(coinMoney.getDouble("last"), market) + " [" + toBTCStr(coinCV) + "]\n";
+				msg += myCoin + " Price before 24 hours : " + toMoneyStr(coinMoney.getDouble("first"), market) + " [" + toBTCStr(coinBV) + "]\n";
 			} else {
-				msg += SET.MY_COIN + " Price at current time : " + toMoneyStr(coinCV, market) + "\n";
-				msg += SET.MY_COIN + " Price before 24 hours : " + toMoneyStr(coinBV, market) + "\n";
+				msg += myCoin + " Price at current time : " + toMoneyStr(coinCV, market) + "\n";
+				msg += myCoin + " Price before 24 hours : " + toMoneyStr(coinBV, market) + "\n";
 			}
 			msg += "\n";
 			msg += "BTC 24 hour rate of change : " + toSignPercent(btcCV, btcBV) + "\n";
-			msg += SET.MY_COIN + " 24 hour rate of change : " + toSignPercent(coinCV, coinBV) + "\n";
+			msg += myCoin + " 24 hour rate of change : " + toSignPercent(coinCV, coinBV) + "\n";
 			break; 
 		}
 		return msg;
@@ -552,7 +542,7 @@ public class MessageMaker {
 			msg += "현재 시각  : "  + date + "\n";
 			msg += "\n";
 			msg += "코인개수 : " + toCoinCntStr(cnt, lang) + "\n";
-			if(SET.isInBtcMarket(market)) {
+			if(inBtcs.get(market)) {
 				double btcMoney = btcObj.getDouble("last");
 				double avgBTC = avgPrice / btcMoney;
 				double coinBTC = coinValue;
@@ -580,7 +570,7 @@ public class MessageMaker {
 			msg += "Current Time  : "  + date + "\n";
 			msg += "\n";
 			msg += "The number of coins : " + toCoinCntStr(cnt, lang) + "\n";
-			if(SET.isInBtcMarket(market)) {
+			if(inBtcs.get(market)) {
 				double btcMoney = btcObj.getDouble("last");
 				double avgBTC = avgPrice / btcMoney;
 				double coinBTC = coinValue;
@@ -1166,7 +1156,7 @@ public class MessageMaker {
 	public String msgStopAllNotice(String lang) {
 		String msg = "";
 		switch(lang) {
-		case ID.LANG_KR : msg = SET.MY_COIN + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n"; break;
+		case ID.LANG_KR : msg = myCoin + " 모든알림(시간알림, 일일알림, 목표가격알림)이 중지되었습니다.\n"; break;
 		case ID.LANG_US : msg = "All notifications (daily, hourly , target price notifications ) be stoped.\n"; break; 
 		}
 		return msg;
@@ -1175,9 +1165,8 @@ public class MessageMaker {
 	/***********************/
 	/** Explain Coin List **/
 	/***********************/
-	public String explainCoinList(String lang) {
+	public String explainCoinList(List<CoinInfoVo> coinInfos, String lang) {
 		String msg = "";
-		List<CoinInfoVo> coinInfos = coinInfoService.list(SET.MY_COIN);
 		CoinInfoVo coinInfo = null;
 		int coinInfosLen = coinInfos.size();
 		
@@ -1215,15 +1204,13 @@ public class MessageMaker {
 	/***********/
 	/** Help  **/
 	/***********/
-	public String explainHelp(String lang) {
-		List<String> enabledMarkets = SET.getEnabledMarkets();
-		
+	public String explainHelp(List<String> enabledMarkets, String lang) {
 		String msg = "";
 		if (lang.equals(ID.LANG_KR)) {
-			msg += SET.MY_COIN + " 알리미 ver" + version + "\n";
+			msg += myCoin + " 알리미 ver" + version + "\n";
 			msg += "\n";
 			msg += "별도의 시간 알림 주기 설정을 안하셨다면,\n";
-			msg += "3시간 주기로 " + SET.MY_COIN + " 가격 알림이 전송됩니다.\n";
+			msg += "3시간 주기로 " + myCoin + " 가격 알림이 전송됩니다.\n";
 			msg += "\n";
 			msg += "별도의 일일 알림 주기 설정을 안하셨다면,\n";
 			msg += "1일 주기로 거래량, 상한가, 하한가, 종가가 비교되어 전송됩니다.\n";
@@ -1254,13 +1241,13 @@ public class MessageMaker {
 			msg += "\n";
 			msg += "Developed By CGLEE ( cglee079@gmail.com )\n";
 		} else if(lang.equals(ID.LANG_US)) {
-			msg += SET.MY_COIN + " Coin Noticer Ver" + version + "\n";
+			msg += myCoin + " Coin Noticer Ver" + version + "\n";
 			msg += "\n";
 			msg += "If you are using this service for the first time,\n";
-			msg += SET.MY_COIN + " price are sent every 3 hours.\n";
+			msg += myCoin + " price are sent every 3 hours.\n";
 			msg += "\n";
 			msg += "If you are using this service for the first time,\n";
-			msg += SET.MY_COIN + " price are sent every 1 days. (with high, low, last price and volume)\n";
+			msg += myCoin + " price are sent every 1 days. (with high, low, last price and volume)\n";
 			msg += "\n";
 			msg += "If you are using this service for the first time,\n";
 			msg += "Information based on ";
@@ -1375,15 +1362,14 @@ public class MessageMaker {
 		return msg;
 	}
 	
-	public String explainSupportWallet(String lang) {
+	public String explainSupportWallet(CoinWalletVo wallet, CoinWalletVo xrpWallet, String lang) {
 		String msg = "";
-		CoinWalletVo wallet = coinWalletService.get(SET.MY_COIN);
 		switch(lang) {
 		case ID.LANG_KR :
 			if (wallet != null) {
 				msg += "* " + wallet.getSymbol() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n";
 				msg += wallet.getAddr1() + "\n";
-				if (SET.MY_COIN.equals(ID.COIN_XRP)) {
+				if (myCoin.equals(ID.COIN_XRP)) {
 					msg += "데스티네이션 태그 :  " + wallet.getAddr2() + "\n";
 				}
 			} else {
@@ -1391,7 +1377,7 @@ public class MessageMaker {
 				msg += "타 코인 지갑 정보를 전송합니다.\n";
 				msg += "\n";
 
-				wallet = coinWalletService.get(ID.COIN_XRP);
+				wallet = xrpWallet;
 				msg += "* " + wallet.getSymbol() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n";
 				msg += wallet.getAddr1() + "\n";
 				msg += "데스티네이션 태그 :  " + wallet.getAddr2() + "\n";
@@ -1402,7 +1388,7 @@ public class MessageMaker {
 			if (wallet != null) {
 				msg += "* " + wallet.getSymbol() + " [ " + wallet.getUsName() + " ]  Wallet address : \n";
 				msg += wallet.getAddr1() + "\n";
-				if (SET.MY_COIN.equals(ID.COIN_XRP)) {
+				if (myCoin.equals(ID.COIN_XRP)) {
 					msg += "destination tag :  " + wallet.getAddr2() + "\n";
 				}
 			} else {
@@ -1410,7 +1396,7 @@ public class MessageMaker {
 				msg += "another coin wallet address send.\n";
 				msg += "\n";
 
-				wallet = coinWalletService.get(ID.COIN_XRP);
+				wallet = xrpWallet;
 				msg += "* " + wallet.getSymbol() + " [ " + wallet.getUsName() + " ]  Wallet address : \n";
 				msg += wallet.getAddr1() + "\n";
 				msg += "destination tag :  " + wallet.getAddr2() + "\n";
@@ -1544,7 +1530,7 @@ public class MessageMaker {
 			case 7 : dayLoopStr ="한주"; break;
 			}
 			
-			if(SET.isInBtcMarket(market)) {
+			if(inBtcs.get(market)) {
 				currentHighBTC	= currentHigh;
 				beforeHighBTC	= beforeHigh;
 				currentLowBTC	= currentLow;
@@ -1605,7 +1591,7 @@ public class MessageMaker {
 			break;
 			
 		case ID.LANG_US : 
-			if(SET.isInBtcMarket(market)) {
+			if(inBtcs.get(market)) {
 				currentHighBTC	= currentHigh;
 				beforeHighBTC	= beforeHigh;
 				currentLowBTC	= currentLow;
@@ -1685,7 +1671,7 @@ public class MessageMaker {
 				msg += "에러발생: " + currentErrorMsg +"\n";
 				msg += "에러코드: " + currentErrorCode +"\n";
 				
-				if(SET.isInBtcMarket(market)) {
+				if(inBtcs.get(market)) {
 					double beforeBTC = beforeValue;
 					double beforeMoney = coinBeforeMoney.getDouble("last");
 					
@@ -1694,7 +1680,7 @@ public class MessageMaker {
 					msg += timeLoop + " 시간 전: " + toMoneyStr(beforeValue, market) + " 원\n";
 				}
 			} else{
-				if(SET.isInBtcMarket(market)) {
+				if(inBtcs.get(market)) {
 					double currentBTC = currentValue;
 					double beforeBTC = beforeValue;
 					double currentMoney = coinCurrentMoney.getDouble("last");
@@ -1719,7 +1705,7 @@ public class MessageMaker {
 				msg += "Error Msg : " + currentErrorMsg +"\n";
 				msg += "Error Code: " + currentErrorCode +"\n";
 				
-				if(SET.isInBtcMarket(market)) {
+				if(inBtcs.get(market)) {
 					double beforeBTC = beforeValue;
 					double beforeMoney = coinBeforeMoney.getDouble("last");
 					
@@ -1728,7 +1714,7 @@ public class MessageMaker {
 					msg += "Coin Price before " + timeLoop + " hour : " + toMoneyStr(beforeValue, market) + "\n";
 				}
 			} else{
-				if(SET.isInBtcMarket(market)) {
+				if(inBtcs.get(market)) {
 					double currentBTC = currentValue;
 					double beforeBTC = beforeValue;
 					double currentMoney = coinCurrentMoney.getDouble("last");

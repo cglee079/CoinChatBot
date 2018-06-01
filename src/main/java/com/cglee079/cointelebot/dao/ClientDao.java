@@ -16,27 +16,30 @@ public class ClientDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	public List<ClientVo> list() {
-		return sqlSession.selectList(namespace + ".S01");
+	public List<ClientVo> list(String coinId) {
+		return sqlSession.selectList(namespace + ".S01", coinId);
 	}
 	
-	public List<ClientVo> list(String market, Integer timeLoop, Integer dayLoop){
+	public List<ClientVo> list(String coinId, String market, Integer timeLoop, Integer dayLoop){
 		HashMap<String, Object> map = new HashMap<>();
+		map.put("coinId", coinId);
 		map.put("market", market);
 		map.put("timeLoop", timeLoop);
 		map.put("dayLoop", dayLoop);
 		return sqlSession.selectList(namespace + ".S01", map);
 	}
 	
-	public List<ClientVo> listTargetUp(String market, double coinValue) {
+	public List<ClientVo> listTargetUp(String coinId, String market, double coinValue) {
 		HashMap<String, Object> map = new HashMap<>();
+		map.put("coinId", coinId);
 		map.put("market", market);
 		map.put("coinValue", coinValue);
 		return sqlSession.selectList(namespace + ".S02", map);
 	}
 	
-	public List<ClientVo> listTargetDown(String market, double coinValue) {
+	public List<ClientVo> listTargetDown(String coinId, String market, double coinValue) {
 		HashMap<String, Object> map = new HashMap<>();
+		map.put("coinId", coinId);
 		map.put("market", market);
 		map.put("coinValue", coinValue);
 		return sqlSession.selectList(namespace + ".S03", map);
@@ -47,8 +50,9 @@ public class ClientDao {
 		catch (Exception e){ return false; }
 	}
 
-	public boolean delete(String userId) {
+	public boolean delete(String coinId, String userId) {
 		HashMap<String, Object> map = new HashMap<>();
+		map.put("coinId", coinId);
 		map.put("userId", userId);
 		return sqlSession.delete(namespace + ".delete", map) == 1;
 	}
@@ -57,8 +61,9 @@ public class ClientDao {
 		return sqlSession.update(namespace + ".update", client) == 1;
 	}
 
-	public ClientVo get(String userId) {
+	public ClientVo get(String coinId, String userId) {
 		HashMap<String, Object> map = new HashMap<>();
+		map.put("coinId", coinId);
 		map.put("userId", userId);
 		return sqlSession.selectOne(namespace + ".get", map);
 	}

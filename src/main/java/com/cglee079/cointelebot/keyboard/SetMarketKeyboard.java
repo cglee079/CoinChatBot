@@ -10,7 +10,7 @@ import com.cglee079.cointelebot.cmd.CMDER;
 import com.cglee079.cointelebot.constants.SET;
 
 public class SetMarketKeyboard extends ReplyKeyboardMarkup {
-	public SetMarketKeyboard(String lang) {
+	public SetMarketKeyboard(List<String> enabledMarkets, String lang) {
 		super();
 
 		this.setSelective(true);
@@ -22,7 +22,6 @@ public class SetMarketKeyboard extends ReplyKeyboardMarkup {
 		KeyboardRow keyboardRow = null;
 		int marketCnt = 0;
 		
-		List<String> enabledMarkets = SET.getEnabledMarkets();
 		for(int i = 0; i < enabledMarkets.size(); i++) {
 			if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow();}
 			marketCnt ++;

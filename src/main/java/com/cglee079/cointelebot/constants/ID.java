@@ -15,6 +15,7 @@ public class ID {
 	public final static String MARKET_BINANCE	= "204";
 	public final static String MARKET_HUOBI		= "205";
 	public final static String MARKET_HADAX		= "206";
+	public final static String MARKET_OKEX		= "207";
 	
 	public final static String COIN_ADA = "ADA";
 	public final static String COIN_BCH = "BCH";
@@ -26,14 +27,18 @@ public class ID {
 	public static final String COIN_GTO = "GTO";
 	public static final String COIN_KNC = "KNC";
 	public final static String COIN_LTC = "LTC";
+	public final static String COIN_MIT = "MIT";
 	public final static String COIN_NEO = "NEO";
+	public final static String COIN_OMG = "OMG";
 	public final static String COIN_QTM = "QTM";
+	public final static String COIN_RDD = "RDD";
 	public final static String COIN_SIA = "SIA";
 	public static final String COIN_SNT = "SNT";
 	public final static String COIN_TRX = "TRX";
 	public final static String COIN_XLM = "XLM";
 	public final static String COIN_XRP = "XRP";
 	public final static String COIN_XVG = "XVG";
+	public final static String COIN_ZIL = "ZIL";
 	
 	
     public static final String STATE_MAIN 			= "ST000";

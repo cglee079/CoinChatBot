@@ -1,45 +1,76 @@
 package com.cglee079.cointelebot.coin;
 
+import java.util.Iterator;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.scheduling.annotation.Scheduled;
 
-import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 
 public class BitfinexPooler extends ApiPooler{
-	public JSONObject getCoin(String coin) throws ServerErrorException{
-		String param = coinParam.get(coin);
-		
-		String url = "https://api.bitfinex.com/v2/ticker/" + param;
-		HttpClient httpClient = new HttpClient();
-		String response;
-		try {
-			response = httpClient.get(url);
-			JSONArray jsonArr= new JSONArray(response);
-			JSONObject coinObj = new JSONObject();
-//			coinObj.put("bid", jsonArr.get(0));
-//			coinObj.put("bid_size", jsonArr.get(1));
-//			coinObj.put("ask", jsonArr.get(2));
-//			coinObj.put("ask_size", jsonArr.get(3));
-//			coinObj.put("bid", jsonArr.get(4));
-//			coinObj.put("bid", jsonArr.get(5));
-			coinObj.put("first", jsonArr.getDouble(6) / ( 1 + jsonArr.getDouble(5)));
-			coinObj.put("last", jsonArr.get(6));
-			coinObj.put("volume", jsonArr.get(7));
-			coinObj.put("high", jsonArr.get(8));
-			coinObj.put("low", jsonArr.get(9));
-			coinObj.put("errorCode", 0);
-			coinObj.put("errorMsg", "");
-			coinObj.put("result", "success");
-			retryCnt = 0;
-			return coinObj;
-		} catch (Exception e) {
-			retryCnt++;
-			if(retryCnt < MAX_RETRY_CNT) {
-				return this.getCoin(coin);
-			} else {
+	private JSONObject coinObjs = null;
+	private String errMessage;
+	
+	public BitfinexPooler() throws ServerErrorException {
+		getCoins();
+	}
+	
+	public JSONObject getCoin(String coin) throws ServerErrorException {
+		if(coinObjs != null) {
+			return coinObjs.getJSONObject(coinParam.get(coin));
+		} else {
+			throw new ServerErrorException("Bifinex Server Error : " + errMessage);
+		}
+	}
+	
+	@Scheduled(cron = "00 0/1 * * * *")
+	public void getCoins() throws ServerErrorException{
+		String param = "";
+		if(coinParam != null) {
+			coinObjs = new JSONObject();
+			
+			Iterator<String> iter = coinParam.keySet().iterator();
+			while(iter.hasNext()) {
+				param += coinParam.get(iter.next()) + ",";
+			}
+			
+			String url = "https://api.bitfinex.com/v2/tickers?symbols=" + param;
+			HttpClient httpClient = new HttpClient();
+			String response;
+			try {
+				response = httpClient.get(url);
+				JSONArray jsonArr	= new JSONArray(response);
+				JSONArray coinArr 	= null;
+				JSONObject coinObj 	= null;
+				String coinParam 	= null;
+				
+				for(int i = 0; i < jsonArr.length(); i++) {
+					coinArr = jsonArr.getJSONArray(i);
+					coinObj = new JSONObject();
+					coinParam =  coinArr.getString(0);
+					coinObj.put("first", coinArr.getDouble(7) / ( 1 + coinArr.getDouble(6)));
+					coinObj.put("last", coinArr.getDouble(7));
+					coinObj.put("volume", coinArr.getDouble(8));
+					coinObj.put("high", coinArr.getDouble(9));
+					coinObj.put("low", coinArr.getDouble(10));
+					coinObj.put("errorCode", 0);
+					coinObj.put("errorMsg", "");
+					coinObj.put("result", "success");
+					
+					coinObjs.put(coinParam, coinObj);
+				}
+				
 				retryCnt = 0;
-				throw new ServerErrorException("Bitfinex Server Error : " + e.getMessage());
+			} catch (Exception e) {
+				retryCnt++;
+				if(retryCnt < MAX_RETRY_CNT) {
+					this.getCoins();
+				} else {
+					retryCnt 	= 0;
+					coinObjs 	= null;
+					errMessage 	= e.getMessage();
+				}
 			}
 		}
 	}

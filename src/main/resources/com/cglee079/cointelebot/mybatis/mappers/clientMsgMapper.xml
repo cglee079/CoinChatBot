@@ -11,8 +11,8 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO TB_ETCBOT_CLIENT_MSG (MSG_USERID, MSG_USERNAME, MSG_TEXT, MSG_DATE)
- 		VALUES (#{userId}, #{username}, #{msg}, #{date})
+		INSERT INTO TB_TESTBOT_CLIENT_MSG (MSG_COINID, MSG_USERID, MSG_USERNAME, MSG_TEXT, MSG_DATE)
+ 		VALUES (#{coinId}, #{userId}, #{username}, #{msg}, #{date})
 	</insert>
 	
 	<delete id="delete" parameterType="map">

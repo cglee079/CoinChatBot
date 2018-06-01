@@ -1,6 +1,7 @@
 package com.cglee079.cointelebot.telegram;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardRemove;
@@ -26,7 +27,7 @@ public class KeyboardManager {
 	private HashMap<String, ConfirmStopKeyboard> confirmStopKeyboards;
 	private HashMap<String, PreferenceKeyboard> preferenceKeyboards;
 
-	public KeyboardManager() {
+	public KeyboardManager(List<String> enabledMarkets) {
 		defaultKeyboard 	= new ReplyKeyboardRemove();
 		mainKeyboards 		= new HashMap<>();
 		setDayloopKeyboards = new HashMap<>();
@@ -45,8 +46,8 @@ public class KeyboardManager {
 		setTimeloopKeyboards.put(ID.LANG_KR, new SetTimeloopKeyboard(ID.LANG_KR));
 		setTimeloopKeyboards.put(ID.LANG_US, new SetTimeloopKeyboard(ID.LANG_US));
 		
-		setMarketKeyboards.put(ID.LANG_KR, new SetMarketKeyboard(ID.LANG_KR));
-		setMarketKeyboards.put(ID.LANG_US, new SetMarketKeyboard(ID.LANG_US));
+		setMarketKeyboards.put(ID.LANG_KR, new SetMarketKeyboard(enabledMarkets, ID.LANG_KR));
+		setMarketKeyboards.put(ID.LANG_US, new SetMarketKeyboard(enabledMarkets, ID.LANG_US));
 		
 		setLanguageKeyboards.put(ID.LANG_KR, new SetLanguageKeyboard(ID.LANG_KR));
 		setLanguageKeyboards.put(ID.LANG_US, new SetLanguageKeyboard(ID.LANG_US));

@@ -37,6 +37,7 @@ public class CMD_US {
 	public static final String SET_MARKET_BINANCE 	= "BINANCE";
 	public static final String SET_MARKET_HUOBI 	= "HUOBI";
 	public static final String SET_MARKET_HADAX 	= "HADAX";
+	public static final String SET_MARKET_OKEX 		= "OKEx";
 	public static final String SET_MARKET_OUT 		= "OUT";
 
 	public static final String SET_DAYLOOP_OFF 	= "Stop";
