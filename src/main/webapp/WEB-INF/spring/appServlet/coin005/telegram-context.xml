@@ -12,7 +12,8 @@
 	<bean id="TelegramClient" class="com.cglee079.cointelebot.telegram.TelegramClient">
 		<constructor-arg index="0">
 			<list>
-	            <ref bean="TelegramBot_TEST" />
+			 	<ref bean="TelegramBot_RDD" />
+	            <ref bean="TelegramBot_ZIL" />
 	        </list>
         </constructor-arg>
 	</bean>

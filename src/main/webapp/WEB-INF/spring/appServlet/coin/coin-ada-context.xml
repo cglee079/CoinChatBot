@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+	
+	<context:annotation-config></context:annotation-config>
+	
+	<bean id="COIN_ADA" class="java.lang.String">
+		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_ADA"/></constructor-arg>
+	</bean>
+	
+	<bean id="TelegramBot_ADA" class="com.cglee079.cointelebot.telegram.TelegramBot">
+		<constructor-arg index="0" ref="COIN_ADA"/>
+		<constructor-arg index="1" value="493072194:AAEmFhG8ZC9FaFEZaOI4-vFNcJZj3jeIVWI"/>
+		<constructor-arg index="2" value="cg_ada_bot"/>
+	</bean>
+	
+	<bean id="TargetScheduler_ADA" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+		<constructor-arg index="0" ref="COIN_ADA"/>
+		<constructor-arg index="1" ref="TelegramBot_ADA"/>
+	</bean>
+	
+	<bean id="TimelyScheduler_ADA" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+		<constructor-arg index="0" ref="COIN_ADA"/>
+		<constructor-arg index="1" ref="TelegramBot_ADA"/>
+	</bean>
+
+</beans>

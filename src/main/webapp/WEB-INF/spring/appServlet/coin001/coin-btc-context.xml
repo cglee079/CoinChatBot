@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+	
+	<context:annotation-config></context:annotation-config>
+	
+	<bean id="COIN_BTC" class="java.lang.String">
+		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_BTC"/></constructor-arg>
+	</bean>
+	
+	<bean id="TelegramBot_BTC" class="com.cglee079.cointelebot.telegram.TelegramBot">
+		<constructor-arg index="0" ref="COIN_BTC"/>
+		<constructor-arg index="1" value="543841955:AAHSrYXxoPiU2mmT_EpGfuxV8VhVkFtbqdw"/>
+		<constructor-arg index="2" value="cg_btc_bot"/>
+	</bean>
+	
+	<bean id="TargetScheduler_BTC" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+		<constructor-arg index="0" ref="COIN_BTC"/>
+		<constructor-arg index="1" ref="TelegramBot_BTC"/>
+	</bean>
+	
+	<bean id="TimelyScheduler_BTC" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+		<constructor-arg index="0" ref="COIN_BTC"/>
+		<constructor-arg index="1" ref="TelegramBot_BTC"/>
+	</bean>
+
+</beans>

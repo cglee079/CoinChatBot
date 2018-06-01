@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+	
+	<context:annotation-config></context:annotation-config>
+	
+	<bean id="COIN_EOS" class="java.lang.String">
+		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_EOS"/></constructor-arg>
+	</bean>
+	
+	<bean id="TelegramBot_EOS" class="com.cglee079.cointelebot.telegram.TelegramBot">
+		<constructor-arg index="0" ref="COIN_EOS"/>
+		<constructor-arg index="1" value="552212684:AAEzQXaE-3IuizJ-xX-5d8RJLRSaXHO4F50"/>
+		<constructor-arg index="2" value="cg_eos_bot"/>
+	</bean>
+	
+	<bean id="TargetScheduler_EOS" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+		<constructor-arg index="0" ref="COIN_EOS"/>
+		<constructor-arg index="1" ref="TelegramBot_EOS"/>
+	</bean>
+	
+	<bean id="TimelyScheduler_EOS" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+		<constructor-arg index="0" ref="COIN_EOS"/>
+		<constructor-arg index="1" ref="TelegramBot_EOS"/>
+	</bean>
+
+</beans>
