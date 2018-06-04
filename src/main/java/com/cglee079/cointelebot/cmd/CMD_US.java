@@ -31,6 +31,7 @@ public class CMD_US {
 	public static final String SET_MARKET_UPBIT 	= "Upbit";
 	public static final String SET_MARKET_COINNEST	= "Coinnest";
 	public static final String SET_MARKET_KORBIT 	= "Korbit";
+	public static final String SET_MARKET_GOPAX	 	= "Gopax";
 	public static final String SET_MARKET_BITFINEX 	= "BITFINEX";
 	public static final String SET_MARKET_BITTREX 	= "BITTREX";
 	public static final String SET_MARKET_POLONIEX 	= "POLONIEX";

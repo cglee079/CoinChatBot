@@ -29,6 +29,13 @@
 				<ref bean="TelegramBot_XLM" />
 				<ref bean="TelegramBot_XRP" />
 				<ref bean="TelegramBot_XVG" />
+				
+				<ref bean="TelegramBot_BTG" />
+	            <ref bean="TelegramBot_ICX" />
+	            <ref bean="TelegramBot_IOT" />
+	            <ref bean="TelegramBot_NXT" />
+	            <ref bean="TelegramBot_STM" />
+	            
 	        </list>
         </constructor-arg>
 	</bean>

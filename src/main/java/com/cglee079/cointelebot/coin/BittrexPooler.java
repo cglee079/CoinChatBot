@@ -1,47 +1,65 @@
 package com.cglee079.cointelebot.coin;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cglee079.cointelebot.exception.ServerErrorException;
 
 public class BittrexPooler extends ApiPooler{
+	private JSONArray coinObjs = null;
+	private String errMessage;
 	
+	
+	public BittrexPooler() throws ServerErrorException {
+		getCoins();
+	}
+
 	public JSONObject getCoin(String coin) throws ServerErrorException {
 		String param = coinParam.get(coin);
 		
-		JSONObject coinObj = getCurrentCoin(param);
-		
-		return coinObj;
+		if(coinObjs != null) {
+			JSONObject coinObj = null;
+			for(int i =0; i < coinObjs.length(); i++) {
+				coinObj = coinObjs.getJSONObject(i);
+				if(coinObj.getString("MarketName").equals(param)) {
+					JSONObject newCoinObj = new JSONObject();
+					newCoinObj.put("first", 0);
+					newCoinObj.put("last", coinObj.getDouble("Last"));
+					newCoinObj.put("high", coinObj.getDouble("High"));
+					newCoinObj.put("low", coinObj.getDouble("Low"));
+					newCoinObj.put("volume", coinObj.getDouble("Volume"));
+					newCoinObj.put("errorCode", 0);
+					newCoinObj.put("errorMsg", "");
+					newCoinObj.put("result", "success");
+					return newCoinObj;
+				}
+			}
+			return null;
+		} else {
+			throw new ServerErrorException("Bittrex Server Error : " + errMessage);
+		}
 	}
 	
-	public JSONObject getCurrentCoin(String param) throws ServerErrorException {
-		String url = "https://bittrex.com/api/v1.1/public/getmarketsummary?market=" + param;
+	@Scheduled(cron = "00 0/1 * * * *")
+	public void getCoins() throws ServerErrorException {
+		String url = "https://bittrex.com/api/v1.1/public/getmarketsummaries";
 		HttpClient httpClient = new HttpClient();
 		String response;
 		try {
 			response = httpClient.get(url);
 			JSONObject jsonObj= new JSONObject(response);
-			JSONObject coinObj = new JSONObject();
-			coinObj.put("first", 0);
-			coinObj.put("last", jsonObj.getJSONArray("result").getJSONObject(0).getDouble("Last"));
-			coinObj.put("high", jsonObj.getJSONArray("result").getJSONObject(0).getDouble("High"));
-			coinObj.put("low", jsonObj.getJSONArray("result").getJSONObject(0).getDouble("Low"));
-			coinObj.put("volume", jsonObj.getJSONArray("result").getJSONObject(0).getDouble("Volume"));
-			coinObj.put("errorCode", 0);
-			coinObj.put("errorMsg", jsonObj.getString("message"));
+			if(!jsonObj.getBoolean("success")) {
+				throw new ServerErrorException("Bitrrex Server Error : " + jsonObj.getString("message"));
+			} 
 			
-			if(jsonObj.getBoolean("success")) {
-				coinObj.put("result", "success");
-			} else {
-				coinObj.put("result", "error");
-			}
+			coinObjs = jsonObj.getJSONArray("result");
 			
 			retryCnt = 0;
-			return coinObj;
 		} catch (Exception e) {
 			retryCnt++;
 			if(retryCnt < MAX_RETRY_CNT) {
-				return this.getCurrentCoin(param);
+				this.getCoins();
 			} else {
 				retryCnt = 0;
 				throw new ServerErrorException("Bitrrex Server Error : " + e.getMessage());

@@ -52,6 +52,15 @@ public class MessageMaker {
 	/*******************/
 	/*** Formatter *****/
 	/*******************/
+	private String toExchangeRateKRWStr(double i) {
+		DecimalFormat df = new DecimalFormat("#,###"); 
+		df.setMinimumFractionDigits(0);
+		df.setMaximumFractionDigits(0);
+		df.setPositiveSuffix("원");
+		df.setNegativeSuffix("원");
+		return df.format(i);
+	}
+	
 	private String toBTCStr(double i) {
 		DecimalFormat df = new DecimalFormat("#.#");
 		df.setMinimumFractionDigits(digitBTC);
@@ -226,6 +235,7 @@ public class MessageMaker {
 			case ID.MARKET_UPBIT 		: market = "업비트"; break;
 			case ID.MARKET_COINNEST 	: market = "코인네스트"; break;
 			case ID.MARKET_KORBIT 		: market = "코빗"; break;
+			case ID.MARKET_GOPAX 		: market = "고팍스"; break;
 			case ID.MARKET_BITFINEX 	: market = "비트파이넥스"; break;
 			case ID.MARKET_BITTREX 		: market = "비트렉스"; break;
 			case ID.MARKET_POLONIEX 	: market = "폴로닉스"; break;
@@ -241,6 +251,7 @@ public class MessageMaker {
 			case ID.MARKET_UPBIT 		: market = "Upbit"; break;
 			case ID.MARKET_COINNEST 	: market = "Coinnest"; break;
 			case ID.MARKET_KORBIT 		: market = "Korbit"; break;
+			case ID.MARKET_GOPAX 		: market = "Gopax"; break;
 			case ID.MARKET_BITFINEX 	: market = "Bitfinex"; break;
 			case ID.MARKET_BITTREX 		: market = "Bittrex"; break;
 			case ID.MARKET_POLONIEX 	: market = "Poloniex"; break;
@@ -373,7 +384,7 @@ public class MessageMaker {
 			msg += "현재 시각  : "  + date + "\n";
 			msg += "\n";
 			msg += "나의 거래소 : "  + toMarketStr(market, lang) + "\n";
-			msg += "금일의 환율 : $1 = " + toKRWStr(exchangeRate) + "\n";
+			msg += "금일의 환율 : $1 = " + toExchangeRateKRWStr(exchangeRate) + "\n";
 			msg += "----------------------------\n";
 			break;
 		case ID.LANG_US :

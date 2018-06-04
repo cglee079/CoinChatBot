@@ -5,8 +5,6 @@ import org.json.JSONObject;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 
 public class OkexPooler extends ApiPooler{
-	private int i = 0;
-	
 	public JSONObject getCoin(String coin) throws ServerErrorException {
 		String param = coinParam.get(coin);
 		

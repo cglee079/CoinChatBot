@@ -29,7 +29,7 @@ public class PoloniexPooler extends ApiPooler{
 			newCoinObj.put("result", "success");
 			return newCoinObj;
 		} else {
-			throw new ServerErrorException("Poloniex Server Error : " + errMessage);
+			throw new ServerErrorException("Poloniex Server Error : " + errMessage );
 		}
 		
 	}

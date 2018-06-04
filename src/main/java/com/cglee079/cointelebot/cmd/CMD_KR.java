@@ -32,6 +32,7 @@ public class CMD_KR {
 	public static final String SET_MARKET_UPBIT 	= "업비트";
 	public static final String SET_MARKET_COINNEST	= "코인네스트";
 	public static final String SET_MARKET_KORBIT 	= "코빗";
+	public static final String SET_MARKET_GOPAX	 	= "고팍스";
 	public static final String SET_MARKET_BITFINEX 	= "비트파이넥스";
 	public static final String SET_MARKET_BITTREX 	= "비트렉스";
 	public static final String SET_MARKET_POLONIEX 	= "폴로닉스";

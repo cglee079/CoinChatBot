@@ -12,6 +12,7 @@
 	<bean id="UpbitPooler" 		class="com.cglee079.cointelebot.coin.UpbitPooler"/>
 	<bean id="CoinnestPooler" 	class="com.cglee079.cointelebot.coin.CoinnestPooler"/>
 	<bean id="KorbitPooler" 	class="com.cglee079.cointelebot.coin.KorbitPooler"/>
+	<bean id="GopaxPooler" 		class="com.cglee079.cointelebot.coin.GopaxPooler"/>
 	
 	<bean id="BitfinexPooler" 	class="com.cglee079.cointelebot.coin.BitfinexPooler"/>
 	<bean id="BittrexPooler" 	class="com.cglee079.cointelebot.coin.BittrexPooler"/>

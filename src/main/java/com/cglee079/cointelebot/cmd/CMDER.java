@@ -174,6 +174,7 @@ public class CMDER {
 		case ID.MARKET_UPBIT 	: str = getSetMarketUpbit(lang);break;
 		case ID.MARKET_COINNEST : str = getSetMarketCoinnest(lang);break;
 		case ID.MARKET_KORBIT 	: str = getSetMarketKorbit(lang);break;
+		case ID.MARKET_GOPAX 	: str = getSetMarketGopax(lang);break;
 		case ID.MARKET_BITFINEX : str = getSetMarketBitfinex(lang);break;
 		case ID.MARKET_BITTREX 	: str = getSetMarketBittrex(lang);break;
 		case ID.MARKET_POLONIEX : str = getSetMarketPoloniex(lang);break;
@@ -226,6 +227,15 @@ public class CMDER {
 		switch(lang){
 		case ID.LANG_KR : str = CMD_KR.SET_MARKET_KORBIT; break;
 		case ID.LANG_US : str = CMD_US.SET_MARKET_KORBIT; break;
+		}
+		return str;
+	}
+	
+	public static String getSetMarketGopax(String lang) {
+		String str = "";
+		switch(lang){
+		case ID.LANG_KR : str = CMD_KR.SET_MARKET_GOPAX; break;
+		case ID.LANG_US : str = CMD_US.SET_MARKET_GOPAX; break;
 		}
 		return str;
 	}

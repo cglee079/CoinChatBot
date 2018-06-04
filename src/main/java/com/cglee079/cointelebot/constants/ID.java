@@ -7,6 +7,7 @@ public class ID {
 	public final static String MARKET_UPBIT		= "103";
 	public final static String MARKET_COINNEST	= "104";
 	public final static String MARKET_KORBIT	= "105";
+	public final static String MARKET_GOPAX		= "106";
 	
 	public final static String MARKET_US		= "20";
 	public final static String MARKET_BITFINEX	= "201";
@@ -20,43 +21,51 @@ public class ID {
 	public final static String COIN_ADA = "ADA";
 	public final static String COIN_BCH = "BCH";
 	public final static String COIN_BTC = "BTC";
-	public static final String COIN_CNN = "CNN";
+	public final static String COIN_BTG = "BTG";
+	public final static String COIN_CNN = "CNN";
+	public final static String COIN_ELF = "ELF";
 	public final static String COIN_EOS = "EOS";
 	public final static String COIN_ETC = "ETC";
 	public final static String COIN_ETH = "ETH";
-	public static final String COIN_GTO = "GTO";
-	public static final String COIN_KNC = "KNC";
+	public final static String COIN_GTO = "GTO";
+	public final static String COIN_ICX = "ICX";
+	public final static String COIN_IOT = "IOT";
+	public final static String COIN_KNC = "KNC";
 	public final static String COIN_LTC = "LTC";
 	public final static String COIN_MIT = "MIT";
+	public final static String COIN_MCO = "MCO";
 	public final static String COIN_NEO = "NEO";
+	public final static String COIN_NXT = "NXT";
 	public final static String COIN_OMG = "OMG";
 	public final static String COIN_QTM = "QTM";
 	public final static String COIN_RDD = "RDD";
 	public final static String COIN_SIA = "SIA";
-	public static final String COIN_SNT = "SNT";
+	public final static String COIN_SNT = "SNT";
+	public final static String COIN_STM = "STM";
 	public final static String COIN_TRX = "TRX";
+	public final static String COIN_VEN = "VEN";
 	public final static String COIN_XLM = "XLM";
 	public final static String COIN_XRP = "XRP";
 	public final static String COIN_XVG = "XVG";
 	public final static String COIN_ZIL = "ZIL";
 	
 	
-    public static final String STATE_MAIN 			= "ST000";
-    public static final String STATE_SET_PRICE  	= "ST012";
-    public static final String STATE_SET_NUMBER 	= "ST013";
-    public static final String STATE_SET_TARGET 	= "ST014";
-    public static final String STATE_SET_MARKET 	= "ST015";
-    public static final String STATE_SET_DAYLOOP 	= "ST016";
-    public static final String STATE_SET_TIMELOOP	= "ST017";
-    public static final String STATE_SEND_MSG 		= "ST018";
-    public static final String STATE_CONFIRM_STOP 	= "ST019";
-    public static final String STATE_HAPPY_LINE 	= "ST020";
-    public static final String STATE_PREFERENCE 	= "ST021";
-    public static final String STATE_PREF_LANGUAGE 	= "ST022";
-    public static final String STATE_PREF_TIMEADJUST= "ST023";
+    public final static String STATE_MAIN 			= "ST000";
+    public final static String STATE_SET_PRICE  	= "ST012";
+    public final static String STATE_SET_NUMBER 	= "ST013";
+    public final static String STATE_SET_TARGET 	= "ST014";
+    public final static String STATE_SET_MARKET 	= "ST015";
+    public final static String STATE_SET_DAYLOOP 	= "ST016";
+    public final static String STATE_SET_TIMELOOP	= "ST017";
+    public final static String STATE_SEND_MSG 		= "ST018";
+    public final static String STATE_CONFIRM_STOP 	= "ST019";
+    public final static String STATE_HAPPY_LINE 	= "ST020";
+    public final static String STATE_PREFERENCE 	= "ST021";
+    public final static String STATE_PREF_LANGUAGE 	= "ST022";
+    public final static String STATE_PREF_TIMEADJUST= "ST023";
     
-    public static final String LANG_KR 	= "kr";
-    public static final String LANG_US 	= "us";
+    public final static String LANG_KR 	= "kr";
+    public final static String LANG_US 	= "us";
 	
 	
 }
