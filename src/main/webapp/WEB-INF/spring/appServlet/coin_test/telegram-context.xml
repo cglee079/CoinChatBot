@@ -13,11 +13,9 @@
 		<constructor-arg index="0">
 			<list>
 	            <ref bean="TelegramBot_TEST" />
-	            <ref bean="TelegramBot_BTG" />
-	            <ref bean="TelegramBot_ICX" />
-	            <ref bean="TelegramBot_IOT" />
-	            <ref bean="TelegramBot_NXT" />
-	            <ref bean="TelegramBot_STM" />
+	            <ref bean="TelegramBot_ELF" />
+	            <ref bean="TelegramBot_MCO" />
+	            <ref bean="TelegramBot_VEN" />
 	        </list>
         </constructor-arg>
 	</bean>

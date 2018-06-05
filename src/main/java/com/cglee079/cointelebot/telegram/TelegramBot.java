@@ -607,8 +607,6 @@ public class TelegramBot extends AbilityBot  {
 			langID = ID.LANG_KR;
 		} else if(cmd.equals(CMDER.getSetLanguageUS(lang))) {
 			langID = ID.LANG_US;
-		} else if(cmd.equals(CMDER.getSetLanguageOut(lang))) {
-			
 		} 
 		
 		if(clientService.updateLanguage(myCoin, userId.toString(), langID)) {
@@ -621,6 +619,9 @@ public class TelegramBot extends AbilityBot  {
 		
 		
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(langID));
+		if(cmd.equals(CMDER.getSetLanguageKR(lang)) || cmd.equals(CMDER.getSetLanguageUS(lang))) {
+			sendMessage(userId, messageId, msgMaker.explainHelp(enabledMarkets, langID), null);
+		}
 		
 		clientService.updateState(myCoin, userId.toString(), ID.STATE_MAIN);
 		
@@ -720,15 +721,15 @@ public class TelegramBot extends AbilityBot  {
 		
 		msg += msgMaker.msgBTCCurrentTime(date, lang);
 		
-		
 		if(market.startsWith(ID.MARKET_KR) && (market.equals(ID.MARKET_COINNEST) || market.equals(ID.MARKET_KORBIT))) {
 			if(market.equals(ID.MARKET_COINNEST)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_COINNEST, lang); }
 			if(market.equals(ID.MARKET_KORBIT)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_KORBIT, lang); }
 			
+			market = null;
 			String marketID = null;
 			for(int i = 0; i < enabledMarkets.size(); i++) {
 				marketID = enabledMarkets.get(i);
-				if(marketID.startsWith(ID.MARKET_KR) && marketID != ID.MARKET_COINNEST && marketID != ID.MARKET_KORBIT) {
+				if(marketID.startsWith(ID.MARKET_KR) && !marketID.equals(ID.MARKET_COINNEST) && !marketID.equals(ID.MARKET_KORBIT)) {
 					msg += msgMaker.msgBTCReplaceAnotherMarket(marketID, lang);
 					market = marketID;
 					break;
@@ -741,10 +742,11 @@ public class TelegramBot extends AbilityBot  {
 			if(market.equals(ID.MARKET_BITTREX)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_BITTREX, lang); }
 			if(market.equals(ID.MARKET_OKEX)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_OKEX, lang); }
 			
+			market = null;
 			String marketID = null;
 			for(int i = 0; i < enabledMarkets.size(); i++) {
 				marketID = enabledMarkets.get(i);
-				if(marketID.startsWith(ID.MARKET_US) && marketID != ID.MARKET_BITTREX) {
+				if(marketID.startsWith(ID.MARKET_US) && !marketID.equals(ID.MARKET_BITTREX)&& !marketID.equals(ID.MARKET_OKEX)) {
 					msg += msgMaker.msgBTCReplaceAnotherMarket(marketID, lang);
 					market = marketID;
 					break;
@@ -754,29 +756,33 @@ public class TelegramBot extends AbilityBot  {
 			msg += "\n";
 		}
 		
-		try {
-			coin 	= coinManager.getCoin(myCoin, market);
-			btc 	= coinManager.getCoin(ID.COIN_BTC, market);
-		} catch (ServerErrorException e) {
-			Log.i(e.log());
-			e.printStackTrace();			
-			return msgMaker.warningWaitSecond(lang) + e.getTelegramMsg();
-		}
-	
-		if(coin != null && btc != null){
-			double coinCV = coin.getDouble("last");
-			double coinBV = coin.getDouble("first");
-			double btcCV = btc.getDouble("last");
-			double btcBV = btc.getDouble("first");
-			JSONObject coinMoney = null;
-			if(inBtcs.get(market)) {
-				coinMoney = coinManager.getMoney(coin, market);
+		if(market != null) {
+			try {
+				coin 	= coinManager.getCoin(myCoin, market);
+				btc 	= coinManager.getCoin(ID.COIN_BTC, market);
+			} catch (ServerErrorException e) {
+				Log.i(e.log());
+				e.printStackTrace();			
+				return msgMaker.warningWaitSecond(lang) + e.getTelegramMsg();
 			}
-			msg += msgMaker.msgBTCResult(coinCV, coinBV, btcCV, btcBV, coinMoney, market, lang);
-			
-			return msg;
+		
+			if(coin != null && btc != null){
+				double coinCV = coin.getDouble("last");
+				double coinBV = coin.getDouble("first");
+				double btcCV = btc.getDouble("last");
+				double btcBV = btc.getDouble("first");
+				JSONObject coinMoney = null;
+				if(inBtcs.get(market)) {
+					coinMoney = coinManager.getMoney(coin, market);
+				}
+				msg += msgMaker.msgBTCResult(coinCV, coinBV, btcCV, btcBV, coinMoney, market, lang);
+				
+				return msg;
+			} else {
+				return msgMaker.warningNeedToStart(lang) + "Coin NULL\n";
+			}
 		} else {
-			return msgMaker.warningNeedToStart(lang) + "Coin NULL\n";
+			return msg;
 		}
 		
 	}

@@ -1273,9 +1273,9 @@ public class MessageMaker {
 			msg += "Once you reach the target price, you will be notified.\n";
 			msg += "Coin price information is updated every 1 minute.\n";
 			msg += "\n";
-			msg += "You can check the price difference between markets.\n";
+			msg += "You can check the coin price on each market\n";
 			msg += "\n";
-			msg += "You can check the amount of change compared to Bitcoin.\n";
+			msg += "You can check coin price change rate compared to BTC\n";
 			msg += "\n";
 			
 			msg += "* Markets : ";
@@ -1296,7 +1296,7 @@ public class MessageMaker {
 		msg += "* Use the " + CMDER.getMainPref(ID.LANG_US) + " Menu.\n";
 		msg += "* First. Please set language to English.\n";
 		msg += "* Second. Set the time adjustment for accurate notifications. Because of time difference by country.\n";
-		msg += "* Last. if you set market in USA using '" +CMDER.getMainSetMarket(ID.LANG_US) + "' menu, the currency unit is changed to USD.\n";
+//		msg += "* Last. if you set market in USA using '" +CMDER.getMainSetMarket(ID.LANG_US) + "' menu, the currency unit is changed to USD.\n";
 		return msg;
 	}
 	
