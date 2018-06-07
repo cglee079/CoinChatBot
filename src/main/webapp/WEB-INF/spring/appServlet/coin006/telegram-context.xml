@@ -12,11 +12,6 @@
 	<bean id="TelegramClient" class="com.cglee079.cointelebot.telegram.TelegramClient">
 		<constructor-arg index="0">
 			<list>
-	            <ref bean="TelegramBot_BTG" />
-	            <ref bean="TelegramBot_ICX" />
-	            <ref bean="TelegramBot_IOT" />
-	            <ref bean="TelegramBot_NXT" />
-	            <ref bean="TelegramBot_STM" />
 	            
 	        </list>
         </constructor-arg>

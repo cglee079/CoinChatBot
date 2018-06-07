@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 
 public class UpbitPooler extends ApiPooler{
+	protected static final int MAX_RETRY_CNT = 5;
+	protected int retryCnt = 0;
 	
 	public JSONObject getCoin(String coin) throws ServerErrorException {
 		String param = coinParam.get(coin);
@@ -45,7 +47,7 @@ public class UpbitPooler extends ApiPooler{
 				return this.getCurrentCoin(param);
 			} else {
 				retryCnt = 0;
-				throw new ServerErrorException("업비트 서버 에러 : " + e.getMessage());
+				throw new ServerErrorException("Upbit Server Error : " + e.getMessage());
 			}
 		}
 	}
@@ -76,7 +78,7 @@ public class UpbitPooler extends ApiPooler{
 				return this.getFirst(param);
 			} else {
 				retryCnt = 0;
-				throw new ServerErrorException("업비트 서버 에러 : " + e.getMessage());
+				throw new ServerErrorException("Upbit Server Error : " + e.getMessage());
 			}
 		}
 	}
@@ -115,7 +117,7 @@ public class UpbitPooler extends ApiPooler{
 				return this.getOnedayInfo(param);
 			} else {
 				retryCnt = 0;
-				throw new ServerErrorException("업비트 서버 에러 : " + e.getMessage());
+				throw new ServerErrorException("Upbit Server Error : " + e.getMessage());
 			}
 		}
 		
@@ -162,7 +164,7 @@ public class UpbitPooler extends ApiPooler{
 				return this.getOnedayInfo(param);
 			} else {
 				retryCnt = 0;
-				throw new ServerErrorException("업비트 서버 에러 : " + e.getMessage());
+				throw new ServerErrorException("Upbit Server Error : " + e.getMessage());
 			}
 		}
 		

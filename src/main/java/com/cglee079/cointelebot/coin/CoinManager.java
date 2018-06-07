@@ -78,7 +78,7 @@ public class CoinManager {
 		okexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_OKEX));
 	}
 	
-	private double exchangeRate = 1075;
+	private double exchangeRate = 1068;
 
 	public double getExchangeRate() {
 		return exchangeRate;

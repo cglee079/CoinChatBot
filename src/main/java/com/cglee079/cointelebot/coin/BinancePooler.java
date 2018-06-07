@@ -45,20 +45,13 @@ public class BinancePooler extends ApiPooler{
 	public void getCoins() throws ServerErrorException {
 		String url = "https://api.binance.com/api/v1/ticker/24hr";
 		HttpClient httpClient = new HttpClient();
-		String response;
+		String response = "";
 		try {
 			response = httpClient.get(url);
 			coinObjs = new JSONArray(response);
-			retryCnt = 0;
 		} catch (Exception e) {
-			retryCnt++;
-			if(retryCnt < MAX_RETRY_CNT) {
-				this.getCoins();
-			} else {
-				retryCnt 	= 0;
-				coinObjs 	= null;
-				errMessage 	= e.getMessage();
-			}
+			coinObjs 	= null;
+			errMessage 	= e.getMessage();
 		}
 	}
 }

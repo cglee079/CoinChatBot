@@ -12,11 +12,12 @@
 	<bean id="TelegramClient" class="com.cglee079.cointelebot.telegram.TelegramClient">
 		<constructor-arg index="0">
 			<list>
-			 	<ref bean="TelegramBot_RDD" />
-	            <ref bean="TelegramBot_ZIL" />
 	            <ref bean="TelegramBot_ELF" />
+	            <ref bean="TelegramBot_IOT" />
 	            <ref bean="TelegramBot_MCO" />
+	            <ref bean="TelegramBot_RDD" />
 	            <ref bean="TelegramBot_VEN" />
+	            <ref bean="TelegramBot_ZIL" />
 	        </list>
         </constructor-arg>
 	</bean>

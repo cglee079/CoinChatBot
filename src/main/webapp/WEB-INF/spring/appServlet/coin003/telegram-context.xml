@@ -15,6 +15,7 @@
 				<ref bean="TelegramBot_QTM" />
 				<ref bean="TelegramBot_SIA" />
 				<ref bean="TelegramBot_SNT" />
+				<ref bean="TelegramBot_STM" />
 				<ref bean="TelegramBot_TRX" />
 				<ref bean="TelegramBot_XLM" />
 	        </list>

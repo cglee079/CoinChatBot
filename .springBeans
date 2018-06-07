@@ -10,13 +10,80 @@
 		<config>src/main/webapp/WEB-INF/spring/appServlet/scheduler-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin_test/telegram-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin001/coin-gto-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin002/coin-eos-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin005/coin-iot-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin004/coin-icx-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-stm-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin001/coin-btg-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin002/coin-nxt-context.xml</config>
 	</configs>
 	<autoconfigs>
-		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin001/coin-btc-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-iot-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-gto-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin004/coin-xvg-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-mit-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin005/coin-ven-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin005/coin-zil-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-mco-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin002/coin-ltc-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-cnn-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin005/telegram-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-btg-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-omg-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-icx-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-qtm-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/telegram-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-btc-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-trx-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-sia-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-rdd-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-trx-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin004/coin-omg-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin004/coin-xrp-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin005/coin-rdd-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-qtm-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin001/coin-ada-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin005/coin-elf-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-xvg-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-zil-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin004/telegram-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-xrp-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-bch-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-elf-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin002/coin-eth-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin004/coin-mit-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-eth-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin_test/coin-test-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-snt-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin001/telegram-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/service-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-ada-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-xlm-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/dao-context.xml</config>
-		<config>src/main/webapp/WEB-INF/spring/appServlet/coin_test/coin-xrp-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-stm-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-nxt-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin002/coin-knc-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin005/coin-mco-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-etc-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-ven-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-knc-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-ltc-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin001/coin-bch-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin004/coin-cnn-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-sia-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-eos-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin006/telegram-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/telegram-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-snt-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin002/telegram-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin002/coin-neo-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin001/coin-etc-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-neo-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/root-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin/coin-xlm-context.xml</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

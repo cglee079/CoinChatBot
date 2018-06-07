@@ -11,18 +11,9 @@ public class ExchangePooler extends ApiPooler{
 		String response;
 		try {
 			response = httpClient.get(url);
-			
-			retryCnt = 0;
 			return new JSONObject(response).getJSONObject("rates").getDouble("KRW");
 		} catch (Exception e) {
-			retryCnt++;
-			if(retryCnt < MAX_RETRY_CNT) {
-				return this.usd2krw();
-			} else {
-				retryCnt = 0;
-				throw new ServerErrorException("환율정보 서버 에러");
-			}
+			throw new ServerErrorException("Exchange rate server error " + e.getMessage());
 		}
-	
 	}
 }

@@ -12,6 +12,7 @@ import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.dao.ClientDao;
 import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.ClientVo;
+import com.cglee079.cointelebot.util.TimeStamper;
 
 @Service
 public class ClientService {
@@ -136,7 +137,6 @@ public class ClientService {
 		
 	}
 	
-	
 	public boolean update(ClientVo client) {
 		return clientDao.update(client);
 	}
@@ -248,6 +248,15 @@ public class ClientService {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setLang(lang);
+			return clientDao.update(client);
+		} else{
+			return false;
+		}
+	}
+	
+	public boolean updateMsgDate(ClientVo client) {
+		if(client != null){
+			client.setMsgDate(TimeStamper.getDateTime());
 			return clientDao.update(client);
 		} else{
 			return false;

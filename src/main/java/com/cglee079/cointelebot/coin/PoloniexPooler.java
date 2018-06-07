@@ -40,16 +40,9 @@ public class PoloniexPooler extends ApiPooler{
 		HttpClient httpClient = new HttpClient();
 		try {
 			coinObjs = new JSONObject(httpClient.get(url));
-			retryCnt = 0;
 		} catch (Exception e) {
-			retryCnt++;
-			if(retryCnt < MAX_RETRY_CNT) {
-				this.getCoins();
-			} else {
-				retryCnt 	= 0;
-				coinObjs 	= null;
-				errMessage	= e.getMessage();
-			}
+			coinObjs 	= null;
+			errMessage	= e.getMessage();
 		}
 	}
 }

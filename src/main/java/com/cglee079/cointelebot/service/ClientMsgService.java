@@ -12,6 +12,7 @@ import org.telegram.telegrambots.api.objects.User;
 import com.cglee079.cointelebot.dao.ClientMsgDao;
 import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.ClientMsgVo;
+import com.cglee079.cointelebot.util.TimeStamper;
 
 @Service
 public class ClientMsgService {
@@ -33,7 +34,7 @@ public class ClientMsgService {
 		clientMsg.setUserId(user.getId().toString());
 		clientMsg.setUsername(user.getLastName() + " " + user.getFirstName());
 		clientMsg.setMsg(message.getText());
-		clientMsg.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		clientMsg.setDate(TimeStamper.getDateTime());
 		
 		Log.i(clientMsg.log(coinId));
 		return clientMsgDao.insert(clientMsg);

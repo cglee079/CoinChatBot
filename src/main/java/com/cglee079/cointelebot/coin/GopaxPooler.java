@@ -1,7 +1,5 @@
 package com.cglee079.cointelebot.coin;
 
-import java.util.Iterator;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,7 +11,7 @@ public class GopaxPooler extends ApiPooler{
 	private String errMessage;
 	
 	public GopaxPooler() throws ServerErrorException {
-		getCoins();
+		this.getCoins();
 	}
 	
 	public JSONObject getCoin(String coin) throws ServerErrorException {
@@ -51,17 +49,9 @@ public class GopaxPooler extends ApiPooler{
 			try {
 				response = httpClient.get(url);
 				coinObjs = new JSONArray(response);
-				
-				retryCnt = 0;
 			} catch (Exception e) {
-				retryCnt++;
-				if(retryCnt < MAX_RETRY_CNT) {
-					this.getCoins();
-				} else {
-					retryCnt 	= 0;
-					coinObjs 	= null;
-					errMessage 	= e.getMessage();
-				}
+				coinObjs 	= null;
+				errMessage 	= e.getMessage();
 			}
 		}
 	}

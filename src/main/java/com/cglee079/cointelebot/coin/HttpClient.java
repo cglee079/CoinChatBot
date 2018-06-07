@@ -17,8 +17,8 @@ public class HttpClient {
 			
 			// optional default is GET
 			con.setRequestMethod("GET");
-			con.setConnectTimeout(10 * 1000);
-			con.setReadTimeout(10 * 1000);
+			con.setConnectTimeout(15 * 1000);
+			con.setReadTimeout(15 * 1000);
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String inputLine;

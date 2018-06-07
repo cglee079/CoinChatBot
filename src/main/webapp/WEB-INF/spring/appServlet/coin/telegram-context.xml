@@ -15,20 +15,32 @@
 				<ref bean="TelegramBot_ADA" />
 				<ref bean="TelegramBot_BCH" />
 				<ref bean="TelegramBot_BTC" />
-				<ref bean="TelegramBot_EOS" />
 				<ref bean="TelegramBot_ETC" />
-				<ref bean="TelegramBot_ETH" />
 				<ref bean="TelegramBot_GTO" />
+				
+				<ref bean="TelegramBot_EOS" />
+				<ref bean="TelegramBot_ETH" />
 				<ref bean="TelegramBot_KNC" />
 				<ref bean="TelegramBot_LTC" />
 				<ref bean="TelegramBot_NEO" />
+				
 				<ref bean="TelegramBot_QTM" />
 				<ref bean="TelegramBot_SIA" />
 				<ref bean="TelegramBot_SNT" />
 				<ref bean="TelegramBot_TRX" />
 				<ref bean="TelegramBot_XLM" />
+				
+				<ref bean="TelegramBot_CNN" />
+	            <ref bean="TelegramBot_MIT" />
+	            <ref bean="TelegramBot_OMG" />
 				<ref bean="TelegramBot_XRP" />
 				<ref bean="TelegramBot_XVG" />
+				
+				<ref bean="TelegramBot_ELF" />
+	            <ref bean="TelegramBot_MCO" />
+	            <ref bean="TelegramBot_RDD" />
+	            <ref bean="TelegramBot_VEN" />
+	            <ref bean="TelegramBot_ZIL" />
 				
 				<ref bean="TelegramBot_BTG" />
 	            <ref bean="TelegramBot_ICX" />

@@ -13,6 +13,7 @@
 		<constructor-arg index="0">
 			<list>
 			 	<ref bean="TelegramBot_CNN" />
+			 	<ref bean="TelegramBot_ICX" />
 	            <ref bean="TelegramBot_MIT" />
 	            <ref bean="TelegramBot_OMG" />
 				<ref bean="TelegramBot_XRP" />

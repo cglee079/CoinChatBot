@@ -50,20 +50,14 @@ public class BittrexPooler extends ApiPooler{
 			response = httpClient.get(url);
 			JSONObject jsonObj= new JSONObject(response);
 			if(!jsonObj.getBoolean("success")) {
-				throw new ServerErrorException("Bitrrex Server Error : " + jsonObj.getString("message"));
+				throw new Exception("Bitrrex Server Error : " + jsonObj.getString("message"));
 			} 
 			
 			coinObjs = jsonObj.getJSONArray("result");
 			
-			retryCnt = 0;
 		} catch (Exception e) {
-			retryCnt++;
-			if(retryCnt < MAX_RETRY_CNT) {
-				this.getCoins();
-			} else {
-				retryCnt = 0;
-				throw new ServerErrorException("Bitrrex Server Error : " + e.getMessage());
-			}
+			coinObjs 	= null;
+			errMessage 	= e.getMessage();
 		}
 	}
 }

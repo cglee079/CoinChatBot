@@ -40,17 +40,9 @@ public class HuobiPooler extends ApiPooler{
 			newCoinObj.put("high", coinObj.getDouble("high"));
 			newCoinObj.put("low", coinObj.getDouble("low"));
 			
-			retryCnt = 0;
-			
 			return newCoinObj;
 		} catch (Exception e) {
-			retryCnt++;
-			if(retryCnt < MAX_RETRY_CNT) {
-				return this.getCurrentCoin(param);
-			} else {
-				retryCnt 	= 0;
-				throw new ServerErrorException("Huobi server error: " + e.getMessage());
-			}
+			throw new ServerErrorException("Huobi server error: " + e.getMessage());
 		}
 		
 	}

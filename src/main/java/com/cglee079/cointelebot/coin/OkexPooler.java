@@ -37,17 +37,9 @@ public class OkexPooler extends ApiPooler{
 			newCoinObj.put("errorMsg", "");
 			newCoinObj.put("result", "success");
 			
-			retryCnt = 0;
 			return newCoinObj;
 		} catch (Exception e) {
-			e.printStackTrace();
-			retryCnt++;
-			if(retryCnt < MAX_RETRY_CNT) {
-				return this.getCurrentCoin(param);
-			} else {
-				retryCnt = 0;
-				throw new ServerErrorException("OKEx Server Error : " + e.getMessage());
-			}
+			throw new ServerErrorException("OKEx Server Error : " + e.getMessage());
 		}
 	}
 }

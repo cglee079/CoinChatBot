@@ -61,16 +61,9 @@ public class BitfinexPooler extends ApiPooler{
 					coinObjs.put(coinParam, coinObj);
 				}
 				
-				retryCnt = 0;
 			} catch (Exception e) {
-				retryCnt++;
-				if(retryCnt < MAX_RETRY_CNT) {
-					this.getCoins();
-				} else {
-					retryCnt 	= 0;
-					coinObjs 	= null;
-					errMessage 	= e.getMessage();
-				}
+				coinObjs 	= null;
+				errMessage 	= e.getMessage();
 			}
 		}
 	}

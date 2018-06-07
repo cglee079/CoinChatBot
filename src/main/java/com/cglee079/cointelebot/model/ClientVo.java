@@ -25,6 +25,7 @@ public class ClientVo {
 	private String openDate;
 	private String reopenDate;
 	private String closeDate;
+	private String msgDate;
 
 	public String getCoinId() {
 		return coinId;
@@ -190,6 +191,14 @@ public class ClientVo {
 	public void setCloseDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		this.closeDate = format.format(date);
+	}
+
+	public String getMsgDate() {
+		return msgDate;
+	}
+
+	public void setMsgDate(String msgDate) {
+		this.msgDate = msgDate;
 	}
 
 }

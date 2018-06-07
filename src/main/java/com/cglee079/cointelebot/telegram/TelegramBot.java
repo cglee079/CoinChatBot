@@ -114,6 +114,8 @@ public class TelegramBot extends AbilityBot  {
 		String cmd			= message.getText();
 		
 		ClientVo client = clientService.get(myCoin, userId);
+		clientService.updateMsgDate(client);
+		
 		
 		if(message.getText().equals("/start") || client == null) {
 			String lang= ID.LANG_KR;
@@ -150,6 +152,7 @@ public class TelegramBot extends AbilityBot  {
 		case ID.STATE_PREF_LANGUAGE	: handleSetLanguage(userId, username, messageId, cmd, lang); break;
 		case ID.STATE_PREF_TIMEADJUST: handleTimeAdjust(userId, username, messageId, cmd, lang); break;
 		}
+		
 	}
 
 	/* 메인 메뉴 응답 처리 */

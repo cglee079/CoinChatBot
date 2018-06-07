@@ -41,17 +41,10 @@ public class HadaxPooler extends ApiPooler{
 			newCoinObj.put("high", coinObj.getDouble("high"));
 			newCoinObj.put("low", coinObj.getDouble("low"));
 			
-			retryCnt = 0;
 			
 			return newCoinObj;
 		} catch (Exception e) {
-			retryCnt++;
-			if(retryCnt < MAX_RETRY_CNT) {
-				return this.getCurrentCoin(param);
-			} else {
-				retryCnt 	= 0;
-				throw new ServerErrorException("Hadax server error: " + e.getMessage());
-			}
+			throw new ServerErrorException("Hadax server error: " + e.getMessage());
 		}
 		
 	}

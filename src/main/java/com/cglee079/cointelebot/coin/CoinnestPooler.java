@@ -24,16 +24,9 @@ public class CoinnestPooler extends ApiPooler{
 			coinObj.put("high", data.getDouble("high"));
 			coinObj.put("low", data.getDouble("low"));
 			
-			retryCnt = 0;
 			return coinObj;				
 		} catch (Exception e) {
-			retryCnt++;
-			if(retryCnt < MAX_RETRY_CNT) {
-				return this.getCoin(coin);
-			} else {
-				retryCnt = 0;
-				throw new ServerErrorException("Coinnest Server Error : " + e.getMessage());
-			}
+			throw new ServerErrorException("Coinnest Server Error : " + e.getMessage());
 		}
 	}
 }

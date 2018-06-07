@@ -19,19 +19,12 @@ public class CoinonePooler extends ApiPooler{
 			if(jsonObj.getString("result").equals("success")){ 
 				jsonObj.put("errorMsg", "");
 				
-				retryCnt = 0;
 				return jsonObj;				
 			} else {
 				throw new ServerErrorException("Coinone server error", jsonObj.getInt("errorCode"));
 			}
 		} catch (Exception e) {
-			retryCnt++;
-			if(retryCnt < MAX_RETRY_CNT) {
-				return this.getCoin(coin);
-			} else {
-				retryCnt = 0;
-				throw new ServerErrorException("Coinone server error : " + e.getMessage());
-			}
+			throw new ServerErrorException("Coinone server error : " + e.getMessage());
 		}
 		
 	}

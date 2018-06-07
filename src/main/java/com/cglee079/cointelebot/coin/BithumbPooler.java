@@ -27,19 +27,12 @@ public class BithumbPooler extends ApiPooler{
 				coinObj.put("high", data.getDouble("max_price"));
 				coinObj.put("low", data.getDouble("min_price"));
 				
-				retryCnt = 0;
 				return coinObj;				
 			} else{
 				throw new ServerErrorException("Bithumb Server Error", jsonObj.getInt("status"));
 			}
 		} catch (Exception e) {
-			retryCnt++;
-			if(retryCnt < MAX_RETRY_CNT) {
-				return this.getCoin(coin);
-			} else {
-				retryCnt = 0;
-				throw new ServerErrorException("Bithumb Server Error : " + e.getMessage());
-			}
+			throw new ServerErrorException("Bithumb Server Error : " + e.getMessage());
 		}
 	}
 }
