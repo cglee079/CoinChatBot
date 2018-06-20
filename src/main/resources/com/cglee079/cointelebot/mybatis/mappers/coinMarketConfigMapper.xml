@@ -4,17 +4,23 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cglee079.cointelebot.mapper.CoinMarketConfigMapper">
 
-	<select id="list" resultType="com.cglee079.cointelebot.model.CoinMarketConfigVo">
-			SELECT 
-			MCONFIG_COINID as 'coinId',
-			MCONFIG_MARKET as 'market',
-			MCONFIG_INBTC as 'inBtc',
-			MCONFIG_ENABLED as 'enabled'
-			FROM TB_COINBOT_MARKET_CONFIG
-			WHERE 1 = 1
-			AND MCONFIG_ENABLED = 'Y'
-			AND MCONFIG_COINID = #{coinId}
-			ORDER BY MCONFIG_MARKET ASC;
+	<select id="list" parameterType="map" resultType="com.cglee079.cointelebot.model.CoinMarketConfigVo">
+		SELECT
+		MCONFIG_MARKET as 'market', 
+		MCONFIG_COINID as 'coinId',
+		MCONFIG_INBTC as 'inBtc',
+		MCONFIG_PARAM as 'param',
+		MCONFIG_ENABLED as 'enabled'
+		FROM TB_COINBOT_MARKET_CONFIG
+		WHERE 1 = 1
+		AND MCONFIG_ENABLED = 'Y'
+		<if test="coinId != null">
+		AND MCONFIG_COINID = #{coinId}
+		</if>
+		<if test="market != null">
+		AND MCONFIG_MARKET = #{market}
+		</if>
+		ORDER BY MCONFIG_MARKET ASC;
 	</select>
 	
 </mapper>

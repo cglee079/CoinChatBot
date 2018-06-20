@@ -1,18 +1,11 @@
 package com.cglee079.cointelebot.model;
 
 public class CoinMarketConfigVo {
-	private String coinId;
 	private String market;
+	private String coinId;
 	private boolean inBtc;
+	private String param;
 	private String enabled;
-
-	public String getCoinId() {
-		return coinId;
-	}
-
-	public void setCoinId(String coinId) {
-		this.coinId = coinId;
-	}
 
 	public String getMarket() {
 		return market;
@@ -22,12 +15,28 @@ public class CoinMarketConfigVo {
 		this.market = market;
 	}
 
+	public String getCoinId() {
+		return coinId;
+	}
+
+	public void setCoinId(String coinId) {
+		this.coinId = coinId;
+	}
+
 	public boolean isInBtc() {
 		return inBtc;
 	}
 
 	public void setInBtc(boolean inBtc) {
 		this.inBtc = inBtc;
+	}
+
+	public String getParam() {
+		return param;
+	}
+
+	public void setParam(String param) {
+		this.param = param;
 	}
 
 	public String getEnabled() {

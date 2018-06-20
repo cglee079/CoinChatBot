@@ -1,6 +1,8 @@
 package com.cglee079.cointelebot.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,10 @@ public class CoinMarketConfigDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	public List<CoinMarketConfigVo> list(String coinId) {
-		return sqlSession.selectList(namespace + ".list", coinId);
+	public List<CoinMarketConfigVo> list(String market, String coinId) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("market", market);
+		map.put("coinId", coinId);
+		return sqlSession.selectList(namespace + ".list", map);
 	}
 }

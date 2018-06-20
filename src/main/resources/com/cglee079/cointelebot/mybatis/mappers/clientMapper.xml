@@ -6,7 +6,7 @@
 
 	<select id="get" resultType="com.cglee079.cointelebot.model.ClientVo">
 		SELECT
-		CLNT_coinId as 'coinId', 
+		CLNT_COINID as 'coinId', 
 		CLNT_USERID as 'userId',
 		CLNT_USERNAME as 'username',
 		CLNT_LOCAL_TIME as 'localTime',
@@ -25,15 +25,15 @@
 		CLNT_REOPEN_DATE as 'reopenDate',
 		CLNT_CLOSE_DATE as 'closeDate',
 		CLNT_MSG_DATE as 'msgDate'
-		FROM TB_COINBOT_CLIENT
-		WHERE CLNT_coinId = #{coinId}
+		FROM TB_TESTBOT_CLIENT
+		WHERE CLNT_COINID = #{coinId}
 		AND CLNT_USERID = #{userId}
 	</select>
 	
 	<select id="S01" resultType="com.cglee079.cointelebot.model.ClientVo" parameterType="map">
 		/* 거래소, 시간주기, 일일주기 별 사용자 리스트 */
 		SELECT 
-		CLNT_coinId as 'coinId',
+		CLNT_COINID as 'coinId',
 		CLNT_USERID as 'userId',
 		CLNT_USERNAME as 'username',
 		CLNT_LOCAL_TIME as 'localTime',
@@ -52,9 +52,9 @@
 		CLNT_REOPEN_DATE as 'reopenDate',
 		CLNT_CLOSE_DATE as 'closeDate',
 		CLNT_MSG_DATE as 'msgDate'
-		FROM TB_COINBOT_CLIENT
+		FROM TB_TESTBOT_CLIENT
 		WHERE 1 = 1
-		AND CLNT_coinId = #{coinId}
+		AND CLNT_COINID = #{coinId}
 		AND CLNT_ENABLED = 'Y'
 		<if test="market != null">
 		AND CLNT_MARKET = #{market}
@@ -70,7 +70,7 @@
 	<select id="S02" resultType="com.cglee079.cointelebot.model.ClientVo" parameterType="map">
 		/* 목표가격 현재가 이상 설정, 사용자 리스트*/
 		SELECT 
-		CLNT_coinId as 'coinId',
+		CLNT_COINID as 'coinId',
 		CLNT_USERID as 'userId',
 		CLNT_USERNAME as 'username',
 		CLNT_LOCAL_TIME as 'localTime',
@@ -89,10 +89,10 @@
 		CLNT_REOPEN_DATE as 'reopenDate',
 		CLNT_CLOSE_DATE as 'closeDate',
 		CLNT_MSG_DATE as 'msgDate'
-		FROM TB_COINBOT_CLIENT
+		FROM TB_TESTBOT_CLIENT
 		WHERE 1 = 1
 		AND CLNT_ENABLED = 'Y'
-		AND CLNT_coinId = #{coinId}
+		AND CLNT_COINID = #{coinId}
 		AND CLNT_MARKET = #{market}
 		<![CDATA[ AND  #{coinValue} >= CLNT_TGUP_PRICE ]]>
 	</select>
@@ -101,7 +101,7 @@
 	<select id="S03" resultType="com.cglee079.cointelebot.model.ClientVo" parameterType="map">
 		/* 목표가격 현재가 이하 설정, 사용자 리스트 */
 		SELECT 
-		CLNT_coinId as 'coinId',
+		CLNT_COINID as 'coinId',
 		CLNT_USERID as 'userId',
 		CLNT_USERNAME as 'username',
 		CLNT_LOCAL_TIME as 'localTime',
@@ -120,29 +120,29 @@
 		CLNT_REOPEN_DATE as 'reopenDate',
 		CLNT_CLOSE_DATE as 'closeDate',
 		CLNT_MSG_DATE as 'msgDate'
-		FROM TB_COINBOT_CLIENT
+		FROM TB_TESTBOT_CLIENT
 		WHERE 1 = 1
 		AND CLNT_ENABLED = 'Y'
-		AND CLNT_coinId = #{coinId}
+		AND CLNT_COINID = #{coinId}
 		AND CLNT_MARKET = #{market}
 		<![CDATA[ AND  #{coinValue} <= CLNT_TGDOWN_PRICE ]]>
 	</select>
 	
 	
 	<insert id="insert">
-		INSERT INTO TB_COINBOT_CLIENT(CLNT_coinId, CLNT_USERID, CLNT_USERNAME, CLNT_LOCAL_TIME, CLNT_LANG, CLNT_STATE, CLNT_MARKET, CLNT_TIMELOOP, CLNT_DAYLOOP, CLNT_TGUP_PRICE, CLNT_TGDOWN_PRICE, CLNT_PRICE, CLNT_COIN_COUNT, CLNT_ENABLED, CLNT_ERRCNT, CLNT_OPEN_DATE, CLNT_REOPEN_DATE, CLNT_CLOSE_DATE, CLNT_MSG_DATE)
+		INSERT INTO TB_TESTBOT_CLIENT(CLNT_COINID, CLNT_USERID, CLNT_USERNAME, CLNT_LOCAL_TIME, CLNT_LANG, CLNT_STATE, CLNT_MARKET, CLNT_TIMELOOP, CLNT_DAYLOOP, CLNT_TGUP_PRICE, CLNT_TGDOWN_PRICE, CLNT_PRICE, CLNT_COIN_COUNT, CLNT_ENABLED, CLNT_ERRCNT, CLNT_OPEN_DATE, CLNT_REOPEN_DATE, CLNT_CLOSE_DATE, CLNT_MSG_DATE)
 		VALUES (#{coinId}, #{userId}, #{username}, #{localTime}, #{lang}, #{state}, #{market}, #{timeLoop}, #{dayLoop}, #{targetUpPrice}, #{targetDownPrice}, #{price}, #{coinCount}, #{enabled}, #{errCnt}, #{openDate}, #{reopenDate}, #{closeDate}, #{msgDate})
 	</insert>
 	
 	<delete id="delete" parameterType="map">
-		DELETE FROM TB_COINBOT_CLIENT
-		WHERE CLNT_coinId = #{coinId}
+		DELETE FROM TB_TESTBOT_CLIENT
+		WHERE CLNT_COINID = #{coinId}
 		AND CLNT_USERID = #{userId}
 		
 	</delete>
 	
 	<update id="update">
-		UPDATE TB_COINBOT_CLIENT
+		UPDATE TB_TESTBOT_CLIENT
 		SET
 		CLNT_USERNAME = #{username},
 		CLNT_LOCAL_TIME = #{localTime},

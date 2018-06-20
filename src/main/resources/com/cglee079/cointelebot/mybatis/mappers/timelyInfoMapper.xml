@@ -15,7 +15,7 @@
 		TINFO_RESULT as 'result',
 		TINFO_ERRCODE as 'errorCode',
 		TINFO_ERRMSG as 'errorMsg'
-		FROM TB_COINBOT_TIMELYINFO
+		FROM TB_TESTBOT_TIMELYINFO
 		WHERE 1 = 1
 		AND TINFO_COINID = #{coinId}
 		AND TINFO_DATE = #{date}
@@ -35,7 +35,7 @@
 		TINFO_RESULT as 'result',
 		TINFO_ERRCODE as 'errorCode',
 		TINFO_ERRMSG as 'errorMsg'
-		FROM TB_COINBOT_TIMELYINFO
+		FROM TB_TESTBOT_TIMELYINFO
 		WHERE 1 = 1
 		AND TINFO_COINID = #{coinId}
 		<if test="market != null">
@@ -46,7 +46,7 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO TB_COINBOT_TIMELYINFO
+		INSERT INTO TB_TESTBOT_TIMELYINFO
 		VALUES (#{coinId}, #{date}, #{market}, #{high}, #{low}, #{last}, #{volume}, #{result}, #{errorCode}, #{errorMsg})
 	</insert>
 	

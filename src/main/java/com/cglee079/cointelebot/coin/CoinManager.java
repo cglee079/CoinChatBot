@@ -1,7 +1,5 @@
 package com.cglee079.cointelebot.coin;
 
-import java.util.HashMap;
-
 import javax.annotation.PostConstruct;
 
 import org.json.JSONObject;
@@ -9,15 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cglee079.cointelebot.constants.ID;
-import com.cglee079.cointelebot.constants.SET;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 import com.cglee079.cointelebot.log.Log;
 import com.cglee079.cointelebot.model.TimelyInfoVo;
-import com.cglee079.cointelebot.service.CoinMarketParamService;
+import com.cglee079.cointelebot.service.CoinMarketConfigService;
 
 public class CoinManager {
 	@Autowired
-	private CoinMarketParamService coinMarketParamService;
+	private CoinMarketConfigService coinMarketConfigService;
 	
 	@Autowired
 	private CoinonePooler coinonePooler;
@@ -63,19 +60,21 @@ public class CoinManager {
 
 	@PostConstruct
 	public void init() {
-		coinonePooler.setCoinParam(coinMarketParamService.get(ID.MARKET_COINONE));
-		bithumbPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BITHUMB));
-		upbitPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_UPBIT));
-		coinnestPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_COINNEST));
-		korbitPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_KORBIT));
-		gopaxPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_GOPAX));
-		bitfinexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BITFINEX));
-		bittrexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BITTREX));
-		poloniexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_POLONIEX));
-		binancePooler.setCoinParam(coinMarketParamService.get(ID.MARKET_BINANCE));
-		huobiPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_HUOBI));
-		hadaxPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_HADAX));
-		okexPooler.setCoinParam(coinMarketParamService.get(ID.MARKET_OKEX));
+		coinonePooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_COINONE));
+		bithumbPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_BITHUMB));
+		upbitPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_UPBIT));
+		coinnestPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_COINNEST));
+		korbitPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_KORBIT));
+		gopaxPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_GOPAX));
+		bitfinexPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_BITFINEX));
+		bittrexPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_BITTREX));
+		poloniexPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_POLONIEX));
+		binancePooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_BINANCE));
+		huobiPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_HUOBI));
+		hadaxPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_HADAX));
+		okexPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_OKEX));
+		
+		updateExchangeRate();
 	}
 	
 	private double exchangeRate = 1068;
