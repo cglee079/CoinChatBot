@@ -17,7 +17,7 @@
 			CONFIG_DIGIT_USD as 'digitUSD',
 			CONFIG_DIGIT_BTC as 'digitBTC',
 			CONFIG_VERSION as 'version'
-			FROM TB_COINBOT_CONFIG
+			FROM TB_COINBOT_COIN_CONFIG
 			WHERE 1 = 1
 			AND CONFIG_COINID = #{coinId}
 	</select>

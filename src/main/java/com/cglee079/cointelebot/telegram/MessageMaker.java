@@ -1189,7 +1189,7 @@ public class MessageMaker {
 			msg += "-----------------------\n";
 			for (int i = 0; i < coinInfosLen; i++) {
 				coinInfo = coinInfos.get(i);
-				msg += coinInfo.getSymbol() + " [" + coinInfo.getKrName() + "] \n";
+				msg += coinInfo.getCoinId() + " [" + coinInfo.getKrName() + "] \n";
 				msg += coinInfo.getChatAddr() + "\n";
 				msg += "\n";
 			}
@@ -1200,7 +1200,7 @@ public class MessageMaker {
 			msg += "-----------------------\n";
 			for (int i = 0; i < coinInfosLen; i++) {
 				coinInfo = coinInfos.get(i);
-				msg += coinInfo.getSymbol() + " [" + coinInfo.getUsName() + "] \n";
+				msg += coinInfo.getCoinId() + " [" + coinInfo.getUsName() + "] \n";
 				msg += coinInfo.getChatAddr() + "\n";
 				msg += "\n";
 			}

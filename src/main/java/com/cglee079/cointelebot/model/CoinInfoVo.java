@@ -2,7 +2,6 @@ package com.cglee079.cointelebot.model;
 
 public class CoinInfoVo {
 	private String coinId;
-	private String symbol;
 	private String usName;
 	private String krName;
 	private String chatAddr;
@@ -14,14 +13,6 @@ public class CoinInfoVo {
 
 	public void setCoinId(String coinId) {
 		this.coinId = coinId;
-	}
-
-	public String getSymbol() {
-		return symbol;
-	}
-
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
 	}
 
 	public String getUsName() {

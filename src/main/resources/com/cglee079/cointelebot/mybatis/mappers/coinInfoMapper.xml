@@ -7,12 +7,11 @@
 	<select id="list" resultType="com.cglee079.cointelebot.model.CoinInfoVo">
 			SELECT 
 			CINFO_COINID as 'coinId',
-			CINFO_SYMBOL as 'symbol',
 			CINFO_US_NAME as 'usName',
 			CINFO_KR_NAME as 'krName',
 			CINFO_CHAT_ADDR as 'chatAddr',
 			CINFO_ENABLED as 'enabled'
-			FROM TB_COINBOT_INFO
+			FROM TB_COINBOT_COIN_INFO
 			WHERE 1 = 1
 			AND CINFO_ENABLED = 'Y'
 			<![CDATA[AND CINFO_COINID <> #{coinId}]]>

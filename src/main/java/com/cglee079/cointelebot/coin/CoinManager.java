@@ -73,7 +73,6 @@ public class CoinManager {
 		huobiPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_HUOBI));
 		hadaxPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_HADAX));
 		okexPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_OKEX));
-		
 		updateExchangeRate();
 	}
 	
