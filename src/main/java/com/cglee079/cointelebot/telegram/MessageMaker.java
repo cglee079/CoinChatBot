@@ -1378,7 +1378,7 @@ public class MessageMaker {
 		switch(lang) {
 		case ID.LANG_KR :
 			if (wallet != null) {
-				msg += "* " + wallet.getSymbol() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n";
+				msg += "* " + wallet.getCoinId() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n";
 				msg += wallet.getAddr1() + "\n";
 				if (myCoin.equals(ID.COIN_XRP)) {
 					msg += "데스티네이션 태그 :  " + wallet.getAddr2() + "\n";
@@ -1389,7 +1389,7 @@ public class MessageMaker {
 				msg += "\n";
 
 				wallet = xrpWallet;
-				msg += "* " + wallet.getSymbol() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n";
+				msg += "* " + wallet.getCoinId() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n";
 				msg += wallet.getAddr1() + "\n";
 				msg += "데스티네이션 태그 :  " + wallet.getAddr2() + "\n";
 			}
@@ -1397,7 +1397,7 @@ public class MessageMaker {
 			
 		case ID.LANG_US : 
 			if (wallet != null) {
-				msg += "* " + wallet.getSymbol() + " [ " + wallet.getUsName() + " ]  Wallet address : \n";
+				msg += "* " + wallet.getCoinId() + " [ " + wallet.getUsName() + " ]  Wallet address : \n";
 				msg += wallet.getAddr1() + "\n";
 				if (myCoin.equals(ID.COIN_XRP)) {
 					msg += "destination tag :  " + wallet.getAddr2() + "\n";
@@ -1408,7 +1408,7 @@ public class MessageMaker {
 				msg += "\n";
 
 				wallet = xrpWallet;
-				msg += "* " + wallet.getSymbol() + " [ " + wallet.getUsName() + " ]  Wallet address : \n";
+				msg += "* " + wallet.getCoinId() + " [ " + wallet.getUsName() + " ]  Wallet address : \n";
 				msg += wallet.getAddr1() + "\n";
 				msg += "destination tag :  " + wallet.getAddr2() + "\n";
 			}
