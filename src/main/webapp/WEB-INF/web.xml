@@ -5,7 +5,7 @@
     <param-value>
 		/WEB-INF/spring/root-context.xml
 		/WEB-INF/spring/appServlet/**-context.xml
-		/WEB-INF/spring/appServlet/coin001/**-context.xml
+		/WEB-INF/spring/appServlet/coin004/**-context.xml
 		</param-value>
   </context-param>
   <listener>

@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_MIT" class="com.cglee079.cointelebot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_MIT"/>
-		<constructor-arg index="1" value="579057143:AAE9bIxm6OKzsdFbrSf_TP5JEGvQyoeH_7M"/>
+		<constructor-arg index="1" value="579057143:AAH-pP5JuSqD9gW7xOkPHlh2nmlDqR9SrQE"/>
 		<constructor-arg index="2" value="cg_mith_bot"/>
 	</bean>
 	
