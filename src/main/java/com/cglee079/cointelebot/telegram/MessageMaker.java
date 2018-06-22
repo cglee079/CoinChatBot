@@ -328,8 +328,8 @@ public class MessageMaker {
 	public String msgAlreadyStartService(String lang) {
 		String msg = "";
 		switch(lang) {
-		case ID.LANG_KR : msg = "이미 " + myCoin + " 알리미에 설정 정보가 기록되어있습니다."; break;
-		case ID.LANG_US : msg = "Already " + myCoin + " Noticer Started.\n Database have your setting information."; break; 
+		case ID.LANG_KR : msg = "이미 " + myCoin + " 알리미에 설정 정보가 기록되어있습니다.\n"; break;
+		case ID.LANG_US : msg = "Already " + myCoin + " Noticer Started.\n Database have your setting information.\n"; break; 
 		}
 		return msg;
 	}

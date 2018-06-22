@@ -136,21 +136,27 @@ public class TelegramBot extends AbilityBot  {
 		String lang 	= client.getLang();
 		String state 	= client.getState();
 		String market	= client.getMarket();
-		
-		switch(state) {
-		case ID.STATE_MAIN			: handleMenu(userId, messageId, cmd, market, lang); break;
-		case ID.STATE_SET_DAYLOOP 	: handleSetDayloop(userId, messageId, cmd, lang); break;
-		case ID.STATE_SET_TIMELOOP 	: handleSetTimeloop(userId, messageId, cmd, lang); break;
-		case ID.STATE_SET_MARKET 	: handleSetMarket(userId, messageId, cmd, lang); break;
-		case ID.STATE_SET_TARGET 	: handleSetTarget(userId, messageId, cmd, lang); break;
-		case ID.STATE_SET_PRICE 	: handleSetPrice(userId, messageId, cmd, market, lang); break;
-		case ID.STATE_SET_NUMBER 	: handleSetNumber(userId, messageId, cmd, lang); break;
-		case ID.STATE_SEND_MSG 		: handleSendMsg(userId, username, messageId, cmd, lang); break;
-		case ID.STATE_CONFIRM_STOP 	: handleConfirmStop(userId, username, messageId, cmd, lang); break;
-		case ID.STATE_HAPPY_LINE 	: handleHappyLine(userId, username, messageId, cmd, lang); break;
-		case ID.STATE_PREFERENCE	: handlePreference(userId, username, messageId, cmd, lang); break;
-		case ID.STATE_PREF_LANGUAGE	: handleSetLanguage(userId, username, messageId, cmd, lang); break;
-		case ID.STATE_PREF_TIMEADJUST: handleTimeAdjust(userId, username, messageId, cmd, lang); break;
+		if(client.getEnabled().equals("Y")) {
+			switch(state) {
+			case ID.STATE_MAIN			: handleMenu(userId, messageId, cmd, market, lang); break;
+			case ID.STATE_SET_DAYLOOP 	: handleSetDayloop(userId, messageId, cmd, lang); break;
+			case ID.STATE_SET_TIMELOOP 	: handleSetTimeloop(userId, messageId, cmd, lang); break;
+			case ID.STATE_SET_MARKET 	: handleSetMarket(userId, messageId, cmd, lang); break;
+			case ID.STATE_SET_TARGET 	: handleSetTarget(userId, messageId, cmd, lang); break;
+			case ID.STATE_SET_PRICE 	: handleSetPrice(userId, messageId, cmd, market, lang); break;
+			case ID.STATE_SET_NUMBER 	: handleSetNumber(userId, messageId, cmd, lang); break;
+			case ID.STATE_SEND_MSG 		: handleSendMsg(userId, username, messageId, cmd, lang); break;
+			case ID.STATE_CONFIRM_STOP 	: handleConfirmStop(userId, username, messageId, cmd, lang); break;
+			case ID.STATE_HAPPY_LINE 	: handleHappyLine(userId, username, messageId, cmd, lang); break;
+			case ID.STATE_PREFERENCE	: handlePreference(userId, username, messageId, cmd, lang); break;
+			case ID.STATE_PREF_LANGUAGE	: handleSetLanguage(userId, username, messageId, cmd, lang); break;
+			case ID.STATE_PREF_TIMEADJUST: handleTimeAdjust(userId, username, messageId, cmd, lang); break;
+			}
+		} else {
+			clientService.openChat(myCoin, userId, username, market);
+			sendMessage(userId, null,  msgMaker.msgStartService(lang), null);
+			sendMessage(userId, null,  msgMaker.msgAlreadyStartService(lang), null);
+			sendMessage(userId, messageId, messageInfo(userId), km.getMainKeyboard(lang));
 		}
 		
 	}
