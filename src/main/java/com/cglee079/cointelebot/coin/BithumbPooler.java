@@ -1,38 +1,67 @@
 package com.cglee079.cointelebot.coin;
 
 import org.json.JSONObject;
-
+import org.springframework.scheduling.annotation.Scheduled;
 import com.cglee079.cointelebot.exception.ServerErrorException;
 
 public class BithumbPooler extends ApiPooler{
+	private JSONObject coinObjs = null;
+	private int istatus;
+	private String errMessage;
+	
+	public BithumbPooler() throws ServerErrorException {
+		getCoins();
+	}
 	
 	public JSONObject getCoin(String coin) throws ServerErrorException {
-		String param = coinParam.get(coin);
+		if(coinObjs != null) {
+			String param = coinParam.get(coin);
+			JSONObject coinObj =  coinObjs.getJSONObject(param);
+			JSONObject newCoinObj = new JSONObject();
+			newCoinObj.put("errorCode", istatus);
+			newCoinObj.put("errorMsg", "");
+			newCoinObj.put("result", "success");
+			newCoinObj.put("volume", coinObj.getDouble("volume_1day"));
+			newCoinObj.put("first", coinObj.getDouble("opening_price"));
+			newCoinObj.put("last", coinObj.getDouble("closing_price"));
+			newCoinObj.put("high", coinObj.getDouble("max_price"));
+			newCoinObj.put("low", coinObj.getDouble("min_price"));
+			
+			return newCoinObj;
+		} else {
+			throw new ServerErrorException("Bithumb Server Error : " + errMessage);
+		}
 		
-		String url = "https://api.bithumb.com/public/ticker/" + param;
-		HttpClient httpClient = new HttpClient();
-		String response;
-		try {
-			response = httpClient.get(url);
-			JSONObject jsonObj = new JSONObject(response);
-			if(jsonObj.getInt("status") == 0000){
-				JSONObject coinObj = new JSONObject();
-				JSONObject data = jsonObj.getJSONObject("data");
-				coinObj.put("errorCode", jsonObj.getInt("status"));
-				coinObj.put("errorMsg", "");
-				coinObj.put("result", "success");
-				coinObj.put("volume", data.getDouble("volume_1day"));
-				coinObj.put("first", data.getDouble("opening_price"));
-				coinObj.put("last", data.getDouble("closing_price"));
-				coinObj.put("high", data.getDouble("max_price"));
-				coinObj.put("low", data.getDouble("min_price"));
+	}
+	
+	@Scheduled(cron = "00 0/1 * * * *")
+	public void getCoins() throws ServerErrorException{
+		if(coinParam != null) {
+			coinObjs = new JSONObject();
+			
+			String url = "https://api.bithumb.com/public/ticker/ALL";
+			HttpClient httpClient = new HttpClient();
+			String response;
+			JSONObject responseObj = null;
+			try {
+				response = httpClient.get(url);
+				responseObj = new JSONObject(response);
 				
-				return coinObj;				
-			} else{
-				throw new ServerErrorException("Bithumb Server Error", jsonObj.getInt("status"));
+				String status  = responseObj.getString("status");
+				istatus = Integer.parseInt(status);
+				
+				if(status.equals("0000")) {
+					coinObjs = responseObj.getJSONObject("data");
+				} else {
+					String message = responseObj.getString("message");
+					throw new Exception(message);
+				}
+				
+				
+			} catch (Exception e) {
+				coinObjs 	= null;
+				errMessage 	= e.getMessage();
 			}
-		} catch (Exception e) {
-			throw new ServerErrorException("Bithumb Server Error : " + e.getMessage());
 		}
 	}
 }
