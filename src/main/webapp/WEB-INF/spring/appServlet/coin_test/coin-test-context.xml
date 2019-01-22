@@ -13,18 +13,18 @@
 		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_STORM"/></constructor-arg>
 	</bean>
 	
-	<bean id="TelegramBot_TEST" class="com.cglee079.cointelebot.telegram.TelegramBot">
+	<bean id="TelegramBot_TEST" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_TEST"/>
 		<constructor-arg index="1" value="509885308:AAGqgiMXRfkXWeamsta6N0nFkF0d9I_SFOI"/>
 		<constructor-arg index="2" value="changoos_bot"/>
 	</bean>
 	
-	<bean id="TargetScheduler_TEST" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+	<bean id="TargetScheduler_TEST" class="com.cglee079.coinchatbot.scheduler.TargetScheduler">
 		<constructor-arg index="0" ref="COIN_TEST"/>
 		<constructor-arg index="1" ref="TelegramBot_TEST"/>
 	</bean>
 	
-	<bean id="TimelyScheduler_TEST" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+	<bean id="TimelyScheduler_TEST" class="com.cglee079.coinchatbot.scheduler.TimelyScheduler">
 		<constructor-arg index="0" ref="COIN_TEST"/>
 		<constructor-arg index="1" ref="TelegramBot_TEST"/>
 	</bean>

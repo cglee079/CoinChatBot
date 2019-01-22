@@ -21,7 +21,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.cglee079.cointelebot.controller" />
+	<context:component-scan base-package="com.cglee079.coinchatbot.controller" />
 	
 	
 	

@@ -13,18 +13,18 @@
 		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_MITH"/></constructor-arg>
 	</bean>
 	
-	<bean id="TelegramBot_MIT" class="com.cglee079.cointelebot.telegram.TelegramBot">
+	<bean id="TelegramBot_MIT" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_MIT"/>
 		<constructor-arg index="1" value="579057143:AAH-pP5JuSqD9gW7xOkPHlh2nmlDqR9SrQE"/>
 		<constructor-arg index="2" value="cg_mith_bot"/>
 	</bean>
 	
-	<bean id="TargetScheduler_MIT" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+	<bean id="TargetScheduler_MIT" class="com.cglee079.coinchatbot.scheduler.TargetScheduler">
 		<constructor-arg index="0" ref="COIN_MIT"/>
 		<constructor-arg index="1" ref="TelegramBot_MIT"/>
 	</bean>
 	
-	<bean id="TimelyScheduler_MIT" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+	<bean id="TimelyScheduler_MIT" class="com.cglee079.coinchatbot.scheduler.TimelyScheduler">
 		<constructor-arg index="0" ref="COIN_MIT"/>
 		<constructor-arg index="1" ref="TelegramBot_MIT"/>
 	</bean>

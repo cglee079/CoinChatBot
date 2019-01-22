@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
 	<context:annotation-config></context:annotation-config>
-	<context:component-scan base-package="com.cglee079.cointelebot.dao"></context:component-scan>
+	<context:component-scan base-package="com.cglee079.coinchatbot.dao"></context:component-scan>
 	
 	<bean id="DataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />

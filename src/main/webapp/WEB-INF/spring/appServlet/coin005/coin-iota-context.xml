@@ -13,18 +13,18 @@
 		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_IOTA"/></constructor-arg>
 	</bean>
 	
-	<bean id="TelegramBot_IOT" class="com.cglee079.cointelebot.telegram.TelegramBot">
+	<bean id="TelegramBot_IOT" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_IOT"/>
 		<constructor-arg index="1" value="536717946:AAHSUIf3cFO5u66R9bYq5MQhQs-SarFHRCA"/>
 		<constructor-arg index="2" value="cg_iota_bot"/>
 	</bean>
 	
-	<bean id="TargetScheduler_IOT" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+	<bean id="TargetScheduler_IOT" class="com.cglee079.coinchatbot.scheduler.TargetScheduler">
 		<constructor-arg index="0" ref="COIN_IOT"/>
 		<constructor-arg index="1" ref="TelegramBot_IOT"/>
 	</bean>
 	
-	<bean id="TimelyScheduler_IOT" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+	<bean id="TimelyScheduler_IOT" class="com.cglee079.coinchatbot.scheduler.TimelyScheduler">
 		<constructor-arg index="0" ref="COIN_IOT"/>
 		<constructor-arg index="1" ref="TelegramBot_IOT"/>
 	</bean>
