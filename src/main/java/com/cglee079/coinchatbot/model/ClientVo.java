@@ -1,6 +1,7 @@
 package com.cglee079.coinchatbot.model;
 
 import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Market;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,7 @@ public class ClientVo {
 	private Long localtime;
 	private String lang;
 	private String state;
-	private String marketId;
+	private Market marketId;
 	private Integer timeloop;
 	private Integer dayloop;
 	private Double targetUp;

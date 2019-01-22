@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.cglee079.coinchatbot.coin.CoinManager;
 import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientVo;
@@ -34,8 +35,8 @@ public class TargetScheduler {
 
 	private Coin myCoin;
 	private TelegramBot telegramBot;
-	private HashMap<String, Boolean> inBtcs;
-	private List<String> enabledMarkets;
+	private HashMap<Market, Boolean> inBtcs;
+	private List<Market> enabledMarkets;
 	
 	public TargetScheduler(Coin myCoin, TelegramBot telegramBot) {
 		this.myCoin 		= myCoin;
@@ -48,7 +49,7 @@ public class TargetScheduler {
 		CoinMarketConfigVo configMarket;
 		
 		inBtcs 			= new HashMap<>();
-		enabledMarkets	= new ArrayList<String>();
+		enabledMarkets	= new ArrayList<Market>();
 		
 		for(int i = 0; i < configMarkets.size(); i++) {
 			configMarket = configMarkets.get(i);
@@ -64,23 +65,23 @@ public class TargetScheduler {
 		}
 	}
 	
-	public void loadTargetPrice(String market) {
+	public void loadTargetPrice(Market marketId) {
 		List<ClientVo> clients = null;
 		JSONObject coinObj = null;
 		
 		try {
-			coinObj = coinManager.getCoin(myCoin, market);
+			coinObj = coinManager.getCoin(myCoin, marketId);
 			double coinValue = coinObj.getDouble("last");
 			
-			if(inBtcs.get(market)) {
-				coinValue = coinValue * coinManager.getCoin(Coin.BTC, market).getDouble("last");
+			if(inBtcs.get(marketId)) {
+				coinValue = coinValue * coinManager.getCoin(Coin.BTC, marketId).getDouble("last");
 			}
 			
-			clients = clientService.list(myCoin, market, coinValue, true); //TargetUp
-			telegramBot.sendTargetPriceMessage(clients, market, coinObj, true);
+			clients = clientService.list(myCoin, marketId, coinValue, true); //TargetUp
+			telegramBot.sendTargetPriceMessage(clients, marketId, coinObj, true);
 			
-			clients = clientService.list(myCoin, market, coinValue, false); //TagetDown
-			telegramBot.sendTargetPriceMessage(clients, market, coinObj, false);
+			clients = clientService.list(myCoin, marketId, coinValue, false); //TagetDown
+			telegramBot.sendTargetPriceMessage(clients, marketId, coinObj, false);
 			
 		} catch (ServerErrorException e) {
 			Log.i("Load TargetPrice  " + e.log());

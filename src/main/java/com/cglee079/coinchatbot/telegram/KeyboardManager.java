@@ -6,6 +6,7 @@ import java.util.List;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
+import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.constants.ID;
 import com.cglee079.coinchatbot.keyboard.ConfirmStopKeyboard;
 import com.cglee079.coinchatbot.keyboard.MainKeyboard_KR;
@@ -27,7 +28,7 @@ public class KeyboardManager {
 	private HashMap<String, ConfirmStopKeyboard> confirmStopKeyboards;
 	private HashMap<String, PreferenceKeyboard> preferenceKeyboards;
 
-	public KeyboardManager(List<String> enabledMarkets) {
+	public KeyboardManager(List<Market> enabledMarketIds) {
 		defaultKeyboard 	= new ReplyKeyboardRemove();
 		mainKeyboards 		= new HashMap<>();
 		setDayloopKeyboards = new HashMap<>();
@@ -46,8 +47,8 @@ public class KeyboardManager {
 		setTimeloopKeyboards.put(ID.LANG_KR, new SetTimeloopKeyboard(ID.LANG_KR));
 		setTimeloopKeyboards.put(ID.LANG_US, new SetTimeloopKeyboard(ID.LANG_US));
 		
-		setMarketKeyboards.put(ID.LANG_KR, new SetMarketKeyboard(enabledMarkets, ID.LANG_KR));
-		setMarketKeyboards.put(ID.LANG_US, new SetMarketKeyboard(enabledMarkets, ID.LANG_US));
+		setMarketKeyboards.put(ID.LANG_KR, new SetMarketKeyboard(enabledMarketIds, ID.LANG_KR));
+		setMarketKeyboards.put(ID.LANG_US, new SetMarketKeyboard(enabledMarketIds, ID.LANG_US));
 		
 		setLanguageKeyboards.put(ID.LANG_KR, new SetLanguageKeyboard(ID.LANG_KR));
 		setLanguageKeyboards.put(ID.LANG_US, new SetLanguageKeyboard(ID.LANG_US));

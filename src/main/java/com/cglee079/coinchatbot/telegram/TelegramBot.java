@@ -23,6 +23,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import com.cglee079.coinchatbot.cmd.CMDER;
 import com.cglee079.coinchatbot.coin.CoinManager;
 import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.constants.ID;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 import com.cglee079.coinchatbot.log.Log;
@@ -67,8 +68,8 @@ public class TelegramBot extends AbilityBot  {
 	
 	private KeyboardManager km;
 	private MessageMaker 	msgMaker;
-	private HashMap<String, Boolean> inBtcs;
-	private List<String> enabledMarkets;
+	private HashMap<Market, Boolean> inBtcs;
+	private List<Market> enabledMarketIds;
 	
 	protected TelegramBot(Coin myCoin, String botToken, String botUsername) {
 		super(botToken, botUsername);
@@ -78,17 +79,17 @@ public class TelegramBot extends AbilityBot  {
 	@PostConstruct
 	public void init() {
 		inBtcs 			= new HashMap<>();
-		enabledMarkets 	= new ArrayList<String>();
+		enabledMarketIds 	= new ArrayList<Market>();
 		List<CoinMarketConfigVo> configMarkets = coinMarketConfigService.list(myCoin);
 		CoinMarketConfigVo configMarket;
 		
 		for(int i = 0; i < configMarkets.size(); i++) {
 			configMarket = configMarkets.get(i);
 			inBtcs.put(configMarket.getMarketId(), configMarket.isInBtc());
-			enabledMarkets.add(configMarket.getMarketId());
+			enabledMarketIds.add(configMarket.getMarketId());
 		}
 		
-		km 				= new KeyboardManager(enabledMarkets);
+		km 				= new KeyboardManager(enabledMarketIds);
 		msgMaker		= new MessageMaker(myCoin, coinConfigService.get(myCoin), inBtcs);
 	}
 	
@@ -120,9 +121,9 @@ public class TelegramBot extends AbilityBot  {
 		if(message.getText().equals("/start") || client == null) {
 			String lang= ID.LANG_KR;
 			String msg = "";
-			if (clientService.openChat(myCoin, userId, username, enabledMarkets.get(0))) {
+			if (clientService.openChat(myCoin, userId, username, enabledMarketIds.get(0))) {
 				msg += msgMaker.msgStartService(lang);
-				msg += msgMaker.explainHelp(enabledMarkets, lang);
+				msg += msgMaker.explainHelp(enabledMarketIds, lang);
 				sendMessage(userId, null, msg, km.getMainKeyboard(lang));
 				sendMessage(userId, null, msgMaker.explainSetForeginer(lang), km.getMainKeyboard(lang));
 			} else {
@@ -135,15 +136,15 @@ public class TelegramBot extends AbilityBot  {
 		
 		String lang 	= client.getLang();
 		String state 	= client.getState();
-		String market	= client.getMarketId();
+		Market marketId	= client.getMarketId();
 		if(client.getEnabled().equals("Y")) {
 			switch(state) {
-			case ID.STATE_MAIN			: handleMenu(userId, messageId, cmd, market, lang); break;
+			case ID.STATE_MAIN			: handleMenu(userId, messageId, cmd, marketId, lang); break;
 			case ID.STATE_SET_DAYLOOP 	: handleSetDayloop(userId, messageId, cmd, lang); break;
 			case ID.STATE_SET_TIMELOOP 	: handleSetTimeloop(userId, messageId, cmd, lang); break;
 			case ID.STATE_SET_MARKET 	: handleSetMarket(userId, messageId, cmd, lang); break;
 			case ID.STATE_SET_TARGET 	: handleSetTarget(userId, messageId, cmd, lang); break;
-			case ID.STATE_SET_PRICE 	: handleSetPrice(userId, messageId, cmd, market, lang); break;
+			case ID.STATE_SET_PRICE 	: handleSetPrice(userId, messageId, cmd, marketId, lang); break;
 			case ID.STATE_SET_NUMBER 	: handleSetNumber(userId, messageId, cmd, lang); break;
 			case ID.STATE_SEND_MSG 		: handleSendMsg(userId, username, messageId, cmd, lang); break;
 			case ID.STATE_CONFIRM_STOP 	: handleConfirmStop(userId, username, messageId, cmd, lang); break;
@@ -153,7 +154,7 @@ public class TelegramBot extends AbilityBot  {
 			case ID.STATE_PREF_TIMEADJUST: handleTimeAdjust(userId, username, messageId, cmd, lang); break;
 			}
 		} else {
-			clientService.openChat(myCoin, userId, username, market);
+			clientService.openChat(myCoin, userId, username, marketId);
 			sendMessage(userId, null,  msgMaker.msgStartService(lang), null);
 			sendMessage(userId, null,  msgMaker.msgAlreadyStartService(lang), null);
 			sendMessage(userId, messageId, messageInfo(userId), km.getMainKeyboard(lang));
@@ -162,7 +163,7 @@ public class TelegramBot extends AbilityBot  {
 	}
 
 	/* 메인 메뉴 응답 처리 */
-	private void handleMenu(Integer userId, Integer messageId, String cmd, String market, String lang) {
+	private void handleMenu(Integer userId, Integer messageId, String cmd, Market marketId, String lang) {
 		String state = ID.STATE_MAIN;
 		
 		if(cmd.equals(CMDER.getMainCurrentPrice(lang))){ //현재가
@@ -178,7 +179,7 @@ public class TelegramBot extends AbilityBot  {
 		} else if(cmd.equals(CMDER.getMainCoinList(lang))){ //타 코인 알리미
 			sendMessage(userId, messageId, msgMaker.explainCoinList(coinInfoService.list(myCoin), lang), km.getMainKeyboard(lang));
 		} else if(cmd.equals(CMDER.getMainHelp(lang))) { // 도움말
-			sendMessage(userId, messageId, msgMaker.explainHelp(enabledMarkets, lang), km.getMainKeyboard(lang));
+			sendMessage(userId, messageId, msgMaker.explainHelp(enabledMarketIds, lang), km.getMainKeyboard(lang));
 			sendMessage(userId, null, msgMaker.explainSetForeginer(lang), km.getMainKeyboard(lang));
 		} else if(cmd.equals(CMDER.getMainSupport(lang))){ // 후원하기
 			sendMessage(userId, messageId, msgMaker.explainSupport(lang), null);
@@ -194,10 +195,10 @@ public class TelegramBot extends AbilityBot  {
 			sendMessage(userId, messageId, msgMaker.explainMarketSet(lang), km.getSetMarketKeyboard(lang));
 			state = ID.STATE_SET_MARKET;
 		} else if(cmd.equals(CMDER.getMainSetTarget(lang))){ // 목표가 설정
-			sendMessage(userId, messageId, msgMaker.explainTargetPriceSet(lang, market), km.getDefaultKeyboard());
+			sendMessage(userId, messageId, msgMaker.explainTargetPriceSet(lang, marketId), km.getDefaultKeyboard());
 			state = ID.STATE_SET_TARGET;
 		} else if(cmd.equals(CMDER.getMainSetPrice(lang))){ // 투자금액 설정
-			sendMessage(userId, messageId, msgMaker.explainSetPrice(lang, market), km.getDefaultKeyboard());
+			sendMessage(userId, messageId, msgMaker.explainSetPrice(lang, marketId), km.getDefaultKeyboard());
 			state = ID.STATE_SET_PRICE;
 		} else if(cmd.equals(CMDER.getMainSetNumber(lang))){ // 코인개수 설정
 			sendMessage(userId, messageId, msgMaker.explainSetCoinCount(lang), km.getDefaultKeyboard());
@@ -209,7 +210,7 @@ public class TelegramBot extends AbilityBot  {
 			sendMessage(userId, messageId, msgMaker.explainStop(lang), km.getConfirmStopKeyboard(lang));
 			state = ID.STATE_CONFIRM_STOP;
 		} else if (cmd.equals(CMDER.getMainHappyLine(lang))){ // 행복회로
-			state = checkHappyLine(userId, messageId, market, lang);
+			state = checkHappyLine(userId, messageId, marketId, lang);
 		} else if(cmd.equals(CMDER.getMainPref(lang))){ // 환경설정
 			sendMessage(userId, messageId, "Set Preference", km.getPreferenceKeyboard(lang));
 			state = ID.STATE_PREFERENCE;
@@ -296,22 +297,22 @@ public class TelegramBot extends AbilityBot  {
 	
 	/* 마켓 설정 응답 처리 */
 	private void handleSetMarket(Integer userId, Integer messageId, String cmd, String lang) {
-		String market = null;
+		Market marketId = null;
 		String msg = "";
 		msg = msgMaker.msgMarketNoSet(lang);
 
-		String marketID;
-		for(int i = 0; i < enabledMarkets.size(); i++) {
-			marketID = enabledMarkets.get(i);
-			if(CMDER.getSetMarket(marketID, lang).equals(cmd)){
-				market = marketID;
-				msg = msgMaker.msgMarketSet(marketID, lang);
+		Market temp;
+		for(int i = 0; i < enabledMarketIds.size(); i++) {
+			temp = enabledMarketIds.get(i);
+			if(CMDER.getSetMarket(temp, lang).equals(cmd)){
+				marketId = temp;
+				msg = msgMaker.msgMarketSet(temp, lang);
 			}
 		}
 		
-		if(market != null) {
+		if(marketId != null) {
 			ClientVo client = clientService.get(myCoin, userId);
-			String currentMarket 		= client.getMarketId();
+			Market currentMarket 		= client.getMarketId();
 			Double currentPrice 		= client.getInvest();
 			Double currentTargetUp 		= client.getTargetUp();
 			Double currentTargetDown	= client.getTargetDown();
@@ -321,27 +322,27 @@ public class TelegramBot extends AbilityBot  {
 			Double changeTargetUp	= currentTargetUp;
 			Double changeTargetDown	= currentTargetDown;
 			
-			if(currentMarket.startsWith(ID.MARKET_KR) && market.startsWith(ID.MARKET_US)) {
+			if(Market.isKR(currentMarket) && Market.isUS(marketId)) {
 				if(currentPrice != null) { changePrice = currentPrice / exchangeRate; }
 				if(currentTargetUp != null) { changeTargetUp = currentTargetUp / exchangeRate; }
 				if(currentTargetDown != null) { changeTargetDown = currentTargetDown / exchangeRate; }
 				
-				msg += msgMaker.msgMarketSetChangeCurrency(client, changePrice, changeTargetUp, changeTargetDown, market);
+				msg += msgMaker.msgMarketSetChangeCurrency(client, changePrice, changeTargetUp, changeTargetDown, marketId);
 				
 			}
 			
-			if(currentMarket.startsWith(ID.MARKET_US) && market.startsWith(ID.MARKET_KR)) {
+			if(Market.isUS(currentMarket) && Market.isKR(marketId)) {
 				if(currentPrice != null) { changePrice = currentPrice * exchangeRate; }
 				if(currentTargetUp != null) { changeTargetUp = currentTargetUp * exchangeRate; }
 				if(currentTargetDown != null) { changeTargetDown = currentTargetDown * exchangeRate; }
 				
-				msg += msgMaker.msgMarketSetChangeCurrency(client, changePrice, changeTargetUp, changeTargetDown, market);
+				msg += msgMaker.msgMarketSetChangeCurrency(client, changePrice, changeTargetUp, changeTargetDown, marketId);
 			}
 			
 			client.setInvest(changePrice);
 			client.setTargetUp(changeTargetUp);
 			client.setTargetDown(currentTargetDown);
-			client.setMarketId(market);
+			client.setMarketId(marketId);
 			clientService.update(client);
 			
 		} else {
@@ -357,17 +358,17 @@ public class TelegramBot extends AbilityBot  {
 	/* 목표가 설정 응답 처리 */
 	private void handleSetTarget(Integer userId, Integer messageId, String cmd, String lang) {
 		ClientVo client = clientService.get(myCoin, userId);
-		String market = client.getMarketId();
+		Market marketId = client.getMarketId();
 		String msg = "";
 		boolean valid = false;
 		
 		double currentValue = -1;
 		try {
-			JSONObject coinObj = coinManager.getCoin(myCoin, market);
+			JSONObject coinObj = coinManager.getCoin(myCoin, marketId);
 			currentValue = coinObj.getDouble("last");
 			
-			if(inBtcs.get(market)) {
-				currentValue = coinManager.getMoney(coinObj, market).getDouble("last");
+			if(inBtcs.get(marketId)) {
+				currentValue = coinManager.getMoney(coinObj, marketId).getDouble("last");
 			}
 			
 		}
@@ -419,7 +420,7 @@ public class TelegramBot extends AbilityBot  {
 			}
 			
 			if(valid) {
-				msg += msgMaker.msgTargetPriceSetResult(targetPrice, currentValue, market, lang);
+				msg += msgMaker.msgTargetPriceSetResult(targetPrice, currentValue, marketId, lang);
 				if(targetPrice >= currentValue) {
 					if(!clientService.updateTargetUpPrice(myCoin, userId.toString(), targetPrice)){
 						msg = msgMaker.warningNeedToStart(lang);
@@ -440,7 +441,7 @@ public class TelegramBot extends AbilityBot  {
 	
 	
 	/* 투자 금액 설정 응답 처리 */
-	private void handleSetPrice(Integer userId, Integer messageId, String cmd, String market, String lang) {
+	private void handleSetPrice(Integer userId, Integer messageId, String cmd, Market marketId, String lang) {
 		String priceStr = cmd;
 		String msg = "";
 		double price = -1;
@@ -454,7 +455,7 @@ public class TelegramBot extends AbilityBot  {
 		if(price != -1) {
 			if(clientService.updatePrice(myCoin, userId.toString(), price)){
 				if (price == 0) { msg = msgMaker.msgPriceInit(lang);} // case2. 초기화
-				else {msg = msgMaker.msgPriceSet(price, market, lang);} // case3.설정완료
+				else {msg = msgMaker.msgPriceSet(price, marketId, lang);} // case3.설정완료
 			} else{
 				msg = msgMaker.warningNeedToStart(lang);
 			}
@@ -539,7 +540,7 @@ public class TelegramBot extends AbilityBot  {
 	
 	
 	/* 행복회로 메뉴 클릭 시, 투자금액 && 코인개수 설정 입력되었는지 확인 */
-	private String checkHappyLine(Integer userId, Integer messageId, String market, String lang) {
+	private String checkHappyLine(Integer userId, Integer messageId, Market marketId, String lang) {
 		String state = ID.STATE_MAIN;
 		String msg = "";
 		ClientVo client = clientService.get(myCoin, userId);
@@ -551,7 +552,7 @@ public class TelegramBot extends AbilityBot  {
 				msg = msgMaker.msgPleaseSetTheNumberOfCoins(lang);
 				sendMessage(userId, messageId, msg, km.getMainKeyboard(lang));
 			} else {
-				msg = msgMaker.explainHappyLine(market, lang);
+				msg = msgMaker.explainHappyLine(marketId, lang);
 				sendMessage(userId, messageId, msg, km.getDefaultKeyboard());
 				state = ID.STATE_HAPPY_LINE;
 			}
@@ -576,9 +577,9 @@ public class TelegramBot extends AbilityBot  {
 			ClientVo client = clientService.get(myCoin, userId);
 			double price = client.getInvest();
 			double coinCnt = client.getCoinCnt();
-			String market = client.getMarketId();
+			Market marketId = client.getMarketId();
 			
-			msg = msgMaker.msgHappyLineResult(price, coinCnt, happyPrice, market, lang);
+			msg = msgMaker.msgHappyLineResult(price, coinCnt, happyPrice, marketId, lang);
 		}
 		
 		msg += msgMaker.msgToMain(lang);
@@ -629,7 +630,7 @@ public class TelegramBot extends AbilityBot  {
 		
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(langID));
 		if(cmd.equals(CMDER.getSetLanguageKR(lang)) || cmd.equals(CMDER.getSetLanguageUS(lang))) {
-			sendMessage(userId, messageId, msgMaker.explainHelp(enabledMarkets, langID), null);
+			sendMessage(userId, messageId, msgMaker.explainHelp(enabledMarketIds, langID), null);
 		}
 		
 		clientService.updateState(myCoin, userId.toString(), ID.STATE_MAIN);
@@ -674,11 +675,11 @@ public class TelegramBot extends AbilityBot  {
 		JSONObject coinObj = null;
 		double currentValue = 0;
 		ClientVo client = clientService.get(myCoin, userId);
-		String market 	= client.getMarketId();
+		Market marketId 	= client.getMarketId();
 		String lang		= client.getLang();
 		
 		try {
-			coinObj = coinManager.getCoin(myCoin, market);
+			coinObj = coinManager.getCoin(myCoin, marketId);
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
 			e.printStackTrace();
@@ -694,8 +695,8 @@ public class TelegramBot extends AbilityBot  {
 		
 			
 		JSONObject coinMoney = null;
-		if(inBtcs.get(market)) { 
-			coinMoney = coinManager.getMoney(coinObj, market);
+		if(inBtcs.get(marketId)) { 
+			coinMoney = coinManager.getMoney(coinObj, marketId);
 		}
 		
 		return msgMaker.msgCurrentPrice(currentValue, coinMoney, client);
@@ -704,11 +705,11 @@ public class TelegramBot extends AbilityBot  {
 	
 	/* 거래소별 가격 */
 	public String messageEachMarketPrice(Integer userId) {
-		LinkedHashMap<String, Double> lasts = new LinkedHashMap<>();
+		LinkedHashMap<Market, Double> lasts = new LinkedHashMap<>();
 		
-		String marketId = null;
-		for(int i = 0; i < enabledMarkets.size(); i++) {
-			marketId = enabledMarkets.get(i);
+		Market marketId = null;
+		for(int i = 0; i < enabledMarketIds.size(); i++) {
+			marketId = enabledMarketIds.get(i);
 			lasts.put(marketId, coinManager.getCoinLast(myCoin, marketId, inBtcs.get(marketId)));
 		}
 		
@@ -724,40 +725,40 @@ public class TelegramBot extends AbilityBot  {
 		String msg = "";
 		
 		ClientVo client = clientService.get(myCoin, userId);
-		String market 	= client.getMarketId();
+		Market marketId	= client.getMarketId();
 		String lang 	= client.getLang();
 		String date		= TimeStamper.getDateTime(client.getLocaltime());
 		
 		msg += msgMaker.msgBTCCurrentTime(date, lang);
 		
-		if(market.startsWith(ID.MARKET_KR) && (market.equals(ID.MARKET_COINNEST) || market.equals(ID.MARKET_KORBIT))) {
-			if(market.equals(ID.MARKET_COINNEST)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_COINNEST, lang); }
-			if(market.equals(ID.MARKET_KORBIT)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_KORBIT, lang); }
+		if(Market.isKR(marketId) && (marketId == Market.COINNEST || marketId == Market.KORBIT)) {
+			if(marketId == Market.COINNEST) { msg += msgMaker.msgBTCNotSupportAPI(Market.COINNEST, lang); }
+			if(marketId == Market.KORBIT) { msg += msgMaker.msgBTCNotSupportAPI(Market.KORBIT, lang); }
 			
-			market = null;
-			String marketID = null;
-			for(int i = 0; i < enabledMarkets.size(); i++) {
-				marketID = enabledMarkets.get(i);
-				if(marketID.startsWith(ID.MARKET_KR) && !marketID.equals(ID.MARKET_COINNEST) && !marketID.equals(ID.MARKET_KORBIT)) {
-					msg += msgMaker.msgBTCReplaceAnotherMarket(marketID, lang);
-					market = marketID;
+			marketId = null;
+			Market temp = null;
+			for(int i = 0; i < enabledMarketIds.size(); i++) {
+				temp = enabledMarketIds.get(i);
+				if(Market.isKR(temp) && temp != Market.COINNEST && temp != Market.KORBIT ) {
+					msg += msgMaker.msgBTCReplaceAnotherMarket(temp, lang);
+					marketId = temp;
 					break;
 				}
 			}
 			msg += "\n";
 		}
 		
-		if(market.startsWith(ID.MARKET_US) && (market.equals(ID.MARKET_BITTREX)|| market.equals(ID.MARKET_OKEX))) {
-			if(market.equals(ID.MARKET_BITTREX)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_BITTREX, lang); }
-			if(market.equals(ID.MARKET_OKEX)) { msg += msgMaker.msgBTCNotSupportAPI(ID.MARKET_OKEX, lang); }
+		if(Market.isUS(marketId) && marketId == Market.BITTREX || marketId == Market.OKEX) {
+			if(marketId == Market.BITTREX) { msg += msgMaker.msgBTCNotSupportAPI(Market.BITTREX, lang); }
+			if(marketId == Market.OKEX) { msg += msgMaker.msgBTCNotSupportAPI(Market.OKEX, lang); }
 			
-			market = null;
-			String marketID = null;
-			for(int i = 0; i < enabledMarkets.size(); i++) {
-				marketID = enabledMarkets.get(i);
-				if(marketID.startsWith(ID.MARKET_US) && !marketID.equals(ID.MARKET_BITTREX)&& !marketID.equals(ID.MARKET_OKEX)) {
-					msg += msgMaker.msgBTCReplaceAnotherMarket(marketID, lang);
-					market = marketID;
+			marketId = null;
+			Market temp = null;
+			for(int i = 0; i < enabledMarketIds.size(); i++) {
+				temp = enabledMarketIds.get(i);
+				if(Market.isUS(temp) && temp != Market.BITTREX && temp != Market.OKEX) {
+					msg += msgMaker.msgBTCReplaceAnotherMarket(temp, lang);
+					marketId = temp;
 					break;
 				}
 			}
@@ -765,10 +766,10 @@ public class TelegramBot extends AbilityBot  {
 			msg += "\n";
 		}
 		
-		if(market != null) {
+		if(marketId != null) {
 			try {
-				coin 	= coinManager.getCoin(myCoin, market);
-				btc 	= coinManager.getCoin(Coin.BTC, market);
+				coin 	= coinManager.getCoin(myCoin, marketId);
+				btc 	= coinManager.getCoin(Coin.BTC, marketId);
 			} catch (ServerErrorException e) {
 				Log.i(e.log());
 				e.printStackTrace();			
@@ -781,10 +782,10 @@ public class TelegramBot extends AbilityBot  {
 				double btcCV = btc.getDouble("last");
 				double btcBV = btc.getDouble("first");
 				JSONObject coinMoney = null;
-				if(inBtcs.get(market)) {
-					coinMoney = coinManager.getMoney(coin, market);
+				if(inBtcs.get(marketId)) {
+					coinMoney = coinManager.getMoney(coin, marketId);
 				}
-				msg += msgMaker.msgBTCResult(coinCV, coinBV, btcCV, btcBV, coinMoney, market, lang);
+				msg += msgMaker.msgBTCResult(coinCV, coinBV, btcCV, btcBV, coinMoney, marketId, lang);
 				
 				return msg;
 			} else {
@@ -819,12 +820,12 @@ public class TelegramBot extends AbilityBot  {
 		double price 		= client.getInvest();
 		double cnt 		= client.getCoinCnt();
 		String lang 	= client.getLang();
-		String market	= client.getMarketId();
+		Market marketId	= client.getMarketId();
 		
 		double avgPrice = (double)((double)price / cnt);
 		
 		JSONObject btcObj = null;
-		if(inBtcs.get(market)) {
+		if(inBtcs.get(marketId)) {
 			try {
 				btcObj = coinManager.getCoin(Coin.BTC, client.getMarketId());
 			} catch (ServerErrorException e) {
@@ -880,10 +881,10 @@ public class TelegramBot extends AbilityBot  {
 	}
 	
 	/* 목표가 알림 */
-	public void sendTargetPriceMessage(List<ClientVo> clients, String market, JSONObject coinObj, boolean isUp) {
+	public void sendTargetPriceMessage(List<ClientVo> clients, Market marketId, JSONObject coinObj, boolean isUp) {
 		double currentValue = coinObj.getDouble("last");
-		if(inBtcs.get(market)) {
-			currentValue = coinManager.getMoney(coinObj, market).getDouble("last");
+		if(inBtcs.get(marketId)) {
+			currentValue = coinManager.getMoney(coinObj, marketId).getDouble("last");
 		}
 
 		ClientVo client = null;
@@ -900,7 +901,7 @@ public class TelegramBot extends AbilityBot  {
 			if(isUp) { targetPrice =  client.getTargetUp(); }
 			else  { targetPrice =  client.getTargetDown(); }
 				
-			msg = msgMaker.msgTargetPriceNotify(currentValue, targetPrice, market, lang);
+			msg = msgMaker.msgTargetPriceNotify(currentValue, targetPrice, marketId, lang);
 			sendMessage(client.getUserId(), null, msg, null);
 			if(clientService.clearTargetPrice(myCoin, client.getUserId())) {
 				sendMessage(client.getUserId(), null, msgMaker.msgTargetPriceInit(lang), null);
@@ -909,14 +910,14 @@ public class TelegramBot extends AbilityBot  {
 	}
 	
 	/* 시간 알림 */
-	public void sendTimelyMessage(List<ClientVo> clients, String market, TimelyInfoVo coinCurrent, TimelyInfoVo coinBefore){
+	public void sendTimelyMessage(List<ClientVo> clients, Market marketId, TimelyInfoVo coinCurrent, TimelyInfoVo coinBefore){
 		ClientVo client = null;
 		
 		JSONObject coinCurrentMoney = null;
 		JSONObject coinBeforeMoney = null;
-		if(inBtcs.get(market)) {
-			coinCurrentMoney = coinManager.getMoney(coinCurrent, market);
-			coinBeforeMoney = coinManager.getMoney(coinBefore, market);
+		if(inBtcs.get(marketId)) {
+			coinCurrentMoney = coinManager.getMoney(coinCurrent, marketId);
+			coinBeforeMoney = coinManager.getMoney(coinBefore, marketId);
 		}
 		
 		int clientLength = clients.size();
@@ -928,15 +929,15 @@ public class TelegramBot extends AbilityBot  {
 	}
 	
 	/* 일일 알림 */
-	public void sendDailyMessage(List<ClientVo> clients, String market, TimelyInfoVo coinCurrent, TimelyInfoVo coinBefore){
+	public void sendDailyMessage(List<ClientVo> clients, Market marketId, TimelyInfoVo coinCurrent, TimelyInfoVo coinBefore){
 		ClientVo client = null;
 		int clientLength = clients.size();
 		
 		JSONObject coinCurrentMoney = null;
 		JSONObject coinBeforeMoney = null;
-		if(inBtcs.get(market)) {
-			coinCurrentMoney = coinManager.getMoney(coinCurrent, market);
-			coinBeforeMoney = coinManager.getMoney(coinBefore, market);
+		if(inBtcs.get(marketId)) {
+			coinCurrentMoney = coinManager.getMoney(coinCurrent, marketId);
+			coinBeforeMoney = coinManager.getMoney(coinBefore, marketId);
 		}
 		
 		String msg = null;

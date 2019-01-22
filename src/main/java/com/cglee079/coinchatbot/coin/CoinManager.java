@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.constants.ID;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
 import com.cglee079.coinchatbot.service.CoinMarketConfigService;
+import com.sun.media.jfxmedia.events.MarkerEvent;
 
 public class CoinManager {
 	@Autowired
@@ -61,19 +63,19 @@ public class CoinManager {
 
 	@PostConstruct
 	public void init() {
-		coinonePooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_COINONE));
-		bithumbPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_BITHUMB));
-		upbitPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_UPBIT));
-		coinnestPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_COINNEST));
-		korbitPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_KORBIT));
-		gopaxPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_GOPAX));
-		bitfinexPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_BITFINEX));
-		bittrexPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_BITTREX));
-		poloniexPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_POLONIEX));
-		binancePooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_BINANCE));
-		huobiPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_HUOBI));
-		hadaxPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_HADAX));
-		okexPooler.setCoinParam(coinMarketConfigService.getMarketParams(ID.MARKET_OKEX));
+		coinonePooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.COINONE));
+		bithumbPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.BITHUMB));
+		upbitPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.UPBIT));
+		coinnestPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.COINNEST));
+		korbitPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.KORBIT));
+		gopaxPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.GOPAX));
+		bitfinexPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.BITFINEX));
+		bittrexPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.BITTREX));
+		poloniexPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.POLONIEX));
+		binancePooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.BINANCE));
+		huobiPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.HUOBI));
+		hadaxPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.HADAX));
+		okexPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.OKEX));
 		updateExchangeRate();
 	}
 	
@@ -98,40 +100,40 @@ public class CoinManager {
 		}
 	}
 
-	public JSONObject getCoin(Coin coin, String market) throws ServerErrorException{
+	public JSONObject getCoin(Coin coin, Market marketId) throws ServerErrorException{
 		JSONObject coinObj = null;
 		
-		switch(market) {
-		case ID.MARKET_COINONE 		: coinObj = coinonePooler.getCoin(coin); break;
-		case ID.MARKET_BITHUMB 		: coinObj = bithumbPooler.getCoin(coin); break;
-		case ID.MARKET_UPBIT 		: coinObj = upbitPooler.getCoin(coin); break;
-		case ID.MARKET_COINNEST		: coinObj = coinnestPooler.getCoin(coin); break;
-		case ID.MARKET_KORBIT 		: coinObj = korbitPooler.getCoin(coin); break;
-		case ID.MARKET_GOPAX 		: coinObj = gopaxPooler.getCoin(coin); break;
-		case ID.MARKET_BITFINEX 	: coinObj = bitfinexPooler.getCoin(coin); break;
-		case ID.MARKET_BITTREX 		: coinObj = bittrexPooler.getCoin(coin); break;
-		case ID.MARKET_POLONIEX 	: coinObj = poloniexPooler.getCoin(coin); break;
-		case ID.MARKET_BINANCE 		: coinObj = binancePooler.getCoin(coin); break;
-		case ID.MARKET_HUOBI 		: coinObj = huobiPooler.getCoin(coin); break;
-		case ID.MARKET_HADAX 		: 
+		switch(marketId) {
+		case COINONE 	: coinObj = coinonePooler.getCoin(coin); break;
+		case BITHUMB 	: coinObj = bithumbPooler.getCoin(coin); break;
+		case UPBIT 		: coinObj = upbitPooler.getCoin(coin); break;
+		case COINNEST	: coinObj = coinnestPooler.getCoin(coin); break;
+		case KORBIT 	: coinObj = korbitPooler.getCoin(coin); break;
+		case GOPAX 		: coinObj = gopaxPooler.getCoin(coin); break;
+		case BITFINEX 	: coinObj = bitfinexPooler.getCoin(coin); break;
+		case BITTREX 	: coinObj = bittrexPooler.getCoin(coin); break;
+		case POLONIEX 	: coinObj = poloniexPooler.getCoin(coin); break;
+		case BINANCE 	: coinObj = binancePooler.getCoin(coin); break;
+		case HUOBI 		: coinObj = huobiPooler.getCoin(coin); break;
+		case HADAX 		: 
 			if(coin == Coin.BTC) { coinObj = huobiPooler.getCoin(coin); } 
 			else { coinObj = hadaxPooler.getCoin(coin); }
 			break;
-		case ID.MARKET_OKEX 		: coinObj = okexPooler.getCoin(coin); break;
+		case OKEX 		: coinObj = okexPooler.getCoin(coin); break;
 		}
 		
 		return coinObj;
 	}
 	
-	public Double getCoinLast(Coin myCoin, String market, boolean isInBtc) {
+	public Double getCoinLast(Coin myCoin, Market marketId, boolean isInBtc) {
 		try {
 			double last = -1;
 			JSONObject coinObj = null;
-			coinObj = this.getCoin(myCoin, market);
+			coinObj = this.getCoin(myCoin, marketId);
 			
 			last = coinObj.getDouble("last");
 			if(isInBtc) {
-				last = this.getMoney(coinObj, market).getDouble("last");
+				last = this.getMoney(coinObj, marketId).getDouble("last");
 			}
 			return last;
 		} catch (ServerErrorException e) {
@@ -141,19 +143,19 @@ public class CoinManager {
 		}
 	}
 	
-	public JSONObject getMoney(TimelyInfoVo timelyInfo, String market){
+	public JSONObject getMoney(TimelyInfoVo timelyInfo, Market marketId){
 		JSONObject coinObj = new JSONObject();
 		coinObj.put("last", timelyInfo.getLast());
 		coinObj.put("first", 0);
 		coinObj.put("high", timelyInfo.getHigh());
 		coinObj.put("low", timelyInfo.getLow());
-		return this.getMoney(coinObj, market);
+		return this.getMoney(coinObj, marketId);
 	}
 	
-	public JSONObject getMoney(JSONObject coinObj, String market){
+	public JSONObject getMoney(JSONObject coinObj, Market marketId){
 		JSONObject btcObj;
 		try {
-			btcObj = this.getCoin(Coin.BTC, market);
+			btcObj = this.getCoin(Coin.BTC, marketId);
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
 			e.printStackTrace();

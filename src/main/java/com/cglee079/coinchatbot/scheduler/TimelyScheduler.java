@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.cglee079.coinchatbot.coin.CoinManager;
 import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientVo;
@@ -41,8 +42,8 @@ public class TimelyScheduler {
 	
 	private Coin myCoin;
 	private TelegramBot telegramBot;
-	private HashMap<String, Boolean> inBtcs;
-	private List<String> enabledMarkets;
+	private HashMap<Market, Boolean> inBtcs;
+	private List<Market> enabledMarketIds;
 	
 	public TimelyScheduler(Coin myCoin, TelegramBot telegramBot) {
 		this.myCoin 		= myCoin;
@@ -55,12 +56,12 @@ public class TimelyScheduler {
 		CoinMarketConfigVo configMarket;
 		
 		inBtcs 			= new HashMap<>();
-		enabledMarkets	= new ArrayList<String>();
+		enabledMarketIds	= new ArrayList<Market>();
 		
 		for(int i = 0; i < configMarkets.size(); i++) {
 			configMarket = configMarkets.get(i);
 			inBtcs.put(configMarket.getMarketId(), configMarket.isInBtc());
-			enabledMarkets.add(configMarket.getMarketId());
+			enabledMarketIds.add(configMarket.getMarketId());
 		}
 	}
 	
@@ -68,8 +69,8 @@ public class TimelyScheduler {
 	public void loadTimelyCoins(){
 		Date dateCurrent = new Date();
 		
-		for(int i = 0; i < enabledMarkets.size(); i++) {
-			loadTimelyCoin(dateCurrent, enabledMarkets.get(i));
+		for(int i = 0; i < enabledMarketIds.size(); i++) {
+			loadTimelyCoin(dateCurrent, enabledMarketIds.get(i));
 		}
 		
 		/* Send Timely Message */
@@ -78,8 +79,8 @@ public class TimelyScheduler {
 		Integer hour = Integer.valueOf(hourStr);
 		for(int timeloop = 1; timeloop <= 12; timeloop++) {
 			if(hour % timeloop == 0) {
-				for(int i = 0; i <enabledMarkets.size(); i++) {
-					sendTimelyInfo(dateCurrent, enabledMarkets.get(i), timeloop);
+				for(int i = 0; i <enabledMarketIds.size(); i++) {
+					sendTimelyInfo(dateCurrent, enabledMarketIds.get(i), timeloop);
 				}
 			}
 		}
@@ -90,35 +91,35 @@ public class TimelyScheduler {
 		Integer day = Integer.valueOf(dayStr);
 		for(int dayloop = 1; dayloop <= 7; dayloop++) {
 			if(day % dayloop == 0) {
-				for(int i = 0; i <enabledMarkets.size(); i++) {
-					sendDailyInfo(dateCurrent, enabledMarkets.get(i), dayloop);
+				for(int i = 0; i <enabledMarketIds.size(); i++) {
+					sendDailyInfo(dateCurrent, enabledMarketIds.get(i), dayloop);
 				}
 			}
 		}
 	}
 	
-	public void loadTimelyCoin(Date dateCurrent, String market) {
+	public void loadTimelyCoin(Date dateCurrent, Market marketId) {
 		JSONObject coinObj = null;
 		try {
-			coinObj = coinManager.getCoin(myCoin, market);
+			coinObj = coinManager.getCoin(myCoin, marketId);
 		} catch (ServerErrorException e) {
 			Log.i("ERROR loadDailyCoin : " + e.getMessage());
 			e.printStackTrace();
 			
-			coinObj = timelyInfoService.getBefore(myCoin, dateCurrent, market);
+			coinObj = timelyInfoService.getBefore(myCoin, dateCurrent, marketId);
 			coinObj.put("result", "error");
 			coinObj.put("errorCode", e.getErrCode());
 			coinObj.put("errorMsg", e.getMessage());
 		} finally {
-			timelyInfoService.insert(myCoin, dateCurrent, market, coinObj);
+			timelyInfoService.insert(myCoin, dateCurrent, marketId, coinObj);
 		}
 	}
 	
 	/************************/
 	/** Timely Send Message **/
 	/************************/
-	public void sendTimelyInfo(Date dateCurrent, String market, int timeLoop){
-		List<ClientVo> clients = clientService.list(myCoin, market, timeLoop, null);
+	public void sendTimelyInfo(Date dateCurrent, Market marketId, int timeLoop){
+		List<ClientVo> clients = clientService.list(myCoin, marketId, timeLoop, null);
 		if(clients.size() > 0) {
 			Date dateBefore = null;
 			dateBefore = new Date();
@@ -126,17 +127,17 @@ public class TimelyScheduler {
 			time = time - (60 * 60 * 1000 * timeLoop);
 			dateBefore.setTime(time);
 			
-			TimelyInfoVo coinCurrent = timelyInfoService.get(myCoin, dateCurrent, market);
-			TimelyInfoVo coinBefore = timelyInfoService.get(myCoin, dateBefore, market);
-			telegramBot.sendTimelyMessage(clients, market, coinCurrent, coinBefore);
+			TimelyInfoVo coinCurrent = timelyInfoService.get(myCoin, dateCurrent, marketId);
+			TimelyInfoVo coinBefore = timelyInfoService.get(myCoin, dateBefore, marketId);
+			telegramBot.sendTimelyMessage(clients, marketId, coinCurrent, coinBefore);
 		}
 	}
 	
 	/************************/
 	/** Daily Send Message **/
 	/************************/
-	public void sendDailyInfo(Date dateCurrent, String market, int dayLoop) {
-		List<ClientVo> clients = clientService.listAtMidnight(myCoin, market, null, dayLoop, dateCurrent);
+	public void sendDailyInfo(Date dateCurrent, Market marketId, int dayLoop) {
+		List<ClientVo> clients = clientService.listAtMidnight(myCoin, marketId, null, dayLoop, dateCurrent);
 		if(clients.size() > 0 ) {
 			Date dateBefore = null;
 			dateBefore = new Date();
@@ -144,9 +145,9 @@ public class TimelyScheduler {
 			time = time -(1 * 24 * 60 * 60 * 1000 * dayLoop);
 			dateBefore.setTime(time);
 			
-			TimelyInfoVo coinCurrent  = timelyInfoService.get(myCoin, dateCurrent, market);
-			TimelyInfoVo coinBefore = timelyInfoService.get(myCoin, dateBefore, market);
-			telegramBot.sendDailyMessage(clients, market, coinCurrent, coinBefore);
+			TimelyInfoVo coinCurrent  = timelyInfoService.get(myCoin, dateCurrent, marketId);
+			TimelyInfoVo coinBefore = timelyInfoService.get(myCoin, dateBefore, marketId);
+			telegramBot.sendDailyMessage(clients, marketId, coinCurrent, coinBefore);
 		}
 	}
 }

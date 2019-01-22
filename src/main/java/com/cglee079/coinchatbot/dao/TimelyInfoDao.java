@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
 
@@ -27,18 +28,18 @@ public class TimelyInfoDao {
 		}
 	}
 
-	public TimelyInfoVo get(Coin coinId, String date, String market) {
+	public TimelyInfoVo get(Coin coinId, String date, Market marketId) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("coinId", coinId);
 		map.put("date", date);
-		map.put("market", market);
+		map.put("market", marketId);
 		return sqlSession.selectOne(namespace + ".get", map);
 	}
 
-	public List<TimelyInfoVo> list(String coinId, String market, int cnt) {
+	public List<TimelyInfoVo> list(String coinId, Market marketId, int cnt) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("coinId", coinId);
-		map.put("market", market);
+		map.put("market", marketId);
 		map.put("cnt", cnt);
 		return sqlSession.selectList(namespace + ".list", map);
 	}

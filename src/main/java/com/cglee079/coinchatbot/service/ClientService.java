@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.constants.ID;
 import com.cglee079.coinchatbot.constants.SET;
 import com.cglee079.coinchatbot.dao.ClientDao;
@@ -25,18 +26,18 @@ public class ClientService {
 		return clientDao.list(coinId);
 	}
 	
-	public List<ClientVo> list(Coin coinId, String market, double coinValue, boolean isUp) {
-		if(isUp) { return clientDao.listTargetUp(coinId, market, coinValue); } 
-		else { return clientDao.listTargetDown(coinId, market, coinValue); }
+	public List<ClientVo> list(Coin coinId, Market marketId, double coinValue, boolean isUp) {
+		if(isUp) { return clientDao.listTargetUp(coinId, marketId, coinValue); } 
+		else { return clientDao.listTargetDown(coinId, marketId, coinValue); }
 	}
 	
-	public List<ClientVo> list(Coin coinId, String market, Integer timeLoop, Integer dayLoop){
-		return clientDao.list(coinId, market, timeLoop, dayLoop);
+	public List<ClientVo> list(Coin coinId, Market marketId, Integer timeLoop, Integer dayLoop){
+		return clientDao.list(coinId, marketId, timeLoop, dayLoop);
 	}
 	
-	public List<ClientVo> listAtMidnight(Coin coinId, String market, Integer timeLoop, int dayLoop, Date dateCurrent) {
+	public List<ClientVo> listAtMidnight(Coin coinId, Market marketId, Integer timeLoop, int dayLoop, Date dateCurrent) {
 		List<ClientVo> newclients = new ArrayList<>();
-		List<ClientVo> clients = clientDao.list(coinId, market, timeLoop, dayLoop);
+		List<ClientVo> clients = clientDao.list(coinId, marketId, timeLoop, dayLoop);
 		ClientVo client = null;
 		Date newDate = new Date();
 		for(int i =0; i < clients.size(); i++) {
@@ -58,16 +59,16 @@ public class ClientService {
 		}
 	}
 	
-	public String getMarketId(Coin coinId, String userId){
+	public Market getMarketId(Coin coinId, String userId){
 		ClientVo client = clientDao.get(coinId, userId);
 		return client.getMarketId();
 	}
 	
-	public String getMarket(Coin coinId, long userId) {
+	public Market getMarketId(Coin coinId, long userId) {
 		return this.getMarketId(coinId, String.valueOf(userId));
 	}
 	
-	public boolean openChat(Coin coinId, Integer userId, String username, String market) {
+	public boolean openChat(Coin coinId, Integer userId, String username, Market marketId) {
 		
 		ClientVo client = null;
 		client = clientDao.get(coinId, userId.toString());
@@ -75,7 +76,7 @@ public class ClientService {
 		if(client == null){
 			client = ClientVo.builder()
 					.coinId(coinId)
-					.marketId(market)
+					.marketId(marketId)
 					.userId(userId.toString())
 					.username(username)
 					.localtime((long)0)
@@ -155,10 +156,10 @@ public class ClientService {
 		
 	}
 
-	public boolean updateMarket(Coin coinId, String userId, String market) {
+	public boolean updateMarketId(Coin coinId, String userId, Market marketId) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
-			client.setMarketId(market);
+			client.setMarketId(marketId);
 			return clientDao.update(client);
 		} else{
 			return false;

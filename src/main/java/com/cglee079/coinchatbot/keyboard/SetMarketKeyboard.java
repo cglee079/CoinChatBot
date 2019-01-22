@@ -7,9 +7,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import com.cglee079.coinchatbot.cmd.CMDER;
+import com.cglee079.coinchatbot.config.id.Market;
 
 public class SetMarketKeyboard extends ReplyKeyboardMarkup {
-	public SetMarketKeyboard(List<String> enabledMarkets, String lang) {
+	public SetMarketKeyboard(List<Market> enabledMarketIds, String lang) {
 		super();
 
 		this.setSelective(true);
@@ -21,11 +22,11 @@ public class SetMarketKeyboard extends ReplyKeyboardMarkup {
 		KeyboardRow keyboardRow = null;
 		int marketCnt = 0;
 		
-		for(int i = 0; i < enabledMarkets.size(); i++) {
+		for(int i = 0; i < enabledMarketIds.size(); i++) {
 			if(marketCnt%2 == 0) { keyboardRow = new KeyboardRow();}
 			marketCnt ++;
 			
-			keyboardRow.add(CMDER.getSetMarket(enabledMarkets.get(i), lang));
+			keyboardRow.add(CMDER.getSetMarket(enabledMarketIds.get(i), lang));
 			if(marketCnt%2 == 0) { keyboard.add(keyboardRow);}
 		}
 

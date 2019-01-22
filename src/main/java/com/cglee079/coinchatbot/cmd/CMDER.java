@@ -1,5 +1,6 @@
 package com.cglee079.coinchatbot.cmd;
 
+import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.constants.ID;
 
 public class CMDER {
@@ -166,22 +167,22 @@ public class CMDER {
 		return str;
 	}
 	
-	public static String getSetMarket(String market, String lang) {
+	public static String getSetMarket(Market marketId, String lang) {
 		String str = "";
-		switch(market) {
-		case ID.MARKET_COINONE 	: str = getSetMarketCoinone(lang);break;
-		case ID.MARKET_BITHUMB 	: str = getSetMarketBithumb(lang);break;
-		case ID.MARKET_UPBIT 	: str = getSetMarketUpbit(lang);break;
-		case ID.MARKET_COINNEST : str = getSetMarketCoinnest(lang);break;
-		case ID.MARKET_KORBIT 	: str = getSetMarketKorbit(lang);break;
-		case ID.MARKET_GOPAX 	: str = getSetMarketGopax(lang);break;
-		case ID.MARKET_BITFINEX : str = getSetMarketBitfinex(lang);break;
-		case ID.MARKET_BITTREX 	: str = getSetMarketBittrex(lang);break;
-		case ID.MARKET_POLONIEX : str = getSetMarketPoloniex(lang);break;
-		case ID.MARKET_BINANCE 	: str = getSetMarketBinance(lang);break;
-		case ID.MARKET_HUOBI 	: str = getSetMarketHuobi(lang);break;
-		case ID.MARKET_HADAX 	: str = getSetMarketHadax(lang);break;
-		case ID.MARKET_OKEX 	: str = getSetMarketOkex(lang);break;
+		switch(marketId) {
+		case COINONE 	: str = getSetMarketCoinone(lang);break;
+		case BITHUMB 	: str = getSetMarketBithumb(lang);break;
+		case UPBIT 	: str = getSetMarketUpbit(lang);break;
+		case COINNEST : str = getSetMarketCoinnest(lang);break;
+		case KORBIT 	: str = getSetMarketKorbit(lang);break;
+		case GOPAX 	: str = getSetMarketGopax(lang);break;
+		case BITFINEX : str = getSetMarketBitfinex(lang);break;
+		case BITTREX 	: str = getSetMarketBittrex(lang);break;
+		case POLONIEX : str = getSetMarketPoloniex(lang);break;
+		case BINANCE 	: str = getSetMarketBinance(lang);break;
+		case HUOBI 	: str = getSetMarketHuobi(lang);break;
+		case HADAX 	: str = getSetMarketHadax(lang);break;
+		case OKEX 	: str = getSetMarketOkex(lang);break;
 		}
 		return str;
 	}

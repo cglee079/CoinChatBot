@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.dao.CoinMarketConfigDao;
 import com.cglee079.coinchatbot.model.CoinMarketConfigVo;
 
@@ -16,7 +17,7 @@ public class CoinMarketConfigService {
 	@Autowired
 	private CoinMarketConfigDao coinMarketConfigDao;
 
-	public HashMap<Coin, String> getMarketParams(String market){
+	public HashMap<Coin, String> getMarketParams(Market market){
 		HashMap<Coin, String> map = new HashMap<>();
 		List<CoinMarketConfigVo> configs = coinMarketConfigDao.list(market, null);
 		CoinMarketConfigVo config = null;

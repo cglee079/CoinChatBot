@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.dao.TimelyInfoDao;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
 import com.google.gson.Gson;
@@ -22,15 +23,15 @@ public class TimelyInfoService {
 
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH");
 
-	public TimelyInfoVo get(Coin coinId, Date d, String market) {
-		return timelyInfoDao.get(coinId, formatter.format(d), market);
+	public TimelyInfoVo get(Coin coinId, Date d, Market marketId) {
+		return timelyInfoDao.get(coinId, formatter.format(d), marketId);
 	}
 
-	public boolean insert(Coin coinId, Date d, String market, JSONObject coin) {
+	public boolean insert(Coin coinId, Date d, Market marketId, JSONObject coin) {
 		TimelyInfoVo timelyInfo = TimelyInfoVo.builder()
 				.coinId(coinId)
 				.date(formatter.format(d))
-				.marketId(market)
+				.marketId(marketId)
 				.high(coin.getDouble("high"))
 				.low(coin.getDouble("low"))
 				.last(coin.getDouble("last"))
@@ -43,17 +44,17 @@ public class TimelyInfoService {
 		return timelyInfoDao.insert(timelyInfo);
 	}
 
-	public JSONObject getBefore(Coin coinId, Date dateCurrent, String market) {
+	public JSONObject getBefore(Coin coinId, Date dateCurrent, Market marketId) {
 		Date dateBefore = new Date();
 		dateBefore.setTime(dateCurrent.getTime() - (1000 * 60 * 60));
-		TimelyInfoVo timelyInfo = timelyInfoDao.get(coinId, formatter.format(dateBefore), market);
+		TimelyInfoVo timelyInfo = timelyInfoDao.get(coinId, formatter.format(dateBefore), marketId);
 		Gson gson = new Gson();
 		String jsonString = gson.toJson(timelyInfo);
 		return new JSONObject(jsonString);
 	}
 
-	public List<JSONObject> list(String coinId, String market, int cnt) {
-		List<TimelyInfoVo> timelyInfos = timelyInfoDao.list(coinId, market, cnt);
+	public List<JSONObject> list(String coinId, Market marketId, int cnt) {
+		List<TimelyInfoVo> timelyInfos = timelyInfoDao.list(coinId, marketId, cnt);
 		List<JSONObject> jsons = new ArrayList<>();
 		String jsonString = null; 
 		Gson gson = new Gson();
