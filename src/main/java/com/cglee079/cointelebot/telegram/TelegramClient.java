@@ -2,8 +2,8 @@ package com.cglee079.cointelebot.telegram;
 
 import java.util.List;
 
-import org.telegram.telegrambots.TelegramBotsApi;
-import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 public class TelegramClient {
 
@@ -12,7 +12,6 @@ public class TelegramClient {
 		for(int i =0; i < telegramBots.size(); i++) {
 			api.registerBot(telegramBots.get(i));			
 		}
-		
 	}
 
 }

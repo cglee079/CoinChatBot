@@ -3,8 +3,8 @@ package com.cglee079.cointelebot.telegram;
 import java.util.HashMap;
 import java.util.List;
 
-import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardRemove;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
 import com.cglee079.cointelebot.constants.ID;
 import com.cglee079.cointelebot.keyboard.ConfirmStopKeyboard;

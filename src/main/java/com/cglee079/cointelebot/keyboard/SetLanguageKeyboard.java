@@ -3,8 +3,8 @@ package com.cglee079.cointelebot.keyboard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import com.cglee079.cointelebot.cmd.CMDER;
 

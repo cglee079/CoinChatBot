@@ -13,12 +13,12 @@ import javax.annotation.PostConstruct;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.abilitybots.api.bot.AbilityBot;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.api.objects.User;
-import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import com.cglee079.cointelebot.cmd.CMDER;
 import com.cglee079.cointelebot.coin.CoinManager;

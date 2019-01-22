@@ -1,13 +1,10 @@
 package com.cglee079.cointelebot.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 import com.cglee079.cointelebot.dao.ClientMsgDao;
 import com.cglee079.cointelebot.log.Log;
