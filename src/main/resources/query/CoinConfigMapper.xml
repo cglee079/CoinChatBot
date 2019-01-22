@@ -2,24 +2,28 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cglee079.cointelebot.mapper.CoinConfigMapper">
+<mapper namespace="com.cglee079.coinchatbot.mapper.CoinConfigMapper">
 
-	<select id="get" resultType="com.cglee079.cointelebot.model.CoinConfigVo">
+	<resultMap type="CoinConfigVo" id="coinConfigResultMap">
+		<id property="coinId" column="COIN_ID"/>
+		<result property="exInvestKRW" column="EX_INVEST_KRW"/>
+		<result property="exInvestUSD" column="EX_INVEST_USD"/>
+		<result property="exTargetKRW" column="EX_TARGET_KRW"/>
+		<result property="exTargetUSD" column="EX_TARGET_USD"/>
+		<result property="exTargetRate" column="EX_TARGET_RATE"/>
+		<result property="exCoinCnt" column="EX_COINCNT"/>
+		<result property="digitKRW" column="DIGIT_KRW"/>
+		<result property="digitUSD" column="DIGIT_USD"/>
+		<result property="digitBTC" column="DIGIT_BTC"/>
+		<result property="version" column="VERSION"/>
+	</resultMap>
+	
+	<select id="get" resultMap="coinConfigResultMap">
 			SELECT 
-			CONFIG_COINID as 'coinId',
-			CONFIG_EX_PRICE_KR as 'priceKREx',
-			CONFIG_EX_PRICE_US as 'priceUSEx',
-			CONFIG_EX_TARGET_KR as 'targetKREx',
-			CONFIG_EX_TARGET_US as 'targetUSEx',
-			CONFIG_EX_TARGET_RATE as 'targetRateEx',
-			CONFIG_EX_NUMBER as 'numberEx',
-			CONFIG_DIGIT_KRW as 'digitKRW',
-			CONFIG_DIGIT_USD as 'digitUSD',
-			CONFIG_DIGIT_BTC as 'digitBTC',
-			CONFIG_VERSION as 'version'
+				*
 			FROM TB_COINBOT_COIN_CONFIG
 			WHERE 1 = 1
-			AND CONFIG_COINID = #{coinId}
+			AND COIN_ID = #{coinId}
 	</select>
 	
 </mapper>

@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cglee079.cointelebot.mapper.TimelyInfoMapper">
+<mapper namespace="com.cglee079.coinchatbot.mapper.TimelyInfoMapper">
 	<resultMap type="TimelyInfoVo" id="timelyInfoResultMap">
 		<id property="coinId" column="COIN_ID"/>
-		<id property="market" column="MARKET_ID"/>
+		<id property="marketId" column="MARKET_ID"/>
 		<id property="date" column="DT_HOUR"/>
 		<result  property="high" column="TIME_HIGH"/>
 		<result  property="low" column="TIME_LOW"/>
@@ -42,11 +42,22 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO TB_COINBOT_TIMELYINFO
+		INSERT INTO TB_COINBOT_TIMELYINFO(
+			COIN_ID,
+			MARKET_ID,
+			DT_HOUR,
+			TIME_HIGH,
+			TIME_LOW,
+			TIME_LAST,
+			TIME_VOLUME,
+			RES_RESULT,
+			RES_ERRCODE,
+			RES_ERRMSG
+		)
 		VALUES ( 
 			#{coinId}, 
-			#{date}, 
 			#{market},
+			#{date},
 			#{high}, 
 			#{low}, 
 			#{last}, 

@@ -10,21 +10,21 @@
 	<context:annotation-config></context:annotation-config>
 	
 	<bean id="COIN_SIA" class="java.lang.String">
-		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_SC"/></constructor-arg>
+		<constructor-arg><util:constant static-field="com.cglee079.coinchatbot.constants.ID.COIN_SC"/></constructor-arg>
 	</bean>
 	
-	<bean id="TelegramBot_SIA" class="com.cglee079.cointelebot.telegram.TelegramBot">
+	<bean id="TelegramBot_SIA" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_SIA"/>
 		<constructor-arg index="1" value="457893969:AAFPb0E2itq6sJIjmc91R9LTnGm_1NtawnI"/>
 		<constructor-arg index="2" value="cg_sia_bot"/>
 	</bean>
 	
-	<bean id="TargetScheduler_SIA" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+	<bean id="TargetScheduler_SIA" class="com.cglee079.coinchatbot.scheduler.TargetScheduler">
 		<constructor-arg index="0" ref="COIN_SIA"/>
 		<constructor-arg index="1" ref="TelegramBot_SIA"/>
 	</bean>
 	
-	<bean id="TimelyScheduler_SIA" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+	<bean id="TimelyScheduler_SIA" class="com.cglee079.coinchatbot.scheduler.TimelyScheduler">
 		<constructor-arg index="0" ref="COIN_SIA"/>
 		<constructor-arg index="1" ref="TelegramBot_SIA"/>
 	</bean>

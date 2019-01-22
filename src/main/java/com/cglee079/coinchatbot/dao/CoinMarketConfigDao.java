@@ -12,14 +12,14 @@ import com.cglee079.coinchatbot.model.CoinMarketConfigVo;
 
 @Repository
 public class CoinMarketConfigDao {
-	final static String namespace = "com.cglee079.cointelebot.mapper.CoinMarketConfigMapper";
+	final static String namespace = "com.cglee079.coinchatbot.mapper.CoinMarketConfigMapper";
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	public List<CoinMarketConfigVo> list(String market, String coinId) {
+	public List<CoinMarketConfigVo> list(String marketId, String coinId) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("market", market);
+		map.put("marketId", marketId);
 		map.put("coinId", coinId);
 		return sqlSession.selectList(namespace + ".list", map);
 	}

@@ -2,19 +2,23 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cglee079.cointelebot.mapper.CoinInfoMapper">
+<mapper namespace="com.cglee079.coinchatbot.mapper.CoinInfoMapper">
 
-	<select id="list" resultType="com.cglee079.cointelebot.model.CoinInfoVo">
+	<resultMap type="CoinInfoVo" id="coinInfoResultMap">
+		<id property="coinId" column="COIN_ID"/>
+		<result property="usName" column="COIN_USNAME"/>
+		<result property="krName" column="COIN_KRNAME"/>
+		<result property="chatAddr" column="CHAT_URL"/>
+		<result property="enabled" column="ENABLED"/>
+	</resultMap>
+	
+	<select id="list" resultMap="coinInfoResultMap">
 			SELECT 
-			CINFO_COINID as 'coinId',
-			CINFO_US_NAME as 'usName',
-			CINFO_KR_NAME as 'krName',
-			CINFO_CHAT_ADDR as 'chatAddr',
-			CINFO_ENABLED as 'enabled'
+				*
 			FROM TB_COINBOT_COIN_INFO
 			WHERE 1 = 1
-			AND CINFO_ENABLED = 'Y'
-			<![CDATA[AND CINFO_COINID <> #{coinId}]]>
+			AND ENABLED = 'Y'
+			<![CDATA[AND COIN_ID <> #{coinId}]]>
 	</select>
 	
 </mapper>

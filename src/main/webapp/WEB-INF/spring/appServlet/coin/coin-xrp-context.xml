@@ -10,21 +10,21 @@
 	<context:annotation-config></context:annotation-config>
 	
 	<bean id="COIN_XRP" class="java.lang.String">
-		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_XRP"/></constructor-arg>
+		<constructor-arg><util:constant static-field="com.cglee079.coinchatbot.constants.ID.COIN_XRP"/></constructor-arg>
 	</bean>
 	
-	<bean id="TelegramBot_XRP" class="com.cglee079.cointelebot.telegram.TelegramBot">
+	<bean id="TelegramBot_XRP" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_XRP"/>
 		<constructor-arg index="1" value="406662871:AAHk1KhfttRHBtDvRe3PYU2xy8aeT4x0UIE"/>
 		<constructor-arg index="2" value="cg_xrp_bot"/>
 	</bean>
 	
-	<bean id="TargetScheduler_XRP" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+	<bean id="TargetScheduler_XRP" class="com.cglee079.coinchatbot.scheduler.TargetScheduler">
 		<constructor-arg index="0" ref="COIN_XRP"/>
 		<constructor-arg index="1" ref="TelegramBot_XRP"/>
 	</bean>
 	
-	<bean id="TimelyScheduler_XRP" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+	<bean id="TimelyScheduler_XRP" class="com.cglee079.coinchatbot.scheduler.TimelyScheduler">
 		<constructor-arg index="0" ref="COIN_XRP"/>
 		<constructor-arg index="1" ref="TelegramBot_XRP"/>
 	</bean>

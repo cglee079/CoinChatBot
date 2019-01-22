@@ -18,7 +18,6 @@ public class ClientMsgService {
 	private ClientMsgDao clientMsgDao;
 
 	public boolean insert(String coinId, Update update) {
-		ClientMsgVo clientMsg = new ClientMsgVo();
 		Message message = null;
 		if(update.getMessage() != null) {
 			message = update.getMessage();
@@ -27,11 +26,14 @@ public class ClientMsgService {
 		}
 		
 		User user = message.getFrom();
-		clientMsg.setCoinId(coinId);
-		clientMsg.setUserId(user.getId().toString());
-		clientMsg.setUsername(user.getLastName() + " " + user.getFirstName());
-		clientMsg.setMsg(message.getText());
-		clientMsg.setDate(TimeStamper.getDateTime());
+		
+		ClientMsgVo clientMsg = ClientMsgVo.builder()
+				.coinId(coinId)
+				.userId(user.getId().toString())
+				.username(user.getLastName() + " " + user.getFirstName())
+				.contents(message.getText())
+				.date(TimeStamper.getDateTime())
+				.build();
 		
 		Log.i(clientMsg.log(coinId));
 		return clientMsgDao.insert(clientMsg);

@@ -10,21 +10,21 @@
 	<context:annotation-config></context:annotation-config>
 	
 	<bean id="COIN_LTC" class="java.lang.String">
-		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_LTC"/></constructor-arg>
+		<constructor-arg><util:constant static-field="com.cglee079.coinchatbot.constants.ID.COIN_LTC"/></constructor-arg>
 	</bean>
 	
-	<bean id="TelegramBot_LTC" class="com.cglee079.cointelebot.telegram.TelegramBot">
+	<bean id="TelegramBot_LTC" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_LTC"/>
 		<constructor-arg index="1" value="552662669:AAG9HTIwqg3J217KLCqK9twB3NaOtD9qByM"/>
 		<constructor-arg index="2" value="cg_ltc_bot"/>
 	</bean>
 	
-	<bean id="TargetScheduler_LTC" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+	<bean id="TargetScheduler_LTC" class="com.cglee079.coinchatbot.scheduler.TargetScheduler">
 		<constructor-arg index="0" ref="COIN_LTC"/>
 		<constructor-arg index="1" ref="TelegramBot_LTC"/>
 	</bean>
 	
-	<bean id="TimelyScheduler_LTC" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+	<bean id="TimelyScheduler_LTC" class="com.cglee079.coinchatbot.scheduler.TimelyScheduler">
 		<constructor-arg index="0" ref="COIN_LTC"/>
 		<constructor-arg index="1" ref="TelegramBot_LTC"/>
 	</bean>

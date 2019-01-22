@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import com.cglee079.coinchatbot.cmd.CMDER;
 import com.cglee079.coinchatbot.constants.ID;
-import com.cglee079.coinchatbot.constants.SET;
 import com.cglee079.coinchatbot.model.ClientVo;
 import com.cglee079.coinchatbot.model.CoinConfigVo;
 import com.cglee079.coinchatbot.model.CoinInfoVo;
@@ -38,12 +37,12 @@ public class MessageMaker {
 		this.myCoin		= myCoin;
 		this.inBtcs		= inBtcs;
 		version			= config.getVersion();
-		priceKREx 		= config.getPriceKREx();
-		priceUSEx 		= config.getPriceUSEx();
-		coinCntEx 		= config.getNumberEx();
-		targetKREx 		= config.getTargetKREx();
-		targetUSEx 		= config.getTargetUSEx();
-		targetRateEx 	= config.getTargetRateEx();
+		priceKREx 		= config.getExInvestKRW();
+		priceUSEx 		= config.getExInvestUSD();
+		coinCntEx 		= config.getExCoinCnt();
+		targetKREx 		= config.getExTargetKRW();
+		targetUSEx 		= config.getExTargetUSD();
+		targetRateEx 	= config.getExTargetRate();
 		digitKRW 		= config.getDigitKRW();
 		digitUSD 		= config.getDigitUSD();
 		digitBTC 		= config.getDigitBTC();
@@ -340,8 +339,8 @@ public class MessageMaker {
 	public String msgCurrentPrice(double currentValue, JSONObject coinMoney, ClientVo client) {
 		String msg = "";
 		String lang 	= client.getLang();
-		String market 	= client.getMarket();
-		String date		= TimeStamper.getDateTime(client.getLocalTime());
+		String market 	= client.getMarketId();
+		String date		= TimeStamper.getDateTime(client.getLocaltime());
 		
 		switch(lang) {
 		case ID.LANG_KR :
@@ -374,9 +373,9 @@ public class MessageMaker {
 	/**********************************/
 	public String msgEachMarketPrice(double exchangeRate, LinkedHashMap<String, Double> lasts, ClientVo client) {
 		String msg 		= "";
-		String market 	= client.getMarket();
+		String market 	= client.getMarketId();
 		String lang 	= client.getLang();
-		String date		= TimeStamper.getDateTime(client.getLocalTime());
+		String date		= TimeStamper.getDateTime(client.getLocaltime());
 		double mylast 	= lasts.get(market);
 		
 		switch(lang) {
@@ -544,9 +543,9 @@ public class MessageMaker {
 	/**************************/
 	public String msgCalcResult(double price, double cnt, double avgPrice, double coinValue, JSONObject btcObj, ClientVo client) {
 		String msg = "";
-		String market 	= client.getMarket();
+		String market 	= client.getMarketId();
 		String lang 	= client.getLang();
-		String date		= TimeStamper.getDateTime(client.getLocalTime());
+		String date		= TimeStamper.getDateTime(client.getLocaltime());
 		
 		switch(lang) {
 		case ID.LANG_KR :
@@ -846,11 +845,11 @@ public class MessageMaker {
 	
 	public String msgMarketSetChangeCurrency(ClientVo client, Double changePrice, Double changeTargetUp, Double changeTargetDown, String changeMarket) {
 		String msg = "\n";
-		String market 				= client.getMarket();
+		String market 				= client.getMarketId();
 		String lang					= client.getLang();
-		Double currentPrice 		= client.getPrice();
-		Double currentTargetUp 		= client.getTargetUpPrice();
-		Double currentTargetDown	= client.getTargetDownPrice();
+		Double currentPrice 		= client.getInvest();
+		Double currentTargetUp 		= client.getTargetUp();
+		Double currentTargetDown	= client.getTargetDown();
 		if(currentPrice != null || currentTargetUp != null || currentTargetDown != null ) {
 			switch(lang) {
 			case ID.LANG_KR:
@@ -947,22 +946,22 @@ public class MessageMaker {
 		return msg;
 	}
 	
-	public String msgTargetPriceSetResult(double targetPrice, double currentValue, String market, String lang) {
+	public String msgTargetPriceSetResult(double TargetPrice, double currentValue, String market, String lang) {
 		String msg = "";
 		switch(lang) {
 		case ID.LANG_KR :
-			msg += "목표가격 " + toMoneyStr(targetPrice, market) + "으로 설정되었습니다.\n";
+			msg += "목표가격 " + toMoneyStr(TargetPrice, market) + "으로 설정되었습니다.\n";
 			msg += "------------------------\n";
-			msg += "목표가격 : " + toMoneyStr(targetPrice, market) + "\n";
+			msg += "목표가격 : " + toMoneyStr(TargetPrice, market) + "\n";
 			msg += "현재가격 : " + toMoneyStr(currentValue, market) + "\n";
-			msg += "가격차이 : " + toSignMoneyStr(targetPrice - currentValue, market) + "(" + toSignPercent(targetPrice, currentValue) + " )\n";
+			msg += "가격차이 : " + toSignMoneyStr(TargetPrice - currentValue, market) + "(" + toSignPercent(TargetPrice, currentValue) + " )\n";
 			break;
 		case ID.LANG_US : 
-			msg += "The target price is set at " + toMoneyStr(targetPrice, market) + ".\n";
+			msg += "The target price is set at " + toMoneyStr(TargetPrice, market) + ".\n";
 			msg += "------------------------\n";
-			msg += "Target Price       : " + toMoneyStr(targetPrice, market) + "\n";
+			msg += "Target Price       : " + toMoneyStr(TargetPrice, market) + "\n";
 			msg += "Current Price      : " + toMoneyStr(currentValue, market) + "\n";
-			msg += "Price difference : " + toSignMoneyStr(targetPrice - currentValue, market) + " (" + toSignPercent(targetPrice, currentValue) + " )\n";
+			msg += "Price difference : " + toSignMoneyStr(TargetPrice - currentValue, market) + " (" + toSignPercent(TargetPrice, currentValue) + " )\n";
 			break;
 		}
 		return msg;
@@ -1082,30 +1081,30 @@ public class MessageMaker {
 	/*********************/
 	public String msgClientSetting(ClientVo client, String lang) {
 		String msg = "";
-		String market = client.getMarket();
+		String market = client.getMarketId();
 		switch(lang) {
 		case ID.LANG_KR :
 			msg += "현재 설정은 다음과 같습니다.\n";
 			msg += "-----------------\n";
 			
 			msg += "거래소     = ";
-			msg += toMarketStr(client.getMarket(), lang) + "\n";
+			msg += toMarketStr(client.getMarketId(), lang) + "\n";
 					
 			
-			if(client.getDayLoop() != 0){ msg += "일일알림 = 매 " + client.getDayLoop() + " 일 주기 알림\n";} 
+			if(client.getDayloop() != 0){ msg += "일일알림 = 매 " + client.getDayloop() + " 일 주기 알림\n";} 
 			else{ msg += "일일알림 = 알람 없음\n";}
 			
-			if(client.getTimeLoop() != 0){ msg += "시간알림 = 매 " + client.getTimeLoop() + " 시간 주기 알림\n";} 
+			if(client.getTimeloop() != 0){ msg += "시간알림 = 매 " + client.getTimeloop() + " 시간 주기 알림\n";} 
 			else{ msg += "시간알림 = 알람 없음\n";}
 			
-			if(client.getTargetUpPrice() != null){msg += "목표가격 = " + toMoneyStr(client.getTargetUpPrice(), market) + "\n";}
-			else if(client.getTargetDownPrice() != null){msg += "목표가격 = " + toMoneyStr(client.getTargetDownPrice(), market) + "\n";}
+			if(client.getTargetUp() != null){msg += "목표가격 = " + toMoneyStr(client.getTargetUp(), market) + "\n";}
+			else if(client.getTargetDown() != null){msg += "목표가격 = " + toMoneyStr(client.getTargetDown(), market) + "\n";}
 			else { msg += "목표가격 = 입력되어있지 않음.\n";}
 			
-			if(client.getPrice() != null){msg += "투자금액 = " + toInvestAmountStr(client.getPrice(), market) + "\n";}
+			if(client.getInvest() != null){msg += "투자금액 = " + toInvestAmountStr(client.getInvest(), market) + "\n";}
 			else { msg += "투자금액 = 입력되어있지 않음.\n";}
 			
-			if(client.getCoinCount() != null){msg += "코인개수 = " + toCoinCntStr(client.getCoinCount(), lang) + "\n"; }
+			if(client.getCoinCnt() != null){msg += "코인개수 = " + toCoinCntStr(client.getCoinCnt(), lang) + "\n"; }
 			else { msg += "코인개수 = 입력되어있지 않음.\n";}
 			
 			break;
@@ -1115,22 +1114,22 @@ public class MessageMaker {
 			msg += "-----------------\n";
 			
 			msg += "Market = ";
-			msg += toMarketStr(client.getMarket(), lang) + "\n";
+			msg += toMarketStr(client.getMarketId(), lang) + "\n";
 			
-			if(client.getDayLoop() != 0){ msg += "Daily Notification = every " + client.getDayLoop() + " days\n";} 
+			if(client.getDayloop() != 0){ msg += "Daily Notification = every " + client.getDayloop() + " days\n";} 
 			else{ msg += "Daily Notification = No notifications.\n";}
 			
-			if(client.getTimeLoop() != 0){ msg += "Hourly Notification = every " + client.getTimeLoop() + " hours\n";} 
+			if(client.getTimeloop() != 0){ msg += "Hourly Notification = every " + client.getTimeloop() + " hours\n";} 
 			else{ msg += "Hourly Notification = No notifications.\n";}
 			
-			if(client.getTargetUpPrice() != null){msg += "Target price = " + toMoneyStr(client.getTargetUpPrice(), market) + "\n";}
-			else if(client.getTargetDownPrice() != null){msg += "Target price = " + toMoneyStr(client.getTargetDownPrice(), market) + "\n";}
+			if(client.getTargetUp() != null){msg += "Target price = " + toMoneyStr(client.getTargetUp(), market) + "\n";}
+			else if(client.getTargetDown() != null){msg += "Target price = " + toMoneyStr(client.getTargetDown(), market) + "\n";}
 			else { msg += "Target Price = Not entered.\n";}
 			
-			if(client.getPrice() != null){msg += "Investment amount = " + toInvestAmountStr(client.getPrice(), market) + "\n";}
+			if(client.getInvest() != null){msg += "Investment amount = " + toInvestAmountStr(client.getInvest(), market) + "\n";}
 			else { msg += "Investment amount = Not entered.\n";}
 			
-			if(client.getCoinCount() != null){msg += "The number of coins = " + toCoinCntStr(client.getCoinCount(), lang) + "\n"; }
+			if(client.getCoinCnt() != null){msg += "The number of coins = " + toCoinCntStr(client.getCoinCnt(), lang) + "\n"; }
 			else { msg += "The number of coins = Not entered.\n";}
 			break;
 		}
@@ -1519,11 +1518,11 @@ public class MessageMaker {
 		double currentLastBTC 	= 0;
 		double beforeLastBTC	= 0;
 		
-		String market 	= client.getMarket();
+		String market 	= client.getMarketId();
 		String lang		= client.getLang();
-		long localTime	= client.getLocalTime();
+		long localTime	= client.getLocaltime();
 		String date 	= TimeStamper.getDateTime(localTime);
-		int dayLoop 	= client.getDayLoop();
+		int dayLoop 	= client.getDayloop();
 
 		String msg = "";
 		msg += date + "\n";
@@ -1664,10 +1663,10 @@ public class MessageMaker {
 	/**********************************/
 	public String msgSendTimelyMessage(ClientVo client, TimelyInfoVo coinCurrent, TimelyInfoVo coinBefore, JSONObject coinCurrentMoney, JSONObject coinBeforeMoney) {
 		String msg 		=  "";
-		String market 	= client.getMarket();
+		String market 	= client.getMarketId();
 		String lang		= client.getLang();
-		int timeLoop 	= client.getTimeLoop();
-		long localTime	= client.getLocalTime();
+		int timeLoop 	= client.getTimeloop();
+		long localTime	= client.getLocaltime();
 		String date 	= TimeStamper.getDateTime(localTime);
 		
 		double currentValue = coinCurrent.getLast();

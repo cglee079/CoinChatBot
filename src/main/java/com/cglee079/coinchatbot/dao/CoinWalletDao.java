@@ -11,7 +11,7 @@ import com.cglee079.coinchatbot.model.CoinWalletVo;
 
 @Repository
 public class CoinWalletDao {
-	final static String namespace = "com.cglee079.cointelebot.mapper.CoinWalletMapper";
+	final static String namespace = "com.cglee079.coinchatbot.mapper.CoinWalletMapper";
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;

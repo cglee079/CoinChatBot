@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CommonDao {
-	final static String namespace = "com.cglee079.cointelebot.mapper.CommonMapper";
+	final static String namespace = "com.cglee079.coinchatbot.mapper.CommonMapper";
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;

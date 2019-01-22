@@ -10,21 +10,21 @@
 	<context:annotation-config></context:annotation-config>
 	
 	<bean id="COIN_VEN" class="java.lang.String">
-		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_VEN"/></constructor-arg>
+		<constructor-arg><util:constant static-field="com.cglee079.coinchatbot.constants.ID.COIN_VEN"/></constructor-arg>
 	</bean>
 	
-	<bean id="TelegramBot_VEN" class="com.cglee079.cointelebot.telegram.TelegramBot">
+	<bean id="TelegramBot_VEN" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_VEN"/>
 		<constructor-arg index="1" value="454467747:AAFN8SXW1X3_CX7LA7GP75vC6ODlV1sYg3I"/>
 		<constructor-arg index="2" value="cg_ven_bot"/>
 	</bean>
 	
-	<bean id="TargetScheduler_VEN" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+	<bean id="TargetScheduler_VEN" class="com.cglee079.coinchatbot.scheduler.TargetScheduler">
 		<constructor-arg index="0" ref="COIN_VEN"/>
 		<constructor-arg index="1" ref="TelegramBot_VEN"/>
 	</bean>
 	
-	<bean id="TimelyScheduler_VEN" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+	<bean id="TimelyScheduler_VEN" class="com.cglee079.coinchatbot.scheduler.TimelyScheduler">
 		<constructor-arg index="0" ref="COIN_VEN"/>
 		<constructor-arg index="1" ref="TelegramBot_VEN"/>
 	</bean>

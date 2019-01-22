@@ -10,21 +10,21 @@
 	<context:annotation-config></context:annotation-config>
 	
 	<bean id="COIN_ADA" class="java.lang.String">
-		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_ADA"/></constructor-arg>
+		<constructor-arg><util:constant static-field="com.cglee079.coinchatbot.constants.ID.COIN_ADA"/></constructor-arg>
 	</bean>
 	
-	<bean id="TelegramBot_ADA" class="com.cglee079.cointelebot.telegram.TelegramBot">
+	<bean id="TelegramBot_ADA" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_ADA"/>
 		<constructor-arg index="1" value="493072194:AAEmFhG8ZC9FaFEZaOI4-vFNcJZj3jeIVWI"/>
 		<constructor-arg index="2" value="cg_ada_bot"/>
 	</bean>
 	
-	<bean id="TargetScheduler_ADA" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+	<bean id="TargetScheduler_ADA" class="com.cglee079.coinchatbot.scheduler.TargetScheduler">
 		<constructor-arg index="0" ref="COIN_ADA"/>
 		<constructor-arg index="1" ref="TelegramBot_ADA"/>
 	</bean>
 	
-	<bean id="TimelyScheduler_ADA" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+	<bean id="TimelyScheduler_ADA" class="com.cglee079.coinchatbot.scheduler.TimelyScheduler">
 		<constructor-arg index="0" ref="COIN_ADA"/>
 		<constructor-arg index="1" ref="TelegramBot_ADA"/>
 	</bean>

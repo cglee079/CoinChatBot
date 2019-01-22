@@ -9,7 +9,7 @@ import com.cglee079.coinchatbot.model.ClientMsgVo;
 
 @Repository
 public class ClientMsgDao {
-	final static String namespace = "com.cglee079.cointelebot.mapper.ClientMsgMapper";
+	final static String namespace = "com.cglee079.coinchatbot.mapper.ClientMsgMapper";
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;

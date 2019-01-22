@@ -9,7 +9,7 @@
 
 	<bean class="org.telegram.telegrambots.ApiContextInitializer" init-method="init"></bean>
 
-	<bean id="TelegramClient" class="com.cglee079.cointelebot.telegram.TelegramClient">
+	<bean id="TelegramClient" class="com.cglee079.coinchatbot.telegram.TelegramClient">
 		<constructor-arg index="0">
 			<list>
 				<ref bean="TelegramBot_ADA" />

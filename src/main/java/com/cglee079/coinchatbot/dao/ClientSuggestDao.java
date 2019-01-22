@@ -9,7 +9,7 @@ import com.cglee079.coinchatbot.model.ClientSuggestVo;
 
 @Repository
 public class ClientSuggestDao {
-	final static String namespace = "com.cglee079.cointelebot.mapper.ClientSuggestMapper";
+	final static String namespace = "com.cglee079.coinchatbot.mapper.ClientSuggestMapper";
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;

@@ -28,17 +28,19 @@ public class TimelyInfoService {
 	}
 
 	public boolean insert(String coinId, Date d, String market, JSONObject coin) {
-		TimelyInfoVo timelyInfo = new TimelyInfoVo();
-		timelyInfo.setCoinId(coinId);
-		timelyInfo.setDate(formatter.format(d));
-		timelyInfo.setMarket(market);
-		timelyInfo.setHigh(coin.getDouble("high"));
-		timelyInfo.setLow(coin.getDouble("low"));
-		timelyInfo.setLast(coin.getDouble("last"));
-		timelyInfo.setVolume((long) coin.getDouble("volume"));
-		timelyInfo.setResult(coin.getString("result"));
-		timelyInfo.setErrorCode(String.valueOf(coin.getInt("errorCode")));
-		timelyInfo.setErrorMsg(coin.getString("errorMsg"));
+		TimelyInfoVo timelyInfo = TimelyInfoVo.builder()
+				.coinId(coinId)
+				.date(formatter.format(d))
+				.marketId(market)
+				.high(coin.getDouble("high"))
+				.low(coin.getDouble("low"))
+				.last(coin.getDouble("last"))
+				.volume((long) coin.getDouble("volume"))
+				.result(coin.getString("result"))
+				.errorCode(coin.getString("errorCode"))
+				.errorMsg(coin.getString("errorMsg"))
+				.build();
+				
 		return timelyInfoDao.insert(timelyInfo);
 	}
 

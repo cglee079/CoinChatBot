@@ -11,7 +11,7 @@ import com.cglee079.coinchatbot.model.ClientVo;
 
 @Repository
 public class ClientDao {
-	final static String namespace = "com.cglee079.cointelebot.mapper.ClientMapper";
+	final static String namespace = "com.cglee079.coinchatbot.mapper.ClientMapper";
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;

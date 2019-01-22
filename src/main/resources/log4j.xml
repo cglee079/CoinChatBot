@@ -17,7 +17,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.cglee079.cointelebot">
+	<logger name="com.cglee079.coinchatbot">
 		<level value="info" />
 	</logger>
 	

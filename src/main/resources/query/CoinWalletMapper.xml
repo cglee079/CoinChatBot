@@ -2,33 +2,48 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cglee079.cointelebot.mapper.CoinWalletMapper">
-
-	<select id="list" resultType="com.cglee079.cointelebot.model.CoinWalletVo">
+<mapper namespace="com.cglee079.coinchatbot.mapper.CoinWalletMapper">
+	
+	<resultMap type="CoinWalletVo" id="coinWalletResultMap">
+		<id property="coinId" column="COIN_ID"/>
+		<result property="usName" column="COIN_USNAME"/>
+		<result property="krName" column="COIN_KRNAME"/>
+		<result property="addr1" column="ADDR_01"/>
+		<result property="addr2" column="ADDR_02"/>
+		<result property="enabled" column="ENABLED"/>
+	</resultMap>
+	
+	<select id="list" resultMap="coinWalletResultMap">
 			SELECT 
-			WALLET_COINID as 'coinId',
-			CINFO_US_NAME as 'usName',
-			CINFO_KR_NAME as 'krName',
-			WALLET_ADDR1 as 'addr1',
-			WALLET_ADDR2 as 'addr2',
-			WALLET_ENABLED as 'enabled'
-			FROM VW_COINBOT_MYWALLET
+				A.COIN_ID,
+				A.ADDR_01,
+				A.ADDR_02,
+				A.ENABLED,
+				B.COIN_USNAME,
+				B.COIN_KRNAME
+			FROM 
+				TB_COINBOT_MYWALLET A 
+				JOIN TB_COINBOT_COIN_INFO B
+				ON A.COIN_ID = B.COIN_ID
 			WHERE 1 = 1
-			AND WALLET_ENABLED = 'Y'
+			AND A.ENABLED = 'Y'
 	</select>
 	
-	<select id="get" resultType="com.cglee079.cointelebot.model.CoinWalletVo">
+	<select id="get" resultMap="coinWalletResultMap">
 			SELECT 
-			WALLET_COINID as 'coinId',
-			CINFO_US_NAME as 'usName',
-			CINFO_KR_NAME as 'krName',
-			WALLET_ADDR1 as 'addr1',
-			WALLET_ADDR2 as 'addr2',
-			WALLET_ENABLED as 'enabled'
-			FROM VW_COINBOT_MYWALLET
+				A.COIN_ID,
+				A.ADDR_01,
+				A.ADDR_02,
+				A.ENABLED,
+				B.COIN_USNAME,
+				B.COIN_KRNAME
+			FROM 
+				TB_COINBOT_MYWALLET A 
+				JOIN TB_COINBOT_COIN_INFO B
+				ON A.COIN_ID = B.COIN_ID
 			WHERE 1 = 1
-			AND WALLET_ENABLED = 'Y'
-			AND WALLET_COINID = #{myCoin}
+			AND A.ENABLED = 'Y'
+			AND A.COIN_ID = #{myCoin}
 	</select>
 	
 </mapper>

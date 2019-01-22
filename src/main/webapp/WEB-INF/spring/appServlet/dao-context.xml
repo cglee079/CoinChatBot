@@ -38,8 +38,8 @@
 	<!-- Mybatis -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="DataSource" />
-		<property name="configLocation" value="classpath:com/cglee079/cointelebot/mybatis/mybatis-config.xml" />
-		<property name="mapperLocations" value="classpath:com/cglee079/cointelebot/mybatis/mappers/**.xml" />
+	<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath:query/**.xml" />
 	</bean>
 
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">

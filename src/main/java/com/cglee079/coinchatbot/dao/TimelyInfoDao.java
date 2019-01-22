@@ -13,7 +13,7 @@ import com.cglee079.coinchatbot.model.TimelyInfoVo;
 
 @Repository
 public class TimelyInfoDao {
-	final static String namespace = "com.cglee079.cointelebot.mapper.TimelyInfoMapper";
+	final static String namespace = "com.cglee079.coinchatbot.mapper.TimelyInfoMapper";
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;

@@ -2,11 +2,23 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cglee079.cointelebot.mapper.ClientSuggestMapper">
+<mapper namespace="com.cglee079.coinchatbot.mapper.ClientSuggestMapper">
 
 	<insert id="insert">
-		INSERT INTO TB_COINBOT_CLIENT_SUGGEST (SUGST_USERID, SUGST_COINID, SUGST_USERNAME, SUGST_TEXT, SUGST_DATE)
- 		VALUES (#{userId}, #{coinId}, #{username}, #{msg}, #{date})
+		INSERT INTO TB_COINBOT_CLIENT_SUGGEST (
+			COIN_ID,
+			CLNT_USERID, 
+			CLNT_USERNAME, 
+			SUGST_CONTENTS, 
+			SUGST_DATE
+		)
+ 		VALUES (
+ 			#{coinId},
+			#{userId}, 
+			#{username}, 
+			#{contents}, 
+			#{date}
+		)
 	</insert>
 	
 </mapper>

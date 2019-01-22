@@ -7,5 +7,9 @@
 	<typeAliases>
 		<typeAlias type="com.cglee079.coinchatbot.model.ClientVo" alias="ClientVo"/>
 		<typeAlias type="com.cglee079.coinchatbot.model.TimelyInfoVo" alias="TimelyInfoVo"/>
+		<typeAlias type="com.cglee079.coinchatbot.model.CoinConfigVo" alias="CoinConfigVo"/>
+		<typeAlias type="com.cglee079.coinchatbot.model.CoinInfoVo" alias="CoinInfoVo"/>
+		<typeAlias type="com.cglee079.coinchatbot.model.CoinMarketConfigVo" alias="CoinMarketConfigVo"/>
+		<typeAlias type="com.cglee079.coinchatbot.model.CoinWalletVo" alias="CoinWalletVo"/>
 	</typeAliases>
 </configuration>

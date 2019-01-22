@@ -10,7 +10,7 @@ import com.cglee079.coinchatbot.model.CoinInfoVo;
 
 @Repository
 public class CoinInfoDao {
-	final static String namespace = "com.cglee079.cointelebot.mapper.CoinInfoMapper";
+	final static String namespace = "com.cglee079.coinchatbot.mapper.CoinInfoMapper";
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;

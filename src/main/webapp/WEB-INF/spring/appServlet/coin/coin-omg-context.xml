@@ -10,21 +10,21 @@
 	<context:annotation-config></context:annotation-config>
 	
 	<bean id="COIN_OMG" class="java.lang.String">
-		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_OMG"/></constructor-arg>
+		<constructor-arg><util:constant static-field="com.cglee079.coinchatbot.constants.ID.COIN_OMG"/></constructor-arg>
 	</bean>
 	
-	<bean id="TelegramBot_OMG" class="com.cglee079.cointelebot.telegram.TelegramBot">
+	<bean id="TelegramBot_OMG" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_OMG"/>
 		<constructor-arg index="1" value="609896705:AAF6Z3cOdkML5ud2LuxW2OiMWbD1RCszNDw"/>
 		<constructor-arg index="2" value="cg_omg_bot"/>
 	</bean>
 	
-	<bean id="TargetScheduler_OMG" class="com.cglee079.cointelebot.scheduler.TargetScheduler">
+	<bean id="TargetScheduler_OMG" class="com.cglee079.coinchatbot.scheduler.TargetScheduler">
 		<constructor-arg index="0" ref="COIN_OMG"/>
 		<constructor-arg index="1" ref="TelegramBot_OMG"/>
 	</bean>
 	
-	<bean id="TimelyScheduler_OMG" class="com.cglee079.cointelebot.scheduler.TimelyScheduler">
+	<bean id="TimelyScheduler_OMG" class="com.cglee079.coinchatbot.scheduler.TimelyScheduler">
 		<constructor-arg index="0" ref="COIN_OMG"/>
 		<constructor-arg index="1" ref="TelegramBot_OMG"/>
 	</bean>

@@ -2,22 +2,22 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cglee079.cointelebot.mapper.ClientMsgMapper">
+<mapper namespace="com.cglee079.coinchatbot.mapper.ClientMsgMapper">
 
-	<select id="get" resultType="com.cglee079.cointelebot.model.ClientMsgVo">
-	</select>
-	
-	<select id="list" resultType="com.cglee079.cointelebot.model.ClientMsgVo">
-	</select>
-	
 	<insert id="insert">
-		INSERT INTO TB_COINBOT_CLIENT_MSG (MSG_COINID, MSG_USERID, MSG_USERNAME, MSG_TEXT, MSG_DATE)
- 		VALUES (#{coinId}, #{userId}, #{username}, #{msg}, #{date})
+		INSERT INTO TB_COINBOT_CLIENT_MSG (
+			COIN_ID,
+			CLNT_USERID, 
+			CLNT_USERNAME, 
+			MSG_CONTENTS, 
+			MSG_DATE
+		)
+ 		VALUES ( 
+ 			#{coinId},
+ 			#{userId},
+ 			#{username},
+ 			#{contents},
+ 			#{date}
+ 		)
 	</insert>
-	
-	<delete id="delete" parameterType="map">
-	</delete>
-	
-	<update id="update">
-	</update>	
 </mapper>

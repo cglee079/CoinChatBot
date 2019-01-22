@@ -8,7 +8,7 @@ import com.cglee079.coinchatbot.model.CoinConfigVo;
 
 @Repository
 public class CoinConfigDao {
-	final static String namespace = "com.cglee079.cointelebot.mapper.CoinConfigMapper";
+	final static String namespace = "com.cglee079.coinchatbot.mapper.CoinConfigMapper";
 
 	@Autowired
 	private SqlSessionTemplate sqlSession;

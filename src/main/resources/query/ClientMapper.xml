@@ -2,16 +2,16 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cglee079.cointelebot.mapper.ClientMapper">
+<mapper namespace="com.cglee079.coinchatbot.mapper.ClientMapper">
 
 	<resultMap type="ClientVo" id="clientResultMap">
 		<id property="coinId" column="COIN_ID"/>
 		<id property="userId" column="CLNT_USERID"/>
+		<result  property="marketId" column="MARKET_ID"/>
 		<result  property="username" column="CLNT_USERNAME"/>
 		<result  property="localtime" column="CLNT_LOCTIME"/>
 		<result  property="lang" column="CLNT_LANG"/>
 		<result  property="state" column="CLNT_STATE"/>
-		<result  property="market" column="CLNT_MARKET"/>
 		<result  property="timeloop" column="ALERT_TIMELOOP"/>
 		<result  property="dayloop" column="ALERT_DAYLOOP"/>
 		<result  property="targetUp" column="ALERT_TGUP"/>
@@ -31,7 +31,7 @@
 		SELECT
 			*
 		FROM TB_COINBOT_CLIENT
-		WHERE CLNT_COINID = #{coinId}
+		WHERE COIN_ID = #{coinId}
 		AND CLNT_USERID = #{userId}
 	</select>
 	
@@ -41,10 +41,10 @@
 			*
 		FROM TB_COINBOT_CLIENT
 		WHERE 1 = 1
-		AND CLNT_COINID = #{coinId}
+		AND COIN_ID = #{coinId}
 		AND CLNT_ENABLED = 'Y'
-		<if test="market != null">
-		AND CLNT_MARKET = #{market}
+		<if test="marketId != null">
+		AND MARKET_ID = #{marketId}
 		</if>
 		<if test="timeLoop != null">
 		AND ALERT_TIMELOOP = #{timeLoop}
@@ -61,8 +61,8 @@
 		FROM TB_COINBOT_CLIENT
 		WHERE 1 = 1
 		AND CLNT_ENABLED = 'Y'
-		AND CLNT_COINID = #{coinId}
-		AND CLNT_MARKET = #{market}
+		AND COIN_ID = #{coinId}
+		AND MARKET_ID = #{marketId}
 		<![CDATA[ AND  #{coinValue} >= ALERT_TGUP ]]>
 	</select>
 	
@@ -74,21 +74,21 @@
 		FROM TB_COINBOT_CLIENT
 		WHERE 1 = 1
 		AND CLNT_ENABLED = 'Y'
-		AND CLNT_COINID = #{coinId}
-		AND CLNT_MARKET = #{market}
+		AND COIN_ID = #{coinId}
+		AND MARKET_ID = #{marketId}
 		<![CDATA[ AND  #{coinValue} <= ALERT_TGDOWN ]]>
 	</select>
 	
 	
 	<insert id="insert">
 		INSERT INTO TB_COINBOT_CLIENT(
-			CLNT_COINID, 
+			COIN_ID, 
 			CLNT_USERID, 
 			CLNT_USERNAME, 
 			CLNT_LOCTIME,
 			CLNT_LANG, 
 			CLNT_STATE,
-			CLNT_MARKET,
+			MARKET_ID,
 			ALERT_TIMELOOP,
 			ALERT_DAYLOOP,
 			ALERT_TGUP,
@@ -109,7 +109,7 @@
 			#{localtime}, 
 			#{lang}, 
 			#{state},
-			#{market},
+			#{marketId},
 			#{timeloop},
 			#{dayloop},
 			#{targetUp},
@@ -127,7 +127,7 @@
 	
 	<delete id="delete" parameterType="map">
 		DELETE FROM TB_COINBOT_CLIENT
-		WHERE CLNT_COINID = #{coinId}
+		WHERE COIN_ID = #{coinId}
 		AND CLNT_USERID = #{userId}
 	</delete>
 	
@@ -138,7 +138,7 @@
 		CLNT_LOCTIME = #{localtime},
 		CLNT_LANG = #{lang},
 		CLNT_STATE = #{state},
-		CLNT_MARKET = #{market},
+		MARKET_ID = #{marketId},
 		ALERT_TIMELOOP = #{timeloop},
 		ALERT_DAYLOOP = #{dayloop},
 		<choose>
@@ -181,7 +181,7 @@
 		REOPEN_DATE = #{reopenDate},
 		CLOSE_DATE = #{closeDate},
 		LA_MSG_DATE	= #{laMsgDate}
-		WHERE CLNT_COINID = #{coinId}
+		WHERE COIN_ID = #{coinId}
 		AND CLNT_USERID = #{userId}
 	</update>
 	

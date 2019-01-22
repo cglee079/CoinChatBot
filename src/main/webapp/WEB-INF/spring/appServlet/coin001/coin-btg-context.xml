@@ -10,7 +10,7 @@
 	<context:annotation-config></context:annotation-config>
 	
 	<bean id="COIN_BTG" class="java.lang.String">
-		<constructor-arg><util:constant static-field="com.cglee079.cointelebot.constants.ID.COIN_BTG"/></constructor-arg>
+		<constructor-arg><util:constant static-field="com.cglee079.coinchatbot.constants.ID.COIN_BTG"/></constructor-arg>
 	</bean>
 	
 	<bean id="TelegramBot_BTG" class="com.cglee079.coinchatbot.telegram.TelegramBot">

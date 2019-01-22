@@ -58,8 +58,8 @@ public class TimelyScheduler {
 		
 		for(int i = 0; i < configMarkets.size(); i++) {
 			configMarket = configMarkets.get(i);
-			inBtcs.put(configMarket.getMarket(), configMarket.isInBtc());
-			enabledMarkets.add(configMarket.getMarket());
+			inBtcs.put(configMarket.getMarketId(), configMarket.isInBtc());
+			enabledMarkets.add(configMarket.getMarketId());
 		}
 	}
 	
