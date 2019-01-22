@@ -6,7 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.cglee079.coinchatbot.model.CoinInfoVo;
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.model.CoinWalletVo;
 
 @Repository
@@ -20,7 +20,7 @@ public class CoinWalletDao {
 		return sqlSession.selectList(namespace + ".list");
 	}
 
-	public CoinWalletVo get(String myCoin) {
+	public CoinWalletVo get(Coin myCoin) {
 		return sqlSession.selectOne(namespace + ".get", myCoin);
 	}
 

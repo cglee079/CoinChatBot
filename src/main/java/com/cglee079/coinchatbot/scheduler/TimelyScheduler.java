@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.cglee079.coinchatbot.coin.CoinManager;
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientVo;
@@ -38,12 +39,12 @@ public class TimelyScheduler {
 	@Autowired
 	private CoinMarketConfigService coinMarketConfigService;
 	
-	private String myCoin;
+	private Coin myCoin;
 	private TelegramBot telegramBot;
 	private HashMap<String, Boolean> inBtcs;
 	private List<String> enabledMarkets;
 	
-	public TimelyScheduler(String myCoin, TelegramBot telegramBot) {
+	public TimelyScheduler(Coin myCoin, TelegramBot telegramBot) {
 		this.myCoin 		= myCoin;
 		this.telegramBot	= telegramBot;
 	}

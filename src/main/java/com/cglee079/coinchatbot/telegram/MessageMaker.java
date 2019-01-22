@@ -10,6 +10,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.cglee079.coinchatbot.cmd.CMDER;
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.constants.ID;
 import com.cglee079.coinchatbot.model.ClientVo;
 import com.cglee079.coinchatbot.model.CoinConfigVo;
@@ -19,7 +20,7 @@ import com.cglee079.coinchatbot.model.TimelyInfoVo;
 import com.cglee079.coinchatbot.util.TimeStamper;
 
 public class MessageMaker {
-	private String myCoin;
+	private Coin myCoin;
 	private String version;
 	private String priceKREx;
 	private String priceUSEx;
@@ -33,7 +34,7 @@ public class MessageMaker {
 	private HashMap<String, Boolean> inBtcs;
 	
 		
-	public MessageMaker(String myCoin, CoinConfigVo config, HashMap<String, Boolean> inBtcs) {
+	public MessageMaker(Coin myCoin, CoinConfigVo config, HashMap<String, Boolean> inBtcs) {
 		this.myCoin		= myCoin;
 		this.inBtcs		= inBtcs;
 		version			= config.getVersion();
@@ -1379,7 +1380,7 @@ public class MessageMaker {
 			if (wallet != null) {
 				msg += "* " + wallet.getCoinId() + " [ " + wallet.getKrName() + " ]  지갑주소 : \n";
 				msg += wallet.getAddr1() + "\n";
-				if (myCoin.equals(ID.COIN_XRP)) {
+				if (myCoin == Coin.XRP) {
 					msg += "데스티네이션 태그 :  " + wallet.getAddr2() + "\n";
 				}
 			} else {
@@ -1398,7 +1399,7 @@ public class MessageMaker {
 			if (wallet != null) {
 				msg += "* " + wallet.getCoinId() + " [ " + wallet.getUsName() + " ]  Wallet address : \n";
 				msg += wallet.getAddr1() + "\n";
-				if (myCoin.equals(ID.COIN_XRP)) {
+				if (myCoin == Coin.XRP) {
 					msg += "destination tag :  " + wallet.getAddr2() + "\n";
 				}
 			} else {

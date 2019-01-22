@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.constants.ID;
 import com.cglee079.coinchatbot.constants.SET;
 import com.cglee079.coinchatbot.dao.ClientDao;
@@ -20,20 +21,20 @@ public class ClientService {
 	@Autowired
 	private ClientDao clientDao;
 
-	public List<ClientVo> list(String coinId) {
+	public List<ClientVo> list(Coin coinId) {
 		return clientDao.list(coinId);
 	}
 	
-	public List<ClientVo> list(String coinId, String market, double coinValue, boolean isUp) {
+	public List<ClientVo> list(Coin coinId, String market, double coinValue, boolean isUp) {
 		if(isUp) { return clientDao.listTargetUp(coinId, market, coinValue); } 
 		else { return clientDao.listTargetDown(coinId, market, coinValue); }
 	}
 	
-	public List<ClientVo> list(String coinId, String market, Integer timeLoop, Integer dayLoop){
+	public List<ClientVo> list(Coin coinId, String market, Integer timeLoop, Integer dayLoop){
 		return clientDao.list(coinId, market, timeLoop, dayLoop);
 	}
 	
-	public List<ClientVo> listAtMidnight(String coinId, String market, Integer timeLoop, int dayLoop, Date dateCurrent) {
+	public List<ClientVo> listAtMidnight(Coin coinId, String market, Integer timeLoop, int dayLoop, Date dateCurrent) {
 		List<ClientVo> newclients = new ArrayList<>();
 		List<ClientVo> clients = clientDao.list(coinId, market, timeLoop, dayLoop);
 		ClientVo client = null;
@@ -48,7 +49,7 @@ public class ClientService {
 		return newclients;
 	}
 	
-	public String getState(String coinId, Integer id) {
+	public String getState(Coin coinId, Integer id) {
 		ClientVo client = clientDao.get(coinId, id.toString());
 		if(client != null) {
 			return client.getState();
@@ -57,16 +58,16 @@ public class ClientService {
 		}
 	}
 	
-	public String getMarketId(String coinId, String userId){
+	public String getMarketId(Coin coinId, String userId){
 		ClientVo client = clientDao.get(coinId, userId);
 		return client.getMarketId();
 	}
 	
-	public String getMarket(String coinId, long userId) {
+	public String getMarket(Coin coinId, long userId) {
 		return this.getMarketId(coinId, String.valueOf(userId));
 	}
 	
-	public boolean openChat(String coinId, Integer userId, String username, String market) {
+	public boolean openChat(Coin coinId, Integer userId, String username, String market) {
 		
 		ClientVo client = null;
 		client = clientDao.get(coinId, userId.toString());
@@ -104,7 +105,7 @@ public class ClientService {
 		}
 	}
 
-	public boolean stopChat(String coinId, int userId) {
+	public boolean stopChat(Coin coinId, int userId) {
 		ClientVo client = clientDao.get(coinId, String.valueOf(userId));
 		if(client != null) {
 			client.setTargetUp(null);
@@ -116,7 +117,7 @@ public class ClientService {
 		return false;
 	}
 	
-	public boolean increaseErrCnt(String coinId, String userId) {
+	public boolean increaseErrCnt(Coin coinId, String userId) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			if(client.getEnabled().equals("Y")){
@@ -143,7 +144,7 @@ public class ClientService {
 		return clientDao.update(client);
 	}
 	
-	public boolean updateState(String coinId, String userId, String state) {
+	public boolean updateState(Coin coinId, String userId, String state) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setState(state);
@@ -154,7 +155,7 @@ public class ClientService {
 		
 	}
 
-	public boolean updateMarket(String coinId, String userId, String market) {
+	public boolean updateMarket(Coin coinId, String userId, String market) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setMarketId(market);
@@ -164,7 +165,7 @@ public class ClientService {
 		}
 	}
 	
-	public boolean updatePrice(String coinId, String userId, Double price) {
+	public boolean updatePrice(Coin coinId, String userId, Double price) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setInvest(price);
@@ -174,7 +175,7 @@ public class ClientService {
 		}
 	}
 	
-	public boolean updateTargetUpPrice(String coinId, String userId, Double targetPrice) {
+	public boolean updateTargetUpPrice(Coin coinId, String userId, Double targetPrice) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setTargetUp(targetPrice);
@@ -185,7 +186,7 @@ public class ClientService {
 		}
 	}
 	
-	public boolean updateTargetDownPrice(String coinId, String userId, Double targetPrice) {
+	public boolean updateTargetDownPrice(Coin coinId, String userId, Double targetPrice) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setTargetUp(0.0);
@@ -196,7 +197,7 @@ public class ClientService {
 		}
 	}
 
-	public boolean clearTargetPrice(String coinId, String userId) {
+	public boolean clearTargetPrice(Coin coinId, String userId) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setTargetUp(0.0);
@@ -207,7 +208,7 @@ public class ClientService {
 		}
 	}
 	
-	public boolean updateTimeLoop(String coinId, String userId, int timeloop) {
+	public boolean updateTimeLoop(Coin coinId, String userId, int timeloop) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setTimeloop(timeloop);
@@ -217,7 +218,7 @@ public class ClientService {
 		}
 	}
 	
-	public boolean updateDayLoop(String coinId, String userId, int dayLoop) {
+	public boolean updateDayLoop(Coin coinId, String userId, int dayLoop) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setDayloop(dayLoop);
@@ -227,7 +228,7 @@ public class ClientService {
 		}
 	}
 
-	public boolean updateNumber(String coinId, String userId, double number) {
+	public boolean updateNumber(Coin coinId, String userId, double number) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setCoinCnt(number);
@@ -236,7 +237,7 @@ public class ClientService {
 			return false;
 		}
 	}
-	public boolean updateLocalTime(String coinId, String userId, Long localTime) {
+	public boolean updateLocalTime(Coin coinId, String userId, Long localTime) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setLocaltime(localTime);
@@ -246,7 +247,7 @@ public class ClientService {
 		}
 	}
 	
-	public boolean updateLanguage(String coinId, String userId, String lang) {
+	public boolean updateLanguage(Coin coinId, String userId, String lang) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setLang(lang);
@@ -265,11 +266,11 @@ public class ClientService {
 		}
 	}
 	
-	public ClientVo get(String coinId, String userId) {
+	public ClientVo get(Coin coinId, String userId) {
 		return clientDao.get(coinId, userId);
 	}
 	
-	public ClientVo get(String coinId, int userId) {
+	public ClientVo get(Coin coinId, int userId) {
 		return this.get(coinId, String.valueOf(userId));
 	}
 }

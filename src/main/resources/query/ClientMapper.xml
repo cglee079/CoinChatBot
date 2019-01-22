@@ -5,7 +5,7 @@
 <mapper namespace="com.cglee079.coinchatbot.mapper.ClientMapper">
 
 	<resultMap type="ClientVo" id="clientResultMap">
-		<id property="coinId" column="COIN_ID"/>
+		<id property="coinId" column="COIN_ID" />
 		<id property="userId" column="CLNT_USERID"/>
 		<result  property="marketId" column="MARKET_ID"/>
 		<result  property="username" column="CLNT_USERNAME"/>

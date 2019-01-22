@@ -1,10 +1,6 @@
 package com.cglee079.coinchatbot.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.cglee079.coinchatbot.constants.ID;
-import com.cglee079.coinchatbot.constants.SET;
+import com.cglee079.coinchatbot.config.id.Coin;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ClientVo {
-	private String coinId;
+	private Coin coinId;
 	private String userId;
 	private String username;
 	private Long localtime;

@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.model.CoinInfoVo;
 
 @Repository
@@ -15,11 +16,11 @@ public class CoinInfoDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	public List<CoinInfoVo> list(String coinId) {
+	public List<CoinInfoVo> list(Coin coinId) {
 		return sqlSession.selectList(namespace + ".list", coinId);
 	}
 
-	public CoinInfoVo get(String coinId) {
+	public CoinInfoVo get(Coin coinId) {
 		return sqlSession.selectOne(namespace + ".get", coinId);
 	}
 }

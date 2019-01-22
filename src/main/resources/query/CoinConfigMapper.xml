@@ -5,7 +5,7 @@
 <mapper namespace="com.cglee079.coinchatbot.mapper.CoinConfigMapper">
 
 	<resultMap type="CoinConfigVo" id="coinConfigResultMap">
-		<id property="coinId" column="COIN_ID"/>
+		<id property="coinId" column="COIN_ID" />
 		<result property="exInvestKRW" column="EX_INVEST_KRW"/>
 		<result property="exInvestUSD" column="EX_INVEST_USD"/>
 		<result property="exTargetKRW" column="EX_TARGET_KRW"/>

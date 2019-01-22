@@ -2,11 +2,12 @@ package com.cglee079.coinchatbot.coin;
 
 import org.json.JSONObject;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 
 public class CoinnestPooler extends ApiPooler{
 	
-	public JSONObject getCoin(String coin) throws ServerErrorException {
+	public JSONObject getCoin(Coin coin) throws ServerErrorException {
 		String param = coinParam.get(coin);
 		
 		String url = "https://api.coinnest.co.kr/api/pub/ticker?coin=" + param;

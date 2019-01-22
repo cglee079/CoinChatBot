@@ -5,7 +5,7 @@
 <mapper namespace="com.cglee079.coinchatbot.mapper.CoinInfoMapper">
 
 	<resultMap type="CoinInfoVo" id="coinInfoResultMap">
-		<id property="coinId" column="COIN_ID"/>
+		<id property="coinId" column="COIN_ID" />
 		<result property="usName" column="COIN_USNAME"/>
 		<result property="krName" column="COIN_KRNAME"/>
 		<result property="chatAddr" column="CHAT_URL"/>

@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 
 public class GopaxPooler extends ApiPooler{
@@ -14,7 +15,7 @@ public class GopaxPooler extends ApiPooler{
 		this.getCoins();
 	}
 	
-	public JSONObject getCoin(String coin) throws ServerErrorException {
+	public JSONObject getCoin(Coin coin) throws ServerErrorException {
 		if(coinObjs != null) {
 			JSONObject coinObj = null;
 			String param = coinParam.get(coin);

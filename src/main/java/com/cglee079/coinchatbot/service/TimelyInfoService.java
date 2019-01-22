@@ -9,9 +9,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cglee079.coinchatbot.constants.SET;
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.dao.TimelyInfoDao;
-import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
 import com.google.gson.Gson;
 
@@ -23,11 +22,11 @@ public class TimelyInfoService {
 
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH");
 
-	public TimelyInfoVo get(String coinId, Date d, String market) {
+	public TimelyInfoVo get(Coin coinId, Date d, String market) {
 		return timelyInfoDao.get(coinId, formatter.format(d), market);
 	}
 
-	public boolean insert(String coinId, Date d, String market, JSONObject coin) {
+	public boolean insert(Coin coinId, Date d, String market, JSONObject coin) {
 		TimelyInfoVo timelyInfo = TimelyInfoVo.builder()
 				.coinId(coinId)
 				.date(formatter.format(d))
@@ -44,7 +43,7 @@ public class TimelyInfoService {
 		return timelyInfoDao.insert(timelyInfo);
 	}
 
-	public JSONObject getBefore(String coinId, Date dateCurrent, String market) {
+	public JSONObject getBefore(Coin coinId, Date dateCurrent, String market) {
 		Date dateBefore = new Date();
 		dateBefore.setTime(dateCurrent.getTime() - (1000 * 60 * 60));
 		TimelyInfoVo timelyInfo = timelyInfoDao.get(coinId, formatter.format(dateBefore), market);

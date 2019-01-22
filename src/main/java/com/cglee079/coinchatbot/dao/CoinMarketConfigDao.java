@@ -8,6 +8,9 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.model.CoinMarketConfigVo;
 
 @Repository
@@ -17,7 +20,7 @@ public class CoinMarketConfigDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	public List<CoinMarketConfigVo> list(String marketId, String coinId) {
+	public List<CoinMarketConfigVo> list(String marketId, Coin coinId) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("marketId", marketId);
 		map.put("coinId", coinId);

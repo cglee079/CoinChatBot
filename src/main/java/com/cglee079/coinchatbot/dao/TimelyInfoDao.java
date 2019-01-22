@@ -3,11 +3,11 @@ package com.cglee079.coinchatbot.dao;
 import java.util.HashMap;
 import java.util.List;
 
-import org.json.JSONObject;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
 
@@ -27,7 +27,7 @@ public class TimelyInfoDao {
 		}
 	}
 
-	public TimelyInfoVo get(String coinId, String date, String market) {
+	public TimelyInfoVo get(Coin coinId, String date, String market) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("coinId", coinId);
 		map.put("date", date);

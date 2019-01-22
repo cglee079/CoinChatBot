@@ -22,6 +22,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import com.cglee079.coinchatbot.cmd.CMDER;
 import com.cglee079.coinchatbot.coin.CoinManager;
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.constants.ID;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 import com.cglee079.coinchatbot.log.Log;
@@ -38,7 +39,7 @@ import com.cglee079.coinchatbot.service.CoinWalletService;
 import com.cglee079.coinchatbot.util.TimeStamper;
 
 public class TelegramBot extends AbilityBot  {
-	private String myCoin = null;
+	private Coin myCoin = null;
 	
 	@Autowired
 	private ClientService clientService;
@@ -69,7 +70,7 @@ public class TelegramBot extends AbilityBot  {
 	private HashMap<String, Boolean> inBtcs;
 	private List<String> enabledMarkets;
 	
-	protected TelegramBot(String myCoin, String botToken, String botUsername) {
+	protected TelegramBot(Coin myCoin, String botToken, String botUsername) {
 		super(botToken, botUsername);
 		this.myCoin = myCoin; 
 	}
@@ -181,7 +182,7 @@ public class TelegramBot extends AbilityBot  {
 			sendMessage(userId, null, msgMaker.explainSetForeginer(lang), km.getMainKeyboard(lang));
 		} else if(cmd.equals(CMDER.getMainSupport(lang))){ // 후원하기
 			sendMessage(userId, messageId, msgMaker.explainSupport(lang), null);
-			sendMessage(userId, null, msgMaker.explainSupportWallet(coinWalletService.get(myCoin), coinWalletService.get(ID.COIN_XRP), lang), null);
+			sendMessage(userId, null, msgMaker.explainSupportWallet(coinWalletService.get(myCoin), coinWalletService.get(Coin.XRP), lang), null);
 			sendMessage(userId, null, msgMaker.explainSupportAN(lang), km.getMainKeyboard(lang));
 		} else if(cmd.equals(CMDER.getMainSetDayloop(lang))){ // 일일 알림 주기설정
 			sendMessage(userId, messageId, msgMaker.explainSetDayloop(lang), km.getSetDayloopKeyboard(lang));
@@ -767,7 +768,7 @@ public class TelegramBot extends AbilityBot  {
 		if(market != null) {
 			try {
 				coin 	= coinManager.getCoin(myCoin, market);
-				btc 	= coinManager.getCoin(ID.COIN_BTC, market);
+				btc 	= coinManager.getCoin(Coin.BTC, market);
 			} catch (ServerErrorException e) {
 				Log.i(e.log());
 				e.printStackTrace();			
@@ -825,7 +826,7 @@ public class TelegramBot extends AbilityBot  {
 		JSONObject btcObj = null;
 		if(inBtcs.get(market)) {
 			try {
-				btcObj = coinManager.getCoin(ID.COIN_BTC, client.getMarketId());
+				btcObj = coinManager.getCoin(Coin.BTC, client.getMarketId());
 			} catch (ServerErrorException e) {
 				Log.i(e.log());
 				e.printStackTrace();

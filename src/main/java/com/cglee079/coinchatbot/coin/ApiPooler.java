@@ -2,10 +2,12 @@ package com.cglee079.coinchatbot.coin;
 
 import java.util.HashMap;
 
-public class ApiPooler {
-	protected HashMap<String, String> coinParam;
+import com.cglee079.coinchatbot.config.id.Coin;
 
-	public void setCoinParam(HashMap<String, String> coinParam) {
+public class ApiPooler {
+	protected HashMap<Coin, String> coinParam;
+
+	public void setCoinParam(HashMap<Coin, String> coinParam) {
 		this.coinParam = coinParam;
 	}
 	

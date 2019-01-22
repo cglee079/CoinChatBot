@@ -3,6 +3,7 @@ package com.cglee079.coinchatbot.coin;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 
 public class BithumbPooler extends ApiPooler{
@@ -14,7 +15,7 @@ public class BithumbPooler extends ApiPooler{
 		getCoins();
 	}
 	
-	public JSONObject getCoin(String coin) throws ServerErrorException {
+	public JSONObject getCoin(Coin coin) throws ServerErrorException {
 		if(coinObjs != null) {
 			String param = coinParam.get(coin);
 			JSONObject coinObj =  coinObjs.getJSONObject(param);

@@ -8,13 +8,14 @@ import java.util.Date;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 
 public class UpbitPooler extends ApiPooler{
 	protected static final int MAX_RETRY_CNT = 5;
 	protected int retryCnt = 0;
 	
-	public JSONObject getCoin(String coin) throws ServerErrorException {
+	public JSONObject getCoin(Coin coin) throws ServerErrorException {
 		String param = coinParam.get(coin);
 		
 		JSONObject coinObj = getCurrentCoin(param);

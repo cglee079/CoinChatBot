@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cglee079.coinchatbot.mapper.TimelyInfoMapper">
 	<resultMap type="TimelyInfoVo" id="timelyInfoResultMap">
-		<id property="coinId" column="COIN_ID"/>
+		<id property="coinId" column="COIN_ID" />
 		<id property="marketId" column="MARKET_ID"/>
 		<id property="date" column="DT_HOUR"/>
 		<result  property="high" column="TIME_HIGH"/>

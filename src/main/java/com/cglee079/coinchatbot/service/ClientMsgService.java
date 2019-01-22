@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.dao.ClientMsgDao;
 import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientMsgVo;
@@ -17,7 +18,7 @@ public class ClientMsgService {
 	@Autowired
 	private ClientMsgDao clientMsgDao;
 
-	public boolean insert(String coinId, Update update) {
+	public boolean insert(Coin coinId, Update update) {
 		Message message = null;
 		if(update.getMessage() != null) {
 			message = update.getMessage();

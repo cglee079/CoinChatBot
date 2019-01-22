@@ -5,7 +5,7 @@
 <mapper namespace="com.cglee079.coinchatbot.mapper.CoinMarketConfigMapper">
 
 	<resultMap type="CoinMarketConfigVo" id="coinMarketConfigResultMap">
-		<id property="coinId" column="COIN_ID"/>
+		<id property="coinId" column="COIN_ID" />
 		<id property="marketId" column="MARKET_ID"/>
 		<result property="inBtc" column="IS_INBTC"/>
 		<result property="param" column="URL_PARAM"/>

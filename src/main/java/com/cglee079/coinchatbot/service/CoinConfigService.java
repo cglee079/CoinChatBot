@@ -3,6 +3,7 @@ package com.cglee079.coinchatbot.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.dao.CoinConfigDao;
 import com.cglee079.coinchatbot.model.CoinConfigVo;
 
@@ -12,7 +13,7 @@ public class CoinConfigService {
 	@Autowired
 	private CoinConfigDao coinConfigDao;
 
-	public CoinConfigVo get(String coinId) {
+	public CoinConfigVo get(Coin coinId) {
 		return coinConfigDao.get(coinId);
 	}
 }

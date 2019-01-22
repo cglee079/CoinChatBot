@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.constants.ID;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 import com.cglee079.coinchatbot.log.Log;
@@ -97,7 +98,7 @@ public class CoinManager {
 		}
 	}
 
-	public JSONObject getCoin(String coin, String market) throws ServerErrorException{
+	public JSONObject getCoin(Coin coin, String market) throws ServerErrorException{
 		JSONObject coinObj = null;
 		
 		switch(market) {
@@ -113,7 +114,7 @@ public class CoinManager {
 		case ID.MARKET_BINANCE 		: coinObj = binancePooler.getCoin(coin); break;
 		case ID.MARKET_HUOBI 		: coinObj = huobiPooler.getCoin(coin); break;
 		case ID.MARKET_HADAX 		: 
-			if(coin.equals(ID.COIN_BTC)) { coinObj = huobiPooler.getCoin(coin); } 
+			if(coin == Coin.BTC) { coinObj = huobiPooler.getCoin(coin); } 
 			else { coinObj = hadaxPooler.getCoin(coin); }
 			break;
 		case ID.MARKET_OKEX 		: coinObj = okexPooler.getCoin(coin); break;
@@ -122,7 +123,7 @@ public class CoinManager {
 		return coinObj;
 	}
 	
-	public Double getCoinLast(String myCoin, String market, boolean isInBtc) {
+	public Double getCoinLast(Coin myCoin, String market, boolean isInBtc) {
 		try {
 			double last = -1;
 			JSONObject coinObj = null;
@@ -152,7 +153,7 @@ public class CoinManager {
 	public JSONObject getMoney(JSONObject coinObj, String market){
 		JSONObject btcObj;
 		try {
-			btcObj = this.getCoin(ID.COIN_BTC, market);
+			btcObj = this.getCoin(Coin.BTC, market);
 		} catch (ServerErrorException e) {
 			Log.i(e.log());
 			e.printStackTrace();

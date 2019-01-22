@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 
 public class BitfinexPooler extends ApiPooler{
@@ -16,7 +17,7 @@ public class BitfinexPooler extends ApiPooler{
 		getCoins();
 	}
 	
-	public JSONObject getCoin(String coin) throws ServerErrorException {
+	public JSONObject getCoin(Coin coin) throws ServerErrorException {
 		if(coinObjs != null) {
 			return coinObjs.getJSONObject(coinParam.get(coin));
 		} else {
@@ -30,7 +31,7 @@ public class BitfinexPooler extends ApiPooler{
 		if(coinParam != null) {
 			coinObjs = new JSONObject();
 			
-			Iterator<String> iter = coinParam.keySet().iterator();
+			Iterator<Coin> iter = coinParam.keySet().iterator();
 			while(iter.hasNext()) {
 				param += coinParam.get(iter.next()) + ",";
 			}

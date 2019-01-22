@@ -1,10 +1,12 @@
 package com.cglee079.coinchatbot.model;
 
+import com.cglee079.coinchatbot.config.id.Coin;
+
 import lombok.Data;
 
 @Data
 public class CoinConfigVo {
-	private String coinId;
+	private Coin coinId;
 	private String exInvestKRW;
 	private String exInvestUSD;
 	private String exTargetKRW;

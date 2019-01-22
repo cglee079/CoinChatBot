@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.cglee079.coinchatbot.coin.CoinManager;
-import com.cglee079.coinchatbot.constants.ID;
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientVo;
@@ -32,12 +32,12 @@ public class TargetScheduler {
 	@Autowired
 	private CoinMarketConfigService coinMarketConfigService;
 
-	private String myCoin;
+	private Coin myCoin;
 	private TelegramBot telegramBot;
 	private HashMap<String, Boolean> inBtcs;
 	private List<String> enabledMarkets;
 	
-	public TargetScheduler(String myCoin, TelegramBot telegramBot) {
+	public TargetScheduler(Coin myCoin, TelegramBot telegramBot) {
 		this.myCoin 		= myCoin;
 		this.telegramBot	= telegramBot;
 	}
@@ -73,7 +73,7 @@ public class TargetScheduler {
 			double coinValue = coinObj.getDouble("last");
 			
 			if(inBtcs.get(market)) {
-				coinValue = coinValue * coinManager.getCoin(ID.COIN_BTC, market).getDouble("last");
+				coinValue = coinValue * coinManager.getCoin(Coin.BTC, market).getDouble("last");
 			}
 			
 			clients = clientService.list(myCoin, market, coinValue, true); //TargetUp

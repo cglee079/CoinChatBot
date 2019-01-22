@@ -9,8 +9,8 @@
 	
 	<context:annotation-config></context:annotation-config>
 	
-	<bean id="COIN_TEST" class="java.lang.String">
-		<constructor-arg><util:constant static-field="com.cglee079.coinchatbot.constants.ID.COIN_XRP"/></constructor-arg>
+	<bean id="COIN_TEST" class="com.cglee079.coinchatbot.config.id.Coin" factory-method="valueOf">
+		  <constructor-arg value="XRP" />
 	</bean>
 	
 	<bean id="TelegramBot_TEST" class="com.cglee079.coinchatbot.telegram.TelegramBot">

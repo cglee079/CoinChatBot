@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.dao.CoinWalletDao;
 import com.cglee079.coinchatbot.model.CoinWalletVo;
 
@@ -18,7 +19,7 @@ public class CoinWalletService {
 		return coinWalletDao.list();
 	}
 
-	public CoinWalletVo get(String myCoin) {
+	public CoinWalletVo get(Coin myCoin) {
 		return coinWalletDao.get(myCoin);
 	}
 

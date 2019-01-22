@@ -18,37 +18,6 @@ public class ID {
 	public final static String MARKET_HADAX		= "206";
 	public final static String MARKET_OKEX		= "207";
 	
-	public final static String COIN_ADA = "ADA";
-	public final static String COIN_BCH = "BCH";
-	public final static String COIN_BTC = "BTC";
-	public final static String COIN_BTG = "BTG";
-	public final static String COIN_CNN = "CNN";
-	public final static String COIN_ELF = "ELF";
-	public final static String COIN_EOS = "EOS";
-	public final static String COIN_ETC = "ETC";
-	public final static String COIN_ETH = "ETH";
-	public final static String COIN_GTO = "GTO";
-	public final static String COIN_ICX = "ICX";
-	public final static String COIN_IOTA = "IOTA";
-	public final static String COIN_KNC = "KNC";
-	public final static String COIN_LTC = "LTC";
-	public final static String COIN_MITH = "MITH";
-	public final static String COIN_MCO = "MCO";
-	public final static String COIN_NEO = "NEO";
-	public final static String COIN_NXT = "NXT";
-	public final static String COIN_OMG = "OMG";
-	public final static String COIN_QTUM = "QTUM";
-	public final static String COIN_RDD = "RDD";
-	public final static String COIN_SC = "SC";
-	public final static String COIN_SNT = "SNT";
-	public final static String COIN_STORM = "STORM";
-	public final static String COIN_TRX = "TRX";
-	public final static String COIN_VEN = "VEN";
-	public final static String COIN_XLM = "XLM";
-	public final static String COIN_XRP = "XRP";
-	public final static String COIN_XVG = "XVG";
-	public final static String COIN_ZIL = "ZIL";
-	
 	
     public final static String STATE_MAIN 			= "ST000";
     public final static String STATE_SET_PRICE  	= "ST012";
