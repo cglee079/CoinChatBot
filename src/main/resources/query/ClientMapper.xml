@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.cointelebot.mapper.ClientMapper">
+
+	<resultMap type="ClientVo" id="clientResultMap">
+		<id property="coinId" column="COIN_ID"/>
+		<id property="userId" column="CLNT_USERID"/>
+		<result  property="username" column="CLNT_USERNAME"/>
+		<result  property="localtime" column="CLNT_LOCTIME"/>
+		<result  property="lang" column="CLNT_LANG"/>
+		<result  property="state" column="CLNT_STATE"/>
+		<result  property="market" column="CLNT_MARKET"/>
+		<result  property="timeloop" column="ALERT_TIMELOOP"/>
+		<result  property="dayloop" column="ALERT_DAYLOOP"/>
+		<result  property="targetUp" column="ALERT_TGUP"/>
+		<result  property="targetDown" column="ALERT_TGDOWN"/>
+		<result  property="invest" column="CLNT_INVEST"/>
+		<result  property="coinCnt" column="CLNT_COINCNT"/>
+		<result  property="enabled" column="CLNT_ENABLED"/>
+		<result  property="errCnt" column="CLNT_ERRCNT"/>
+		<result  property="openDate" column="OPEN_DATE"/>
+		<result  property="reopenDate" column="REOPEN_DATE"/>
+		<result  property="closeDate" column="CLOSE_DATE"/>
+		<result  property="laMsgDate" column="LA_MSG_DATE"/>
+	</resultMap>
+	
+	
+	<select id="get" resultMap="clientResultMap">
+		SELECT
+			*
+		FROM TB_COINBOT_CLIENT
+		WHERE CLNT_COINID = #{coinId}
+		AND CLNT_USERID = #{userId}
+	</select>
+	
+	<select id="S01" resultMap="clientResultMap" parameterType="map">
+		/* 거래소, 시간주기, 일일주기 별 사용자 리스트 */
+		SELECT 
+			*
+		FROM TB_COINBOT_CLIENT
+		WHERE 1 = 1
+		AND CLNT_COINID = #{coinId}
+		AND CLNT_ENABLED = 'Y'
+		<if test="market != null">
+		AND CLNT_MARKET = #{market}
+		</if>
+		<if test="timeLoop != null">
+		AND ALERT_TIMELOOP = #{timeLoop}
+		</if>
+		<if test="dayLoop != null">
+		AND ALERT_DAYLOOP = #{dayLoop}
+		</if>
+	</select>
+	
+	<select id="S02" resultMap="clientResultMap" parameterType="map">
+		/* 목표가격 현재가 이상 설정, 사용자 리스트*/
+		SELECT 
+			*
+		FROM TB_COINBOT_CLIENT
+		WHERE 1 = 1
+		AND CLNT_ENABLED = 'Y'
+		AND CLNT_COINID = #{coinId}
+		AND CLNT_MARKET = #{market}
+		<![CDATA[ AND  #{coinValue} >= ALERT_TGUP ]]>
+	</select>
+	
+	
+	<select id="S03" resultMap="clientResultMap" parameterType="map">
+		/* 목표가격 현재가 이하 설정, 사용자 리스트 */
+		SELECT 
+			*
+		FROM TB_COINBOT_CLIENT
+		WHERE 1 = 1
+		AND CLNT_ENABLED = 'Y'
+		AND CLNT_COINID = #{coinId}
+		AND CLNT_MARKET = #{market}
+		<![CDATA[ AND  #{coinValue} <= ALERT_TGDOWN ]]>
+	</select>
+	
+	
+	<insert id="insert">
+		INSERT INTO TB_COINBOT_CLIENT(
+			CLNT_COINID, 
+			CLNT_USERID, 
+			CLNT_USERNAME, 
+			CLNT_LOCTIME,
+			CLNT_LANG, 
+			CLNT_STATE,
+			CLNT_MARKET,
+			ALERT_TIMELOOP,
+			ALERT_DAYLOOP,
+			ALERT_TGUP,
+			ALERT_TGDOWN,
+			CLNT_INVEST,
+			CLNT_COINCNT,
+			CLNT_ENABLED,
+			CLNT_ERRCNT,
+			OPEN_DATE,
+			REOPEN_DATE,
+			CLOSE_DATE,
+			LA_MSG_DATE
+		)
+		VALUES ( 
+			#{coinId}, 
+			#{userId}, 
+			#{username}, 
+			#{localtime}, 
+			#{lang}, 
+			#{state},
+			#{market},
+			#{timeloop},
+			#{dayloop},
+			#{targetUp},
+			#{targetDown},
+			#{invest},
+			#{coinCnt},
+			#{enabled},
+			#{errCnt},
+			#{openDate},
+			#{reopenDate},
+			#{closeDate},
+			#{laMsgDate}
+		)
+	</insert>
+	
+	<delete id="delete" parameterType="map">
+		DELETE FROM TB_COINBOT_CLIENT
+		WHERE CLNT_COINID = #{coinId}
+		AND CLNT_USERID = #{userId}
+	</delete>
+	
+	<update id="update">
+		UPDATE TB_COINBOT_CLIENT
+		SET
+		CLNT_USERNAME = #{username},
+		CLNT_LOCTIME = #{localtime},
+		CLNT_LANG = #{lang},
+		CLNT_STATE = #{state},
+		CLNT_MARKET = #{market},
+		ALERT_TIMELOOP = #{timeloop},
+		ALERT_DAYLOOP = #{dayloop},
+		<choose>
+			<when test="targetUp == 0">
+			ALERT_TGUP = null,
+			</when>
+			<otherwise>
+			ALERT_TGUP = #{targetUp},
+			</otherwise>
+		</choose>
+		
+		<choose>
+			<when test="targetDown == 0">
+			ALERT_TGDOWN = null,
+			</when>
+			<otherwise>
+			ALERT_TGDOWN = #{targetDown},
+			</otherwise>
+		</choose>
+		
+		<choose>
+			<when test="invest == 0">
+			CLNT_INVEST = null,
+			</when>
+			<otherwise>
+			CLNT_INVEST = #{invest},
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="coinCnt == 0">
+			CLNT_COINCNT = null,
+			</when>
+			<otherwise>
+			CLNT_COINCNT = #{coinCnt},
+			</otherwise>
+		</choose>
+		CLNT_ENABLED = #{enabled},
+		CLNT_ERRCNT = #{errCnt},
+		OPEN_DATE = #{openDate},
+		REOPEN_DATE = #{reopenDate},
+		CLOSE_DATE = #{closeDate},
+		LA_MSG_DATE	= #{laMsgDate}
+		WHERE CLNT_COINID = #{coinId}
+		AND CLNT_USERID = #{userId}
+	</update>
+	
+</mapper>

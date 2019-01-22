@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.cointelebot.mapper.TimelyInfoMapper">
+	<resultMap type="TimelyInfoVo" id="timelyInfoResultMap">
+		<id property="coinId" column="COIN_ID"/>
+		<id property="market" column="MARKET_ID"/>
+		<id property="date" column="DT_HOUR"/>
+		<result  property="high" column="TIME_HIGH"/>
+		<result  property="low" column="TIME_LOW"/>
+		<result  property="last" column="TIME_LAST"/>
+		<result  property="volume" column="TIME_VOLUME"/>
+		<result  property="result" column="RES_RESULT"/>
+		<result  property="errorCode" column="RES_ERRCODE"/>
+		<result  property="errorMsg" column="RES_ERRMSG"/>
+	</resultMap>
+	
+	<select id="get" resultMap="timelyInfoResultMap">
+		SELECT 
+			*
+		FROM TB_COINBOT_TIMELYINFO
+		WHERE 1 = 1
+		AND TINFO_COINID = #{coinId}
+		AND TINFO_DATE = #{date}
+		<if test="market != null">
+		AND TINFO_MARKET = #{market}
+		</if>
+	</select>
+	
+	<select id="list" resultMap="timelyInfoResultMap">
+		SELECT 
+			*
+		FROM TB_COINBOT_TIMELYINFO
+		WHERE 1 = 1
+		AND TINFO_COINID = #{coinId}
+		<if test="market != null">
+		AND TINFO_MARKET = #{market}
+		</if>
+		ORDER BY TINFO_DATE DESC
+		LIMIT 0, #{cnt}
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_COINBOT_TIMELYINFO
+		VALUES ( 
+			#{coinId}, 
+			#{date}, 
+			#{market},
+			#{high}, 
+			#{low}, 
+			#{last}, 
+			#{volume},
+			#{result}, 
+			#{errorCode}, 
+			#{errorMsg}
+		)
+	</insert>
+</mapper>
