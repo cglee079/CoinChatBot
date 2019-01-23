@@ -42,7 +42,7 @@
 		FROM TB_COINBOT_CLIENT
 		WHERE 1 = 1
 		AND COIN_ID = #{coinId}
-		AND CLNT_ENABLED = 'Y'
+		AND CLNT_ENABLED = true
 		<if test="marketId != null">
 		AND MARKET_ID = #{marketId}
 		</if>
@@ -60,7 +60,7 @@
 			*
 		FROM TB_COINBOT_CLIENT
 		WHERE 1 = 1
-		AND CLNT_ENABLED = 'Y'
+		AND CLNT_ENABLED = true
 		AND COIN_ID = #{coinId}
 		AND MARKET_ID = #{marketId}
 		<![CDATA[ AND  #{coinValue} >= ALERT_TGUP ]]>
@@ -73,7 +73,7 @@
 			*
 		FROM TB_COINBOT_CLIENT
 		WHERE 1 = 1
-		AND CLNT_ENABLED = 'Y'
+		AND CLNT_ENABLED = true
 		AND COIN_ID = #{coinId}
 		AND MARKET_ID = #{marketId}
 		<![CDATA[ AND  #{coinValue} <= ALERT_TGDOWN ]]>

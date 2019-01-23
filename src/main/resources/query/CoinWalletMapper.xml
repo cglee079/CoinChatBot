@@ -17,7 +17,7 @@
 			FROM 
 				TB_COINBOT_MYWALLET A 
 			WHERE 1 = 1
-			AND A.ENABLED = 'Y'
+			AND A.ENABLED = true
 	</select>
 	
 	<select id="get" resultMap="coinWalletResultMap">
@@ -26,7 +26,7 @@
 			FROM 
 				TB_COINBOT_MYWALLET A 
 			WHERE 1 = 1
-			AND A.ENABLED = 'Y'
+			AND A.ENABLED = true
 			AND A.COIN_ID = #{myCoin}
 	</select>
 	

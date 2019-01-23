@@ -15,7 +15,7 @@
 				*
 			FROM TB_COINBOT_COIN_INFO
 			WHERE 1 = 1
-			AND ENABLED = 'Y'
+			AND ENABLED = true
 			<![CDATA[AND COIN_ID <> #{coinId}]]>
 	</select>
 	
