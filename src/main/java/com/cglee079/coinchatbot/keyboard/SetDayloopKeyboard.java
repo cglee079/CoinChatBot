@@ -6,10 +6,11 @@ import java.util.List;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import com.cglee079.coinchatbot.cmd.CMDER;
+import com.cglee079.coinchatbot.config.cmd.DayloopCmd;
+import com.cglee079.coinchatbot.config.id.Lang;
 
 public class SetDayloopKeyboard extends ReplyKeyboardMarkup{
-	public SetDayloopKeyboard(String lang) {
+	public SetDayloopKeyboard(Lang lang) {
 		super();
 		
 	    this.setSelective(true);
@@ -18,19 +19,19 @@ public class SetDayloopKeyboard extends ReplyKeyboardMarkup{
 
 	    List<KeyboardRow> keyboard = new ArrayList<>();
 	    KeyboardRow keyboardFirstRow = new KeyboardRow();
-	    keyboardFirstRow.add(CMDER.getSetDayloop01(lang));
-	    keyboardFirstRow.add(CMDER.getSetDayloop02(lang));
-	    keyboardFirstRow.add(CMDER.getSetDayloop03(lang));
+	    keyboardFirstRow.add(DayloopCmd.D1.getCmd(lang));
+	    keyboardFirstRow.add(DayloopCmd.D2.getCmd(lang));
+	    keyboardFirstRow.add(DayloopCmd.D3.getCmd(lang));
 	    
 	    KeyboardRow keyboardSecondRow = new KeyboardRow();
-	    keyboardSecondRow.add(CMDER.getSetDayloop04(lang));
-	    keyboardSecondRow.add(CMDER.getSetDayloop05(lang));
-	    keyboardSecondRow.add(CMDER.getSetDayloop06(lang));
+	    keyboardSecondRow.add(DayloopCmd.D4.getCmd(lang));
+	    keyboardSecondRow.add(DayloopCmd.D5.getCmd(lang));
+	    keyboardSecondRow.add(DayloopCmd.D6.getCmd(lang));
 	    
 	    KeyboardRow keyboardThirdRow = new KeyboardRow();
-	    keyboardThirdRow.add(CMDER.getSetDayloop07(lang));
-	    keyboardThirdRow.add(CMDER.getSetDayloopOff(lang));
-	    keyboardThirdRow.add(CMDER.getSetDayloopOut(lang));
+	    keyboardThirdRow.add(DayloopCmd.D7.getCmd(lang));
+	    keyboardThirdRow.add(DayloopCmd.OFF.getCmd(lang));
+	    keyboardThirdRow.add(DayloopCmd.OUT.getCmd(lang));
 	    
 	    keyboard.add(keyboardFirstRow);
 	    keyboard.add(keyboardSecondRow);

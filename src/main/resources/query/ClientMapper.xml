@@ -7,11 +7,11 @@
 	<resultMap type="ClientVo" id="clientResultMap">
 		<id property="coinId" column="COIN_ID" />
 		<id property="userId" column="CLNT_USERID"/>
-		<result  property="marketId" column="MARKET_ID"/>
+		<result  property="marketId" column="MARKET_ID" />
 		<result  property="username" column="CLNT_USERNAME"/>
 		<result  property="localtime" column="CLNT_LOCTIME"/>
 		<result  property="lang" column="CLNT_LANG"/>
-		<result  property="state" column="CLNT_STATE"/>
+		<result  property="stateId" column="CLNT_STATE" />
 		<result  property="timeloop" column="ALERT_TIMELOOP"/>
 		<result  property="dayloop" column="ALERT_DAYLOOP"/>
 		<result  property="targetUp" column="ALERT_TGUP"/>
@@ -108,7 +108,7 @@
 			#{username}, 
 			#{localtime}, 
 			#{lang}, 
-			#{state},
+			#{stateId},
 			#{marketId},
 			#{timeloop},
 			#{dayloop},
@@ -137,7 +137,7 @@
 		CLNT_USERNAME = #{username},
 		CLNT_LOCTIME = #{localtime},
 		CLNT_LANG = #{lang},
-		CLNT_STATE = #{state},
+		CLNT_STATE = #{stateId},
 		MARKET_ID = #{marketId},
 		ALERT_TIMELOOP = #{timeloop},
 		ALERT_DAYLOOP = #{dayloop},

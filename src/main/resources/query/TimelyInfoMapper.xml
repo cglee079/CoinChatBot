@@ -5,7 +5,7 @@
 <mapper namespace="com.cglee079.coinchatbot.mapper.TimelyInfoMapper">
 	<resultMap type="TimelyInfoVo" id="timelyInfoResultMap">
 		<id property="coinId" column="COIN_ID" />
-		<id property="marketId" column="MARKET_ID"/>
+		<id property="marketId" column="MARKET_ID" />
 		<id property="date" column="DT_HOUR"/>
 		<result  property="high" column="TIME_HIGH"/>
 		<result  property="low" column="TIME_LOW"/>
@@ -21,10 +21,10 @@
 			*
 		FROM TB_COINBOT_TIMELYINFO
 		WHERE 1 = 1
-		AND TINFO_COINID = #{coinId}
-		AND TINFO_DATE = #{date}
-		<if test="market != null">
-		AND TINFO_MARKET = #{market}
+		AND COIN_ID = #{coinId}
+		AND DT_HOUR = #{date}
+		<if test="marketId != null">
+		AND MARKET_ID = #{marketId}
 		</if>
 	</select>
 	
@@ -33,11 +33,11 @@
 			*
 		FROM TB_COINBOT_TIMELYINFO
 		WHERE 1 = 1
-		AND TINFO_COINID = #{coinId}
-		<if test="market != null">
-		AND TINFO_MARKET = #{market}
+		AND COIN_ID = #{coinId}
+		<if test="marketId != null">
+		AND MARKET_ID = #{marketId}
 		</if>
-		ORDER BY TINFO_DATE DESC
+		ORDER BY DT_HOUR DESC
 		LIMIT 0, #{cnt}
 	</select>
 	
@@ -56,7 +56,7 @@
 		)
 		VALUES ( 
 			#{coinId}, 
-			#{market},
+			#{marketId},
 			#{date},
 			#{high}, 
 			#{low}, 

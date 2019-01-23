@@ -7,8 +7,6 @@ import lombok.Data;
 @Data
 public class CoinInfoVo {
 	private Coin coinId;
-	private String usName;
-	private String krName;
 	private String chatAddr;
-	private String enabled;
+	private boolean enabled;
 }

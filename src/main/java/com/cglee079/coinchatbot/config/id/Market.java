@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public enum Market {
-	KR("10"),
+public enum Market implements CodeEnum{
 	COINONE("101"),
 	BITHUMB("102"),
 	UPBIT("103"),
@@ -13,7 +12,6 @@ public enum Market {
 	KORBIT("105"),
 	GOPAX("106"),
 	
-	US("20"),
 	BITFINEX("201"),
 	BITTREX("202"),
 	POLONIEX("203"),
@@ -24,29 +22,39 @@ public enum Market {
 	
 	@Getter
 	private final String code;
-	
-	public static Market from(String str) {
-		for (Market b : Market.values()) {
-			if (b.code.equalsIgnoreCase(str)) {
-				return b;
-			}
+
+    
+	public boolean isKRW() {
+		boolean result = false;
+		switch(this) {
+		case COINONE:
+		case BITHUMB:
+		case UPBIT:
+		case COINNEST:
+		case KORBIT:
+		case GOPAX:
+			result = true; break;
+		default :
+			result = false; break;
 		}
-		return null;
+		
+		return result;
 	}
 	
-	
-	public static boolean isKR(Market marketId) {
-		if(marketId.getCode().startsWith(Market.KR.getCode())) {
-			return true;
+	public boolean isUSD() {
+		boolean result = false;
+		switch(this) {
+		case COINONE:
+		case BITHUMB:
+		case UPBIT:
+		case COINNEST:
+		case KORBIT:
+		case GOPAX:
+			result = false; break;
+		default :
+			result = true; break;
 		}
-		return false;
+		
+		return result;
 	}
-	
-	public static boolean isUS(Market marketId) {
-		if(marketId.getCode().startsWith(Market.US.getCode())) {
-			return true;
-		}
-		return false;
-	}
-	
 }

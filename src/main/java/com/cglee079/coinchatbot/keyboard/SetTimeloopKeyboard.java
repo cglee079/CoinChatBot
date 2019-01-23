@@ -6,10 +6,11 @@ import java.util.List;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import com.cglee079.coinchatbot.cmd.CMDER;
+import com.cglee079.coinchatbot.config.cmd.TimeloopCmd;
+import com.cglee079.coinchatbot.config.id.Lang;
 
 public class SetTimeloopKeyboard extends ReplyKeyboardMarkup{
-	public SetTimeloopKeyboard(String lang) {
+	public SetTimeloopKeyboard(Lang lang) {
 		super();
 	    this.setSelective(true);
 	    this.setResizeKeyboard(true);
@@ -17,26 +18,26 @@ public class SetTimeloopKeyboard extends ReplyKeyboardMarkup{
 
 	    List<KeyboardRow> keyboard = new ArrayList<>();
 	    KeyboardRow keyboardFirstRow = new KeyboardRow();
-	    keyboardFirstRow.add(CMDER.getSetTimeloop01(lang));
-	    keyboardFirstRow.add(CMDER.getSetTimeloop02(lang));
-	    keyboardFirstRow.add(CMDER.getSetTimeloop03(lang));
-	    keyboardFirstRow.add(CMDER.getSetTimeloop04(lang));
+	    keyboardFirstRow.add(TimeloopCmd.H1.getCmd(lang));
+	    keyboardFirstRow.add(TimeloopCmd.H2.getCmd(lang));
+	    keyboardFirstRow.add(TimeloopCmd.H3.getCmd(lang));
+	    keyboardFirstRow.add(TimeloopCmd.H4.getCmd(lang));
 	    
 	    KeyboardRow keyboardSecondRow = new KeyboardRow();
-	    keyboardSecondRow.add(CMDER.getSetTimeloop05(lang));
-	    keyboardSecondRow.add(CMDER.getSetTimeloop06(lang));
-	    keyboardSecondRow.add(CMDER.getSetTimeloop07(lang));
-	    keyboardSecondRow.add(CMDER.getSetTimeloop08(lang));
+	    keyboardSecondRow.add(TimeloopCmd.H5.getCmd(lang));
+	    keyboardSecondRow.add(TimeloopCmd.H6.getCmd(lang));
+	    keyboardSecondRow.add(TimeloopCmd.H7.getCmd(lang));
+	    keyboardSecondRow.add(TimeloopCmd.H8.getCmd(lang));
 	    
 	    KeyboardRow keyboardThirdRow = new KeyboardRow();
-	    keyboardThirdRow.add(CMDER.getSetTimeloop09(lang));
-	    keyboardThirdRow.add(CMDER.getSetTimeloop10(lang));
-	    keyboardThirdRow.add(CMDER.getSetTimeloop11(lang));
-	    keyboardThirdRow.add(CMDER.getSetTimeloop12(lang));
+	    keyboardThirdRow.add(TimeloopCmd.H9.getCmd(lang));
+	    keyboardThirdRow.add(TimeloopCmd.H10.getCmd(lang));
+	    keyboardThirdRow.add(TimeloopCmd.H11.getCmd(lang));
+	    keyboardThirdRow.add(TimeloopCmd.H12.getCmd(lang));
 	    
 	    KeyboardRow keyboardForthRow = new KeyboardRow();
-	    keyboardForthRow.add(CMDER.getSetTimeloopOff(lang));
-	    keyboardForthRow.add(CMDER.getSetTimeloopOut(lang));
+	    keyboardForthRow.add(TimeloopCmd.OFF.getCmd(lang));
+	    keyboardForthRow.add(TimeloopCmd.OUT.getCmd(lang));
 	    
 	    keyboard.add(keyboardFirstRow);
 	    keyboard.add(keyboardSecondRow);

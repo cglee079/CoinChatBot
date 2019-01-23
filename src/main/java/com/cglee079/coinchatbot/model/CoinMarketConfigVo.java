@@ -11,5 +11,5 @@ public class CoinMarketConfigVo {
 	private Market marketId;
 	private boolean inBtc;
 	private String param;
-	private String enabled;
+	private boolean enabled;
 }

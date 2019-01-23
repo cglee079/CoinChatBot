@@ -6,10 +6,11 @@ import java.util.List;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import com.cglee079.coinchatbot.cmd.CMDER;
+import com.cglee079.coinchatbot.config.cmd.PrefLangCmd;
+import com.cglee079.coinchatbot.config.id.Lang;
 
 public class SetLanguageKeyboard extends ReplyKeyboardMarkup{
-	public SetLanguageKeyboard(String lang) {
+	public SetLanguageKeyboard(Lang lang) {
 		super();
 		
 	    this.setSelective(true);
@@ -18,11 +19,11 @@ public class SetLanguageKeyboard extends ReplyKeyboardMarkup{
 
 	    List<KeyboardRow> keyboard = new ArrayList<>();
 	    KeyboardRow keyboardFirstRow = new KeyboardRow();
-	    keyboardFirstRow.add(CMDER.getSetLanguageKR(lang));
-	    keyboardFirstRow.add(CMDER.getSetLanguageUS(lang));
+	    keyboardFirstRow.add(PrefLangCmd.SET_KR.getCmd(lang));
+	    keyboardFirstRow.add(PrefLangCmd.SET_US.getCmd(lang));
 	    
 	    KeyboardRow keyboardSecondRow = new KeyboardRow();
-	    keyboardSecondRow.add(CMDER.getSetLanguageOut(lang));
+	    keyboardSecondRow.add(PrefLangCmd.OUT.getCmd(lang));
 	    
 	    keyboard.add(keyboardFirstRow);
 	    keyboard.add(keyboardSecondRow);

@@ -20,8 +20,8 @@ public class CoinWalletDao {
 		return sqlSession.selectList(namespace + ".list");
 	}
 
-	public CoinWalletVo get(Coin myCoin) {
-		return sqlSession.selectOne(namespace + ".get", myCoin);
+	public CoinWalletVo get(Coin myCoinId) {
+		return sqlSession.selectOne(namespace + ".get", myCoinId);
 	}
 
 }

@@ -1,21 +1,14 @@
 package com.cglee079.coinchatbot.controller;
 
 import java.io.IOException;
-import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cglee079.coinchatbot.coin.CoinManager;
-import com.cglee079.coinchatbot.constants.SET;
-import com.cglee079.coinchatbot.model.ClientVo;
-import com.cglee079.coinchatbot.service.ClientService;
-import com.cglee079.coinchatbot.telegram.TelegramBot;
 
 @Controller
 public class HomeController {

@@ -17,9 +17,9 @@ public class CoinMarketConfigService {
 	@Autowired
 	private CoinMarketConfigDao coinMarketConfigDao;
 
-	public HashMap<Coin, String> getMarketParams(Market market){
+	public HashMap<Coin, String> getMarketParams(Market marketId){
 		HashMap<Coin, String> map = new HashMap<>();
-		List<CoinMarketConfigVo> configs = coinMarketConfigDao.list(market, null);
+		List<CoinMarketConfigVo> configs = coinMarketConfigDao.list(marketId, null);
 		CoinMarketConfigVo config = null;
 		for(int i = 0; i < configs.size(); i++) {
 			config = configs.get(i);

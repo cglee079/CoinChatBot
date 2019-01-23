@@ -6,7 +6,7 @@
 
 	<resultMap type="CoinMarketConfigVo" id="coinMarketConfigResultMap">
 		<id property="coinId" column="COIN_ID" />
-		<id property="marketId" column="MARKET_ID"/>
+		<id property="marketId" column="MARKET_ID" />
 		<result property="inBtc" column="IS_INBTC"/>
 		<result property="param" column="URL_PARAM"/>
 		<result property="enabled" column="ENABLED"/>

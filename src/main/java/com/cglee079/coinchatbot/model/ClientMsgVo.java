@@ -15,8 +15,8 @@ public class ClientMsgVo {
 	private String contents;
 	private String date;
 
-	public String log(Coin myCoin) {
-		return "From Client\t:\t" + myCoin + "\t[id: " + userId + " : " + username + " ]  " + contents;
+	public String log(Coin myCoinId) {
+		return "From Client\t:\t" + myCoinId + "\t[id: " + userId + " : " + username + " ]  " + contents;
 	}
 
 }

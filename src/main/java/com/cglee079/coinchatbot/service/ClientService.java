@@ -5,12 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.id.Lang;
 import com.cglee079.coinchatbot.config.id.Market;
-import com.cglee079.coinchatbot.constants.ID;
-import com.cglee079.coinchatbot.constants.SET;
+import com.cglee079.coinchatbot.config.id.MenuState;
 import com.cglee079.coinchatbot.dao.ClientDao;
 import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientVo;
@@ -18,6 +19,9 @@ import com.cglee079.coinchatbot.util.TimeStamper;
 
 @Service
 public class ClientService {
+	
+	@Value("#{constants['client.max.error.cnt']}")
+	private int maxErrorCnt;
 	
 	@Autowired
 	private ClientDao clientDao;
@@ -50,10 +54,10 @@ public class ClientService {
 		return newclients;
 	}
 	
-	public String getState(Coin coinId, Integer id) {
+	public MenuState getStateId(Coin coinId, Integer id) {
 		ClientVo client = clientDao.get(coinId, id.toString());
 		if(client != null) {
-			return client.getState();
+			return client.getStateId();
 		} else {
 			return null;
 		}
@@ -80,30 +84,26 @@ public class ClientService {
 					.userId(userId.toString())
 					.username(username)
 					.localtime((long)0)
-					.lang(ID.LANG_KR)
+					.lang(Lang.KR)
 					.timeloop(3)
 					.dayloop(1)
-					.state(ID.STATE_MAIN)
+					.stateId(MenuState.MAIN)
 					.openDate(TimeStamper.getDateTime())
 					.errCnt(0)
-					.enabled("Y")
+					.enabled(true)
 					.build();
 			return clientDao.insert(client);
 		} else{
-			String enabled = client.getEnabled();
-			if(enabled.equals("Y")){
+			boolean enabled = client.isEnabled();
+			if(enabled){
 				return false;
-			}
-			else if(enabled.equals("N")){
+			} else {
 				client.setErrCnt(0);
-				client.setEnabled("Y");
+				client.setEnabled(true);
 				client.setReopenDate(TimeStamper.getDateTime());
 				return clientDao.update(client);
 			}
-			else{
-				return false;
 			}
-		}
 	}
 
 	public boolean stopChat(Coin coinId, int userId) {
@@ -121,12 +121,12 @@ public class ClientService {
 	public boolean increaseErrCnt(Coin coinId, String userId) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
-			if(client.getEnabled().equals("Y")){
+			if(client.isEnabled()){
 				int errCnt = client.getErrCnt();
 				errCnt = errCnt + 1;
-				if(errCnt > SET.CLNT_MAX_ERRCNT) {
+				if(errCnt > maxErrorCnt) {
 					Log.i("Close Client\t:\t[id :" + userId+ "\t" + client.getUsername() + " ] ");
-					client.setEnabled("N");
+					client.setEnabled(false);
 					client.setCloseDate(TimeStamper.getDateTime());
 				} else {
 					client.setErrCnt(errCnt);
@@ -145,10 +145,10 @@ public class ClientService {
 		return clientDao.update(client);
 	}
 	
-	public boolean updateState(Coin coinId, String userId, String state) {
+	public boolean updateState(Coin coinId, String userId, MenuState stateId) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
-			client.setState(state);
+			client.setStateId(stateId);
 			return clientDao.update(client);
 		} else{
 			return false;
@@ -248,7 +248,7 @@ public class ClientService {
 		}
 	}
 	
-	public boolean updateLanguage(Coin coinId, String userId, String lang) {
+	public boolean updateLanguage(Coin coinId, String userId, Lang lang) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setLang(lang);

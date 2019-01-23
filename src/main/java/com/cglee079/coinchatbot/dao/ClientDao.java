@@ -48,8 +48,7 @@ public class ClientDao {
 	}
 	
 	public boolean insert(ClientVo client){
-		try { return sqlSession.insert(namespace + ".insert", client) == 1; }
-		catch (Exception e){ return false; }
+		return sqlSession.insert(namespace + ".insert", client) == 1;
 	}
 
 	public boolean delete(Coin coinId, String userId) {

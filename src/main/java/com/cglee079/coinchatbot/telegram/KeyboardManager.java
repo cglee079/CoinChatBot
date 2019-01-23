@@ -1,13 +1,15 @@
 package com.cglee079.coinchatbot.telegram;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
+import com.cglee079.coinchatbot.config.cmd.MarketCmd;
+import com.cglee079.coinchatbot.config.id.Lang;
 import com.cglee079.coinchatbot.config.id.Market;
-import com.cglee079.coinchatbot.constants.ID;
 import com.cglee079.coinchatbot.keyboard.ConfirmStopKeyboard;
 import com.cglee079.coinchatbot.keyboard.MainKeyboard_KR;
 import com.cglee079.coinchatbot.keyboard.MainKeyboard_US;
@@ -20,15 +22,22 @@ import com.cglee079.coinchatbot.keyboard.SetTimeloopKeyboard;
 public class KeyboardManager {
 
 	private ReplyKeyboardRemove defaultKeyboard;
-	private HashMap<String, ReplyKeyboardMarkup> mainKeyboards;
-	private HashMap<String, SetDayloopKeyboard> setDayloopKeyboards;
-	private HashMap<String, SetTimeloopKeyboard> setTimeloopKeyboards;
-	private HashMap<String, SetMarketKeyboard> setMarketKeyboards;
-	private HashMap<String, SetLanguageKeyboard> setLanguageKeyboards;
-	private HashMap<String, ConfirmStopKeyboard> confirmStopKeyboards;
-	private HashMap<String, PreferenceKeyboard> preferenceKeyboards;
+	private HashMap<Lang, ReplyKeyboardMarkup> mainKeyboards;
+	private HashMap<Lang, SetDayloopKeyboard> setDayloopKeyboards;
+	private HashMap<Lang, SetTimeloopKeyboard> setTimeloopKeyboards;
+	private HashMap<Lang, SetMarketKeyboard> setMarketKeyboards;
+	private HashMap<Lang, SetLanguageKeyboard> setLanguageKeyboards;
+	private HashMap<Lang, ConfirmStopKeyboard> confirmStopKeyboards;
+	private HashMap<Lang, PreferenceKeyboard> preferenceKeyboards;
 
 	public KeyboardManager(List<Market> enabledMarketIds) {
+		
+		//enabledMarketId --> enabledMarketCmd
+		List<MarketCmd> enabledMarketCmds = new ArrayList<>();
+		for(int i = 0; i < enabledMarketIds.size(); i++) {
+			enabledMarketCmds.add(MarketCmd.from(enabledMarketIds.get(i)));
+		}
+		
 		defaultKeyboard 	= new ReplyKeyboardRemove();
 		mainKeyboards 		= new HashMap<>();
 		setDayloopKeyboards = new HashMap<>();
@@ -38,61 +47,61 @@ public class KeyboardManager {
 		confirmStopKeyboards= new HashMap<>();
 		preferenceKeyboards = new HashMap<>();
 		
-		mainKeyboards.put(ID.LANG_KR, new MainKeyboard_KR(ID.LANG_KR));
-		mainKeyboards.put(ID.LANG_US, new MainKeyboard_US(ID.LANG_US));
+		mainKeyboards.put(Lang.KR, new MainKeyboard_KR(Lang.KR));
+		mainKeyboards.put(Lang.US, new MainKeyboard_US(Lang.US));
 		
-		setDayloopKeyboards.put(ID.LANG_KR, new SetDayloopKeyboard(ID.LANG_KR));
-		setDayloopKeyboards.put(ID.LANG_US, new SetDayloopKeyboard(ID.LANG_US));
+		setDayloopKeyboards.put(Lang.KR, new SetDayloopKeyboard(Lang.KR));
+		setDayloopKeyboards.put(Lang.US, new SetDayloopKeyboard(Lang.US));
 		
-		setTimeloopKeyboards.put(ID.LANG_KR, new SetTimeloopKeyboard(ID.LANG_KR));
-		setTimeloopKeyboards.put(ID.LANG_US, new SetTimeloopKeyboard(ID.LANG_US));
+		setTimeloopKeyboards.put(Lang.KR, new SetTimeloopKeyboard(Lang.KR));
+		setTimeloopKeyboards.put(Lang.US, new SetTimeloopKeyboard(Lang.US));
 		
-		setMarketKeyboards.put(ID.LANG_KR, new SetMarketKeyboard(enabledMarketIds, ID.LANG_KR));
-		setMarketKeyboards.put(ID.LANG_US, new SetMarketKeyboard(enabledMarketIds, ID.LANG_US));
+		setMarketKeyboards.put(Lang.KR, new SetMarketKeyboard(enabledMarketCmds, Lang.KR));
+		setMarketKeyboards.put(Lang.US, new SetMarketKeyboard(enabledMarketCmds, Lang.US));
 		
-		setLanguageKeyboards.put(ID.LANG_KR, new SetLanguageKeyboard(ID.LANG_KR));
-		setLanguageKeyboards.put(ID.LANG_US, new SetLanguageKeyboard(ID.LANG_US));
+		setLanguageKeyboards.put(Lang.KR, new SetLanguageKeyboard(Lang.KR));
+		setLanguageKeyboards.put(Lang.US, new SetLanguageKeyboard(Lang.US));
 		
-		confirmStopKeyboards.put(ID.LANG_KR, new ConfirmStopKeyboard(ID.LANG_KR));
-		confirmStopKeyboards.put(ID.LANG_US, new ConfirmStopKeyboard(ID.LANG_US));
+		confirmStopKeyboards.put(Lang.KR, new ConfirmStopKeyboard(Lang.KR));
+		confirmStopKeyboards.put(Lang.US, new ConfirmStopKeyboard(Lang.US));
 		
-		preferenceKeyboards.put(ID.LANG_KR, new PreferenceKeyboard(ID.LANG_KR));
-		preferenceKeyboards.put(ID.LANG_US, new PreferenceKeyboard(ID.LANG_US));
+		preferenceKeyboards.put(Lang.KR, new PreferenceKeyboard(Lang.KR));
+		preferenceKeyboards.put(Lang.US, new PreferenceKeyboard(Lang.US));
 	}
 
 	public ReplyKeyboardRemove getDefaultKeyboard() {
 		return defaultKeyboard;
 	}
 	
-	public ReplyKeyboardRemove getDefaultKeyboard(String lang) {
+	public ReplyKeyboardRemove getDefaultKeyboard(Lang lang) {
 		return defaultKeyboard;
 	}
 
-	public ReplyKeyboardMarkup getMainKeyboard(String lang) {
+	public ReplyKeyboardMarkup getMainKeyboard(Lang lang) {
 		return mainKeyboards.get(lang);
 	}
 
-	public SetDayloopKeyboard getSetDayloopKeyboard(String lang) {
+	public SetDayloopKeyboard getSetDayloopKeyboard(Lang lang) {
 		return setDayloopKeyboards.get(lang);
 	}
 
-	public SetTimeloopKeyboard getSetTimeloopKeyboard(String lang) {
+	public SetTimeloopKeyboard getSetTimeloopKeyboard(Lang lang) {
 		return setTimeloopKeyboards.get(lang);
 	}
 
-	public SetMarketKeyboard getSetMarketKeyboard(String lang) {
+	public SetMarketKeyboard getSetMarketKeyboard(Lang lang) {
 		return setMarketKeyboards.get(lang);
 	}
 	
-	public SetLanguageKeyboard getSetLanguageKeyboard(String lang) {
+	public SetLanguageKeyboard getSetLanguageKeyboard(Lang lang) {
 		return setLanguageKeyboards.get(lang);
 	}
 
-	public ConfirmStopKeyboard getConfirmStopKeyboard(String lang) {
+	public ConfirmStopKeyboard getConfirmStopKeyboard(Lang lang) {
 		return confirmStopKeyboards.get(lang);
 	}
 
-	public PreferenceKeyboard getPreferenceKeyboard(String lang) {
+	public PreferenceKeyboard getPreferenceKeyboard(Lang lang) {
 		return preferenceKeyboards.get(lang);
 	}
 }

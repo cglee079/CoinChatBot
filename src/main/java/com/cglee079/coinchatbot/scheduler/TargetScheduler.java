@@ -33,19 +33,19 @@ public class TargetScheduler {
 	@Autowired
 	private CoinMarketConfigService coinMarketConfigService;
 
-	private Coin myCoin;
+	private Coin myCoinId;
 	private TelegramBot telegramBot;
 	private HashMap<Market, Boolean> inBtcs;
 	private List<Market> enabledMarkets;
 	
-	public TargetScheduler(Coin myCoin, TelegramBot telegramBot) {
-		this.myCoin 		= myCoin;
+	public TargetScheduler(Coin myCoinId, TelegramBot telegramBot) {
+		this.myCoinId 		= myCoinId;
 		this.telegramBot	= telegramBot;
 	}
 	
 	@PostConstruct
 	public void init() {
-		List<CoinMarketConfigVo> configMarkets = coinMarketConfigService.list(myCoin);
+		List<CoinMarketConfigVo> configMarkets = coinMarketConfigService.list(myCoinId);
 		CoinMarketConfigVo configMarket;
 		
 		inBtcs 			= new HashMap<>();
@@ -70,17 +70,17 @@ public class TargetScheduler {
 		JSONObject coinObj = null;
 		
 		try {
-			coinObj = coinManager.getCoin(myCoin, marketId);
+			coinObj = coinManager.getCoin(myCoinId, marketId);
 			double coinValue = coinObj.getDouble("last");
 			
 			if(inBtcs.get(marketId)) {
 				coinValue = coinValue * coinManager.getCoin(Coin.BTC, marketId).getDouble("last");
 			}
 			
-			clients = clientService.list(myCoin, marketId, coinValue, true); //TargetUp
+			clients = clientService.list(myCoinId, marketId, coinValue, true); //TargetUp
 			telegramBot.sendTargetPriceMessage(clients, marketId, coinObj, true);
 			
-			clients = clientService.list(myCoin, marketId, coinValue, false); //TagetDown
+			clients = clientService.list(myCoinId, marketId, coinValue, false); //TagetDown
 			telegramBot.sendTargetPriceMessage(clients, marketId, coinObj, false);
 			
 		} catch (ServerErrorException e) {

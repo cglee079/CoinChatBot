@@ -8,12 +8,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.config.id.Market;
-import com.cglee079.coinchatbot.constants.ID;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
 import com.cglee079.coinchatbot.service.CoinMarketConfigService;
-import com.sun.media.jfxmedia.events.MarkerEvent;
 
 public class CoinManager {
 	@Autowired
@@ -125,11 +123,11 @@ public class CoinManager {
 		return coinObj;
 	}
 	
-	public Double getCoinLast(Coin myCoin, Market marketId, boolean isInBtc) {
+	public Double getCoinLast(Coin myCoinId, Market marketId, boolean isInBtc) {
 		try {
 			double last = -1;
 			JSONObject coinObj = null;
-			coinObj = this.getCoin(myCoin, marketId);
+			coinObj = this.getCoin(myCoinId, marketId);
 			
 			last = coinObj.getDouble("last");
 			if(isInBtc) {

@@ -32,14 +32,14 @@ public class TimelyInfoDao {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("coinId", coinId);
 		map.put("date", date);
-		map.put("market", marketId);
+		map.put("marketId", marketId);
 		return sqlSession.selectOne(namespace + ".get", map);
 	}
 
 	public List<TimelyInfoVo> list(String coinId, Market marketId, int cnt) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("coinId", coinId);
-		map.put("market", marketId);
+		map.put("marketId", marketId);
 		map.put("cnt", cnt);
 		return sqlSession.selectList(namespace + ".list", map);
 	}

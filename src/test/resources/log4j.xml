@@ -49,6 +49,23 @@
 		<appender-ref ref="console" />
 	</logger>
 	
+	<logger name="jdbc.connection" additivity="false">
+		<level value="DEBUG" />
+	</logger>
+	
+	<logger name="jdbc.sqltiming" additivity="false">
+		<level value="DEBUG" />
+	</logger>
+	
+	<logger name="jdbc.audit" additivity="false">
+		<level value="DEBUG" />
+	</logger>
+
+	<!-- log the jdbc ResultSet calls -->
+	<logger name="jdbc.resultset" additivity="false">
+		<level value="DEBUG" />
+	</logger>
+	
 	<!-- Root Logger -->
 	<root>
 		<priority value="warn" />

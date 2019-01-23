@@ -19,8 +19,8 @@ public class CoinWalletService {
 		return coinWalletDao.list();
 	}
 
-	public CoinWalletVo get(Coin myCoin) {
-		return coinWalletDao.get(myCoin);
+	public CoinWalletVo get(Coin myCoinId) {
+		return coinWalletDao.get(myCoinId);
 	}
 
 }

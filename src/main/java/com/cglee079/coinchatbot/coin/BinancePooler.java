@@ -5,7 +5,6 @@ import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cglee079.coinchatbot.config.id.Coin;
-import com.cglee079.coinchatbot.constants.ID;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 
 public class BinancePooler extends ApiPooler{

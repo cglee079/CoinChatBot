@@ -6,48 +6,45 @@ import java.util.List;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import com.cglee079.coinchatbot.cmd.CMDER;
+import com.cglee079.coinchatbot.config.cmd.MainCmd;
+import com.cglee079.coinchatbot.config.id.Lang;
 
 public class MainKeyboard_US extends ReplyKeyboardMarkup{
-	public MainKeyboard_US(String lang) {
+	public MainKeyboard_US(Lang lang) {
 		super();
 		
 	    this.setSelective(true);
 	    this.setResizeKeyboard(true);
 	    this.setOneTimeKeyboard(false);
-
+	    
 	    List<KeyboardRow> keyboard = new ArrayList<>();
 	    KeyboardRow keyboardFirstRow = new KeyboardRow();
-	    keyboardFirstRow.add(CMDER.getMainCurrentPrice(lang));
-	    keyboardFirstRow.add(CMDER.getMainKoreaPremium(lang));
-	    keyboardFirstRow.add(CMDER.getMainBtc(lang));
-	    keyboardFirstRow.add(CMDER.getMainCalculate(lang));
-	  
+	    keyboardFirstRow.add(MainCmd.CURRENT_PRICE.getCmd(lang));
+	    keyboardFirstRow.add(MainCmd.MARKETS_PRICE.getCmd(lang));
+	    keyboardFirstRow.add(MainCmd.CHANGE_RATE.getCmd(lang));
+	    keyboardFirstRow.add(MainCmd.CALCULATE.getCmd(lang));
 	    
 	    KeyboardRow keyboardSecondRow = new KeyboardRow();
-	    keyboardSecondRow.add(CMDER.getMainSetPrice(lang));
-	    keyboardSecondRow.add(CMDER.getMainSetNumber(lang));
-	    keyboardSecondRow.add(CMDER.getMainSetMarket(lang));
-	    
+	    keyboardSecondRow.add(MainCmd.SET_INVEST.getCmd(lang));
+	    keyboardSecondRow.add(MainCmd.SET_COINCNT.getCmd(lang));
+	    keyboardSecondRow.add(MainCmd.SET_MARKET.getCmd(lang));
 	    
 	    KeyboardRow keyboardThirdRow = new KeyboardRow();
-	    keyboardThirdRow.add(CMDER.getMainSetTarget(lang));
-	    keyboardThirdRow.add(CMDER.getMainSetDayloop(lang));
-	    keyboardThirdRow.add(CMDER.getMainSetTimeloop(lang));
-	    
+	    keyboardSecondRow.add(MainCmd.SET_TARGET.getCmd(lang));
+	    keyboardThirdRow.add(MainCmd.SET_DAYLOOP.getCmd(lang));
+	    keyboardThirdRow.add(MainCmd.SET_TIMELOOP.getCmd(lang));
 	    
 	    KeyboardRow keyboardForthRow = new KeyboardRow();
-	    keyboardForthRow.add(CMDER.getMainHappyLine(lang));
-	    keyboardForthRow.add(CMDER.getMainInfo(lang));
-	    keyboardForthRow.add(CMDER.getMainStop(lang));
+	    keyboardThirdRow.add(MainCmd.HAPPY_LINE.getCmd(lang));
+	    keyboardThirdRow.add(MainCmd.SHOW_SETTING.getCmd(lang));
+	    keyboardThirdRow.add(MainCmd.STOP_ALERTS.getCmd(lang));
 	    
 	    KeyboardRow keyboardFifthRow = new KeyboardRow();
-	    keyboardFifthRow.add(CMDER.getMainCoinList(lang));
-	    keyboardFifthRow.add(CMDER.getMainSendMsg(lang));
-	    keyboardFifthRow.add(CMDER.getMainSupport(lang));
-	    keyboardFifthRow.add(CMDER.getMainHelp(lang));
-	    keyboardFifthRow.add(CMDER.getMainPref(lang));
-	    
+	    keyboardForthRow.add(MainCmd.COIN_LIST.getCmd(lang));
+	    keyboardForthRow.add(MainCmd.SEND_MESSAGE.getCmd(lang));
+	    keyboardForthRow.add(MainCmd.SPONSORING.getCmd(lang));
+	    keyboardForthRow.add(MainCmd.HELP.getCmd(lang));
+	    keyboardForthRow.add(MainCmd.PREFERENCE.getCmd(lang));
 	    
 	    keyboard.add(keyboardFirstRow);
 	    keyboard.add(keyboardSecondRow);

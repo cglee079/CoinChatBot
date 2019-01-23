@@ -12,4 +12,14 @@
 		<typeAlias type="com.cglee079.coinchatbot.model.CoinMarketConfigVo" alias="CoinMarketConfigVo"/>
 		<typeAlias type="com.cglee079.coinchatbot.model.CoinWalletVo" alias="CoinWalletVo"/>
 	</typeAliases>
+	
+	<typeHandlers>
+		 <typeHandler handler="com.cglee079.coinchatbot.config.mybatis.CodeEnumTypeHandler" 
+			  javaType="com.cglee079.coinchatbot.config.id.CodeEnum"/>
+<!-- 		  <typeHandler handler="com.cglee079.coinchatbot.config.mybatis.MarketEnumTypeHandler" 
+			  javaType="com.cglee079.coinchatbot.config.id.Market"/>
+			  
+		  <typeHandler handler="com.cglee079.coinchatbot.config.mybatis.MenuStateEnumTypeHandler" 
+			  javaType="com.cglee079.coinchatbot.config.id.MenuState"/> -->
+	</typeHandlers>
 </configuration>
