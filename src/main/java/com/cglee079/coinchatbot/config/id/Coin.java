@@ -35,7 +35,9 @@ public enum Coin {
 	XLM("스텔라루멘", "Stellar"), 
 	XRP("리플", "Ripple"), 
 	XVG("버지", "Verge"), 
-	ZIL("질리카", "Zilliqa");
+	ZIL("질리카", "Zilliqa"),
+	NPXS("펀디엑스", "Pundi X"),
+	CAP("캡", "Cap");
 	
 	@Getter
 	private final String kr;

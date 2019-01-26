@@ -11,6 +11,7 @@ public enum Market implements CodeEnum{
 	COINNEST("104"),
 	KORBIT("105"),
 	GOPAX("106"),
+	CASHIEREST("107"),
 	
 	BITFINEX("201"),
 	BITTREX("202"),
@@ -25,36 +26,10 @@ public enum Market implements CodeEnum{
 
     
 	public boolean isKRW() {
-		boolean result = false;
-		switch(this) {
-		case COINONE:
-		case BITHUMB:
-		case UPBIT:
-		case COINNEST:
-		case KORBIT:
-		case GOPAX:
-			result = true; break;
-		default :
-			result = false; break;
-		}
-		
-		return result;
+		return this.code.startsWith("10");
 	}
 	
 	public boolean isUSD() {
-		boolean result = false;
-		switch(this) {
-		case COINONE:
-		case BITHUMB:
-		case UPBIT:
-		case COINNEST:
-		case KORBIT:
-		case GOPAX:
-			result = false; break;
-		default :
-			result = true; break;
-		}
-		
-		return result;
+		return this.code.startsWith("20");
 	}
 }

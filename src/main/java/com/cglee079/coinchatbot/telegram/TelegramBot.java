@@ -126,19 +126,26 @@ public class TelegramBot extends AbilityBot  {
 		ClientVo client = clientService.get(myCoinId, userId);
 		clientService.updateMsgDate(client);
 		
+		//Client가 새로 시작한 경우
 		if(message.getText().equals("/start") || client == null) {
 			Lang lang= Lang.KR;
 			StringBuilder msg = new StringBuilder("");
+			
+			//새로운 사용자
 			if (clientService.openChat(myCoinId, userId, username, enabledMarketIds.get(0))) {
 				msg.append(msgMaker.msgStartService(lang));
 				msg.append(msgMaker.explainHelp(enabledMarketIds, lang));
 				sendMessage(userId, null, msg, km.getMainKeyboard(lang));
 				sendMessage(userId, null, msgMaker.explainSetForeginer(lang), km.getMainKeyboard(lang));
-			} else {
+			} 
+			
+			// 이미 이전에 챗봇을 시작한 사용.
+			else {
 				msg.append(msgMaker.msgAlreadyStartService(lang));
 				sendMessage(userId, null, msg, km.getMainKeyboard(lang));
 				sendMessage(userId, messageId, messageInfo(userId), km.getMainKeyboard(lang));
 			}
+			
 			return ;
 		} 
 		
@@ -210,56 +217,56 @@ public class TelegramBot extends AbilityBot  {
 			sendMessage(userId, null, msgMaker.explainSupportAN(lang), km.getMainKeyboard(lang));
 			break;
 			
-		case SET_DAYLOOP : // 일일 알림주기 선택
+		case SET_DAYLOOP : // 일일 알림주기 설정
 			sendMessage(userId, messageId, msgMaker.explainSetDayloop(lang), km.getSetDayloopKeyboard(lang));
 			stateId = MenuState.SET_DAYLOOP;
 			break;
 			
-		case SET_TIMELOOP:
+		case SET_TIMELOOP: // 시간 알림 주기 설정
 			sendMessage(userId, messageId, msgMaker.explainSetTimeloop(lang), km.getSetTimeloopKeyboard(lang));
 			stateId = MenuState.SET_TIMELOOP;
 			break;
 			
-		case SET_MARKET:
+		case SET_MARKET: // 거래소 설정
 			sendMessage(userId, messageId, msgMaker.explainMarketSet(lang), km.getSetMarketKeyboard(lang));
 			stateId = MenuState.SET_MARKET;
 			break;
 		
-		case SET_TARGET:
+		case SET_TARGET: // 목표가 설정
 			sendMessage(userId, messageId, msgMaker.explainTargetPriceSet(lang, marketId), km.getDefaultKeyboard());
 			stateId = MenuState.SET_TARGET;
 			break;
 			
-		case SET_INVEST:
+		case SET_INVEST: //투자금액 설정
 			sendMessage(userId, messageId, msgMaker.explainSetPrice(lang, marketId), km.getDefaultKeyboard());
 			stateId = MenuState.SET_INVEST;
 			break;
 			
-		case SET_COINCNT :
+		case SET_COINCNT : // 코인개수 설정
 			sendMessage(userId, messageId, msgMaker.explainSetCoinCount(lang), km.getDefaultKeyboard());
 			stateId = MenuState.SET_COINCNT;
 			break;
 			
-		case SEND_MESSAGE:
+		case SEND_MESSAGE: // 문의 건의
 			sendMessage(userId, messageId, msgMaker.explainSendSuggest(lang), km.getDefaultKeyboard());
 			stateId = MenuState.SEND_MSG;
 			break;
 			
-		case STOP_ALERTS :
+		case STOP_ALERTS : // 모든알림 중지
 			sendMessage(userId, messageId, msgMaker.explainStop(lang), km.getConfirmStopKeyboard(lang));
 			stateId = MenuState.CONFIRM_STOP;
 			break;
 			
-		case HAPPY_LINE : 
+		case HAPPY_LINE : // 행복회로
 			stateId = checkHappyLine(userId, messageId, marketId, lang);
 			break;
 			
-		case PREFERENCE: 
+		case PREFERENCE:  // 설정
 			sendMessage(userId, messageId, "Set Preference", km.getPreferenceKeyboard(lang));
 			stateId = MenuState.PREFERENCE;
 			break;
 			
-		default : 
+		default :
 			sendMessage(userId, messageId, messageCurrentPrice(userId), km.getMainKeyboard(lang));
 			break;
 		
@@ -395,6 +402,7 @@ public class TelegramBot extends AbilityBot  {
 		StringBuilder msg = new StringBuilder("");
 		boolean valid = false;
 		
+		// 코인 가격 정보를 가져옴.
 		double currentValue = -1;
 		try {
 			JSONObject coinObj = coinManager.getCoin(myCoinId, marketId);
@@ -415,6 +423,7 @@ public class TelegramBot extends AbilityBot  {
 			String priceStr = cmd.trim();
 			double targetPrice = -1;
 
+			//사용자의 입력이 유효한 패턴인지 검증.
 			if(priceStr.matches("^\\d*(\\.?\\d*)$")) {
 				targetPrice = Double.valueOf(priceStr);
 				
@@ -452,6 +461,7 @@ public class TelegramBot extends AbilityBot  {
 				msg.append(msgMaker.warningTargetPriceSetFormat(lang));
 			}
 			
+			//유효한 입력을 했다면, DB 정보 갱신
 			if(valid) {
 				msg.append(msgMaker.msgTargetPriceSetResult(targetPrice, currentValue, marketId, lang));
 				if(targetPrice >= currentValue) {
@@ -483,19 +493,16 @@ public class TelegramBot extends AbilityBot  {
 
 		try { // case1. 평균단가에 문자가 포함될때
 			price = Double.parseDouble(priceStr);
-		} catch (NumberFormatException e) {
-			msg.append(msgMaker.warningPriceFormat(lang));
-		}
-
-		if(price != -1) {
 			if(clientService.updatePrice(myCoinId, userId.toString(), price)){
 				if (price == 0) { msg.append(msgMaker.msgPriceInit(lang));} // case2. 초기화
 				else {msg.append(msgMaker.msgPriceSet(price, marketId, lang));} // case3.설정완료
 			} else{
 				msg.append(msgMaker.warningNeedToStart(lang));
 			}
+		} catch (NumberFormatException e) {
+			msg.append(msgMaker.warningPriceFormat(lang));
 		}
-		
+
 		msg.append(msgMaker.msgToMain(lang));
 		
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(lang));

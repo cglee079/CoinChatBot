@@ -5,11 +5,11 @@
 <mapper namespace="com.cglee079.coinchatbot.mapper.TimelyInfoMapper">
 	<resultMap type="TimelyInfoVo" id="timelyInfoResultMap">
 		<id property="coinId" column="COIN_ID" />
-		<id property="marketId" column="MARKET_ID" />
+		<id property="marketId" column="MARKET_CD" />
 		<id property="date" column="DT_HOUR"/>
-		<result  property="high" column="TIME_HIGH"/>
-		<result  property="low" column="TIME_LOW"/>
-		<result  property="last" column="TIME_LAST"/>
+		<result  property="high" column="PRICE_HIGH"/>
+		<result  property="low" column="PRICE_LOW"/>
+		<result  property="last" column="PRICE_LAST"/>
 		<result  property="volume" column="TIME_VOLUME"/>
 		<result  property="result" column="RES_RESULT"/>
 		<result  property="errorCode" column="RES_ERRCODE"/>
@@ -24,7 +24,7 @@
 		AND COIN_ID = #{coinId}
 		AND DT_HOUR = #{date}
 		<if test="marketId != null">
-		AND MARKET_ID = #{marketId}
+		AND MARKET_CD = #{marketId}
 		</if>
 	</select>
 	
@@ -35,7 +35,7 @@
 		WHERE 1 = 1
 		AND COIN_ID = #{coinId}
 		<if test="marketId != null">
-		AND MARKET_ID = #{marketId}
+		AND MARKET_CD = #{marketId}
 		</if>
 		ORDER BY DT_HOUR DESC
 		LIMIT 0, #{cnt}
@@ -44,11 +44,11 @@
 	<insert id="insert">
 		INSERT INTO TB_COINBOT_TIMELYINFO(
 			COIN_ID,
-			MARKET_ID,
+			MARKET_CD,
 			DT_HOUR,
-			TIME_HIGH,
-			TIME_LOW,
-			TIME_LAST,
+			PRICE_HIGH,
+			PRICE_LOW,
+			PRICE_LAST,
 			TIME_VOLUME,
 			RES_RESULT,
 			RES_ERRCODE,

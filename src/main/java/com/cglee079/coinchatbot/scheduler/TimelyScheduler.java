@@ -65,7 +65,8 @@ public class TimelyScheduler {
 		}
 	}
 	
-	@Scheduled(cron = "02 00 0/1 * * *")
+	/* 매 시간 주기로 코인 가격정보를 가져옴  -> DB 삽입*/
+	@Scheduled(cron = "02 00 1 * * *")
 	public void loadTimelyCoins(){
 		Date dateCurrent = new Date();
 		
@@ -73,7 +74,7 @@ public class TimelyScheduler {
 			loadTimelyCoin(dateCurrent, enabledMarketIds.get(i));
 		}
 		
-		/* Send Timely Message */
+		/* 사용자에게 시간 알림 메시지 전송 */
 		SimpleDateFormat formatter = new SimpleDateFormat("HH");
 		String hourStr = formatter.format(dateCurrent);
 		Integer hour = Integer.valueOf(hourStr);
@@ -85,7 +86,7 @@ public class TimelyScheduler {
 			}
 		}
 		
-		/* Send Daily Message */
+		/* 사용자에게 일일 알림 메시지 전송 */
 		SimpleDateFormat formatter2 = new SimpleDateFormat("dd");
 		String dayStr = formatter2.format(dateCurrent);
 		Integer day = Integer.valueOf(dayStr);
@@ -97,6 +98,7 @@ public class TimelyScheduler {
 			}
 		}
 	}
+	
 	
 	public void loadTimelyCoin(Date dateCurrent, Market marketId) {
 		JSONObject coinObj = null;

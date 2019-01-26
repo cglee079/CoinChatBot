@@ -6,7 +6,7 @@
 
 	<resultMap type="CoinMarketConfigVo" id="coinMarketConfigResultMap">
 		<id property="coinId" column="COIN_ID" />
-		<id property="marketId" column="MARKET_ID" />
+		<id property="marketId" column="MARKET_CD" />
 		<result property="inBtc" column="IS_INBTC"/>
 		<result property="param" column="URL_PARAM"/>
 		<result property="enabled" column="ENABLED"/>
@@ -22,9 +22,9 @@
 		AND COIN_ID = #{coinId}
 		</if>
 		<if test="marketId != null">
-		AND MARKET_ID = #{marketId}
+		AND MARKET_CD = #{marketId}
 		</if>
-		ORDER BY MARKET_ID ASC;
+		ORDER BY MARKET_CD ASC;
 	</select>
 	
 </mapper>

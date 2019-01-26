@@ -9,8 +9,8 @@
 
 	<context:annotation-config></context:annotation-config>
 	
-	<bean id="COIN_LTC" class="java.lang.String">
-		<constructor-arg><util:constant static-field="com.cglee079.coinchatbot.constants.ID.COIN_LTC"/></constructor-arg>
+	<bean id="COIN_LTC" class="com.cglee079.coinchatbot.config.id.Coin" factory-method="valueOf">
+		<constructor-arg value="LTC"/>
 	</bean>
 	
 	<bean id="TelegramBot_LTC" class="com.cglee079.coinchatbot.telegram.TelegramBot">

@@ -15,6 +15,7 @@ public enum MarketCmd implements CmdEnum{
 	COINNEST(Market.COINNEST, "코인네스트", "Coinnest"),
 	KORBIT(Market.KORBIT, "코빗", "Korbit"),
 	GOPAX(Market.GOPAX, "고팍스", "Gopax"),
+	CASHIEREST(Market.CASHIEREST ,"캐셔레스트", "Cashierest"),
 	
 	BITFINEX(Market.BITFINEX, "비트파이넥스", "Bitfinex"),
 	BITTREX(Market.BITTREX, "비트렉스", "Bitrrext"),

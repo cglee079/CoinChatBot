@@ -7,11 +7,11 @@
 	<resultMap type="ClientVo" id="clientResultMap">
 		<id property="coinId" column="COIN_ID" />
 		<id property="userId" column="CLNT_USERID"/>
-		<result  property="marketId" column="MARKET_ID" />
+		<result  property="marketId" column="MARKET_CD" />
 		<result  property="username" column="CLNT_USERNAME"/>
 		<result  property="localtime" column="CLNT_LOCTIME"/>
 		<result  property="lang" column="CLNT_LANG"/>
-		<result  property="stateId" column="CLNT_STATE" />
+		<result  property="stateId" column="CLNT_STATECD" />
 		<result  property="timeloop" column="ALERT_TIMELOOP"/>
 		<result  property="dayloop" column="ALERT_DAYLOOP"/>
 		<result  property="targetUp" column="ALERT_TGUP"/>
@@ -44,7 +44,7 @@
 		AND COIN_ID = #{coinId}
 		AND CLNT_ENABLED = true
 		<if test="marketId != null">
-		AND MARKET_ID = #{marketId}
+		AND MARKET_CD = #{marketId}
 		</if>
 		<if test="timeLoop != null">
 		AND ALERT_TIMELOOP = #{timeLoop}
@@ -62,7 +62,7 @@
 		WHERE 1 = 1
 		AND CLNT_ENABLED = true
 		AND COIN_ID = #{coinId}
-		AND MARKET_ID = #{marketId}
+		AND MARKET_CD = #{marketId}
 		<![CDATA[ AND  #{coinValue} >= ALERT_TGUP ]]>
 	</select>
 	
@@ -75,7 +75,7 @@
 		WHERE 1 = 1
 		AND CLNT_ENABLED = true
 		AND COIN_ID = #{coinId}
-		AND MARKET_ID = #{marketId}
+		AND MARKET_CD = #{marketId}
 		<![CDATA[ AND  #{coinValue} <= ALERT_TGDOWN ]]>
 	</select>
 	
@@ -87,8 +87,8 @@
 			CLNT_USERNAME, 
 			CLNT_LOCTIME,
 			CLNT_LANG, 
-			CLNT_STATE,
-			MARKET_ID,
+			CLNT_STATECD,
+			MARKET_CD,
 			ALERT_TIMELOOP,
 			ALERT_DAYLOOP,
 			ALERT_TGUP,
@@ -137,8 +137,8 @@
 		CLNT_USERNAME = #{username},
 		CLNT_LOCTIME = #{localtime},
 		CLNT_LANG = #{lang},
-		CLNT_STATE = #{stateId},
-		MARKET_ID = #{marketId},
+		CLNT_STATECD = #{stateId},
+		MARKET_CD = #{marketId},
 		ALERT_TIMELOOP = #{timeloop},
 		ALERT_DAYLOOP = #{dayloop},
 		<choose>

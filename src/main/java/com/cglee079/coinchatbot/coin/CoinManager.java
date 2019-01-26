@@ -17,6 +17,7 @@ public class CoinManager {
 	@Autowired
 	private CoinMarketConfigService coinMarketConfigService;
 	
+	//KRW 거래소
 	@Autowired
 	private CoinonePooler coinonePooler;
 
@@ -35,6 +36,11 @@ public class CoinManager {
 	@Autowired
 	private GopaxPooler gopaxPooler;
 	
+	@Autowired
+	private CashierestPooler cashierestPooler;
+	
+	
+	/// USD 거래소
 	@Autowired
 	private BitfinexPooler bitfinexPooler;
 
@@ -59,6 +65,7 @@ public class CoinManager {
 	@Autowired
 	private ExchangePooler exchangePooler;
 
+	/* DB에서 각 거래소의 RestAPI Coin 파라미터값을 가져옴. */
 	@PostConstruct
 	public void init() {
 		coinonePooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.COINONE));
@@ -67,6 +74,8 @@ public class CoinManager {
 		coinnestPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.COINNEST));
 		korbitPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.KORBIT));
 		gopaxPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.GOPAX));
+		cashierestPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.CASHIEREST));
+		
 		bitfinexPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.BITFINEX));
 		bittrexPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.BITTREX));
 		poloniexPooler.setCoinParam(coinMarketConfigService.getMarketParams(Market.POLONIEX));
@@ -87,7 +96,7 @@ public class CoinManager {
 		this.exchangeRate = exchangeRate;
 	}
 
-	///
+	/* 환율 정보 갱신 */
 	@Scheduled(cron = "00 01 00 * * *")
 	private void updateExchangeRate() {
 		try {
@@ -98,6 +107,7 @@ public class CoinManager {
 		}
 	}
 
+	/* 거래소로부터 코인 정보 가져옴 */
 	public JSONObject getCoin(Coin coin, Market marketId) throws ServerErrorException{
 		JSONObject coinObj = null;
 		
@@ -108,6 +118,8 @@ public class CoinManager {
 		case COINNEST	: coinObj = coinnestPooler.getCoin(coin); break;
 		case KORBIT 	: coinObj = korbitPooler.getCoin(coin); break;
 		case GOPAX 		: coinObj = gopaxPooler.getCoin(coin); break;
+		case CASHIEREST : coinObj = cashierestPooler.getCoin(coin); break;
+			
 		case BITFINEX 	: coinObj = bitfinexPooler.getCoin(coin); break;
 		case BITTREX 	: coinObj = bittrexPooler.getCoin(coin); break;
 		case POLONIEX 	: coinObj = poloniexPooler.getCoin(coin); break;
@@ -118,11 +130,15 @@ public class CoinManager {
 			else { coinObj = hadaxPooler.getCoin(coin); }
 			break;
 		case OKEX 		: coinObj = okexPooler.getCoin(coin); break;
+
+		default:
+			break;
 		}
 		
 		return coinObj;
 	}
 	
+	/* 코인 정보 중 현재가격 가져옴  */
 	public Double getCoinLast(Coin myCoinId, Market marketId, boolean isInBtc) {
 		try {
 			double last = -1;
@@ -141,15 +157,7 @@ public class CoinManager {
 		}
 	}
 	
-	public JSONObject getMoney(TimelyInfoVo timelyInfo, Market marketId){
-		JSONObject coinObj = new JSONObject();
-		coinObj.put("last", timelyInfo.getLast());
-		coinObj.put("first", 0);
-		coinObj.put("high", timelyInfo.getHigh());
-		coinObj.put("low", timelyInfo.getLow());
-		return this.getMoney(coinObj, marketId);
-	}
-	
+	/* 기축이 비트코인인 코인에 대하여, KRW or USD로 바꾼 가격을 가져옴 */
 	public JSONObject getMoney(JSONObject coinObj, Market marketId){
 		JSONObject btcObj;
 		try {
@@ -172,6 +180,15 @@ public class CoinManager {
 		coinKRW.put("low", low);
 		
 		return coinKRW;
+	}
+	
+	public JSONObject getMoney(TimelyInfoVo timelyInfo, Market marketId){
+		JSONObject coinObj = new JSONObject();
+		coinObj.put("last", timelyInfo.getLast());
+		coinObj.put("first", 0);
+		coinObj.put("high", timelyInfo.getHigh());
+		coinObj.put("low", timelyInfo.getLow());
+		return this.getMoney(coinObj, marketId);
 	}
 }
 

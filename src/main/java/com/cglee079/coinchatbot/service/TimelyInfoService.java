@@ -37,7 +37,7 @@ public class TimelyInfoService {
 				.last(coin.getDouble("last"))
 				.volume((long) coin.getDouble("volume"))
 				.result(coin.getString("result"))
-				.errorCode(coin.getString("errorCode"))
+				.errorCode(String.valueOf(coin.getInt("errorCode")))
 				.errorMsg(coin.getString("errorMsg"))
 				.build();
 				
