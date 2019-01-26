@@ -37,7 +37,11 @@ public enum Coin {
 	XVG("버지", "Verge"), 
 	ZIL("질리카", "Zilliqa"),
 	NPXS("펀디엑스", "Pundi X"),
-	CAP("캡", "Cap");
+	CAP("캡", "Cap"),
+	DASH("대쉬", "Dash"),
+	BSV("비트코인에스브이", "Bitcoin SV"),
+	WAVES("웨이브", "Waves");
+	
 	
 	@Getter
 	private final String kr;

@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_QTM" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_QTM"/>
-		<constructor-arg index="1" value="537584129:AAFrmA9F1xP_2SRzW7eKs_wCaRmvhDIj4y4"/>
+		<constructor-arg index="1" value="#{telegram['coin.qtum.bot.token']}"/>
 		<constructor-arg index="2" value="cg_qtum_bot"/>
 	</bean>
 	

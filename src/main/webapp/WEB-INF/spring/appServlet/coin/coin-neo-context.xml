@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_NEO" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_NEO"/>
-		<constructor-arg index="1" value="541716799:AAG1KNWF6Z6nwqeIVLhd5IfEEV7aLK_2bcY"/>
+		<constructor-arg index="1" value="#{telegram['coin.neo.bot.token']}"/>
 		<constructor-arg index="2" value="cg_neo_bot"/>
 	</bean>
 	

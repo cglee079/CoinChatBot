@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_ELF" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_ELF"/>
-		<constructor-arg index="1" value="597926990:AAEhQuOXQTS3lYTDNVdL29QAuY5oOZvn3gk"/>
+		<constructor-arg index="1" value="#{telegram['coin.elf.bot.token']}"/>
 		<constructor-arg index="2" value="cg_elf_bot"/>
 	</bean>
 	

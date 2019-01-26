@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_ICX" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_ICX"/>
-		<constructor-arg index="1" value="600690548:AAEiEAvOTs693GErGQrGgD25FltP1OLNjgw"/>
+		<constructor-arg index="1" value="#{telegram['coin.icx.bot.token']}"/>
 		<constructor-arg index="2" value="cg_icx_bot"/>
 	</bean>
 	

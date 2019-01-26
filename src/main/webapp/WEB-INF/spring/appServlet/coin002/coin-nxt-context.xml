@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_NXT" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_NXT"/>
-		<constructor-arg index="1" value="586358237:AAEXtzdZbn5_Rh7jct9hHqTFAZCOeOcpQPg"/>
+		<constructor-arg index="1" value="#{telegram['coin.nxt.bot.token']}"/>
 		<constructor-arg index="2" value="cg_nxt_bot"/>
 	</bean>
 	

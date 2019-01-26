@@ -15,7 +15,6 @@
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin004/coin-icx-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin001/coin-btg-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin002/coin-nxt-context.xml</config>
-		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-storm-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin005/coin-iota-context.xml</config>
 	</configs>
 	<autoconfigs>

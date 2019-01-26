@@ -8,4 +8,5 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		
 	<util:properties id="constants" location="classpath:env/constants.properties" />
+	<util:properties id="telegram" location="classpath:env/telegram.properties" />
 </beans>

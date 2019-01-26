@@ -18,6 +18,8 @@
 	            <ref bean="TelegramBot_OMG" />
 				<ref bean="TelegramBot_XRP" />
 				<ref bean="TelegramBot_XVG" />
+				<ref bean="TelegramBot_BSV" />
+				<ref bean="TelegramBot_DASH" />
 	        </list>
         </constructor-arg>
 	</bean>

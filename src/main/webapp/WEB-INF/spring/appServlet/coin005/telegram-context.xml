@@ -18,6 +18,8 @@
 	            <ref bean="TelegramBot_RDD" />
 	            <ref bean="TelegramBot_VEN" />
 	            <ref bean="TelegramBot_ZIL" />
+	            <ref bean="TelegramBot_CAP" />
+	            <ref bean="TelegramBot_NPXS" />
 	        </list>
         </constructor-arg>
 	</bean>

@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_XVG" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_XVG"/>
-		<constructor-arg index="1" value="588363986:AAEcHJ9z4TOku8lXbErum9wbvutluL9NCKQ"/>
+		<constructor-arg index="1" value="#{telegram['coin.xvg.bot.token']}"/>
 		<constructor-arg index="2" value="cg_xvg_bot"/>
 	</bean>
 	

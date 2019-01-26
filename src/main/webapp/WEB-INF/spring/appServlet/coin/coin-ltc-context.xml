@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_LTC" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_LTC"/>
-		<constructor-arg index="1" value="552662669:AAG9HTIwqg3J217KLCqK9twB3NaOtD9qByM"/>
+		<constructor-arg index="1" value="#{telegram['coin.ltc.bot.token']}"/>
 		<constructor-arg index="2" value="cg_ltc_bot"/>
 	</bean>
 	

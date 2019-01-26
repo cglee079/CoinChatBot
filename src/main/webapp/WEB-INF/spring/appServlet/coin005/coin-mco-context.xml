@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_MCO" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_MCO"/>
-		<constructor-arg index="1" value="607315746:AAFaX2sHNDEqkqdPpKP4aesPcavI627FjHk"/>
+		<constructor-arg index="1" value="#{telegram['coin.mco.bot.token']}"/>
 		<constructor-arg index="2" value="cg_mco_bot"/>
 	</bean>
 	

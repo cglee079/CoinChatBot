@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_RDD" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_RDD"/>
-		<constructor-arg index="1" value="600333809:AAG4nkjpPkjLDimca2WM4b56k9W6KivCSD4"/>
+		<constructor-arg index="1" value="#{telegram['coin.rdd.bot.token']}"/>
 		<constructor-arg index="2" value="cg_rdd_bot"/>
 	</bean>
 	

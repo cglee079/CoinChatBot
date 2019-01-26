@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_XLM" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_XLM"/>
-		<constructor-arg index="1" value="587169665:AAF3fkU10UvbyPkwEIX2iWbjwre6OBZmPhs"/>
+		<constructor-arg index="1" value="#{telegram['coin.xlm.bot.token']}"/>
 		<constructor-arg index="2" value="cg_xlm_bot"/>
 	</bean>
 	

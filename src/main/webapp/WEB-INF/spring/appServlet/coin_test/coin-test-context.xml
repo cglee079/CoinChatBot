@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_TEST" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_TEST"/>
-		<constructor-arg index="1" value="509885308:AAGqgiMXRfkXWeamsta6N0nFkF0d9I_SFOI"/>
+		<constructor-arg index="1" value="#{telegram['test.bot.token']}"/>
 		<constructor-arg index="2" value="changoos_bot"/>
 	</bean>
 	

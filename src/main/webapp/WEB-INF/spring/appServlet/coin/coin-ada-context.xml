@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_ADA" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_ADA"/>
-		<constructor-arg index="1" value="493072194:AAEmFhG8ZC9FaFEZaOI4-vFNcJZj3jeIVWI"/>
+		<constructor-arg index="1" value="#{telegram['coin.ada.bot.token']}"/>
 		<constructor-arg index="2" value="cg_ada_bot"/>
 	</bean>
 	

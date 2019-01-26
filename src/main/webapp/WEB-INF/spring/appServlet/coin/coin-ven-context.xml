@@ -15,7 +15,7 @@
 	
 	<bean id="TelegramBot_VEN" class="com.cglee079.coinchatbot.telegram.TelegramBot">
 		<constructor-arg index="0" ref="COIN_VEN"/>
-		<constructor-arg index="1" value="454467747:AAFN8SXW1X3_CX7LA7GP75vC6ODlV1sYg3I"/>
+		<constructor-arg index="1" value="#{telegram['coin.ven.bot.token']}"/>
 		<constructor-arg index="2" value="cg_ven_bot"/>
 	</bean>
 	
