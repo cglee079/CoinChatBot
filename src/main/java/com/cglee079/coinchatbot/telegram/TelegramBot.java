@@ -805,15 +805,14 @@ public class TelegramBot extends AbilityBot  {
 		}
 		
 		// * 비트대비 변화량을 제공하지 않는 거래소에 대해서 처리
-		if(marketId.isUSD() && marketId == Market.BITTREX || marketId == Market.OKEX) {
+		if(marketId.isUSD() && marketId == Market.BITTREX) {
 			if(marketId == Market.BITTREX) { msg.append(msgMaker.msgBTCNotSupportAPI(Market.BITTREX, lang)); }
-			if(marketId == Market.OKEX) { msg.append(msgMaker.msgBTCNotSupportAPI(Market.OKEX, lang)); }
 			
 			marketId = null;
 			Market temp = null;
 			for(int i = 0; i < enabledMarketIds.size(); i++) {
 				temp = enabledMarketIds.get(i);
-				if(temp.isUSD() && temp != Market.BITTREX && temp != Market.OKEX) {
+				if(temp.isUSD() && temp != Market.BITTREX) {
 					msg.append(msgMaker.msgBTCReplaceAnotherMarket(temp, lang));
 					marketId = temp;
 					break;

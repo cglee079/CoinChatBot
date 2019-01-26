@@ -48,7 +48,7 @@ public class CashierestPooler extends ApiPooler{
 			JSONObject responseObj = null;
 			try {
 				response = httpClient.get(url);
-				responseObj = new JSONObject(response.substring(2, response.length()));
+				responseObj = new JSONObject(response.substring(response.indexOf("{"), response.length()));
 				
 				coinObjs = responseObj.getJSONObject("Cashierest");
 				
