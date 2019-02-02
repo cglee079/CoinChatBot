@@ -66,7 +66,7 @@ public class TimelyScheduler {
 	}
 	
 	/* 매 시간 주기로 코인 가격정보를 가져옴  -> DB 삽입*/
-	@Scheduled(cron = "02 00 0/1 * * *")
+	@Scheduled(cron = "02 05 0/1 * * *")
 	public void loadTimelyCoins(){
 		Date dateCurrent = new Date();
 		

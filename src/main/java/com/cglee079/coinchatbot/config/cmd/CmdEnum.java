@@ -9,6 +9,10 @@ public interface CmdEnum {
 	public static <E extends Enum<E> & CmdEnum> E from(E[] values, Lang lang, String str, E dfalt) {
 		E rs = null;
 		
+		if(lang == null) {
+			return null;
+		}
+		
 		switch(lang) {
 		case KR : 
 			for (E b : values) {

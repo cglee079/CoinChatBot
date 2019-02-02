@@ -1,5 +1,6 @@
 package com.cglee079.coinchatbot.telegram;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,12 +14,16 @@ import javax.annotation.PostConstruct;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.abilitybots.api.bot.AbilityBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.ResponseParameters;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
 
 import com.cglee079.coinchatbot.coin.CoinManager;
 import com.cglee079.coinchatbot.config.cmd.DayloopCmd;
@@ -38,7 +43,7 @@ import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientVo;
 import com.cglee079.coinchatbot.model.CoinMarketConfigVo;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
-import com.cglee079.coinchatbot.service.ClientMsgService;
+import com.cglee079.coinchatbot.service.ClientMessgeService;
 import com.cglee079.coinchatbot.service.ClientService;
 import com.cglee079.coinchatbot.service.ClientSuggestService;
 import com.cglee079.coinchatbot.service.CoinConfigService;
@@ -47,6 +52,8 @@ import com.cglee079.coinchatbot.service.CoinMarketConfigService;
 import com.cglee079.coinchatbot.service.CoinWalletService;
 import com.cglee079.coinchatbot.util.TimeStamper;
 
+import javafx.util.Callback;
+
 public class TelegramBot extends AbilityBot  {
 	private Coin myCoinId = null;
 	
@@ -54,7 +61,7 @@ public class TelegramBot extends AbilityBot  {
 	private ClientService clientService;
 	
 	@Autowired
-	private ClientMsgService clientMsgService;
+	private ClientMessgeService clientMsgService;
 	
 	@Autowired
 	private ClientSuggestService clientSuggestService;
@@ -927,12 +934,25 @@ public class TelegramBot extends AbilityBot  {
 		} 
 		
 		try {
-			sender.execute(sendMessage);
+			this.sender.executeAsync(sendMessage, new SentCallback<Message>() {
+
+				@Override
+				public void onError(BotApiMethod<Message> arg0, TelegramApiRequestException e) {
+					Log.i("To Client Error\t:\t" + myCoinId +  "\t[id :" + userId + " ]  에게 메세지를 보낼 수 없습니다.  :" + e.getMessage());
+					e.printStackTrace();
+					clientService.increaseErrCnt(myCoinId, userId);
+				}
+
+				@Override
+				public void onException(BotApiMethod<Message> arg0, Exception e) {
+				}
+
+				@Override
+				public void onResult(BotApiMethod<Message> arg0, Message arg1) {
+				}
+			});
 		} catch (TelegramApiException e) {
-			Log.i("To Client Error\t:\t" + myCoinId +  "\t[id :" + userId + " ]  에게 메세지를 보낼 수 없습니다.  :" + e.getMessage());
 			e.printStackTrace();
-			clientService.increaseErrCnt(myCoinId, userId);
-			return ;
 		}
 		
 	}

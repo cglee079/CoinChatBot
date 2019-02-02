@@ -1,0 +1,26 @@
+.wp-message-stat {
+	padding: 10px;
+	height: calc(100% - var(--nav-height) - 20px);
+	display : flex;
+}
+
+.wrap-msg-datagrid{
+	width : 85%;
+}
+
+.msg-datagrid{
+	margin-bottom : 30px;
+	width : 100%;
+	height : 40%;
+}
+
+.wrap-msg-menu{
+	flex : 1;
+	margin-left : 10px;
+	border : 1px solid #BBC;
+}
+
+.msg-menu-clear{
+	display : inline-block;
+	text-align: center;
+}

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ClientSuggestVo {
+	private int row;
 	private int seq;
 	private String userId;
 	private Coin coinId;

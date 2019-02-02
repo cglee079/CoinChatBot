@@ -1,0 +1,8 @@
+.wp-suggest-list {
+	padding: 10px;
+	height : calc(100% - var(--nav-height) - 20px);
+}
+
+.wrap-dg{
+	height : 100%;
+}

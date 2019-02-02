@@ -1,0 +1,41 @@
+.wp-post {
+	display: flex;
+	padding: 10px;
+	height: 90%;
+}
+
+.wrap-message-area {
+	padding: 0px 10px;
+	width: 300px;
+	height: 100%;
+}
+
+.wrap-message-area .message-area {
+	width: 100%;
+	height: 50%;
+}
+
+.wrap-search-opt {
+	border: 1px solid #BBC;
+	padding: 10px 5px;
+	margin-bottom: 10px;
+}
+
+.search-opt tr td {
+	width: 100px;
+	padding: 3px 5px;
+}
+
+.search-opt input, .search-opt select {
+	width: 200px;
+	min-width : 200px;
+	height: 20px;
+}
+
+.btn.send{
+	display: inline-block;
+	margin-left: auto;
+}
+.wrap-user-list {
+	flex: 1;
+}

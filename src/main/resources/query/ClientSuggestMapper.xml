@@ -4,6 +4,26 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cglee079.coinchatbot.mapper.ClientSuggestMapper">
 
+	<select id="count" resultType="Integer" parameterType="map">
+		SELECT 
+			count(*)
+		FROM TB_COINBOT_CLIENT_SUGGEST
+	</select>
+	
+	<select id="list" resultType="ClientSuggestVo" parameterType="map">
+		SELECT 
+		@rownum:=@rownum+1 as 'row',
+		SUGST_SEQ as 'seq',
+		COIN_ID as 'coinId',
+		CLNT_USERID as 'userId',
+		CLNT_USERNAME as 'username',
+		SUGST_CONTENTS as 'contents',
+		SUGST_DATE as 'date'
+		FROM TB_COINBOT_CLIENT_SUGGEST, (SELECT @rownum:=0) TMP
+		ORDER BY SUGST_DATE DESC
+		LIMIT ${stRow}, ${rows}
+	</select>
+	
 	<insert id="insert">
 		INSERT INTO TB_COINBOT_CLIENT_SUGGEST (
 			COIN_ID,
@@ -20,5 +40,11 @@
 			#{date}
 		)
 	</insert>
+	
+	<select id="delete" resultType="Integer">
+		DELETE 
+		FROM TB_COINBOT_CLIENT_SUGGEST
+		WHERE SUGST_SEQ = #{seq}
+	</select>
 	
 </mapper>

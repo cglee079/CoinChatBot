@@ -10,14 +10,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRem
 import com.cglee079.coinchatbot.config.cmd.MarketCmd;
 import com.cglee079.coinchatbot.config.id.Lang;
 import com.cglee079.coinchatbot.config.id.Market;
-import com.cglee079.coinchatbot.keyboard.ConfirmStopKeyboard;
-import com.cglee079.coinchatbot.keyboard.MainKeyboard_KR;
-import com.cglee079.coinchatbot.keyboard.MainKeyboard_US;
-import com.cglee079.coinchatbot.keyboard.PreferenceKeyboard;
-import com.cglee079.coinchatbot.keyboard.SetDayloopKeyboard;
-import com.cglee079.coinchatbot.keyboard.SetLanguageKeyboard;
-import com.cglee079.coinchatbot.keyboard.SetMarketKeyboard;
-import com.cglee079.coinchatbot.keyboard.SetTimeloopKeyboard;
+import com.cglee079.coinchatbot.telegram.keyboard.ConfirmStopKeyboard;
+import com.cglee079.coinchatbot.telegram.keyboard.MainKeyboard_KR;
+import com.cglee079.coinchatbot.telegram.keyboard.MainKeyboard_US;
+import com.cglee079.coinchatbot.telegram.keyboard.PreferenceKeyboard;
+import com.cglee079.coinchatbot.telegram.keyboard.SetDayloopKeyboard;
+import com.cglee079.coinchatbot.telegram.keyboard.SetLanguageKeyboard;
+import com.cglee079.coinchatbot.telegram.keyboard.SetMarketKeyboard;
+import com.cglee079.coinchatbot.telegram.keyboard.SetTimeloopKeyboard;
 
 public class KeyboardManager {
 

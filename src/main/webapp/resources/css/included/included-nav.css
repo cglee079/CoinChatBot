@@ -1,0 +1,22 @@
+.nav {
+	width: 100%;
+	height: var(--nav-height);
+	box-shadow: 0px 0px 1px 2px #555;
+}
+
+.nav-menu {
+	height : 100%;
+	display: flex;
+	align-items: center;
+	background: #333;
+	color : #FFF;
+}
+
+.nav-menu-item {
+	margin: 0px 20px;
+}
+
+.nav-menu-item.on{
+	font-weight: bold;
+}
+

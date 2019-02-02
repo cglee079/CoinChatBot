@@ -7,6 +7,7 @@
 	<resultMap type="ClientVo" id="clientResultMap">
 		<id property="coinId" column="COIN_ID" />
 		<id property="userId" column="CLNT_USERID"/>
+		<result  property="row" column="row" />
 		<result  property="marketId" column="MARKET_CD" />
 		<result  property="username" column="CLNT_USERNAME"/>
 		<result  property="localtime" column="CLNT_LOCTIME"/>
@@ -35,7 +36,125 @@
 		AND CLNT_USERID = #{userId}
 	</select>
 	
-	<select id="S01" resultMap="clientResultMap" parameterType="map">
+	<select id="count" resultType="Integer" parameterType="map">
+		SELECT 
+			count(*)
+			FROM TB_COINBOT_CLIENT
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		<if test="coinId != null and coinId != ''">
+			AND COIN_ID = #{coinId}
+		</if>
+		<if test="userId != null and userId != ''">
+			AND CLNT_USERID = #{userId}
+		</if>
+		<if test="username  != null and username != ''">
+			AND CLNT_USERNAME = #{username}
+		</if>
+		<if test="language  != null and language != ''">
+			AND CLNT_LANG = #{language}
+		</if>
+		<if test="marketId  != null and marketId != ''">
+			AND MARKET_CD = #{marketId}
+		</if>
+		<if test="stateId  != null and stateId != ''">
+			AND CLNT_STATECD = #{stateId}
+		</if>
+		<if test="enabled  != null and enabled != ''">
+			AND CLNT_ENABLED = #{enabled}
+		</if>
+		<if test="openDate  != null and openDate != ''">
+			<![CDATA[AND OPEN_DATE like CONCAT(#{openDate},'%')]]>
+		</if>
+		
+		<choose>
+			<when test="msgDate1 != null and msgDate1 != '' 
+						and (msgDate2 == null or msgDate2 == '')">
+				<![CDATA[AND LA_MSG_DATE like '${msgDate1}%']]>
+			</when>
+			<when test="msgDate1 != null and msgDate1 != '' 
+						and msgDate2 != null and msgDate2 != ''">
+				<![CDATA[AND LA_MSG_DATE >= #{msgDate1}]]>
+				<![CDATA[AND LA_MSG_DATE <= #{msgDate2}]]>
+			</when>
+		</choose>
+		</trim>
+	</select>
+	
+	<select id="list" resultMap="clientResultMap" parameterType="map">
+		SELECT 
+			@rownum:=@rownum+1 as 'row',
+			A.*
+		FROM 
+			TB_COINBOT_CLIENT A, 
+			(SELECT @rownum:=0) TMP
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		
+		<if test="coinId != null and coinId != ''">
+			AND COIN_ID = #{coinId}
+		</if>
+		<if test="userId != null and userId != ''">
+			AND CLNT_USERID = #{userId}
+		</if>
+		<if test="username != null and username != ''">
+			AND CLNT_USERNAME = #{username}
+		</if>
+		<if test="language != null and language != ''">
+			AND CLNT_LANG = #{language}
+		</if>
+		<if test="marketId != null and marketId != ''">
+			AND MARKET_CD = #{marketId}
+		</if>
+		<if test="stateId != null and stateId != ''">
+			AND CLNT_STATECD = #{stateId}
+		</if>
+		<if test="enabled != null and enabled != ''">
+			AND CLNT_ENABLED = #{enabled}
+		</if>
+		<if test="openDate  != null and openDate != ''">
+			<![CDATA[AND OPEN_DATE like CONCAT(#{openDate},'%')]]>
+		</if>
+		
+		<choose>
+			<when test="msgDate1 != null and msgDate1 != '' 
+						and (msgDate2 == null or msgDate2 == '')">
+				<![CDATA[AND LA_MSG_DATE like '${msgDate1}%']]>
+			</when>
+			<when test="msgDate1 != null and msgDate1 != '' 
+						and msgDate2 != null and msgDate2 != ''">
+				<![CDATA[AND LA_MSG_DATE >= #{msgDate1}]]>
+				<![CDATA[AND LA_MSG_DATE <= #{msgDate2}]]>
+			</when>
+		</choose>
+		</trim>
+		
+		<choose>
+			<when test="sort != null and sort == 'coinId'"> ORDER BY COIN_ID ${order}</when>
+			<when test="sort != null and sort == 'userId'"> ORDER BY CLNT_USERID ${order}</when>
+			<when test="sort != null and sort == 'username'"> ORDER BY CLNT_USERNAME ${order}</when>
+			<when test="sort != null and sort == 'marketId'"> ORDER BY MARKET_CD ${order}</when>
+			<when test="sort != null and sort == 'lang'"> ORDER BY CLNT_LANG ${order}</when>
+			<when test="sort != null and sort == 'stateId'"> ORDER BY CLNT_STATECD ${order}</when>
+			<when test="sort != null and sort == 'dayloop'"> ORDER BY ALERT_DAYLOOP ${order}</when>
+			<when test="sort != null and sort == 'timeloop'"> ORDER BY ALERT_TIMELOOP ${order}</when>
+			<when test="sort != null and sort == 'invest'"> ORDER BY CLNT_INVEST ${order}</when>
+			<when test="sort != null and sort == 'coinCnt'"> ORDER BY CLNT_COINCNT ${order}</when>
+			<when test="sort != null and sort == 'enabled'"> ORDER BY CLNT_ENABLED ${order}</when>
+			<when test="sort != null and sort == 'openDate'"> ORDER BY OPEN_DATE ${order}</when>
+			<when test="sort != null and sort == 'reopenDate'"> ORDER BY REOPEN_DATE ${order}</when>
+			<when test="sort != null and sort == 'closeDate'"> ORDER BY CLOSE_DATE ${order}</when>
+			<when test="sort != null and sort == 'laMsgDate'"> ORDER BY LA_MSG_DATE ${order}</when>
+			<otherwise>
+				ORDER BY CLNT_USERID ASC, COIN_ID ASC
+			</otherwise>
+		</choose>
+		
+		<if test="stRow != null">
+			LIMIT ${stRow}, ${rows}
+		</if>
+	</select>
+	
+	
+	<select id="listAlertLoop" resultMap="clientResultMap" parameterType="map">
 		/* 거래소, 시간주기, 일일주기 별 사용자 리스트 */
 		SELECT 
 			*
@@ -54,7 +173,7 @@
 		</if>
 	</select>
 	
-	<select id="S02" resultMap="clientResultMap" parameterType="map">
+	<select id="listAlertTargetUp" resultMap="clientResultMap" parameterType="map">
 		/* 목표가격 현재가 이상 설정, 사용자 리스트*/
 		SELECT 
 			*
@@ -67,7 +186,7 @@
 	</select>
 	
 	
-	<select id="S03" resultMap="clientResultMap" parameterType="map">
+	<select id="listAlertTargetDown" resultMap="clientResultMap" parameterType="map">
 		/* 목표가격 현재가 이하 설정, 사용자 리스트 */
 		SELECT 
 			*
@@ -185,4 +304,38 @@
 		AND CLNT_USERID = #{userId}
 	</update>
 	
+	<!-- 통계 관련  -->
+	<select id="countChat" resultType="Integer" parameterType="map">
+		SELECT count(CLNT_USERID)
+		FROM TB_COINBOT_CLIENT
+		WHERE 1 = 1
+		<if test="enabled != null">
+			AND CLNT_ENABLED = #{enabled}
+		</if>
+	</select>
+	
+	<select id="countUser" resultType="Integer" parameterType="map">
+		SELECT count(distinct CLNT_USERID)
+		FROM TB_COINBOT_CLIENT
+		WHERE 1 = 1
+		<if test="enabled != null">
+			AND CLNT_ENABLED = #{enabled}
+		</if>
+	</select>
+	
+	<select id="countNewClientInToday" resultType="map" >
+		SELECT 
+		   DATE_FORMAT(OPEN_DATE, '%Y-%m-%d') as 'date', count(distinct CLNT_USERID) as 'count'
+		FROM TB_COINBOT_CLIENT
+		GROUP BY date
+		ORDER BY date desc
+	</select>
+	
+	<select id="countNewClientInTomonth" resultType="map">
+		SELECT 
+		   DATE_FORMAT(OPEN_DATE, '%Y-%m') as 'date', count(distinct CLNT_USERID) as 'count'
+		FROM TB_COINBOT_CLIENT
+		GROUP BY date
+		ORDER BY date desc	
+	</select>
 </mapper>

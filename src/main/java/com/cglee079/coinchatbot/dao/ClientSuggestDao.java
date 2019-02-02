@@ -1,5 +1,8 @@
 package com.cglee079.coinchatbot.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -14,6 +17,14 @@ public class ClientSuggestDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
+	public int count(Map<String, Object> map) {
+		return sqlSession.selectOne(namespace + ".count", map);
+	}
+	
+	public List<ClientSuggestVo> paging(Map<String, Object> map) {
+		return sqlSession.selectList(namespace + ".list", map);
+	}
+
 	public boolean insert(ClientSuggestVo clientSuggest){
 		try { return sqlSession.insert(namespace + ".insert", clientSuggest) == 1; }
 		catch (Exception e){
@@ -23,4 +34,8 @@ public class ClientSuggestDao {
 		}
 	}
 
+	public int delete(int seq) {
+		return sqlSession.delete(namespace + ".delete", seq);
+	}
+	
 }

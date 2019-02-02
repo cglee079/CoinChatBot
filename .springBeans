@@ -16,12 +16,20 @@
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin001/coin-btg-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin002/coin-nxt-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin005/coin-iota-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/telegram-context.xml</config>
 	</configs>
 	<autoconfigs>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/service-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-xlm-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/dao-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-sc-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/security-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/coin_test/coin-test-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-snt-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-trx-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/coin-qtum-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/coin003/telegram-context.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/root-context.xml</config>
 	</autoconfigs>
 	<configSets>

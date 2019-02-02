@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ClientVo {
+	private int row;
 	private Coin coinId;
 	private String userId;
 	private String username;

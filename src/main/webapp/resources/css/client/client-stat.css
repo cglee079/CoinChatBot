@@ -1,0 +1,79 @@
+.wp-client-stat {
+	padding: 10px;
+	height: calc(100% - var(--nav-height) - 20px);
+}
+
+.wrap-client-info{
+	display: flex;
+	border : 1px solid #248;
+	margin : 10px;
+}
+
+.info-block{
+	flex : 1;
+	padding : 20px;
+}
+
+.client-info{
+	display: flex;
+	margin-bottom : 10px;
+}
+
+.client-info-title {
+	width : 200px;
+}
+
+.client-info-count {
+	min-width : 100px;
+	color : #24A;
+	text-align: right;
+}
+
+.wrap-client-data{
+	display: flex;
+	height : 50%;
+}
+
+.client-data-day{
+	flex : 1;
+	margin : 0px 10px;
+	height: 100%;
+}
+
+.client-data-month{
+	flex : 1;
+	margin : 0px 10px;
+	height: 100%;
+}
+
+.wrap-message-area {
+	padding: 0px 10px;
+	width: 500px;
+	height: 100%;
+}
+
+.wrap-message-area .message-area {
+	width: 100%;
+	height: 50%;
+}
+
+.wrap-search-opt {
+	border: 1px solid #BBC;
+	padding: 10px 5px;
+	margin-bottom: 10px;
+}
+
+.search-opt tr td {
+	width: 100px;
+	padding: 3px 5px;
+}
+
+.search-opt input, .search-opt select {
+	width: 200px;
+	min-width : 200px;
+	height: 20px;
+}
+
+.wrap-user-list {
+	flex: 1;
+}

@@ -1,0 +1,32 @@
+.wp-message-list {
+	padding: 10px;
+	height : calc(100% - var(--nav-height) - 20px);
+	
+	display: flex;
+	flex-flow : column nowrap;
+}
+
+.wrap-search-opt {
+	border: 1px solid #BBC;
+	padding: 10px 5px;
+	margin-bottom: 10px;
+}
+
+.wrap-dg{
+	flex : 1;
+}
+
+.search-opt tr td {
+	min-width: 100px;
+	padding: 3px 5px;
+}
+
+.search-opt input, .search-opt select {
+	width: 200px;
+	height: 20px;
+}
+
+.search-menu {
+	display: flex;
+	justify-content: flex-end;
+}

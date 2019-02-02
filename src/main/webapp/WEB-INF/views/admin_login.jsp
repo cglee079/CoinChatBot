@@ -9,7 +9,13 @@
 	
 	.wrap-form{
 		height : 100%;
-		text-align: center;
+		display : flex;
+		justify-content : center;
+		align-items : center;
+	}
+	
+	.title{
+		color : #24A;
 	}
 	
 	.tb-admin-login{
@@ -24,9 +30,10 @@
 
 <body>
 	<div class="wrapper">
-		<div class="wrap-form row-center">
+		<div class="wrap-form">
 			<form id="form-admin-login" action="${pageContext.request.contextPath}/j_spring_security_check" method="post">
-				<h1>ADMIN</h1>
+				<h1 class="title">Coin.CHATBOT</h1>
+				
 				<table class="tb-admin-login">
 				<tr>
 				<td>USERNAME</td>

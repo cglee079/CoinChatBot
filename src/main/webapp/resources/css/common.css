@@ -1,0 +1,62 @@
+:root{
+	--nav-height: 40px;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.btn {
+	padding: 5px 30px;
+	color: #FFF;
+	background: #444;
+	margin: 10px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+/* easyui - grid */
+.grid-invalid-userid{
+	color : #F00;
+	font-weight: bold;
+	text-decoration: line-through;
+}
+
+.grid-valid-userid{
+	cursor: pointer;
+	color : #00F;
+	text-decoration: underline;
+}
+
+.grid-valid-userid:hover{
+	color : #00F;
+	font-weight: bold;
+}
+
+/** Grid-Btn **/
+.grid-btn-save{
+	color : blue;
+	font-weight : bold;
+	text-decoration: underline;
+}
+
+.grid-btn-cancle{
+	color : #000;
+	text-decoration: underline;
+}
+
+.grid-btn-modify{
+	color : #000;
+	text-decoration: underline;
+}
+
+.grid-btn-delete{
+	color : red;
+	text-decoration: underline;
+}

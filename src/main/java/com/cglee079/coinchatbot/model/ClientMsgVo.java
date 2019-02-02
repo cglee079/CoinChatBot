@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ClientMsgVo {
+	private int row;
 	private int seq;
 	private Coin coinId;
 	private String userId;
