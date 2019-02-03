@@ -1,6 +1,5 @@
 package com.cglee079.coinchatbot.telegram;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -17,7 +17,6 @@ import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.ResponseParameters;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -33,26 +32,33 @@ import com.cglee079.coinchatbot.config.cmd.PrefCmd;
 import com.cglee079.coinchatbot.config.cmd.PrefLangCmd;
 import com.cglee079.coinchatbot.config.cmd.SendMessageCmd;
 import com.cglee079.coinchatbot.config.cmd.StopConfirmCmd;
+import com.cglee079.coinchatbot.config.cmd.TargetDelCmd;
+import com.cglee079.coinchatbot.config.cmd.TargetSetCmd;
 import com.cglee079.coinchatbot.config.cmd.TimeloopCmd;
 import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.config.id.Lang;
 import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.config.id.MenuState;
+import com.cglee079.coinchatbot.config.id.TargetFocus;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 import com.cglee079.coinchatbot.log.Log;
+import com.cglee079.coinchatbot.model.ClientTargetVo;
 import com.cglee079.coinchatbot.model.ClientVo;
+import com.cglee079.coinchatbot.model.CoinConfigVo;
 import com.cglee079.coinchatbot.model.CoinMarketConfigVo;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
 import com.cglee079.coinchatbot.service.ClientMessgeService;
 import com.cglee079.coinchatbot.service.ClientService;
 import com.cglee079.coinchatbot.service.ClientSuggestService;
+import com.cglee079.coinchatbot.service.ClientTargetService;
 import com.cglee079.coinchatbot.service.CoinConfigService;
 import com.cglee079.coinchatbot.service.CoinInfoService;
 import com.cglee079.coinchatbot.service.CoinMarketConfigService;
 import com.cglee079.coinchatbot.service.CoinWalletService;
+import com.cglee079.coinchatbot.telegram.keyboard.KeyboardManager;
+import com.cglee079.coinchatbot.telegram.message.MessageMaker;
+import com.cglee079.coinchatbot.util.NumberFormmater;
 import com.cglee079.coinchatbot.util.TimeStamper;
-
-import javafx.util.Callback;
 
 public class TelegramBot extends AbilityBot  {
 	private Coin myCoinId = null;
@@ -65,6 +71,9 @@ public class TelegramBot extends AbilityBot  {
 	
 	@Autowired
 	private ClientSuggestService clientSuggestService;
+	
+	@Autowired
+	private ClientTargetService clientTargetService;
 	
 	@Autowired
 	private CoinInfoService coinInfoService;
@@ -82,6 +91,7 @@ public class TelegramBot extends AbilityBot  {
 	private CoinManager coinManager;
 	
 	private KeyboardManager km;
+	private NumberFormmater nf;
 	private MessageMaker 	msgMaker;
 	private HashMap<Market, Boolean> inBtcs;
 	private List<Market> enabledMarketIds;
@@ -104,8 +114,15 @@ public class TelegramBot extends AbilityBot  {
 			enabledMarketIds.add(configMarket.getMarketId());
 		}
 		
+		
+		CoinConfigVo config	= coinConfigService.get(myCoinId);
+		int digitKRW 	= config.getDigitKRW();
+		int digitUSD 	= config.getDigitUSD();
+		int digitBTC 	= config.getDigitBTC();
+		nf = new NumberFormmater(digitKRW, digitUSD, digitBTC);
+		
 		km 				= new KeyboardManager(enabledMarketIds);
-		msgMaker		= new MessageMaker(myCoinId, coinConfigService.get(myCoinId), inBtcs);
+		msgMaker		= new MessageMaker(myCoinId, config, nf, inBtcs);
 	}
 	
 	@Override
@@ -113,6 +130,7 @@ public class TelegramBot extends AbilityBot  {
 		return 503609560;
 	}
 
+	/** 사용자로부터 받은 메세지 처리*/
 	@Override
 	public void onUpdateReceived(Update update) {
 		clientMsgService.insert(myCoinId, update);
@@ -156,6 +174,7 @@ public class TelegramBot extends AbilityBot  {
 			return ;
 		} 
 		
+		//사용자 메뉴 상태에 따른 로직
 		Lang lang 	= client.getLang();
 		MenuState stateId 	= client.getStateId();
 		Market marketId	= client.getMarketId();
@@ -165,7 +184,9 @@ public class TelegramBot extends AbilityBot  {
 			case SET_DAYLOOP 	: handleSetDayloop(userId, messageId, cmd, lang); break;
 			case SET_TIMELOOP 	: handleSetTimeloop(userId, messageId, cmd, lang); break;
 			case SET_MARKET 	: handleSetMarket(userId, messageId, cmd, lang); break;
-			case SET_TARGET 	: handleSetTarget(userId, messageId, cmd, lang); break;
+			case SET_TARGET 	: handleSetTarget(userId, messageId, cmd, marketId, lang); break;
+			case ADD_TARGET		: handleAddTarget(userId, messageId, cmd, lang); break;
+			case DEL_TARGET		: handleDelTarget(userId, messageId, cmd, marketId, lang); break;
 			case SET_INVEST 	: handleSetPrice(userId, messageId, cmd, marketId, lang); break;
 			case SET_COINCNT 	: handleSetNumber(userId, messageId, cmd, lang); break;
 			case SEND_MSG 		: handleSendMsg(userId, username, messageId, cmd, lang); break;
@@ -207,6 +228,7 @@ public class TelegramBot extends AbilityBot  {
 			
 		case SHOW_SETTING: //설정정보
 			sendMessage(userId, messageId, messageInfo(userId), km.getMainKeyboard(lang));
+			sendMessage(userId, messageId, msgMaker.showTargetList(lang, marketId, clientTargetService.list(myCoinId, userId)), km.getMainKeyboard(lang));
 			break;
 			
 		case COIN_LIST: //타 코인 알리미
@@ -240,7 +262,7 @@ public class TelegramBot extends AbilityBot  {
 			break;
 		
 		case SET_TARGET: // 목표가 설정
-			sendMessage(userId, messageId, msgMaker.explainTargetPriceSet(lang, marketId), km.getDefaultKeyboard());
+			sendMessage(userId, messageId, msgMaker.showTargetList(lang, marketId, clientTargetService.list(myCoinId, userId)), km.getSetTargetKeyboard(lang));
 			stateId = MenuState.SET_TARGET;
 			break;
 			
@@ -279,7 +301,7 @@ public class TelegramBot extends AbilityBot  {
 		
 		}
 		
-		clientService.updateState(myCoinId, userId.toString(), stateId);
+		clientService.updateStateId(myCoinId, userId.toString(), stateId);
 	}
 
 	
@@ -311,7 +333,7 @@ public class TelegramBot extends AbilityBot  {
 		msg.append(msgMaker.msgToMain(lang));
 		
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(lang));
-		clientService.updateState(myCoinId, userId.toString(), MenuState.MAIN);
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
 	}
 	
 	/* 시간 알림 설정 응답 처리 */
@@ -342,7 +364,7 @@ public class TelegramBot extends AbilityBot  {
 		msg.append(msgMaker.msgToMain(lang));
 		
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(lang));
-		clientService.updateState(myCoinId, userId.toString(), MenuState.MAIN);
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
 	}
 	
 	/* 마켓 설정 응답 처리 */
@@ -359,36 +381,46 @@ public class TelegramBot extends AbilityBot  {
 			ClientVo client = clientService.get(myCoinId, userId);
 			Market currentMarket 		= client.getMarketId();
 			Double currentPrice 		= client.getInvest();
-			Double currentTargetUp 		= client.getTargetUp();
-			Double currentTargetDown	= client.getTargetDown();
 			double exchangeRate			= coinManager.getExchangeRate();
 			
 			Double changePrice 	 	= currentPrice;
-			Double changeTargetUp	= currentTargetUp;
-			Double changeTargetDown	= currentTargetDown;
 			
 			// 한화에서 달러 거래소로 변경시 환율에 따른 투자금액, 목표가격 변경
 			if(currentMarket.isKRW() && marketId.isUSD()) {
 				if(currentPrice != null) { changePrice = currentPrice / exchangeRate; }
-				if(currentTargetUp != null) { changeTargetUp = currentTargetUp / exchangeRate; }
-				if(currentTargetDown != null) { changeTargetDown = currentTargetDown / exchangeRate; }
 				
-				msg.append(msgMaker.msgMarketSetChangeCurrency(client, changePrice, changeTargetUp, changeTargetDown, marketId));
+				List<ClientTargetVo> currentTargets = clientTargetService.list(myCoinId, userId);
+				List<Double> currentTargetPrices = new ArrayList<>();
+				List<Double> changedTargetPrices = new ArrayList<>();
+				ClientTargetVo current;
+				for(int i = 0; i < currentTargets.size(); i++) {
+					current = currentTargets.get(i);
+					currentTargetPrices.add(current.getPrice());
+					changedTargetPrices.add(current.getPrice()/ exchangeRate);
+					clientTargetService.updatePrice(current , nf.formatPrice(current.getPrice() / exchangeRate, marketId));
+				}
+				msg.append(msgMaker.msgMarketSetChangeCurrency(client, changePrice, currentTargetPrices, changedTargetPrices, marketId));
 				
 			}
 			
 			// 달러에서 한화 거래소로 변경시 환율에 따른 투자금액, 목표가격 변경
 			if(currentMarket.isUSD() && marketId.isKRW()) {
 				if(currentPrice != null) { changePrice = currentPrice * exchangeRate; }
-				if(currentTargetUp != null) { changeTargetUp = currentTargetUp * exchangeRate; }
-				if(currentTargetDown != null) { changeTargetDown = currentTargetDown * exchangeRate; }
+				List<ClientTargetVo> currentTargets = clientTargetService.list(myCoinId, userId);
+				List<Double> currentTargetPrices = new ArrayList<>();
+				List<Double> changedTargetPrices = new ArrayList<>();
+				ClientTargetVo current;
+				for(int i = 0; i < currentTargets.size(); i++) {
+					current = currentTargets.get(i);
+					currentTargetPrices.add(current.getPrice());
+					changedTargetPrices.add(current.getPrice() * exchangeRate);
+					clientTargetService.updatePrice(current , nf.formatPrice(current.getPrice() * exchangeRate, marketId));
+				}
 				
-				msg.append(msgMaker.msgMarketSetChangeCurrency(client, changePrice, changeTargetUp, changeTargetDown, marketId));
+				msg.append(msgMaker.msgMarketSetChangeCurrency(client, changePrice, currentTargetPrices, changedTargetPrices, marketId));
 			}
 			
 			client.setInvest(changePrice);
-			client.setTargetUp(changeTargetUp);
-			client.setTargetDown(currentTargetDown);
 			client.setMarketId(marketId);
 			clientService.update(client);
 			
@@ -398,12 +430,42 @@ public class TelegramBot extends AbilityBot  {
 		msg.append(msgMaker.msgToMain(lang));
 		
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(lang));
-		clientService.updateState(myCoinId, userId.toString(), MenuState.MAIN);
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
 	}
 	
 	
+	private void handleSetTarget(Integer userId, Integer messageId, String cmd, Market marketId, Lang lang) {
+		TargetSetCmd inCmd = TargetSetCmd.from(lang, cmd);
+		
+		MenuState state = MenuState.MAIN;
+		switch(inCmd) {
+		case ADD:
+			sendMessage(userId, messageId, msgMaker.explainTargetAdd(lang, marketId), km.getDefaultKeyboard());
+			state = MenuState.ADD_TARGET;
+			break;
+		case DEL:
+			
+			List<ClientTargetVo> targets = clientTargetService.list(myCoinId, userId);
+			List<String> targetCmds = new ArrayList<String>();
+			ClientTargetVo target;
+			for(int i = 0; i < targets.size(); i++) {
+				target = targets.get(i);
+				targetCmds.add(nf.toMoneyStr(target.getPrice(), marketId) + " " + target.getFocus().getStr(lang));
+			}
+			
+			sendMessage(userId, messageId, msgMaker.explainTargetDel(lang, marketId), km.getDelTargetKeyboard(targetCmds, lang));
+			state = MenuState.DEL_TARGET;
+			break;
+		case OUT:
+		default : 
+			sendMessage(userId, messageId, msgMaker.msgToMain(lang), km.getMainKeyboard(lang));
+			break;
+		}
+		
+		clientService.updateStateId(myCoinId, userId.toString(), state);
+	}
 	/* 목표가 설정 응답 처리 */
-	private void handleSetTarget(Integer userId, Integer messageId, String cmd, Lang lang) {
+	private void handleAddTarget(Integer userId, Integer messageId, String cmd, Lang lang) {
 		ClientVo client = clientService.get(myCoinId, userId);
 		Market marketId = client.getMarketId();
 		StringBuilder msg = new StringBuilder("");
@@ -433,14 +495,7 @@ public class TelegramBot extends AbilityBot  {
 			//사용자의 입력이 유효한 패턴인지 검증.
 			if(priceStr.matches("^\\d*(\\.?\\d*)$")) {
 				targetPrice = Double.valueOf(priceStr);
-				
-				if (targetPrice == 0) {  // case4. 초기화
-					if(clientService.clearTargetPrice(myCoinId, userId.toString())) {
-						msg.append(msgMaker.msgTargetPriceInit(lang));
-					}
-				} else {
-					valid = true;
-				}
+				valid = true;
 				
 			} else if( priceStr.matches("^[+-]?\\d*(\\.?\\d*)%$")) {
 				if(priceStr.equals("%")) {
@@ -461,26 +516,33 @@ public class TelegramBot extends AbilityBot  {
 					double a = (currentValue * percent) * -1;
 					targetPrice = currentValue - a;
 				} else if( percent < -100) {
-					msg.append(msgMaker.warningTargetPriceSetPercent(lang));
+					msg.append(msgMaker.warningTargetPriceAddPercent(lang));
 				}
 				
 			} else {
-				msg.append(msgMaker.warningTargetPriceSetFormat(lang));
+				msg.append(msgMaker.warningTargetPriceAddFormat(lang));
 			}
 			
 			//유효한 입력을 했다면, DB 정보 갱신
 			if(valid) {
 				msg.append(msgMaker.msgTargetPriceSetResult(targetPrice, currentValue, marketId, lang));
+				
+				ClientTargetVo target = ClientTargetVo.builder()
+						.coinId(myCoinId)
+						.userId(userId.toString())
+						.price(nf.formatPrice(targetPrice, marketId))
+						.createDate(TimeStamper.getDateTime())
+						.build();
+				
 				if(targetPrice >= currentValue) {
-					if(!clientService.updateTargetUpPrice(myCoinId, userId.toString(), targetPrice)){
-						msg.delete(0, msg.length());
-						msg.append(msgMaker.warningNeedToStart(lang));
-					}
+					target.setFocus(TargetFocus.UP);
 				} else {
-					if(!clientService.updateTargetDownPrice(myCoinId, userId.toString(), targetPrice)){
-						msg.delete(0, msg.length());
-						msg.append(msgMaker.warningNeedToStart(lang));
-					}
+					target.setFocus(TargetFocus.DOWN);
+				}
+			
+				if(!clientTargetService.insert(target)){
+					msg.delete(0, msg.length());
+					msg.append(msgMaker.warningAlreadyTarget(lang));
 				}
 			}
 			
@@ -488,9 +550,38 @@ public class TelegramBot extends AbilityBot  {
 		
 		msg.append(msgMaker.msgToMain(lang));
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(lang));
-		clientService.updateState(myCoinId, userId.toString(), MenuState.MAIN);
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
 	}
 	
+	private void handleDelTarget(Integer userId, Integer messageId, String cmd, Market marketId, Lang lang) {
+		StringBuilder msg = new StringBuilder();
+		
+		TargetDelCmd inCmd = TargetDelCmd.from(lang, cmd);
+
+		switch(inCmd) {
+		case OUT:
+			break;
+		default : 
+			try{
+				Double price = Double.valueOf(cmd.replaceAll("[^-?0-9-?.]+", ""));
+				
+				if(clientTargetService.delete(myCoinId, userId.toString(), price)) {
+					msg.append(msgMaker.msgCompleteDelTarget(price, marketId, lang));
+				}else {
+					throw new NumberFormatException();
+				}
+				
+			} catch(NumberFormatException e) {
+				msg.append(msgMaker.warningTargetPriceDelFormat(lang));
+			}
+			break;
+		}
+		
+		msg.append(msgMaker.msgToMain(lang));
+		sendMessage(userId, messageId,  msg.toString(), km.getMainKeyboard(lang));
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
+		
+	}
 	
 	/* 투자 금액 설정 응답 처리 */
 	private void handleSetPrice(Integer userId, Integer messageId, String cmd, Market marketId, Lang lang) {
@@ -500,7 +591,7 @@ public class TelegramBot extends AbilityBot  {
 
 		try { // case1. 평균단가에 문자가 포함될때
 			price = Double.parseDouble(priceStr);
-			if(clientService.updatePrice(myCoinId, userId.toString(), price)){
+			if(clientService.updateInvest(myCoinId, userId.toString(), price)){
 				if (price == 0) { msg.append(msgMaker.msgPriceInit(lang));} // case2. 초기화
 				else {msg.append(msgMaker.msgPriceSet(price, marketId, lang));} // case3.설정완료
 			} else{
@@ -513,7 +604,7 @@ public class TelegramBot extends AbilityBot  {
 		msg.append(msgMaker.msgToMain(lang));
 		
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(lang));
-		clientService.updateState(myCoinId, userId.toString(), MenuState.MAIN);
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
 	}
 	
 	/* 코인 개수 설정 응답 처리 */
@@ -538,7 +629,7 @@ public class TelegramBot extends AbilityBot  {
 		msg.append(msgMaker.msgToMain(lang));
 		
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(lang));
-		clientService.updateState(myCoinId, userId.toString(), MenuState.MAIN);
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
 	}
 	
 	/* 개발자에게 메세지 보내기, 응답 처리 */
@@ -566,7 +657,7 @@ public class TelegramBot extends AbilityBot  {
 			break;
 		}
 		
-		clientService.updateState(myCoinId, userId.toString(), MenuState.MAIN);
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
 	}
 	
 	
@@ -577,7 +668,7 @@ public class TelegramBot extends AbilityBot  {
 		StopConfirmCmd inCmd = StopConfirmCmd.from(lang, cmd);
 		switch(inCmd) {
 		case YES:
-			if (clientService.stopChat(myCoinId, userId)) {
+			if (clientService.stopChat(myCoinId, userId) && clientTargetService.delete(myCoinId, userId)) {
 				msg.append(msgMaker.msgStopAllNotice(lang));
 			} else {
 				msg.append(msgMaker.warningNeedToStart(lang));
@@ -592,7 +683,7 @@ public class TelegramBot extends AbilityBot  {
 		msg.append(msgMaker.msgToMain(lang));
 		
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(lang));
-		clientService.updateState(myCoinId, userId.toString(), MenuState.MAIN);
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
 	}
 	
 	
@@ -640,7 +731,7 @@ public class TelegramBot extends AbilityBot  {
 		msg.append(msgMaker.msgToMain(lang));
 		
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(lang));
-		clientService.updateState(myCoinId, userId.toString(), MenuState.MAIN);
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
 		
 	}
 
@@ -667,7 +758,7 @@ public class TelegramBot extends AbilityBot  {
 			break;
 		}
 		
-		clientService.updateState(myCoinId, userId.toString(), stateId);
+		clientService.updateStateId(myCoinId, userId.toString(), stateId);
 	}
 	
 	
@@ -695,7 +786,7 @@ public class TelegramBot extends AbilityBot  {
 			sendMessage(userId, messageId, msgMaker.explainHelp(enabledMarketIds, langID), null);
 		}
 		
-		clientService.updateState(myCoinId, userId.toString(), MenuState.MAIN);
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
 		
 	}
 	
@@ -728,7 +819,7 @@ public class TelegramBot extends AbilityBot  {
 		
 		
 		sendMessage(userId, messageId, msg, km.getMainKeyboard(lang));
-		clientService.updateState(myCoinId, userId.toString(), MenuState.MAIN);
+		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
 	}
 	
 	
@@ -958,30 +1049,28 @@ public class TelegramBot extends AbilityBot  {
 	}
 	
 	/* 목표가 알림 */
-	public void sendTargetPriceMessage(List<ClientVo> clients, Market marketId, JSONObject coinObj, boolean isUp) {
+	public void sendTargetPriceMessage(List<ClientTargetVo> targets, Market marketId, JSONObject coinObj) {
 		double currentValue = coinObj.getDouble("last");
 		if(inBtcs.get(marketId)) {
 			currentValue = coinManager.getMoney(coinObj, marketId).getDouble("last");
 		}
 
-		ClientVo client = null;
+		ClientTargetVo target = null;
+		String  userId;
 		Lang lang 	= null;
 		String msg 		= "";
 		
-		double targetPrice = -1;
-		int clientLength = clients.size();
-		for(int i = 0; i < clientLength; i++){
-			client 	= clients.get(i);
-			lang 	= client.getLang();
-			targetPrice 	= -1;
+		Double targetPrice = -1.0;
+		for(int i = 0; i < targets.size(); i++){
+			target 	= targets.get(i);
+			userId 	= target.getUserId();
+			lang 	= clientService.get(myCoinId, userId).getLang();
+			targetPrice  = target.getPrice();
 			
-			if(isUp) { targetPrice =  client.getTargetUp(); }
-			else  { targetPrice =  client.getTargetDown(); }
-				
 			msg = msgMaker.msgTargetPriceNotify(currentValue, targetPrice, marketId, lang);
-			sendMessage(client.getUserId(), null, msg, null);
-			if(clientService.clearTargetPrice(myCoinId, client.getUserId())) {
-				sendMessage(client.getUserId(), null, msgMaker.msgTargetPriceInit(lang), null);
+			sendMessage(target.getUserId(), null, msg, null);
+			if(clientTargetService.delete(myCoinId, userId, targetPrice)) {
+				sendMessage(userId, null, msgMaker.msgTargetPriceDeleted(lang), null);
 			}
 		}
 	}

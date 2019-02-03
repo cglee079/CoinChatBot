@@ -25,8 +25,6 @@ public class ClientVo {
 	private Market marketId;
 	private Integer timeloop;
 	private Integer dayloop;
-	private Double targetUp;
-	private Double targetDown;
 	private Double invest;
 	private Double coinCnt;
 	private boolean enabled;

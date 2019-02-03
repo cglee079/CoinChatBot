@@ -16,16 +16,17 @@ import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 import com.cglee079.coinchatbot.log.Log;
+import com.cglee079.coinchatbot.model.ClientTargetVo;
 import com.cglee079.coinchatbot.model.ClientVo;
 import com.cglee079.coinchatbot.model.CoinMarketConfigVo;
-import com.cglee079.coinchatbot.service.ClientService;
+import com.cglee079.coinchatbot.service.ClientTargetService;
 import com.cglee079.coinchatbot.service.CoinMarketConfigService;
 import com.cglee079.coinchatbot.telegram.TelegramBot;
 
 @Component
 public class TargetScheduler {
 	@Autowired
-	private ClientService clientService;
+	private ClientTargetService clientTargetService;
 
 	@Autowired
 	private CoinManager coinManager;
@@ -66,7 +67,7 @@ public class TargetScheduler {
 	}
 	
 	public void loadTargetPrice(Market marketId) {
-		List<ClientVo> clients = null;
+		List<ClientTargetVo> targets = null;
 		JSONObject coinObj = null;
 		
 		try {
@@ -77,11 +78,9 @@ public class TargetScheduler {
 				coinValue = coinValue * coinManager.getCoin(Coin.BTC, marketId).getDouble("last");
 			}
 			
-			clients = clientService.list(myCoinId, marketId, coinValue, true); //TargetUp
-			telegramBot.sendTargetPriceMessage(clients, marketId, coinObj, true);
+			targets = clientTargetService.listForAlert(myCoinId, marketId, coinValue); //TargetUp
+			telegramBot.sendTargetPriceMessage(targets, marketId, coinObj);
 			
-			clients = clientService.list(myCoinId, marketId, coinValue, false); //TagetDown
-			telegramBot.sendTargetPriceMessage(clients, marketId, coinObj, false);
 			
 		} catch (ServerErrorException e) {
 			Log.i("Load TargetPrice  " + e.log());

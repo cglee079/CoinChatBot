@@ -1,11 +1,12 @@
-package com.cglee079.coinchatbot.telegram;
+package com.cglee079.coinchatbot.telegram.message;
 
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import javax.swing.text.NumberFormatter;
 
 import org.json.JSONObject;
 
@@ -15,15 +16,18 @@ import com.cglee079.coinchatbot.config.cmd.SendMessageCmd;
 import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.config.id.Lang;
 import com.cglee079.coinchatbot.config.id.Market;
+import com.cglee079.coinchatbot.model.ClientTargetVo;
 import com.cglee079.coinchatbot.model.ClientVo;
 import com.cglee079.coinchatbot.model.CoinConfigVo;
 import com.cglee079.coinchatbot.model.CoinInfoVo;
 import com.cglee079.coinchatbot.model.CoinWalletVo;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
+import com.cglee079.coinchatbot.util.NumberFormmater;
 import com.cglee079.coinchatbot.util.TimeStamper;
 
 public class MessageMaker {
 	private Coin myCoinId;
+	private NumberFormmater nf;
 	private String version;
 	private String exInvestKR;
 	private String exInvestUS;
@@ -31,13 +35,9 @@ public class MessageMaker {
 	private String exTargetKR;
 	private String exTargetUS;
 	private String exTargetRate;
-	private int digitKRW;
-	private int digitUSD;
-	private int digitBTC;
 	private HashMap<Market, Boolean> inBtcs;
-	
 		
-	public MessageMaker(Coin myCoinId, CoinConfigVo config, HashMap<Market, Boolean> inBtcs) {
+	public MessageMaker(Coin myCoinId, CoinConfigVo config, NumberFormmater nts, HashMap<Market, Boolean> inBtcs) {
 		this.myCoinId		= myCoinId;
 		this.inBtcs		= inBtcs;
 		version			= config.getVersion();
@@ -47,189 +47,12 @@ public class MessageMaker {
 		exTargetKR 		= config.getExTargetKRW();
 		exTargetUS 		= config.getExTargetUSD();
 		exTargetRate 	= config.getExTargetRate();
-		digitKRW 		= config.getDigitKRW();
-		digitUSD 		= config.getDigitUSD();
-		digitBTC 		= config.getDigitBTC();
-	}
-
-	/*******************/
-	/*** Formatter *****/
-	/*******************/
-	private String toExchangeRateKRWStr(double i) {
-		DecimalFormat df = new DecimalFormat("#,###"); 
-		df.setMinimumFractionDigits(0);
-		df.setMaximumFractionDigits(0);
-		df.setPositiveSuffix("원");
-		df.setNegativeSuffix("원");
-		return df.format(i);
-	}
-	
-	private String toBTCStr(double i) {
-		DecimalFormat df = new DecimalFormat("#.#");
-		df.setMinimumFractionDigits(digitBTC);
-		df.setMaximumFractionDigits(digitBTC);
-		df.setPositiveSuffix(" BTC");
-		df.setNegativeSuffix(" BTC");
-		return df.format(i);
-	}
-	
-	private String toOnlyBTCMoneyStr(double i, Market marketId) {
-		String result = "";
 		
-		if(marketId.isKRW()) {
-			DecimalFormat df = new DecimalFormat("#,###"); 
-			df.setMinimumFractionDigits(0);
-			df.setMaximumFractionDigits(0);
-			df.setPositiveSuffix("원");
-			result = df.format(i);
-		} else if(marketId.isUSD()) {
-			DecimalFormat df = new DecimalFormat("#,###");
-			df.setMinimumFractionDigits(0);
-			df.setMaximumFractionDigits(0);
-			df.setPositivePrefix("$");
-			result = df.format(i);
-		}
-		return result;
-	}
-	
-	private String toInvestAmountStr(double i, Market marketId) {
-		String result = "";
+		this.nf = nts;
 		
-		if(marketId.isKRW()) {
-			DecimalFormat df = new DecimalFormat("#,###"); 
-			df.setMinimumFractionDigits(0);
-			df.setMaximumFractionDigits(0);
-			df.setPositiveSuffix("원");
-			result = df.format(i);
-		} else if(marketId.isUSD()) {
-			DecimalFormat df = new DecimalFormat("#,###");
-			df.setMinimumFractionDigits(0);
-			df.setMaximumFractionDigits(0);
-			df.setPositivePrefix("$");
-			result = df.format(i);
-		}
-		return result;
 	}
 	
-	private String toSignInvestAmountStr(double i, Market marketId) {
-		String result = "";
-		
-		if(marketId.isKRW()) {
-			DecimalFormat df = new DecimalFormat("#,###"); 
-			df.setMinimumFractionDigits(0);
-			df.setMaximumFractionDigits(0);
-			df.setPositivePrefix("+");
-			df.setNegativePrefix("-");
-			df.setPositiveSuffix("원");
-			df.setNegativeSuffix("원");
-			result = df.format(i);
-		} else if(marketId.isUSD()) {
-			DecimalFormat df = new DecimalFormat("#,###");
-			df.setMinimumFractionDigits(0);
-			df.setMaximumFractionDigits(0);
-			df.setPositivePrefix("+$");
-			df.setNegativePrefix("-$");
-			result = df.format(i);
-		}
-		return result;
-	}
-	
-	private String toMoneyStr(double i, Market marketId){
-		String result = "";
-		if(marketId.isKRW()) { result = toKRWStr(i);}
-		if(marketId.isUSD()) { result = toUSDStr(i);}
-		return result;
-	}
-	
-	private String toSignMoneyStr(double i, Market marketId) {
-		String result = "";
-		if(marketId.isKRW()) { result = toSignKRWStr(i);}
-		if(marketId.isUSD()) { result = toSignUSDStr(i);}
-		return result;
-	}
-	
-	private String toKRWStr(double i){
-		DecimalFormat df = new DecimalFormat("#,###.#"); 
-		df.setMinimumFractionDigits(digitKRW);
-		df.setMaximumFractionDigits(digitKRW);
-		df.setPositiveSuffix("원");
-		df.setNegativeSuffix("원");
-		return df.format(i);
-	}
-	
-	private String toSignKRWStr(double i) {
-		DecimalFormat df = new DecimalFormat("#,###.#");
-		df.setMinimumFractionDigits(digitKRW);
-		df.setMaximumFractionDigits(digitKRW);
-		df.setPositivePrefix("+");
-		df.setNegativePrefix("-");
-		df.setPositiveSuffix("원");
-		df.setNegativeSuffix("원");
-		return df.format(i);
-	}
-	
-	private String toUSDStr(double d){
-		DecimalFormat df = new DecimalFormat("#.#");
-		df.setMinimumFractionDigits(digitUSD);
-		df.setMaximumFractionDigits(digitUSD);
-		df.setPositivePrefix("$");
-		return df.format(d);
-	}
-	
-	private String toSignUSDStr(double d){
-		DecimalFormat df = new DecimalFormat("#.#");
-		df.setMinimumFractionDigits(digitUSD);
-		df.setMaximumFractionDigits(digitUSD);
-		df.setPositivePrefix("+$");
-		df.setNegativePrefix("-$");
-		return df.format(d);
-	}
-	
-	private String toVolumeStr(long i) {
-		DecimalFormat df = new DecimalFormat("#,###");
-		return df.format(i);
-	}
-	
-	private String toSignVolumeStr(long i) {
-		DecimalFormat df = new DecimalFormat("#,###");
-		df.setPositivePrefix("+");
-		df.setNegativePrefix("-");
-		return df.format(i);
-	}
-	
-	private String toCoinCntStr(double i, Lang lang) {
-		DecimalFormat df = new DecimalFormat("#.##");
-		if(lang.equals(Lang.KR)) {
-			df.setPositiveSuffix("개");
-			df.setNegativeSuffix("개");
-		} else if(lang.equals(Lang.US)) {
-			df.setPositiveSuffix(" COIN");
-			df.setNegativeSuffix(" COIN");
-		}
-		
-		return df.format(i);
-	}
-	
-	
-	public String toSignKimpStr(double d){
-		DecimalFormat df = new DecimalFormat("#.##");
-		df.setPositivePrefix("+");
-		df.setNegativePrefix("-");
-		return df.format(d);
-	}
-	
-	public String toSignPercent(double c, double b){
-		String prefix = "";
-		double gap = c - b;
-		double percent = (gap / b) * 100;
-		if (percent > 0) {
-			prefix = "+";
-		}
-		DecimalFormat df = new DecimalFormat("#.##");
-		return prefix + df.format(percent) + "%";
-	}
-
-	private String toMarketStr(Market marketId, Lang lang) {
+	public String toMarketStr(Market marketId, Lang lang) {
 		String marketStr = "";
 		switch(lang) {
 		case KR : 	marketStr = MarketCmd.from(marketId).getKr();break;
@@ -237,7 +60,7 @@ public class MessageMaker {
 		}
 		return marketStr;
 	}
-	
+
 	/********************/
 	/** Common Message **/
 	/********************/
@@ -323,9 +146,9 @@ public class MessageMaker {
 			if(inBtcs.get(marketId)) {
 				double currentMoney = coinMoney.getDouble("last");
 				double currentBTC = currentValue;
-				msg.append("현재가격 : " + toMoneyStr(currentMoney, marketId) + " [" + toBTCStr(currentBTC) + "]\n");
+				msg.append("현재가격 : " + nf.toMoneyStr(currentMoney, marketId) + " [" + nf.toBTCStr(currentBTC) + "]\n");
 			} else {
-				msg.append("현재가격 : " + toMoneyStr(currentValue, marketId) + "\n");
+				msg.append("현재가격 : " + nf.toMoneyStr(currentValue, marketId) + "\n");
 			}
 			break;
 			
@@ -334,9 +157,9 @@ public class MessageMaker {
 			if(inBtcs.get(marketId)) {
 				double currentMoney = coinMoney.getDouble("last");
 				double currentBTC = currentValue;
-				msg.append("Current Price : " + toMoneyStr(currentMoney, marketId) + " [" + toBTCStr(currentBTC) + "]\n");
+				msg.append("Current Price : " + nf.toMoneyStr(currentMoney, marketId) + " [" + nf.toBTCStr(currentBTC) + "]\n");
 			} else {
-				msg.append("Current Price : " + toMoneyStr(currentValue, marketId) + "\n");
+				msg.append("Current Price : " + nf.toMoneyStr(currentValue, marketId) + "\n");
 			}
 			break; 
 		}
@@ -358,14 +181,14 @@ public class MessageMaker {
 			msg.append("현재 시각  : "  + date + "\n");
 			msg.append("\n");
 			msg.append("나의 거래소 : "  + toMarketStr(marketId, lang) + "\n");
-			msg.append("금일의 환율 : $1 = " + toExchangeRateKRWStr(exchangeRate) + "\n");
+			msg.append("금일의 환율 : $1 = " + nf.toExchangeRateKRWStr(exchangeRate) + "\n");
 			msg.append("----------------------------\n");
 			break;
 		case US :
 			msg.append("Current Time  : "  + date + "\n");
 			msg.append("\n");
 			msg.append("My Market     : "  + toMarketStr(marketId, lang) + "\n");
-			msg.append("Exchange rate : $1 = " + toKRWStr(exchangeRate) + "\n");
+			msg.append("Exchange rate : $1 = " + nf.toKRWStr(exchangeRate) + "\n");
 			msg.append("----------------------------\n");
 			break; 
 		}
@@ -388,12 +211,12 @@ public class MessageMaker {
 					msg.append("Server Error");
 				} else { 
 					if(key.isKRW()) {
-						msg.append(toMoneyStr(lasts.get(key), marketKRW));
-						msg.append("  [" + toMoneyStr(lasts.get(key)/ exchangeRate, marketUSD) + "]");
+						msg.append(nf.toMoneyStr(lasts.get(key), marketKRW));
+						msg.append("  [" + nf.toMoneyStr(lasts.get(key)/ exchangeRate, marketUSD) + "]");
 					} else if(key.isUSD()){
-						msg.append(toMoneyStr(lasts.get(key) * exchangeRate, marketKRW));
-						msg.append("  [" + toMoneyStr(lasts.get(key), marketUSD) + "]");
-						msg.append(" ( P. " + toSignPercent(mylast,  lasts.get(key) * exchangeRate ) + ") ");
+						msg.append(nf.toMoneyStr(lasts.get(key) * exchangeRate, marketKRW));
+						msg.append("  [" + nf.toMoneyStr(lasts.get(key), marketUSD) + "]");
+						msg.append(" ( P. " + nf.toSignPercentStr(mylast,  lasts.get(key) * exchangeRate ) + ") ");
 					}
 				}
 				msg.append("\n");
@@ -412,11 +235,11 @@ public class MessageMaker {
 					msg.append("Server Error");
 				} else { 
 					if(key.isKRW()) {
-						msg.append(toMoneyStr(lasts.get(key) / exchangeRate, marketUSD));
-						msg.append("  [" + toMoneyStr(lasts.get(key), marketKRW) + "]");
+						msg.append(nf.toMoneyStr(lasts.get(key) / exchangeRate, marketUSD));
+						msg.append("  [" + nf.toMoneyStr(lasts.get(key), marketKRW) + "]");
 					} else if(key.isUSD()) {
-						msg.append(toMoneyStr(lasts.get(key), marketUSD));
-						msg.append("  [" + toMoneyStr(lasts.get(key) * exchangeRate, marketKRW) + "]");
+						msg.append(nf.toMoneyStr(lasts.get(key), marketUSD));
+						msg.append("  [" + nf.toMoneyStr(lasts.get(key) * exchangeRate, marketKRW) + "]");
 					}
 				}
 				msg.append("\n");
@@ -441,7 +264,7 @@ public class MessageMaker {
 	}
 	
 	public String msgBTCNotSupportAPI(Market marketID, Lang lang) {
-		String marketStr = this.toMarketStr(marketID, lang);
+		String marketStr = toMarketStr(marketID, lang);
 		StringBuilder msg = new StringBuilder("");
 		switch(lang) {
 		case KR : msg.append(marketStr + " API는 해당 정보를 제공하지 않습니다.\n"); break;
@@ -451,7 +274,7 @@ public class MessageMaker {
 	}
 
 	public String msgBTCReplaceAnotherMarket(Market marketId, Lang lang) {
-		String marketStr = this.toMarketStr(marketId, lang);
+		String marketStr = toMarketStr(marketId, lang);
 		StringBuilder msg = new StringBuilder("");
 		switch(lang) {
 		case KR : msg.append(marketStr + " 기준 정보로 대체합니다.\n"); break;
@@ -464,35 +287,35 @@ public class MessageMaker {
 		StringBuilder msg = new StringBuilder("");
 		switch(lang) {
 		case KR :
-			msg.append("BTC 현재 시각 가격 : " + toOnlyBTCMoneyStr(btcCV, marketId) +"\n");
-			msg.append("BTC 24시간전 가격 : " + toOnlyBTCMoneyStr(btcBV, marketId) +"\n");
+			msg.append("BTC 현재 시각 가격 : " + nf.toOnlyBTCMoneyStr(btcCV, marketId) +"\n");
+			msg.append("BTC 24시간전 가격 : " + nf.toOnlyBTCMoneyStr(btcBV, marketId) +"\n");
 			msg.append("\n");
 			if(inBtcs.get(marketId)) {
-				msg.append(myCoinId + " 현재 시각 가격 : " + toMoneyStr(coinMoney.getDouble("last"), marketId) + " [" + toBTCStr(coinCV) + "]\n");
-				msg.append(myCoinId + " 24시간전 가격 : " + toMoneyStr(coinMoney.getDouble("first"), marketId) + " [" + toBTCStr(coinBV) + "]\n");
+				msg.append(myCoinId + " 현재 시각 가격 : " + nf.toMoneyStr(coinMoney.getDouble("last"), marketId) + " [" + nf.toBTCStr(coinCV) + "]\n");
+				msg.append(myCoinId + " 24시간전 가격 : " + nf.toMoneyStr(coinMoney.getDouble("first"), marketId) + " [" + nf.toBTCStr(coinBV) + "]\n");
 			} else {
-				msg.append(myCoinId + " 현재 시각 가격 : " + toMoneyStr(coinCV, marketId) + "\n");
-				msg.append(myCoinId + " 24시간전 가격 : " + toMoneyStr(coinBV, marketId) + "\n");
+				msg.append(myCoinId + " 현재 시각 가격 : " + nf.toMoneyStr(coinCV, marketId) + "\n");
+				msg.append(myCoinId + " 24시간전 가격 : " + nf.toMoneyStr(coinBV, marketId) + "\n");
 			}
 			msg.append("\n");
-			msg.append("BTC 24시간 변화량 : " + toSignPercent(btcCV, btcBV) + "\n");
-			msg.append(myCoinId + " 24시간 변화량 : " + toSignPercent(coinCV, coinBV) + "\n");
+			msg.append("BTC 24시간 변화량 : " + nf.toSignPercentStr(btcCV, btcBV) + "\n");
+			msg.append(myCoinId + " 24시간 변화량 : " + nf.toSignPercentStr(coinCV, coinBV) + "\n");
 			break;
 			
 		case US : 
-			msg.append("BTC Price at current time : " + toMoneyStr(btcCV, marketId) +"\n");
-			msg.append("BTC Price before 24 hours : " + toMoneyStr(btcBV, marketId) +"\n");
+			msg.append("BTC Price at current time : " + nf.toMoneyStr(btcCV, marketId) +"\n");
+			msg.append("BTC Price before 24 hours : " + nf.toMoneyStr(btcBV, marketId) +"\n");
 			msg.append("\n");
 			if(inBtcs.get(marketId)) {
-				msg.append(myCoinId + " Price at current time : " + toMoneyStr(coinMoney.getDouble("last"), marketId) + " [" + toBTCStr(coinCV) + "]\n");
-				msg.append(myCoinId + " Price before 24 hours : " + toMoneyStr(coinMoney.getDouble("first"), marketId) + " [" + toBTCStr(coinBV) + "]\n");
+				msg.append(myCoinId + " Price at current time : " + nf.toMoneyStr(coinMoney.getDouble("last"), marketId) + " [" + nf.toBTCStr(coinCV) + "]\n");
+				msg.append(myCoinId + " Price before 24 hours : " + nf.toMoneyStr(coinMoney.getDouble("first"), marketId) + " [" + nf.toBTCStr(coinBV) + "]\n");
 			} else {
-				msg.append(myCoinId + " Price at current time : " + toMoneyStr(coinCV, marketId) + "\n");
-				msg.append(myCoinId + " Price before 24 hours : " + toMoneyStr(coinBV, marketId) + "\n");
+				msg.append(myCoinId + " Price at current time : " + nf.toMoneyStr(coinCV, marketId) + "\n");
+				msg.append(myCoinId + " Price before 24 hours : " + nf.toMoneyStr(coinBV, marketId) + "\n");
 			}
 			msg.append("\n");
-			msg.append("BTC 24 hour rate of change : " + toSignPercent(btcCV, btcBV) + "\n");
-			msg.append(myCoinId + " 24 hour rate of change : " + toSignPercent(coinCV, coinBV) + "\n");
+			msg.append("BTC 24 hour rate of change : " + nf.toSignPercentStr(btcCV, btcBV) + "\n");
+			msg.append(myCoinId + " 24 hour rate of change : " + nf.toSignPercentStr(coinCV, coinBV) + "\n");
 			break; 
 		}
 		return msg.toString();
@@ -513,27 +336,27 @@ public class MessageMaker {
 		case KR :
 			msg.append("현재 시각  : "  + date + "\n");
 			msg.append("\n");
-			msg.append("코인개수 : " + toCoinCntStr(cnt, lang) + "\n");
+			msg.append("코인개수 : " + nf.toCoinCntStr(cnt, lang) + "\n");
 			if(inBtcs.get(marketId)) {
 				double btcMoney = btcObj.getDouble("last");
 				double avgBTC = avgPrice / btcMoney;
 				double coinBTC = coinValue;
 				double coinMoney = coinValue * btcMoney;
-				msg.append("평균단가 : " + toMoneyStr(avgPrice, marketId) + "  [" + toBTCStr(avgBTC) + "]\n");
-				msg.append("현재단가 : " + toMoneyStr(coinMoney, marketId) + " [" + toBTCStr(coinBTC) + "]\n");
+				msg.append("평균단가 : " + nf.toMoneyStr(avgPrice, marketId) + "  [" + nf.toBTCStr(avgBTC) + "]\n");
+				msg.append("현재단가 : " + nf.toMoneyStr(coinMoney, marketId) + " [" + nf.toBTCStr(coinBTC) + "]\n");
 				msg.append("---------------------\n");
-				msg.append("투자금액 : " + toInvestAmountStr(price, marketId) + "\n");
-				msg.append("현재금액 : " + toInvestAmountStr((int)(coinMoney * cnt), marketId) + "\n");
-				msg.append("손익금액 : " + toSignInvestAmountStr((int)((coinMoney * cnt) - (cnt * avgPrice)), marketId) + " (" + toSignPercent((int)(coinMoney * cnt), (int)(cnt * avgPrice)) + ")\n");
+				msg.append("투자금액 : " + nf.toInvestAmountStr(price, marketId) + "\n");
+				msg.append("현재금액 : " + nf.toInvestAmountStr((int)(coinMoney * cnt), marketId) + "\n");
+				msg.append("손익금액 : " + nf.toSignInvestAmountStr((int)((coinMoney * cnt) - (cnt * avgPrice)), marketId) + " (" + nf.toSignPercentStr((int)(coinMoney * cnt), (int)(cnt * avgPrice)) + ")\n");
 				msg.append("\n");
 			} else {
 				double coinMoney = coinValue;
-				msg.append("평균단가 : " + toMoneyStr(avgPrice, marketId) + "\n");
-				msg.append("현재단가 : " + toMoneyStr(coinMoney, marketId)+ "\n");
+				msg.append("평균단가 : " + nf.toMoneyStr(avgPrice, marketId) + "\n");
+				msg.append("현재단가 : " + nf.toMoneyStr(coinMoney, marketId)+ "\n");
 				msg.append("---------------------\n");
-				msg.append("투자금액 : " + toInvestAmountStr(price, marketId) + "\n");
-				msg.append("현재금액 : " + toInvestAmountStr((int)(coinMoney * cnt), marketId) + "\n");
-				msg.append("손익금액 : " + toSignInvestAmountStr((int)((coinMoney * cnt) - (cnt * avgPrice)), marketId) + " (" + toSignPercent((int)(coinMoney * cnt), (int)(cnt * avgPrice)) + ")\n");
+				msg.append("투자금액 : " + nf.toInvestAmountStr(price, marketId) + "\n");
+				msg.append("현재금액 : " + nf.toInvestAmountStr((int)(coinMoney * cnt), marketId) + "\n");
+				msg.append("손익금액 : " + nf.toSignInvestAmountStr((int)((coinMoney * cnt) - (cnt * avgPrice)), marketId) + " (" + nf.toSignPercentStr((int)(coinMoney * cnt), (int)(cnt * avgPrice)) + ")\n");
 				msg.append("\n");
 			}
 			break;
@@ -541,27 +364,27 @@ public class MessageMaker {
 		case US : 
 			msg.append("Current Time  : "  + date + "\n");
 			msg.append("\n");
-			msg.append("The number of coins : " + toCoinCntStr(cnt, lang) + "\n");
+			msg.append("The number of coins : " + nf.toCoinCntStr(cnt, lang) + "\n");
 			if(inBtcs.get(marketId)) {
 				double btcMoney = btcObj.getDouble("last");
 				double avgBTC = avgPrice / btcMoney;
 				double coinBTC = coinValue;
 				double coinMoney = coinValue * btcMoney;
-				msg.append("Average Coin Price : " + toMoneyStr(avgPrice, marketId) + "  [ " + toBTCStr(avgBTC) + "]\n");
-				msg.append("Current Coin Price : " + toMoneyStr(coinMoney, marketId) + " [ " + toBTCStr(coinBTC) + "]\n");
+				msg.append("Average Coin Price : " + nf.toMoneyStr(avgPrice, marketId) + "  [ " + nf.toBTCStr(avgBTC) + "]\n");
+				msg.append("Current Coin Price : " + nf.toMoneyStr(coinMoney, marketId) + " [ " + nf.toBTCStr(coinBTC) + "]\n");
 				msg.append("---------------------\n");
-				msg.append("Investment Amount : " + toInvestAmountStr(price, marketId) + "\n");
-				msg.append("Curernt Amount : " + toInvestAmountStr((int)(coinMoney * cnt), marketId) + "\n");
-				msg.append("Profit and loss : " + toSignInvestAmountStr((int)((coinMoney * cnt) - (cnt * avgPrice)), marketId) + " (" + toSignPercent((int)(coinMoney * cnt), (int)(cnt * avgPrice)) + ")\n");
+				msg.append("Investment Amount : " + nf.toInvestAmountStr(price, marketId) + "\n");
+				msg.append("Curernt Amount : " + nf.toInvestAmountStr((int)(coinMoney * cnt), marketId) + "\n");
+				msg.append("Profit and loss : " + nf.toSignInvestAmountStr((int)((coinMoney * cnt) - (cnt * avgPrice)), marketId) + " (" + nf.toSignPercentStr((int)(coinMoney * cnt), (int)(cnt * avgPrice)) + ")\n");
 				msg.append("\n");
 			} else {
 				double coinMoney = coinValue;
-				msg.append("Average Coin Price : " + toMoneyStr(avgPrice, marketId) + "\n");
-				msg.append("Current Coin Price : " + toMoneyStr(coinMoney, marketId)+ "\n");
+				msg.append("Average Coin Price : " + nf.toMoneyStr(avgPrice, marketId) + "\n");
+				msg.append("Current Coin Price : " + nf.toMoneyStr(coinMoney, marketId)+ "\n");
 				msg.append("---------------------\n");
-				msg.append("Investment Amount : " + toInvestAmountStr(price, marketId) + "\n");
-				msg.append("Curernt Amount : " + toInvestAmountStr((int)(coinMoney * cnt), marketId) + "\n");
-				msg.append("Profit and loss : " + toSignInvestAmountStr((int)((coinMoney * cnt) - (cnt * avgPrice)), marketId) + " (" + toSignPercent((int)(coinMoney * cnt), (int)(cnt * avgPrice)) + ")\n");
+				msg.append("Investment Amount : " + nf.toInvestAmountStr(price, marketId) + "\n");
+				msg.append("Curernt Amount : " + nf.toInvestAmountStr((int)(coinMoney * cnt), marketId) + "\n");
+				msg.append("Profit and loss : " + nf.toSignInvestAmountStr((int)((coinMoney * cnt) - (cnt * avgPrice)), marketId) + " (" + nf.toSignPercentStr((int)(coinMoney * cnt), (int)(cnt * avgPrice)) + ")\n");
 				msg.append("\n");
 			}
 			break; 
@@ -593,7 +416,7 @@ public class MessageMaker {
 			msg.append("희망 손익금을 확인 하실 수 있습니다.\n");
 			msg.append("\n");
 			msg.append("* 코인가격은 숫자로 입력해주세요.\n");
-			msg.append("* ex) " + exampleTarget + "  : 희망 코인가격 " + toMoneyStr(Double.parseDouble(exampleTarget), marketId) + "\n");
+			msg.append("* ex) " + exampleTarget + "  : 희망 코인가격 " + nf.toMoneyStr(Double.parseDouble(exampleTarget), marketId) + "\n");
 			msg.append("\n");
 			msg.append("\n");
 			msg.append("# 메인으로 돌아가시려면 문자를 입력해주세요.\n");
@@ -603,7 +426,7 @@ public class MessageMaker {
 			msg.append("if enter your desired coin price,  you can see expected profit and loss.\n");
 			msg.append("\n");
 			msg.append("* Please enter the coin price in numbers only.\n");
-			msg.append("* example) " + exampleTarget + "  : desired coin price " + toMoneyStr(Double.parseDouble(exampleTarget), marketId) + " set\n");
+			msg.append("* example) " + exampleTarget + "  : desired coin price " + nf.toMoneyStr(Double.parseDouble(exampleTarget), marketId) + " set\n");
 			msg.append("\n");
 			msg.append("\n");
 			msg.append("# To return to main, enter a character.\n");
@@ -619,22 +442,22 @@ public class MessageMaker {
 		
 		switch(lang) {
 		case KR :
-			msg.append("코인개수 : " + toCoinCntStr(coinCnt, lang) + "\n");
-			msg.append("평균단가 : " + toMoneyStr(avgPrice, marketId) + "\n");
-			msg.append("희망단가 : " + toMoneyStr(happyPrice, marketId) + "\n");
+			msg.append("코인개수 : " + nf.toCoinCntStr(coinCnt, lang) + "\n");
+			msg.append("평균단가 : " + nf.toMoneyStr(avgPrice, marketId) + "\n");
+			msg.append("희망단가 : " + nf.toMoneyStr(happyPrice, marketId) + "\n");
 			msg.append("---------------------\n");
-			msg.append("투자금액 : " + toInvestAmountStr(price, marketId) + "\n"); 
-			msg.append("희망금액 : " + toInvestAmountStr((long)(happyPrice * coinCnt), marketId) + "\n");
-			msg.append("손익금액 : " + toSignInvestAmountStr((long)((happyPrice * coinCnt) - (price)), marketId) + " (" + toSignPercent((int)(happyPrice * coinCnt), price) + ")\n");
+			msg.append("투자금액 : " + nf.toInvestAmountStr(price, marketId) + "\n"); 
+			msg.append("희망금액 : " + nf.toInvestAmountStr((long)(happyPrice * coinCnt), marketId) + "\n");
+			msg.append("손익금액 : " + nf.toSignInvestAmountStr((long)((happyPrice * coinCnt) - (price)), marketId) + " (" + nf.toSignPercentStr((int)(happyPrice * coinCnt), price) + ")\n");
 			break;
 		case US :
-			msg.append("The number of coins : " + toCoinCntStr(coinCnt, lang) + "\n");
-			msg.append("Average Coin Price  : " + toMoneyStr(avgPrice, marketId) + "\n");
-			msg.append("Desired Coin Price  : " + toMoneyStr(happyPrice, marketId) + "\n");
+			msg.append("The number of coins : " + nf.toCoinCntStr(coinCnt, lang) + "\n");
+			msg.append("Average Coin Price  : " + nf.toMoneyStr(avgPrice, marketId) + "\n");
+			msg.append("Desired Coin Price  : " + nf.toMoneyStr(happyPrice, marketId) + "\n");
 			msg.append("---------------------\n");
-			msg.append("Investment Amount : " + toInvestAmountStr(price, marketId) + "\n"); 
-			msg.append("Desired Amount : " + toInvestAmountStr((long)(happyPrice * coinCnt), marketId) + "\n");
-			msg.append("Profit and loss : " + toSignInvestAmountStr((long)((happyPrice * coinCnt) - (price)), marketId) + "(" + toSignPercent((int)(happyPrice * coinCnt), price) + ")\n");
+			msg.append("Investment Amount : " + nf.toInvestAmountStr(price, marketId) + "\n"); 
+			msg.append("Desired Amount : " + nf.toInvestAmountStr((long)(happyPrice * coinCnt), marketId) + "\n");
+			msg.append("Profit and loss : " + nf.toSignInvestAmountStr((long)((happyPrice * coinCnt) - (price)), marketId) + "(" + nf.toSignPercentStr((int)(happyPrice * coinCnt), price) + ")\n");
 			break; 
 		}
 		
@@ -658,7 +481,7 @@ public class MessageMaker {
 			msg.append("* 투자금액은 숫자로만 입력해주세요.\n");
 			msg.append("* 0을 입력하시면 초기화됩니다.\n");
 			msg.append("* ex) " + 0 + " : 초기화\n");
-			msg.append("* ex) " + exampleInvest + " : 투자금액 " + toInvestAmountStr(Double.parseDouble(exampleInvest), marketId) + " 설정\n");
+			msg.append("* ex) " + exampleInvest + " : 투자금액 " + nf.toInvestAmountStr(Double.parseDouble(exampleInvest), marketId) + " 설정\n");
 			msg.append("\n");
 			msg.append("\n");
 			msg.append("# 메인으로 돌아가시려면 문자를 입력해주세요.\n");
@@ -670,7 +493,7 @@ public class MessageMaker {
 			msg.append("* Please enter the investment amount in numbers only.\n");
 			msg.append("* If you enter 0, it is initialized.\n");
 			msg.append("* example) " + 0 + " : Init investment amount\n");
-			msg.append("* example) " + exampleInvest + " : investment amount " + toInvestAmountStr(Double.parseDouble(exampleInvest), marketId) + " set\n");
+			msg.append("* example) " + exampleInvest + " : investment amount " + nf.toInvestAmountStr(Double.parseDouble(exampleInvest), marketId) + " set\n");
 			msg.append("\n");
 			msg.append("\n");
 			msg.append("# To return to main, enter a character.\n");
@@ -700,8 +523,8 @@ public class MessageMaker {
 	public String msgPriceSet(double price, Market marketId, Lang lang) {
 		StringBuilder msg = new StringBuilder("");
 		switch(lang) {
-		case KR : msg.append("투자금액이 " + toInvestAmountStr(price, marketId) + "으로 설정되었습니다.\n"); break;
-		case US : msg.append("The investment amount is set at " + toInvestAmountStr(price, marketId)  + "\n"); break; 
+		case KR : msg.append("투자금액이 " + nf.toInvestAmountStr(price, marketId) + "으로 설정되었습니다.\n"); break;
+		case US : msg.append("The investment amount is set at " + nf.toInvestAmountStr(price, marketId)  + "\n"); break; 
 		}
 		return msg.toString();
 	}
@@ -719,7 +542,7 @@ public class MessageMaker {
 			msg.append("* 코인개수는 숫자로만 입력해주세요.\n");
 			msg.append("* 0을 입력하시면 초기화됩니다.\n");
 			msg.append("* ex) " + 0 + " : 초기화\n");
-			msg.append("* ex) " + exCoinCnt + " : 코인개수 " + toCoinCntStr(Double.parseDouble(exCoinCnt), lang) + " 설정\n");
+			msg.append("* ex) " + exCoinCnt + " : 코인개수 " + nf.toCoinCntStr(Double.parseDouble(exCoinCnt), lang) + " 설정\n");
 			msg.append("\n");
 			msg.append("\n");
 			msg.append("# 메인으로 돌아가시려면 문자를 입력해주세요.\n");
@@ -731,7 +554,7 @@ public class MessageMaker {
 			msg.append("* Please enter the number of coins in numbers only.\n");
 			msg.append("* If you enter 0, it is initialized.\n");
 			msg.append("* example) " + 0 + " : Init the number of coins\n");
-			msg.append("* example) " + exCoinCnt + " : the number of coins " + toCoinCntStr(Double.parseDouble(exCoinCnt), lang) + " set\n");
+			msg.append("* example) " + exCoinCnt + " : the number of coins " + nf.toCoinCntStr(Double.parseDouble(exCoinCnt), lang) + " set\n");
 			msg.append("\n");
 			msg.append("\n");
 			msg.append("# To return to main, enter a character.\n");
@@ -761,8 +584,8 @@ public class MessageMaker {
 	public String msgCoinCountSet(double number, Lang lang) {
 		StringBuilder msg = new StringBuilder("");
 		switch(lang) {
-		case KR : msg.append("코인개수가 " + toCoinCntStr(number, lang) + "로 설정되었습니다.\n"); break;
-		case US : msg.append("The number of coins is set at " + toCoinCntStr(number, lang)  + "\n"); break; 
+		case KR : msg.append("코인개수가 " + nf.toCoinCntStr(number, lang) + "로 설정되었습니다.\n"); break;
+		case US : msg.append("The number of coins is set at " + nf.toCoinCntStr(number, lang)  + "\n"); break; 
 		}
 		return msg.toString();
 	}
@@ -787,7 +610,7 @@ public class MessageMaker {
 
 	public String msgMarketSet(Market marketId, Lang lang) {
 		StringBuilder msg = new StringBuilder("");
-		String marketStr = this.toMarketStr(marketId, lang);
+		String marketStr = toMarketStr(marketId, lang);
 		
 		switch(lang) {
 		case KR : msg.append("거래소가 " + marketStr + "(으)로 설정되었습니다.\n"); break;
@@ -805,31 +628,30 @@ public class MessageMaker {
 		return msg.toString();
 	}
 	
-	public String msgMarketSetChangeCurrency(ClientVo client, Double changePrice, Double changeTargetUp, Double changeTargetDown, Market changeMarketId) {
+	public String msgMarketSetChangeCurrency(ClientVo client, Double changePrice, List<Double> currentTargetPrices, List<Double> changedTargetPrices, Market changeMarketId) {
 		StringBuilder msg = new StringBuilder();
 		Market marketId 				= client.getMarketId();
 		Lang lang					= client.getLang();
 		Double currentPrice 		= client.getInvest();
-		Double currentTargetUp 		= client.getTargetUp();
-		Double currentTargetDown	= client.getTargetDown();
-		if(currentPrice != null || currentTargetUp != null || currentTargetDown != null ) {
-			switch(lang) {
-			case KR:
-				msg.append("변경하신 거래소의 화폐단위가 변경되어,\n");
-				msg.append("설정하신 투자금액/목표가를 환율에 맞추어 변동하였습니다.\n");
-				if(currentPrice != null) { msg.append("투자금액 : " + toInvestAmountStr(currentPrice, marketId) + " -> " + toInvestAmountStr(changePrice, changeMarketId) + "\n"); }
-				if(currentTargetUp != null) { msg.append("목표가격 : " + toMoneyStr(currentTargetUp, marketId) + " -> " + toMoneyStr(changeTargetUp, changeMarketId) + "\n"); }
-				if(currentTargetDown != null) { msg.append("목표가격 : " + toMoneyStr(currentTargetDown, marketId) + " -> " + toMoneyStr(changeTargetDown, changeMarketId) + "\n"); }
-				break;
-			case US:
-				msg.append("* The currency unit of the exchange has been changed,\n");
-				msg.append("the investment amount / target price you set has been changed to match the exchange rate.\n");
-				msg.append("\n");
-				if(currentPrice != null) { msg.append("Investment amount : " + toInvestAmountStr(currentPrice, marketId) + " -> " + toInvestAmountStr(changePrice, changeMarketId) + "\n"); }
-				if(currentTargetUp != null) { msg.append("Target Price: " + toMoneyStr(currentTargetUp, marketId) + " -> " + toMoneyStr(changeTargetUp, changeMarketId) + "\n"); }
-				if(currentTargetDown != null) { msg.append("Target Price : " + toMoneyStr(currentTargetDown, marketId) + " -> " + toMoneyStr(changeTargetDown, changeMarketId) + "\n"); }
-				break;
+	
+		switch(lang) {
+		case KR:
+			msg.append("변경하신 거래소의 화폐단위가 변경되어,\n");
+			msg.append("설정하신 투자금액/목표가를 환율에 맞추어 변동하였습니다.\n");
+			if(currentPrice != null) { msg.append("투자금액 : " + nf.toInvestAmountStr(currentPrice, marketId) + " -> " + nf.toInvestAmountStr(changePrice, changeMarketId) + "\n"); }
+			for(int i = 0; i < currentTargetPrices.size(); i++) {
+				msg.append("목표가격 #" + nf.toNumberStr(i+1, 2) +  ": " + nf.toMoneyStr(currentTargetPrices.get(i), marketId) + " -> " + nf.toMoneyStr(changedTargetPrices.get(i), changeMarketId) + "\n"); 
 			}
+			break;
+		case US:
+			msg.append("* The currency unit of the exchange has been changed,\n");
+			msg.append("the investment amount / target price you set has been changed to match the exchange rate.\n");
+			msg.append("\n");
+			if(currentPrice != null) { msg.append("Investment amount : " + nf.toInvestAmountStr(currentPrice, marketId) + " -> " + nf.toInvestAmountStr(changePrice, changeMarketId) + "\n"); }
+			for(int i = 0; i < currentTargetPrices.size(); i++) {
+				msg.append("Target Price #"+ nf.toNumberStr(i+1, 2) +  ": " + nf.toMoneyStr(currentTargetPrices.get(i), marketId) + " -> " + nf.toMoneyStr(changedTargetPrices.get(i), changeMarketId) + "\n");  
+			}
+			break;
 		}
 		
 		return msg.toString();
@@ -838,9 +660,42 @@ public class MessageMaker {
 	
 	
 	/*****************************/
-	/** Target Price Message**/
+	/**** Target Price Message ***/
 	/*****************************/
-	public String explainTargetPriceSet(Lang lang, Market marketId) {
+	public String showTargetList(Lang lang, Market marketId, List<ClientTargetVo> targets) {
+		StringBuilder msg = new StringBuilder();
+		
+		ClientTargetVo target;
+		switch(lang) {
+		case KR : 
+			msg.append("설정된 목표가격은 다음과 같습니다.\n");
+			msg.append("-------------\n");
+			if(targets.size() == 0) {
+				msg.append("설정된 목표가격이 없습니다\n");
+			}
+			
+			for(int i = 0; i < targets.size(); i++) {
+				target = targets.get(i);
+				msg.append(nf.toNumberStr(i+1, 2) +  "# " + nf.toMoneyStr(target.getPrice(), marketId) + " " + target.getFocus().getKr() +"\n");
+			}
+			break;
+		case US:
+			msg.append("Current Target Setting.\n");
+			msg.append("-------------\n");
+			if(targets.size() == 0) {
+				msg.append("There are no set target prices.\n");
+			}
+			for(int i = 0; i < targets.size(); i++) {
+				target = targets.get(i);
+				msg.append(nf.toNumberStr(i+1, 2) + "# " + nf.toMoneyStr(target.getPrice(), marketId) + " " + target.getFocus().getUs() + "\n");
+			}
+			break;
+		}
+		
+		return msg.toString();
+	}
+	
+	public String explainTargetAdd(Lang lang, Market marketId) {
 		StringBuilder msg = new StringBuilder();
 		String exampleTarget = null;
 		if(marketId.isKRW()) { exampleTarget = exTargetKR;}
@@ -853,8 +708,7 @@ public class MessageMaker {
 			msg.append("목표가격을 위한 가격정보는 1분 주기로 갱신됩니다.\n");
 			msg.append("\n");
 			msg.append("* 목표가격은 숫자 또는 백분율로 입력해주세요.\n");
-			msg.append("* ex) " + 0 + "  : 목표가격 초기화\n");
-			msg.append("* ex) " + exampleTarget + "  : 목표가격 " + toMoneyStr(Double.parseDouble(exampleTarget), marketId) + "\n");
+			msg.append("* ex) " + exampleTarget + "  : 목표가격 " + nf.toMoneyStr(Double.parseDouble(exampleTarget), marketId) + "\n");
 			msg.append("* ex) " + exTargetRate + "    : 현재가 +" + exTargetRate + "\n");
 			msg.append("* ex) -" + exTargetRate + "  : 현재가 -" + exTargetRate + "\n");
 			msg.append("\n");
@@ -868,8 +722,7 @@ public class MessageMaker {
 			msg.append("\n");
 			msg.append("* Please enter the target price in numbers or percentages.\n");
 			msg.append("* If you enter 0, it is initialized.\n");
-			msg.append("* example)  " + 0 + "  : Initial target Price\n");
-			msg.append("* example)  " + exampleTarget + "  : Target price " + toMoneyStr(Double.parseDouble(exampleTarget), marketId)+ "\n");
+			msg.append("* example)  " + exampleTarget + "  : Target price " + nf.toMoneyStr(Double.parseDouble(exampleTarget), marketId)+ "\n");
 			msg.append("* example)  " + exTargetRate + "   : Current Price +" + exTargetRate + "\n");
 			msg.append("* example)  -" + exTargetRate + "  : Current Prcie -" + exTargetRate + "\n");
 			msg.append("\n");
@@ -880,8 +733,36 @@ public class MessageMaker {
 		
 		return msg.toString();
 	}
+	
+	public String explainTargetDel(Lang lang, Market marketId) {
+		StringBuilder msg = new StringBuilder();
+		switch(lang) {
+		case KR :
+			msg.append("삭제할 목표가를 선택해주세요.\n");
+			break;
+		case US :
+			msg.append("Please select Target you want to delete \n");
+			break;
+		}
+		
+		return msg.toString();
+	}
+	
+	public String msgCompleteDelTarget(double price, Market marketId, Lang lang) {
+		StringBuilder msg = new StringBuilder();
+		switch(lang) {
+		case KR :
+			msg.append(nf.toMoneyStr(price, marketId) + " 목표가격이 삭제 되었습니다 \n");
+			break;
+		case US :
+			msg.append(nf.toMoneyStr(price, marketId) + " Target Deleted\n");
+			break;
+		}
+		
+		return msg.toString();
+	}
 
-	public String warningTargetPriceSetPercent(Lang lang) {
+	public String warningTargetPriceAddPercent(Lang lang) {
 		StringBuilder msg = new StringBuilder("");
 		switch(lang) {
 		case KR : msg.append("목표가격 백분율을 -100% 이하로 설정 할 수 없습니다.\n"); break;
@@ -890,7 +771,7 @@ public class MessageMaker {
 		return msg.toString();
 	}
 	
-	public String warningTargetPriceSetFormat(Lang lang) {
+	public String warningTargetPriceAddFormat(Lang lang) {
 		StringBuilder msg = new StringBuilder("");
 		switch(lang) {
 		case KR : msg.append("목표가격을 숫자 또는 백분율로 입력해주세요.\n"); break;
@@ -899,11 +780,30 @@ public class MessageMaker {
 		return msg.toString();
 	}
 	
-	public String msgTargetPriceInit(Lang lang) {
+	public String warningTargetPriceDelFormat(Lang lang) {
 		StringBuilder msg = new StringBuilder("");
 		switch(lang) {
-		case KR : msg.append("목표가격이 초기화되었습니다.\n"); break;
-		case US : msg.append("Target price has been init.\n"); break; 
+		case KR : msg.append("목표가격을 정확히 입력해주세요.\n"); break;
+		case US : msg.append("Please enter correct Target Price.\n"); break; 
+		}
+		return msg.toString();
+	}
+	
+	public String warningAlreadyTarget(Lang lang) {
+		StringBuilder msg = new StringBuilder("");
+		switch(lang) {
+		case KR : msg.append("이미 설정된 목표가격 입니다.\n"); break;
+		case US : msg.append("Target price already set.\n"); break; 
+		}
+		return msg.toString();
+	}
+	
+	
+	public String msgTargetPriceDeleted(Lang lang) {
+		StringBuilder msg = new StringBuilder("");
+		switch(lang) {
+		case KR : msg.append("해당 목표가격이 삭제되었습니다.\n"); break;
+		case US : msg.append("The Target been deleted.\n"); break; 
 		}
 		return msg.toString();
 	}
@@ -912,18 +812,18 @@ public class MessageMaker {
 		StringBuilder msg = new StringBuilder();
 		switch(lang) {
 		case KR :
-			msg.append("목표가격 " + toMoneyStr(TargetPrice, marketId) + "으로 설정되었습니다.\n");
+			msg.append("목표가격 " + nf.toMoneyStr(TargetPrice, marketId) + "으로 설정되었습니다.\n");
 			msg.append("------------------------\n");
-			msg.append("목표가격 : " + toMoneyStr(TargetPrice, marketId) + "\n");
-			msg.append("현재가격 : " + toMoneyStr(currentValue, marketId) + "\n");
-			msg.append("가격차이 : " + toSignMoneyStr(TargetPrice - currentValue, marketId) + "(" + toSignPercent(TargetPrice, currentValue) + " )\n");
+			msg.append("목표가격 : " + nf.toMoneyStr(TargetPrice, marketId) + "\n");
+			msg.append("현재가격 : " + nf.toMoneyStr(currentValue, marketId) + "\n");
+			msg.append("가격차이 : " + nf.toSignMoneyStr(TargetPrice - currentValue, marketId) + "(" + nf.toSignPercentStr(TargetPrice, currentValue) + " )\n");
 			break;
 		case US : 
-			msg.append("The target price is set at " + toMoneyStr(TargetPrice, marketId) + ".\n");
+			msg.append("The target price is set at " + nf.toMoneyStr(TargetPrice, marketId) + ".\n");
 			msg.append("------------------------\n");
-			msg.append("Target Price       : " + toMoneyStr(TargetPrice, marketId) + "\n");
-			msg.append("Current Price      : " + toMoneyStr(currentValue, marketId) + "\n");
-			msg.append("Price difference : " + toSignMoneyStr(TargetPrice - currentValue, marketId) + " (" + toSignPercent(TargetPrice, currentValue) + " )\n");
+			msg.append("Target Price       : " + nf.toMoneyStr(TargetPrice, marketId) + "\n");
+			msg.append("Current Price      : " + nf.toMoneyStr(currentValue, marketId) + "\n");
+			msg.append("Price difference : " + nf.toSignMoneyStr(TargetPrice - currentValue, marketId) + " (" + nf.toSignPercentStr(TargetPrice, currentValue) + " )\n");
 			break;
 		}
 		return msg.toString();
@@ -934,13 +834,13 @@ public class MessageMaker {
 		switch(lang) {
 		case KR :
 			msg.append("목표가격에 도달하였습니다!\n");
-			msg.append("목표가격 : " + toMoneyStr(price, marketId) + "\n"); 
-			msg.append("현재가격 : " + toMoneyStr(currentValue, marketId) + "\n");
+			msg.append("목표가격 : " + nf.toMoneyStr(price, marketId) + "\n"); 
+			msg.append("현재가격 : " + nf.toMoneyStr(currentValue, marketId) + "\n");
 			break;
 		case US : 
 			msg.append("Target price reached!\n");
-			msg.append("Traget Price : " + toMoneyStr(price, marketId) + "\n"); 
-			msg.append("Current Price : " + toMoneyStr(currentValue, marketId) + "\n");
+			msg.append("Traget Price : " + nf.toMoneyStr(price, marketId) + "\n"); 
+			msg.append("Current Price : " + nf.toMoneyStr(currentValue, marketId) + "\n");
 			break;
 		}
 		return msg.toString();
@@ -1059,14 +959,10 @@ public class MessageMaker {
 			if(client.getTimeloop() != 0){ msg.append("시간알림 = 매 " + client.getTimeloop() + " 시간 주기 알림\n");} 
 			else{ msg.append("시간알림 = 알람 없음\n");}
 			
-			if(client.getTargetUp() != null){msg.append("목표가격 = " + toMoneyStr(client.getTargetUp(), marketId) + "\n");}
-			else if(client.getTargetDown() != null){msg.append("목표가격 = " + toMoneyStr(client.getTargetDown(), marketId) + "\n");}
-			else { msg.append("목표가격 = 입력되어있지 않음.\n");}
-			
-			if(client.getInvest() != null){msg.append("투자금액 = " + toInvestAmountStr(client.getInvest(), marketId) + "\n");}
+			if(client.getInvest() != null){msg.append("투자금액 = " + nf.toInvestAmountStr(client.getInvest(), marketId) + "\n");}
 			else { msg.append("투자금액 = 입력되어있지 않음.\n");}
 			
-			if(client.getCoinCnt() != null){msg.append("코인개수 = " + toCoinCntStr(client.getCoinCnt(), lang) + "\n"); }
+			if(client.getCoinCnt() != null){msg.append("코인개수 = " + nf.toCoinCntStr(client.getCoinCnt(), lang) + "\n"); }
 			else { msg.append("코인개수 = 입력되어있지 않음.\n");}
 			
 			break;
@@ -1084,14 +980,10 @@ public class MessageMaker {
 			if(client.getTimeloop() != 0){ msg.append("Hourly Notification = every " + client.getTimeloop() + " hours\n");} 
 			else{ msg.append("Hourly Notification = No notifications.\n");}
 			
-			if(client.getTargetUp() != null){msg.append("Target price = " + toMoneyStr(client.getTargetUp(), marketId) + "\n");}
-			else if(client.getTargetDown() != null){msg.append("Target price = " + toMoneyStr(client.getTargetDown(), marketId) + "\n");}
-			else { msg.append("Target Price = Not entered.\n");}
-			
-			if(client.getInvest() != null){msg.append("Investment amount = " + toInvestAmountStr(client.getInvest(), marketId) + "\n");}
+			if(client.getInvest() != null){msg.append("Investment amount = " + nf.toInvestAmountStr(client.getInvest(), marketId) + "\n");}
 			else { msg.append("Investment amount = Not entered.\n");}
 			
-			if(client.getCoinCnt() != null){msg.append("The number of coins = " + toCoinCntStr(client.getCoinCnt(), lang) + "\n"); }
+			if(client.getCoinCnt() != null){msg.append("The number of coins = " + nf.toCoinCntStr(client.getCoinCnt(), lang) + "\n"); }
 			else { msg.append("The number of coins = Not entered.\n");}
 			break;
 		}
@@ -1515,46 +1407,46 @@ public class MessageMaker {
 				beforeLow = coinBeforeMoney.getDouble("low");
 				
 				msg.append("---------------------\n");
-				msg.append("금일의 거래량 : " + toVolumeStr(currentVolume) + " \n");
-				msg.append(dayLoopStr + "전 거래량 : " + toVolumeStr(beforeVolume) + " \n");
-				msg.append("거래량의 차이 : " + toSignVolumeStr(currentVolume - beforeVolume) + " (" + toSignPercent(currentVolume, beforeVolume) + ")\n");
+				msg.append("금일의 거래량 : " + nf.toVolumeStr(currentVolume) + " \n");
+				msg.append(dayLoopStr + "전 거래량 : " + nf.toVolumeStr(beforeVolume) + " \n");
+				msg.append("거래량의 차이 : " + nf.toSignVolumeStr(currentVolume - beforeVolume) + " (" + nf.toSignPercentStr(currentVolume, beforeVolume) + ")\n");
 				msg.append("\n");
 				
-				msg.append("금일의 상한가 : " + toMoneyStr(currentHigh, marketId) + " ["+ toBTCStr(currentHighBTC) + "]\n");
-				msg.append(dayLoopStr + "전 상한가 : " + toMoneyStr(beforeHigh, marketId) + " ["+ toBTCStr(beforeHighBTC) + "]\n");
-				msg.append("상한가의 차이 : " + toSignMoneyStr(currentHigh - beforeHigh, marketId) + " (" + toSignPercent(currentHigh, beforeHigh) + ")\n");
+				msg.append("금일의 상한가 : " + nf.toMoneyStr(currentHigh, marketId) + " ["+ nf.toBTCStr(currentHighBTC) + "]\n");
+				msg.append(dayLoopStr + "전 상한가 : " + nf.toMoneyStr(beforeHigh, marketId) + " ["+ nf.toBTCStr(beforeHighBTC) + "]\n");
+				msg.append("상한가의 차이 : " + nf.toSignMoneyStr(currentHigh - beforeHigh, marketId) + " (" + nf.toSignPercentStr(currentHigh, beforeHigh) + ")\n");
 				msg.append("\n");
 				
-				msg.append("금일의 하한가 : " + toMoneyStr(currentLow, marketId) + " ["+ toBTCStr(currentLowBTC) + "]\n");
-				msg.append(dayLoopStr + "전 하한가 : " + toMoneyStr(beforeLow, marketId) + " ["+ toBTCStr(beforeLowBTC) + "]\n");
-				msg.append("하한가의 차이 : " + toSignMoneyStr(currentLow - beforeLow, marketId) + " (" + toSignPercent(currentLow, beforeLow) + ")\n");
+				msg.append("금일의 하한가 : " + nf.toMoneyStr(currentLow, marketId) + " ["+ nf.toBTCStr(currentLowBTC) + "]\n");
+				msg.append(dayLoopStr + "전 하한가 : " + nf.toMoneyStr(beforeLow, marketId) + " ["+ nf.toBTCStr(beforeLowBTC) + "]\n");
+				msg.append("하한가의 차이 : " + nf.toSignMoneyStr(currentLow - beforeLow, marketId) + " (" + nf.toSignPercentStr(currentLow, beforeLow) + ")\n");
 				msg.append("\n");
 				
-				msg.append("금일의 종가 : " + toMoneyStr(currentLast, marketId) + " ["+ toBTCStr(currentLastBTC) + "]\n");
-				msg.append(dayLoopStr + "전 종가 : " + toMoneyStr(beforeLast, marketId) + " ["+ toBTCStr(beforeLastBTC) + "]\n");
-				msg.append("종가의 차이 : " + toSignMoneyStr(currentLast - beforeLast, marketId) + " (" + toSignPercent(currentLast, beforeLast) + ")\n");
+				msg.append("금일의 종가 : " + nf.toMoneyStr(currentLast, marketId) + " ["+ nf.toBTCStr(currentLastBTC) + "]\n");
+				msg.append(dayLoopStr + "전 종가 : " + nf.toMoneyStr(beforeLast, marketId) + " ["+ nf.toBTCStr(beforeLastBTC) + "]\n");
+				msg.append("종가의 차이 : " + nf.toSignMoneyStr(currentLast - beforeLast, marketId) + " (" + nf.toSignPercentStr(currentLast, beforeLast) + ")\n");
 				msg.append("\n");
 			} else {
 				msg.append("---------------------\n");
-				msg.append("금일의 거래량 : " + toVolumeStr(currentVolume) + " \n");
-				msg.append(dayLoopStr + "전 거래량 : " + toVolumeStr(beforeVolume) + " \n");
-				msg.append("거래량의 차이 : " + toSignVolumeStr(currentVolume - beforeVolume) + " (" + toSignPercent(currentVolume, beforeVolume) + ")\n");
+				msg.append("금일의 거래량 : " + nf.toVolumeStr(currentVolume) + " \n");
+				msg.append(dayLoopStr + "전 거래량 : " + nf.toVolumeStr(beforeVolume) + " \n");
+				msg.append("거래량의 차이 : " + nf.toSignVolumeStr(currentVolume - beforeVolume) + " (" + nf.toSignPercentStr(currentVolume, beforeVolume) + ")\n");
 				msg.append("\n");
 				
-				msg.append("금일의 상한가 : " + toMoneyStr(currentHigh, marketId) + "\n");
-				msg.append(dayLoopStr + "전 상한가 : " + toMoneyStr(beforeHigh, marketId) + "\n");
-				msg.append("상한가의 차이 : " + toSignMoneyStr(currentHigh - beforeHigh, marketId) + " (" + toSignPercent(currentHigh, beforeHigh) + ")\n");
+				msg.append("금일의 상한가 : " + nf.toMoneyStr(currentHigh, marketId) + "\n");
+				msg.append(dayLoopStr + "전 상한가 : " + nf.toMoneyStr(beforeHigh, marketId) + "\n");
+				msg.append("상한가의 차이 : " + nf.toSignMoneyStr(currentHigh - beforeHigh, marketId) + " (" + nf.toSignPercentStr(currentHigh, beforeHigh) + ")\n");
 				msg.append("\n");
 				
-				msg.append("금일의 하한가 : " + toMoneyStr(currentLow, marketId) + "\n");
-				msg.append(dayLoopStr + "전 하한가 : " + toMoneyStr(beforeLow, marketId) + "\n");
-				msg.append("하한가의 차이 : " + toSignMoneyStr(currentLow - beforeLow, marketId) + " (" + toSignPercent(currentLow, beforeLow) + ")\n");
+				msg.append("금일의 하한가 : " + nf.toMoneyStr(currentLow, marketId) + "\n");
+				msg.append(dayLoopStr + "전 하한가 : " + nf.toMoneyStr(beforeLow, marketId) + "\n");
+				msg.append("하한가의 차이 : " + nf.toSignMoneyStr(currentLow - beforeLow, marketId) + " (" + nf.toSignPercentStr(currentLow, beforeLow) + ")\n");
 				msg.append("\n");
 				
 				
-				msg.append("금일의 종가 : " + toMoneyStr(currentLast, marketId) + "\n");
-				msg.append(dayLoopStr + "전 종가 : " + toMoneyStr(beforeLast, marketId) + "\n");
-				msg.append("종가의 차이 : " + toSignMoneyStr(currentLast - beforeLast, marketId) + " (" + toSignPercent(currentLast, beforeLast) + ")\n");
+				msg.append("금일의 종가 : " + nf.toMoneyStr(currentLast, marketId) + "\n");
+				msg.append(dayLoopStr + "전 종가 : " + nf.toMoneyStr(beforeLast, marketId) + "\n");
+				msg.append("종가의 차이 : " + nf.toSignMoneyStr(currentLast - beforeLast, marketId) + " (" + nf.toSignPercentStr(currentLast, beforeLast) + ")\n");
 				msg.append("\n");
 			}
 			break;
@@ -1576,39 +1468,39 @@ public class MessageMaker {
 				beforeLow = coinBeforeMoney.getDouble("low");
 				
 				msg.append("---------------------\n");
-				msg.append("Volume at today : " + toVolumeStr(currentVolume) + " \n");
-				msg.append("Volume before " + dayLoop + " day : " + toVolumeStr(beforeVolume) + " \n");
-				msg.append("Volume difference : " + toSignVolumeStr(currentVolume - beforeVolume) + " (" + toSignPercent(currentVolume, beforeVolume) + ")\n");
+				msg.append("Volume at today : " + nf.toVolumeStr(currentVolume) + " \n");
+				msg.append("Volume before " + dayLoop + " day : " + nf.toVolumeStr(beforeVolume) + " \n");
+				msg.append("Volume difference : " + nf.toSignVolumeStr(currentVolume - beforeVolume) + " (" + nf.toSignPercentStr(currentVolume, beforeVolume) + ")\n");
 				msg.append("\n");
-				msg.append("High at Today : " + toMoneyStr(currentHigh, marketId) + " ["+ toBTCStr(currentHighBTC) + "]\n");
-				msg.append("High before " + dayLoop + " day : " + toMoneyStr(beforeHigh, marketId) + " ["+ toBTCStr(beforeHighBTC) + "]\n");
-				msg.append("High difference : " + toSignMoneyStr(currentHigh - beforeHigh, marketId) + " (" + toSignPercent(currentHigh, beforeHigh) + ")\n");
+				msg.append("High at Today : " + nf.toMoneyStr(currentHigh, marketId) + " ["+ nf.toBTCStr(currentHighBTC) + "]\n");
+				msg.append("High before " + dayLoop + " day : " + nf.toMoneyStr(beforeHigh, marketId) + " ["+ nf.toBTCStr(beforeHighBTC) + "]\n");
+				msg.append("High difference : " + nf.toSignMoneyStr(currentHigh - beforeHigh, marketId) + " (" + nf.toSignPercentStr(currentHigh, beforeHigh) + ")\n");
 				msg.append("\n");
-				msg.append("Low at Today : " + toMoneyStr(currentLow, marketId) + " ["+ toBTCStr(currentLowBTC) + "]\n");
-				msg.append("Low before " + dayLoop + " day : "+ toMoneyStr(beforeLow, marketId) + " ["+ toBTCStr(beforeLowBTC) + "]\n");
-				msg.append("Low difference : " + toSignMoneyStr(currentLow - beforeLow, marketId) + " (" + toSignPercent(currentLow, beforeLow) + ")\n");
+				msg.append("Low at Today : " + nf.toMoneyStr(currentLow, marketId) + " ["+ nf.toBTCStr(currentLowBTC) + "]\n");
+				msg.append("Low before " + dayLoop + " day : "+ nf.toMoneyStr(beforeLow, marketId) + " ["+ nf.toBTCStr(beforeLowBTC) + "]\n");
+				msg.append("Low difference : " + nf.toSignMoneyStr(currentLow - beforeLow, marketId) + " (" + nf.toSignPercentStr(currentLow, beforeLow) + ")\n");
 				msg.append("\n");
-				msg.append("Last at Today : " + toMoneyStr(currentLast, marketId) + " ["+ toBTCStr(currentLastBTC) + "]\n");
-				msg.append("Last before " + dayLoop + " day : "+ toMoneyStr(beforeLast, marketId) + " ["+ toBTCStr(beforeLastBTC) + "]\n");
-				msg.append("Last difference : " + toSignMoneyStr(currentLast - beforeLast, marketId) + " (" + toSignPercent(currentLast, beforeLast) + ")\n");
+				msg.append("Last at Today : " + nf.toMoneyStr(currentLast, marketId) + " ["+ nf.toBTCStr(currentLastBTC) + "]\n");
+				msg.append("Last before " + dayLoop + " day : "+ nf.toMoneyStr(beforeLast, marketId) + " ["+ nf.toBTCStr(beforeLastBTC) + "]\n");
+				msg.append("Last difference : " + nf.toSignMoneyStr(currentLast - beforeLast, marketId) + " (" + nf.toSignPercentStr(currentLast, beforeLast) + ")\n");
 				msg.append("\n");
 			} else {
 				msg.append("---------------------\n");
-				msg.append("Volume at today : " + toVolumeStr(currentVolume) + " \n");
-				msg.append("Volume before " + dayLoop + " day : " + toVolumeStr(beforeVolume) + " \n");
-				msg.append("Volume difference : " + toSignVolumeStr(currentVolume - beforeVolume) + " (" + toSignPercent(currentVolume, beforeVolume) + ")\n");
+				msg.append("Volume at today : " + nf.toVolumeStr(currentVolume) + " \n");
+				msg.append("Volume before " + dayLoop + " day : " + nf.toVolumeStr(beforeVolume) + " \n");
+				msg.append("Volume difference : " + nf.toSignVolumeStr(currentVolume - beforeVolume) + " (" + nf.toSignPercentStr(currentVolume, beforeVolume) + ")\n");
 				msg.append("\n");
-				msg.append("High at Today : " + toMoneyStr(currentHigh, marketId) + "\n");
-				msg.append("High before " + dayLoop + " day : " + toMoneyStr(beforeHigh, marketId) + "\n");
-				msg.append("High difference : " + toSignMoneyStr(currentHigh - beforeHigh, marketId) + " (" + toSignPercent(currentHigh, beforeHigh) + ")\n");
+				msg.append("High at Today : " + nf.toMoneyStr(currentHigh, marketId) + "\n");
+				msg.append("High before " + dayLoop + " day : " + nf.toMoneyStr(beforeHigh, marketId) + "\n");
+				msg.append("High difference : " + nf.toSignMoneyStr(currentHigh - beforeHigh, marketId) + " (" + nf.toSignPercentStr(currentHigh, beforeHigh) + ")\n");
 				msg.append("\n");
-				msg.append("Low at Today : " + toMoneyStr(currentLow, marketId) + "\n");
-				msg.append("Low before " + dayLoop + " day : " + toMoneyStr(beforeLow, marketId) + "\n");
-				msg.append("Low difference : " + toSignMoneyStr(currentLow - beforeLow, marketId) + " (" + toSignPercent(currentLow, beforeLow) + ")\n");
+				msg.append("Low at Today : " + nf.toMoneyStr(currentLow, marketId) + "\n");
+				msg.append("Low before " + dayLoop + " day : " + nf.toMoneyStr(beforeLow, marketId) + "\n");
+				msg.append("Low difference : " + nf.toSignMoneyStr(currentLow - beforeLow, marketId) + " (" + nf.toSignPercentStr(currentLow, beforeLow) + ")\n");
 				msg.append("\n");
-				msg.append("Last at Today : "  + toMoneyStr(currentLast, marketId) + "\n");
-				msg.append("Last before " + dayLoop + " day : " + toMoneyStr(beforeLast, marketId) + "\n");
-				msg.append("Last difference : " + toSignMoneyStr(currentLast - beforeLast, marketId) + " (" + toSignPercent(currentLast, beforeLast) + ")\n");
+				msg.append("Last at Today : "  + nf.toMoneyStr(currentLast, marketId) + "\n");
+				msg.append("Last before " + dayLoop + " day : " + nf.toMoneyStr(beforeLast, marketId) + "\n");
+				msg.append("Last difference : " + nf.toSignMoneyStr(currentLast - beforeLast, marketId) + " (" + nf.toSignPercentStr(currentLast, beforeLast) + ")\n");
 				msg.append("\n");
 			}
 			break; 
@@ -1644,9 +1536,9 @@ public class MessageMaker {
 					double beforeBTC = beforeValue;
 					double beforeMoney = coinBeforeMoney.getDouble("last");
 					
-					msg.append(timeLoop + " 시간 전: " + toMoneyStr(beforeMoney, marketId) + " 원 [" + toBTCStr(beforeBTC) + " BTC]\n");
+					msg.append(timeLoop + " 시간 전: " + nf.toMoneyStr(beforeMoney, marketId) + " 원 [" + nf.toBTCStr(beforeBTC) + " BTC]\n");
 				} else {
-					msg.append(timeLoop + " 시간 전: " + toMoneyStr(beforeValue, marketId) + " 원\n");
+					msg.append(timeLoop + " 시간 전: " + nf.toMoneyStr(beforeValue, marketId) + " 원\n");
 				}
 			} else{
 				if(inBtcs.get(marketId)) {
@@ -1655,13 +1547,13 @@ public class MessageMaker {
 					double currentMoney = coinCurrentMoney.getDouble("last");
 					double beforeMoney = coinBeforeMoney.getDouble("last");
 
-					msg.append("현재가격: " + toMoneyStr(currentMoney, marketId) + " [" + toBTCStr(currentBTC)+ "]\n");
-					msg.append(timeLoop + " 시간 전: " + toMoneyStr(beforeMoney, marketId) + " [" + toBTCStr(beforeBTC) + "]\n");
-					msg.append("가격차이: " + toSignMoneyStr(currentMoney - beforeMoney, marketId) + " (" + toSignPercent(currentMoney, beforeMoney) + ")\n");
+					msg.append("현재가격: " + nf.toMoneyStr(currentMoney, marketId) + " [" + nf.toBTCStr(currentBTC)+ "]\n");
+					msg.append(timeLoop + " 시간 전: " + nf.toMoneyStr(beforeMoney, marketId) + " [" + nf.toBTCStr(beforeBTC) + "]\n");
+					msg.append("가격차이: " + nf.toSignMoneyStr(currentMoney - beforeMoney, marketId) + " (" + nf.toSignPercentStr(currentMoney, beforeMoney) + ")\n");
 				} else {
-					msg.append("현재가격: " + toMoneyStr(currentValue, marketId) + "\n");
-					msg.append(timeLoop + " 시간 전: " + toMoneyStr(beforeValue, marketId) + "\n");
-					msg.append("가격차이: " + toSignMoneyStr(currentValue - beforeValue, marketId) + " (" + toSignPercent(currentValue, beforeValue) + ")\n");
+					msg.append("현재가격: " + nf.toMoneyStr(currentValue, marketId) + "\n");
+					msg.append(timeLoop + " 시간 전: " + nf.toMoneyStr(beforeValue, marketId) + "\n");
+					msg.append("가격차이: " + nf.toSignMoneyStr(currentValue - beforeValue, marketId) + " (" + nf.toSignPercentStr(currentValue, beforeValue) + ")\n");
 				}
 			}
 			break;
@@ -1678,9 +1570,9 @@ public class MessageMaker {
 					double beforeBTC = beforeValue;
 					double beforeMoney = coinBeforeMoney.getDouble("last");
 					
-					msg.append("Coin Price before " + timeLoop + " hour : " + toMoneyStr(beforeMoney, marketId) + " [" + toBTCStr(beforeBTC) + "]\n");
+					msg.append("Coin Price before " + timeLoop + " hour : " + nf.toMoneyStr(beforeMoney, marketId) + " [" + nf.toBTCStr(beforeBTC) + "]\n");
 				} else {
-					msg.append("Coin Price before " + timeLoop + " hour : " + toMoneyStr(beforeValue, marketId) + "\n");
+					msg.append("Coin Price before " + timeLoop + " hour : " + nf.toMoneyStr(beforeValue, marketId) + "\n");
 				}
 			} else{
 				if(inBtcs.get(marketId)) {
@@ -1689,13 +1581,13 @@ public class MessageMaker {
 					double currentMoney = coinCurrentMoney.getDouble("last");
 					double beforeMoney = coinBeforeMoney.getDouble("last");
 
-					msg.append("Coin Price at Current Time : " + toMoneyStr(currentMoney, marketId) + " [" + toBTCStr(currentBTC)+ "]\n");
-					msg.append("Coin Price before " + timeLoop + " hour : " + toMoneyStr(beforeMoney, marketId) + " [" + toBTCStr(beforeBTC) + "]\n");
-					msg.append("Coin Price Difference : " + toSignMoneyStr(currentMoney - beforeMoney, marketId) + " (" + toSignPercent(currentMoney, beforeMoney) + ")\n");
+					msg.append("Coin Price at Current Time : " + nf.toMoneyStr(currentMoney, marketId) + " [" + nf.toBTCStr(currentBTC)+ "]\n");
+					msg.append("Coin Price before " + timeLoop + " hour : " + nf.toMoneyStr(beforeMoney, marketId) + " [" + nf.toBTCStr(beforeBTC) + "]\n");
+					msg.append("Coin Price Difference : " + nf.toSignMoneyStr(currentMoney - beforeMoney, marketId) + " (" + nf.toSignPercentStr(currentMoney, beforeMoney) + ")\n");
 				} else {
-					msg.append("Coin Price at Current Time : " + toMoneyStr(currentValue, marketId) + "\n");
-					msg.append("Coin Price before " + timeLoop + " hour : " + toMoneyStr(beforeValue, marketId) + "\n");
-					msg.append("Coin Price Difference : " + toSignMoneyStr(currentValue - beforeValue, marketId) + " (" + toSignPercent(currentValue, beforeValue) + ")\n");
+					msg.append("Coin Price at Current Time : " + nf.toMoneyStr(currentValue, marketId) + "\n");
+					msg.append("Coin Price before " + timeLoop + " hour : " + nf.toMoneyStr(beforeValue, marketId) + "\n");
+					msg.append("Coin Price Difference : " + nf.toSignMoneyStr(currentValue - beforeValue, marketId) + " (" + nf.toSignPercentStr(currentValue, beforeValue) + ")\n");
 				}
 			}
 			break; 
@@ -1704,8 +1596,5 @@ public class MessageMaker {
 		return msg.toString();
 	}
 
-	
-	
-	
 
 }

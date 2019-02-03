@@ -30,7 +30,7 @@
 		</trim>
 	</select>
 	
-	<select id="list" resultType="ClientMsgVo" parameterType="map">
+	<select id="list" resultType="ClientMessageVo" parameterType="map">
 		SELECT 
 		@rownum:=@rownum+1 as 'row',
 		MSG_SEQ as 'seq',

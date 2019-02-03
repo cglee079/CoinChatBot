@@ -11,8 +11,9 @@
 		<typeAlias type="com.cglee079.coinchatbot.model.CoinInfoVo" alias="CoinInfoVo"/>
 		<typeAlias type="com.cglee079.coinchatbot.model.CoinMarketConfigVo" alias="CoinMarketConfigVo"/>
 		<typeAlias type="com.cglee079.coinchatbot.model.CoinWalletVo" alias="CoinWalletVo"/>
-		<typeAlias type="com.cglee079.coinchatbot.model.ClientMsgVo" alias="ClientMsgVo" />
+		<typeAlias type="com.cglee079.coinchatbot.model.ClientMessageVo" alias="ClientMessageVo" />
 		<typeAlias type="com.cglee079.coinchatbot.model.ClientSuggestVo" alias="ClientSuggestVo" />
+		<typeAlias type="com.cglee079.coinchatbot.model.ClientTargetVo" alias="ClientTargetVo" />
 		<typeAlias type="com.cglee079.coinchatbot.config.id.Market" alias="Market" />
 	</typeAliases>
 	

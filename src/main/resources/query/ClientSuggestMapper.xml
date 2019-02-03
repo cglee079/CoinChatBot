@@ -41,10 +41,10 @@
 		)
 	</insert>
 	
-	<select id="delete" resultType="Integer">
+	<delete id="delete">
 		DELETE 
 		FROM TB_COINBOT_CLIENT_SUGGEST
 		WHERE SUGST_SEQ = #{seq}
-	</select>
+	</delete>
 	
 </mapper>

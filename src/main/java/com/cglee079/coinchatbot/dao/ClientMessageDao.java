@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.cglee079.coinchatbot.log.Log;
-import com.cglee079.coinchatbot.model.ClientMsgVo;
+import com.cglee079.coinchatbot.model.ClientMessageVo;
 
 @Repository
 public class ClientMessageDao {
@@ -22,11 +22,11 @@ public class ClientMessageDao {
 		return sqlSession.selectOne(namespace + ".count", map);
 	}
 	
-	public List<ClientMsgVo> list(Map<String, Object> map) {
+	public List<ClientMessageVo> list(Map<String, Object> map) {
 		return sqlSession.selectList(namespace + ".list", map);
 	}
 
-	public boolean insert(ClientMsgVo clientMsg){
+	public boolean insert(ClientMessageVo clientMsg){
 		try { return sqlSession.insert(namespace + ".insert", clientMsg) == 1; }
 		catch (Exception e){
 			Log.i("ERROR\t:\t" + e.getMessage());

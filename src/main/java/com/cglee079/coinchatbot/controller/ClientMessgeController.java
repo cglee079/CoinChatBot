@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cglee079.coinchatbot.model.ClientMsgVo;
+import com.cglee079.coinchatbot.model.ClientMessageVo;
 import com.cglee079.coinchatbot.service.ClientMessgeService;
 import com.google.gson.Gson;
 
@@ -41,7 +41,7 @@ public class ClientMessgeController {
 	@ResponseBody
 	@RequestMapping(value = "/client-messages/records", method=RequestMethod.GET)
 	public String doClientMsgList(@RequestParam Map<String,Object> map ){
-		List<ClientMsgVo> clientMsgs = clientMessageService.list(map);
+		List<ClientMessageVo> clientMsgs = clientMessageService.list(map);
 		int count = clientMessageService.count(map);
 		Gson gson = new Gson();
 		JSONArray data = new JSONArray(gson.toJson(clientMsgs));

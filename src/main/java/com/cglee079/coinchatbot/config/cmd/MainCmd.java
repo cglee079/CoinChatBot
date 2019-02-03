@@ -14,7 +14,7 @@ public enum MainCmd implements CmdEnum{
 	CALCULATE("손익금 계산", "Calculate"),
 	SET_INVEST("투자금액 설정", "Set Investment amount"),
 	SET_COINCNT("코인개수 설정", "Set The number of coins"),
-	SET_TARGET("목표가 설정", "Set Target price"),
+	SET_TARGET("목표가 알림", "Set Target price"),
 	SET_MARKET("거래소 설정", "Set Market"),
 	SET_TIMELOOP("시간알림 설정", "Set Daily notifications"),
 	SET_DAYLOOP("일일알림 설정", "Set Hourly notifications"),

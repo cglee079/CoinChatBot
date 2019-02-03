@@ -109,8 +109,6 @@ public class ClientService {
 	public boolean stopChat(Coin coinId, int userId) {
 		ClientVo client = clientDao.get(coinId, String.valueOf(userId));
 		if(client != null) {
-			client.setTargetUp(null);
-			client.setTargetDown(null);
 			client.setTimeloop(0);
 			client.setDayloop(0);
 			return clientDao.update(client);
@@ -167,7 +165,7 @@ public class ClientService {
 	}
 	
 	@Transactional	
-	public boolean updateState(Coin coinId, String userId, MenuState stateId) {
+	public boolean updateStateId(Coin coinId, String userId, MenuState stateId) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setStateId(stateId);
@@ -190,46 +188,10 @@ public class ClientService {
 	}
 	
 	@Transactional	
-	public boolean updatePrice(Coin coinId, String userId, Double price) {
+	public boolean updateInvest(Coin coinId, String userId, Double price) {
 		ClientVo client = clientDao.get(coinId, userId);
 		if(client != null){
 			client.setInvest(price);
-			return clientDao.update(client);
-		} else{
-			return false;
-		}
-	}
-	
-	@Transactional	
-	public boolean updateTargetUpPrice(Coin coinId, String userId, Double targetPrice) {
-		ClientVo client = clientDao.get(coinId, userId);
-		if(client != null){
-			client.setTargetUp(targetPrice);
-			client.setTargetDown(0.0);
-			return clientDao.update(client);
-		} else{
-			return false;
-		}
-	}
-	
-	@Transactional	
-	public boolean updateTargetDownPrice(Coin coinId, String userId, Double targetPrice) {
-		ClientVo client = clientDao.get(coinId, userId);
-		if(client != null){
-			client.setTargetUp(0.0);
-			client.setTargetDown(targetPrice);
-			return clientDao.update(client);
-		} else{
-			return false;
-		}
-	}
-
-	@Transactional	
-	public boolean clearTargetPrice(Coin coinId, String userId) {
-		ClientVo client = clientDao.get(coinId, userId);
-		if(client != null){
-			client.setTargetUp(0.0);
-			client.setTargetDown(0.0);
 			return clientDao.update(client);
 		} else{
 			return false;

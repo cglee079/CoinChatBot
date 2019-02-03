@@ -15,8 +15,6 @@
 		<result  property="stateId" column="CLNT_STATECD" />
 		<result  property="timeloop" column="ALERT_TIMELOOP"/>
 		<result  property="dayloop" column="ALERT_DAYLOOP"/>
-		<result  property="targetUp" column="ALERT_TGUP"/>
-		<result  property="targetDown" column="ALERT_TGDOWN"/>
 		<result  property="invest" column="CLNT_INVEST"/>
 		<result  property="coinCnt" column="CLNT_COINCNT"/>
 		<result  property="enabled" column="CLNT_ENABLED"/>
@@ -173,32 +171,6 @@
 		</if>
 	</select>
 	
-	<select id="listAlertTargetUp" resultMap="clientResultMap" parameterType="map">
-		/* 목표가격 현재가 이상 설정, 사용자 리스트*/
-		SELECT 
-			*
-		FROM TB_COINBOT_CLIENT
-		WHERE 1 = 1
-		AND CLNT_ENABLED = true
-		AND COIN_ID = #{coinId}
-		AND MARKET_CD = #{marketId}
-		<![CDATA[ AND  #{coinValue} >= ALERT_TGUP ]]>
-	</select>
-	
-	
-	<select id="listAlertTargetDown" resultMap="clientResultMap" parameterType="map">
-		/* 목표가격 현재가 이하 설정, 사용자 리스트 */
-		SELECT 
-			*
-		FROM TB_COINBOT_CLIENT
-		WHERE 1 = 1
-		AND CLNT_ENABLED = true
-		AND COIN_ID = #{coinId}
-		AND MARKET_CD = #{marketId}
-		<![CDATA[ AND  #{coinValue} <= ALERT_TGDOWN ]]>
-	</select>
-	
-	
 	<insert id="insert">
 		INSERT INTO TB_COINBOT_CLIENT(
 			COIN_ID, 
@@ -210,8 +182,6 @@
 			MARKET_CD,
 			ALERT_TIMELOOP,
 			ALERT_DAYLOOP,
-			ALERT_TGUP,
-			ALERT_TGDOWN,
 			CLNT_INVEST,
 			CLNT_COINCNT,
 			CLNT_ENABLED,
@@ -231,8 +201,6 @@
 			#{marketId},
 			#{timeloop},
 			#{dayloop},
-			#{targetUp},
-			#{targetDown},
 			#{invest},
 			#{coinCnt},
 			#{enabled},
@@ -260,24 +228,6 @@
 		MARKET_CD = #{marketId},
 		ALERT_TIMELOOP = #{timeloop},
 		ALERT_DAYLOOP = #{dayloop},
-		<choose>
-			<when test="targetUp == 0">
-			ALERT_TGUP = null,
-			</when>
-			<otherwise>
-			ALERT_TGUP = #{targetUp},
-			</otherwise>
-		</choose>
-		
-		<choose>
-			<when test="targetDown == 0">
-			ALERT_TGDOWN = null,
-			</when>
-			<otherwise>
-			ALERT_TGDOWN = #{targetDown},
-			</otherwise>
-		</choose>
-		
 		<choose>
 			<when test="invest == 0">
 			CLNT_INVEST = null,

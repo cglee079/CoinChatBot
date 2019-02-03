@@ -184,7 +184,6 @@ function fn_onInitDataGrid(){
                     }
                 }
 	        },
-			{field:'target', title:'목표가', width:'100px', halign:'center', styler : alignRight, formatter : toTargetCoinPriceStr},
 			{field:'invest', title:'투자금', width:'120px', halign:'center', sortable : "true", styler : alignRight, formatter : toMoneyStr},
 			{field:'coinCnt', title:'코인개수', width:'120px', halign:'center', sortable : "true",  styler : alignRight, formatter : toCoinCntStr},
 			{field:'avgPrice', title:'평단가', width:'120px', halign:'center', styler : alignRight, formatter : toAvgCoinPriceStr},
@@ -312,11 +311,6 @@ function toDayloopStr(value, row, index){
 function toTimeloopStr(value, row, index){
 	if(value == 0){ return "X";	}
 	return "매 " + value + "시간";
-}
-
-function toTargetCoinPriceStr(value, row, index){
-	if(row.targetUp){ return row.targetUp.toLocaleString() + " 원"; 	} 
-	if(row.targetDown){ return row.targetDown.toLocaleString() + " 원"; 	}
 }
 
 /**** *****/

@@ -6,18 +6,23 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum MenuState implements CodeEnum {
     MAIN("000"), 
-    SET_INVEST("012"),
-    SET_COINCNT("013"),
-    SET_TARGET("014"),
-    SET_MARKET("015"),
-    SET_DAYLOOP("016"),
-    SET_TIMELOOP("017"),
-    SEND_MSG("018"),
-    CONFIRM_STOP("019"),
-    HAPPY_LINE("020"),
-    PREFERENCE("021"),
-    PREF_LANGUAGE("022"),
-    PREF_TIMEADJUST("023");
+    SET_INVEST("010"),
+    SET_COINCNT("020"),
+    
+    SET_TARGET("030"),
+    ADD_TARGET("031"),
+ 	DEL_TARGET("032"),
+ 	
+    SET_MARKET("040"),
+    SET_DAYLOOP("050"),
+    SET_TIMELOOP("060"),
+    
+    SEND_MSG("070"),
+    CONFIRM_STOP("080"),
+    HAPPY_LINE("090"),
+    PREFERENCE("100"),
+    PREF_LANGUAGE("101"),
+    PREF_TIMEADJUST("102");
 	
 	@Getter
 	private final String code;

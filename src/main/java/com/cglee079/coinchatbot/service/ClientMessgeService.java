@@ -21,7 +21,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.dao.ClientMessageDao;
 import com.cglee079.coinchatbot.log.Log;
-import com.cglee079.coinchatbot.model.ClientMsgVo;
+import com.cglee079.coinchatbot.model.ClientMessageVo;
 import com.cglee079.coinchatbot.util.TimeStamper;
 
 @Service
@@ -37,7 +37,7 @@ public class ClientMessgeService {
 		return clientMessageDao.count(map);
 	}
 	
-	public List<ClientMsgVo> list(Map<String, Object> map) {
+	public List<ClientMessageVo> list(Map<String, Object> map) {
 		int page = Integer.parseInt((String) map.get("page"));
 		int rows = Integer.parseInt((String) map.get("rows"));
 		int stRow = (page * rows) - rows;
@@ -55,7 +55,7 @@ public class ClientMessgeService {
 		
 		User user = message.getFrom();
 		
-		ClientMsgVo clientMsg = ClientMsgVo.builder()
+		ClientMessageVo clientMsg = ClientMessageVo.builder()
 				.coinId(coinId)
 				.userId(user.getId().toString())
 				.username(user.getLastName() + " " + user.getFirstName())

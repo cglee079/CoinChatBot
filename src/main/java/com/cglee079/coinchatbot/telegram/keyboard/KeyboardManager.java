@@ -1,23 +1,17 @@
-package com.cglee079.coinchatbot.telegram;
+package com.cglee079.coinchatbot.telegram.keyboard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
 import com.cglee079.coinchatbot.config.cmd.MarketCmd;
 import com.cglee079.coinchatbot.config.id.Lang;
 import com.cglee079.coinchatbot.config.id.Market;
-import com.cglee079.coinchatbot.telegram.keyboard.ConfirmStopKeyboard;
-import com.cglee079.coinchatbot.telegram.keyboard.MainKeyboard_KR;
-import com.cglee079.coinchatbot.telegram.keyboard.MainKeyboard_US;
-import com.cglee079.coinchatbot.telegram.keyboard.PreferenceKeyboard;
-import com.cglee079.coinchatbot.telegram.keyboard.SetDayloopKeyboard;
-import com.cglee079.coinchatbot.telegram.keyboard.SetLanguageKeyboard;
-import com.cglee079.coinchatbot.telegram.keyboard.SetMarketKeyboard;
-import com.cglee079.coinchatbot.telegram.keyboard.SetTimeloopKeyboard;
+import com.cglee079.coinchatbot.model.ClientTargetVo;
 
 public class KeyboardManager {
 
@@ -29,6 +23,7 @@ public class KeyboardManager {
 	private HashMap<Lang, SetLanguageKeyboard> setLanguageKeyboards;
 	private HashMap<Lang, ConfirmStopKeyboard> confirmStopKeyboards;
 	private HashMap<Lang, PreferenceKeyboard> preferenceKeyboards;
+	private HashMap<Lang, SetTargetKeyboard> setTargetKeyboards;
 
 	public KeyboardManager(List<Market> enabledMarketIds) {
 		
@@ -46,6 +41,7 @@ public class KeyboardManager {
 		setLanguageKeyboards= new HashMap<>();
 		confirmStopKeyboards= new HashMap<>();
 		preferenceKeyboards = new HashMap<>();
+		setTargetKeyboards 	= new HashMap<>();
 		
 		mainKeyboards.put(Lang.KR, new MainKeyboard_KR(Lang.KR));
 		mainKeyboards.put(Lang.US, new MainKeyboard_US(Lang.US));
@@ -67,6 +63,9 @@ public class KeyboardManager {
 		
 		preferenceKeyboards.put(Lang.KR, new PreferenceKeyboard(Lang.KR));
 		preferenceKeyboards.put(Lang.US, new PreferenceKeyboard(Lang.US));
+		
+		setTargetKeyboards.put(Lang.KR, new SetTargetKeyboard(Lang.KR));
+		setTargetKeyboards.put(Lang.US, new SetTargetKeyboard(Lang.US));
 	}
 
 	public ReplyKeyboardRemove getDefaultKeyboard() {
@@ -104,4 +103,13 @@ public class KeyboardManager {
 	public PreferenceKeyboard getPreferenceKeyboard(Lang lang) {
 		return preferenceKeyboards.get(lang);
 	}
+	
+	public SetTargetKeyboard getSetTargetKeyboard(Lang lang) {
+		return setTargetKeyboards.get(lang);
+	}
+
+	public ReplyKeyboard getDelTargetKeyboard(List<String> targetCmds, Lang lang) {
+		return new DelTargetKeyboard(targetCmds, lang);
+	}
+	
 }
