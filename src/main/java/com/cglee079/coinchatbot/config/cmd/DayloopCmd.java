@@ -8,13 +8,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum DayloopCmd implements CmdEnum{
 	NULL(-1, "", ""),
-	D1(1, "1일", "1 Day"),
-	D2(2, "2일", "2 Day"),
-	D3(3, "3일", "3 Day"),
-	D4(4, "4일", "4 Day"),
-	D5(5, "5일", "5 Day"),
-	D6(6, "6일", "6 Day"),
-	D7(7, "7일", "7 Day"),
+	D1(1, "매 1일", "1 Day"),
+	D2(2, "매 2일", "2 Day"),
+	D3(3, "매 3일", "3 Day"),
+	D4(4, "매 4일", "4 Day"),
+	D5(5, "매 5일", "5 Day"),
+	D6(6, "매 6일", "6 Day"),
+	D7(7, "매 7일", "7 Day"),
 	OFF(0, "끄기", "Stop"),
 	OUT(-1, "나가기", "Out");
 	

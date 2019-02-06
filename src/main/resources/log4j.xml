@@ -39,7 +39,7 @@
 	</logger>
 
 	<!-- Query Loggers -->
-	<logger name="jdbc.sqlonly" additivity="false">
+	<!-- <logger name="jdbc.sqlonly" additivity="false">
 		<level value="INFO" />
 		<appender-ref ref="console-infolog" />
 	</logger>
@@ -61,10 +61,9 @@
 		<level value="DEBUG" />
 	</logger>
 
-	<!-- log the jdbc ResultSet calls -->
 	<logger name="jdbc.resultset" additivity="false">
 		<level value="DEBUG" />
-	</logger>
+	</logger> -->
 	
 	<!-- Root Logger -->
 	<root>
