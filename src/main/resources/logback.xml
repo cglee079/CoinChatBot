@@ -11,7 +11,8 @@
 		<connectionSource
 			class="ch.qos.logback.core.db.DriverManagerConnectionSource">
 			<driverClass>com.mysql.jdbc.Driver</driverClass>
-			<url>jdbc:mysql://192.168.219.103:3307/cg_coin_log</url>
+			<url>jdbc:mysql://192.168.219.103:3307/cg_coin_log?autoReconnect=true
+			</url>
 			<user>coinchatbot-logger</user>
 			<password>s12345</password>
 		</connectionSource>
@@ -21,7 +22,7 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<logger name="com.cglee079.coinchatbot" level="info" additivity="false">
+	<logger name="com.cglee079.coinchatbot" level="info">
 		<appender-ref ref="DB" />
 	</logger>
 
@@ -36,7 +37,8 @@
 		/> </logger> <logger name="jdbc.resultset" additivity="false"> <level value="DEBUG" 
 		/> </logger> -->
 
-	<root level="INFO">
+	<root level="info">
+		<appender-ref ref="STDOUT" />
 	</root>
 
 </configuration>
