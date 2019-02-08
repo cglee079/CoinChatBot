@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 
+	<session-config>
+		<session-timeout>10080</session-timeout>
+	</session-config>
+
 	<!-- ENUM Listener 설정 -->
 	<listener>
 		<listener-class>com.cglee079.coinchatbot.config.listener.EnumContextListener</listener-class>
