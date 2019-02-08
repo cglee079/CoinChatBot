@@ -22,7 +22,7 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<logger name="com.cglee079.coinchatbot" level="info">
+	<logger name="com.cglee079.coinchatbot" level="info" additivity="false">
 		<appender-ref ref="DB" />
 	</logger>
 
