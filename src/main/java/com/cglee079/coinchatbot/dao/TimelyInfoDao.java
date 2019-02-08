@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.config.id.Market;
-import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
 
 @Repository
@@ -22,7 +21,6 @@ public class TimelyInfoDao {
 	public boolean insert(TimelyInfoVo timelyInfo){
 		try { return sqlSession.insert(namespace + ".insert", timelyInfo) == 1; }
 		catch (Exception e){
-			Log.i("ERROR\t:\t" + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}

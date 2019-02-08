@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,7 +19,6 @@ import com.cglee079.coinchatbot.coin.CoinManager;
 import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
-import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientVo;
 import com.cglee079.coinchatbot.model.CoinMarketConfigVo;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
@@ -105,7 +106,6 @@ public class TimelyScheduler {
 		try {
 			coinObj = coinManager.getCoin(myCoinId, marketId);
 		} catch (ServerErrorException e) {
-			Log.i("ERROR loadDailyCoin : " + e.getMessage());
 			e.printStackTrace();
 			
 			coinObj = timelyInfoService.getBefore(myCoinId, dateCurrent, marketId);

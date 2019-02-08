@@ -19,13 +19,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import com.cglee079.coinchatbot.config.id.Coin;
+import com.cglee079.coinchatbot.config.log.MyLog;
 import com.cglee079.coinchatbot.dao.ClientMessageDao;
-import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientMessageVo;
 import com.cglee079.coinchatbot.util.TimeStamper;
 
 @Service
-public class ClientMessgeService {
+public class ClientMessageService {
 	
 	@Autowired
 	private ClientMessageDao clientMessageDao;
@@ -63,7 +63,8 @@ public class ClientMessgeService {
 				.date(TimeStamper.getDateTime())
 				.build();
 		
-		Log.i(clientMsg.log(coinId));
+		MyLog.i(this.getClass(), clientMsg.log(coinId));
+		
 		return clientMessageDao.insert(clientMsg);
 	}
 	

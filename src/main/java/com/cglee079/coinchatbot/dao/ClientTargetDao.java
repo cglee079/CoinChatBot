@@ -47,13 +47,13 @@ public class ClientTargetDao {
 	}
 
 
-	public boolean delete(Coin coinId, String userId, Double price) {
+	public int delete(Coin coinId, String userId, Double price) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("coinId", coinId);
 		map.put("userId", userId);
 		map.put("price", price);
 		
-		return sqlSession.delete(namespace + ".delete", map) == 1;
+		return sqlSession.delete(namespace + ".delete", map);
 		
 	}
 

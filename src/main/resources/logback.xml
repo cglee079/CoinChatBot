@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{5} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
+		<connectionSource
+			class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+			<driverClass>com.mysql.jdbc.Driver</driverClass>
+			<url>jdbc:mysql://192.168.219.103:3307/cg_coin_log</url>
+			<user>coinchatbot-logger</user>
+			<password>s12345</password>
+		</connectionSource>
+	</appender>
+
+	<logger name="org.springframework" level="info" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="com.cglee079.coinchatbot" level="info" additivity="false">
+		<appender-ref ref="DB" />
+	</logger>
+
+	<!-- <logger name="jdbc.sqlonly" additivity="false"> <level value="INFO" 
+		/> <appender-ref ref="STDOUT" /> </logger> <logger name="jdbc.resultsettable" 
+		additivity="false"> <level value="INFO" /> <appender-ref ref="STDOUT" /> 
+		</logger> -->
+
+	<!-- <logger name="jdbc.connection" additivity="false"> <level value="DEBUG" 
+		/> </logger> <logger name="jdbc.sqltiming" additivity="false"> <level value="DEBUG" 
+		/> </logger> <logger name="jdbc.audit" additivity="false"> <level value="DEBUG" 
+		/> </logger> <logger name="jdbc.resultset" additivity="false"> <level value="DEBUG" 
+		/> </logger> -->
+
+	<root level="INFO">
+	</root>
+
+</configuration>

@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cglee079.coinchatbot.model.ClientMessageVo;
-import com.cglee079.coinchatbot.service.ClientMessgeService;
+import com.cglee079.coinchatbot.service.ClientMessageService;
 import com.google.gson.Gson;
 
 @Controller
 public class ClientMessgeController {
 	@Autowired
-	private ClientMessgeService clientMessageService;
+	private ClientMessageService clientMessageService;
 	
 	/* 사용자 메시지 보기, 페이지 이동 */
 	@RequestMapping(value = "/client-messages", method=RequestMethod.GET)

@@ -2,14 +2,30 @@ package com.cglee079.coinchatbot.coin;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import com.cglee079.coinchatbot.coin.pooler.BinancePooler;
+import com.cglee079.coinchatbot.coin.pooler.BitfinexPooler;
+import com.cglee079.coinchatbot.coin.pooler.BithumbPooler;
+import com.cglee079.coinchatbot.coin.pooler.BittrexPooler;
+import com.cglee079.coinchatbot.coin.pooler.CashierestPooler;
+import com.cglee079.coinchatbot.coin.pooler.CoinnestPooler;
+import com.cglee079.coinchatbot.coin.pooler.CoinonePooler;
+import com.cglee079.coinchatbot.coin.pooler.ExchangePooler;
+import com.cglee079.coinchatbot.coin.pooler.GopaxPooler;
+import com.cglee079.coinchatbot.coin.pooler.HadaxPooler;
+import com.cglee079.coinchatbot.coin.pooler.HuobiPooler;
+import com.cglee079.coinchatbot.coin.pooler.KorbitPooler;
+import com.cglee079.coinchatbot.coin.pooler.OkexPooler;
+import com.cglee079.coinchatbot.coin.pooler.PoloniexPooler;
+import com.cglee079.coinchatbot.coin.pooler.UpbitPooler;
 import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
-import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
 import com.cglee079.coinchatbot.service.CoinMarketConfigService;
 
@@ -102,7 +118,6 @@ public class CoinManager {
 		try {
 			this.exchangeRate = exchangePooler.usd2krw();
 		} catch (ServerErrorException e) {
-			Log.i(e.log());
 			e.printStackTrace();
 		}
 	}
@@ -151,7 +166,6 @@ public class CoinManager {
 			}
 			return last;
 		} catch (ServerErrorException e) {
-			Log.i(e.log());
 			e.printStackTrace();
 			return -1.0;
 		}
@@ -163,7 +177,6 @@ public class CoinManager {
 		try {
 			btcObj = this.getCoin(Coin.BTC, marketId);
 		} catch (ServerErrorException e) {
-			Log.i(e.log());
 			e.printStackTrace();
 			return null;
 		}

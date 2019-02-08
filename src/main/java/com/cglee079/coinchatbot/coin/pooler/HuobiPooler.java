@@ -1,21 +1,21 @@
-package com.cglee079.coinchatbot.coin;
+package com.cglee079.coinchatbot.coin.pooler;
 
 import org.json.JSONObject;
 
+import com.cglee079.coinchatbot.coin.HttpClient;
 import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 
-public class HadaxPooler extends ApiPooler{
+public class HuobiPooler extends ApiPooler{
 	public JSONObject getCoin(Coin coin) throws ServerErrorException {
 		String param = coinParam.get(coin);
 		
 		JSONObject coinObj = this.getCurrentCoin(param);
-		
 		return coinObj;
 	}
 	
 	public JSONObject getCurrentCoin(String param) throws ServerErrorException {
-		String url = "https://api.hadax.com/market/detail/merged?symbol=" + param;
+		String url = "https://api.huobi.pro/market/detail/merged?symbol=" + param;
 		HttpClient httpClient = new HttpClient();
 		String response;
 		JSONObject responseObj 	= null;
@@ -42,10 +42,9 @@ public class HadaxPooler extends ApiPooler{
 			newCoinObj.put("high", coinObj.getDouble("high"));
 			newCoinObj.put("low", coinObj.getDouble("low"));
 			
-			
 			return newCoinObj;
 		} catch (Exception e) {
-			throw new ServerErrorException("Hadax server error: " + e.getMessage());
+			throw new ServerErrorException("Huobi server error: " + e.getMessage());
 		}
 		
 	}

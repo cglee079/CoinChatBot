@@ -1,16 +1,17 @@
-package com.cglee079.coinchatbot.coin;
+package com.cglee079.coinchatbot.coin.pooler;
 
 import org.json.JSONObject;
 
+import com.cglee079.coinchatbot.coin.HttpClient;
 import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
 
-public class CoinnestPooler extends ApiPooler{
+public class KorbitPooler extends ApiPooler{
 	
 	public JSONObject getCoin(Coin coin) throws ServerErrorException {
 		String param = coinParam.get(coin);
 		
-		String url = "https://api.coinnest.co.kr/api/pub/ticker?coin=" + param;
+		String url = "https://api.korbit.co.kr/v1/ticker/detailed?currency_pair=" + param;
 		HttpClient httpClient = new HttpClient();
 		String response;
 		try {
@@ -20,14 +21,14 @@ public class CoinnestPooler extends ApiPooler{
 			coinObj.put("errorCode", 0);
 			coinObj.put("errorMsg", "");
 			coinObj.put("result", "success");
-			coinObj.put("volume", data.getDouble("vol"));
+			coinObj.put("volume", data.getDouble("volume"));
 			coinObj.put("last", data.getDouble("last"));
 			coinObj.put("high", data.getDouble("high"));
 			coinObj.put("low", data.getDouble("low"));
 			
 			return coinObj;				
 		} catch (Exception e) {
-			throw new ServerErrorException("Coinnest Server Error : " + e.getMessage());
+			throw new ServerErrorException("Kobit server error: " + e.getMessage());
 		}
 	}
 }

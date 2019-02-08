@@ -4,23 +4,23 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="coinManager" class="com.cglee079.coinchatbot.coin.CoinManager"/>
-	<bean id="exchangePooler" class="com.cglee079.coinchatbot.coin.ExchangePooler"/>
+	<bean id="exchangePooler" class="com.cglee079.coinchatbot.coin.pooler.ExchangePooler"/>
 	
-	<bean id="coinonePooler" 	class="com.cglee079.coinchatbot.coin.CoinonePooler"/>	
-	<bean id="bithumbPooler" 	class="com.cglee079.coinchatbot.coin.BithumbPooler"/>
-	<bean id="upbitPooler" 		class="com.cglee079.coinchatbot.coin.UpbitPooler"/>
-	<bean id="coinnestPooler" 	class="com.cglee079.coinchatbot.coin.CoinnestPooler"/>
-	<bean id="korbitPooler" 	class="com.cglee079.coinchatbot.coin.KorbitPooler"/>
-	<bean id="gopaxPooler" 		class="com.cglee079.coinchatbot.coin.GopaxPooler"/>
+	<bean id="coinonePooler" 	class="com.cglee079.coinchatbot.coin.pooler.CoinonePooler"/>	
+	<bean id="bithumbPooler" 	class="com.cglee079.coinchatbot.coin.pooler.BithumbPooler"/>
+	<bean id="upbitPooler" 		class="com.cglee079.coinchatbot.coin.pooler.UpbitPooler"/>
+	<bean id="coinnestPooler" 	class="com.cglee079.coinchatbot.coin.pooler.CoinnestPooler"/>
+	<bean id="korbitPooler" 	class="com.cglee079.coinchatbot.coin.pooler.KorbitPooler"/>
+	<bean id="gopaxPooler" 		class="com.cglee079.coinchatbot.coin.pooler.GopaxPooler"/>
 	
-	<bean id="bitfinexPooler" 	class="com.cglee079.coinchatbot.coin.BitfinexPooler"/>
-	<bean id="bittrexPooler" 	class="com.cglee079.coinchatbot.coin.BittrexPooler"/>
-	<bean id="poloniexPooler" 	class="com.cglee079.coinchatbot.coin.PoloniexPooler"/>
-	<bean id="binancePooler" 	class="com.cglee079.coinchatbot.coin.BinancePooler"/>
-	<bean id="huobiPooler" 		class="com.cglee079.coinchatbot.coin.HuobiPooler"/>
-	<bean id="hadaxPooler" 		class="com.cglee079.coinchatbot.coin.HadaxPooler"/>
-	<bean id="okexPooler" 		class="com.cglee079.coinchatbot.coin.OkexPooler"/>
-	<bean id="cashierestPooler" class="com.cglee079.coinchatbot.coin.CashierestPooler"/>
+	<bean id="bitfinexPooler" 	class="com.cglee079.coinchatbot.coin.pooler.BitfinexPooler"/>
+	<bean id="bittrexPooler" 	class="com.cglee079.coinchatbot.coin.pooler.BittrexPooler"/>
+	<bean id="poloniexPooler" 	class="com.cglee079.coinchatbot.coin.pooler.PoloniexPooler"/>
+	<bean id="binancePooler" 	class="com.cglee079.coinchatbot.coin.pooler.BinancePooler"/>
+	<bean id="huobiPooler" 		class="com.cglee079.coinchatbot.coin.pooler.HuobiPooler"/>
+	<bean id="hadaxPooler" 		class="com.cglee079.coinchatbot.coin.pooler.HadaxPooler"/>
+	<bean id="okexPooler" 		class="com.cglee079.coinchatbot.coin.pooler.OkexPooler"/>
+	<bean id="cashierestPooler" class="com.cglee079.coinchatbot.coin.pooler.CashierestPooler"/>
 	
 
 </beans>

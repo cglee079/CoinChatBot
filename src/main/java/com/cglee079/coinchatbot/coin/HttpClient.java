@@ -6,7 +6,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.cglee079.coinchatbot.log.Log;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.cglee079.coinchatbot.config.log.MyLog;
 
 public class HttpClient {
 	public String get(String url) throws Exception {
@@ -31,7 +34,7 @@ public class HttpClient {
 			
 			return response.toString();
 		} catch (MalformedURLException e) {
-			Log.i("HTTP Client Error");
+			MyLog.e(this.getClass(), e.getMessage());
 			e.printStackTrace();
 		} 		
 		return null;

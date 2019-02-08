@@ -1,4 +1,4 @@
-package com.cglee079.coinchatbot.coin;
+package com.cglee079.coinchatbot.coin.pooler;
 
 import java.util.HashMap;
 

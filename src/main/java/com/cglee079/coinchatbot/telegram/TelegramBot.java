@@ -7,10 +7,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.logging.Log;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.abilitybots.api.bot.AbilityBot;
@@ -40,14 +40,14 @@ import com.cglee079.coinchatbot.config.id.Lang;
 import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.config.id.MenuState;
 import com.cglee079.coinchatbot.config.id.TargetFocus;
+import com.cglee079.coinchatbot.config.log.MyLog;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
-import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientTargetVo;
 import com.cglee079.coinchatbot.model.ClientVo;
 import com.cglee079.coinchatbot.model.CoinConfigVo;
 import com.cglee079.coinchatbot.model.CoinMarketConfigVo;
 import com.cglee079.coinchatbot.model.TimelyInfoVo;
-import com.cglee079.coinchatbot.service.ClientMessgeService;
+import com.cglee079.coinchatbot.service.ClientMessageService;
 import com.cglee079.coinchatbot.service.ClientService;
 import com.cglee079.coinchatbot.service.ClientSuggestService;
 import com.cglee079.coinchatbot.service.ClientTargetService;
@@ -67,7 +67,7 @@ public class TelegramBot extends AbilityBot  {
 	private ClientService clientService;
 	
 	@Autowired
-	private ClientMessgeService clientMsgService;
+	private ClientMessageService clientMsgService;
 	
 	@Autowired
 	private ClientSuggestService clientSuggestService;
@@ -483,7 +483,6 @@ public class TelegramBot extends AbilityBot  {
 			
 		}
 		catch (ServerErrorException e) {
-			Log.i(e.log());
 			e.printStackTrace();
 			msg.append(msgMaker.warningWaitSecond(lang)+ e.getTelegramMsg());
 		}
@@ -565,7 +564,7 @@ public class TelegramBot extends AbilityBot  {
 			try{
 				Double price = Double.valueOf(cmd.replaceAll("[^-?0-9-?.]+", ""));
 				
-				if(clientTargetService.delete(myCoinId, userId.toString(), price)) {
+				if(clientTargetService.delete(myCoinId, userId.toString(), price) == 1) {
 					msg.append(msgMaker.msgCompleteDelTarget(price, marketId, lang));
 				}else {
 					throw new NumberFormatException();
@@ -668,7 +667,7 @@ public class TelegramBot extends AbilityBot  {
 		StopConfirmCmd inCmd = StopConfirmCmd.from(lang, cmd);
 		switch(inCmd) {
 		case YES:
-			if (clientService.stopChat(myCoinId, userId) && clientTargetService.delete(myCoinId, userId)) {
+			if (clientService.stopChat(myCoinId, userId) && clientTargetService.delete(myCoinId, userId) >= 0) {
 				msg.append(msgMaker.msgStopAllNotice(lang));
 			} else {
 				msg.append(msgMaker.warningNeedToStart(lang));
@@ -768,26 +767,28 @@ public class TelegramBot extends AbilityBot  {
 		Lang langID = lang;
 		
 		PrefLangCmd inCmd = PrefLangCmd.from(lang, cmd);
-		if(inCmd != null) {
+		
+		switch(inCmd) {
+		case SET_KR:
+		case SET_US:
 			langID = inCmd.getId();
-		}
-		
-		if(clientService.updateLanguage(myCoinId, userId.toString(), langID)) {
-			msg.append(msgMaker.msgSetLanguageSuccess(langID));
-			msg.append(msgMaker.msgToMain(langID));
-		} else {
-			msg.append(msgMaker.warningWaitSecond(lang));
-			msg.append(msgMaker.msgToMain(lang));
-		}
-		
-		
-		sendMessage(userId, messageId, msg, km.getMainKeyboard(langID));
-		if(inCmd != null) {
+			if(clientService.updateLanguage(myCoinId, userId.toString(), langID)) {
+				msg.append(msgMaker.msgSetLanguageSuccess(langID));
+				msg.append(msgMaker.msgToMain(langID));
+			} else {
+				msg.append(msgMaker.warningWaitSecond(lang));
+				msg.append(msgMaker.msgToMain(lang));
+			}
+			sendMessage(userId, messageId, msg, km.getMainKeyboard(langID));
 			sendMessage(userId, messageId, msgMaker.explainHelp(enabledMarketIds, langID), null);
+			break;
+		default :
+			msg.append(msgMaker.msgToMain(lang));
+			sendMessage(userId, messageId, msg, km.getMainKeyboard(langID));
+			break;
 		}
 		
 		clientService.updateStateId(myCoinId, userId.toString(), MenuState.MAIN);
-		
 	}
 	
 	
@@ -834,13 +835,12 @@ public class TelegramBot extends AbilityBot  {
 		try {
 			coinObj = coinManager.getCoin(myCoinId, marketId);
 		} catch (ServerErrorException e) {
-			Log.i(e.log());
 			e.printStackTrace();
 			return msgMaker.warningWaitSecond(lang) + e.getTelegramMsg();
 		}
 		
 		if(coinObj == null) {
-			Log.i("가격정보를 보낼 수 없습니다. : return NULL");
+			MyLog.e(this.getClass(), "!!!  가격정보를 보낼 수 없습니다. : return NULL");
 			return msgMaker.warningWaitSecond(lang) + "Coin NULL";
 		}
 		
@@ -926,7 +926,6 @@ public class TelegramBot extends AbilityBot  {
 				coin 	= coinManager.getCoin(myCoinId, marketId);
 				btc 	= coinManager.getCoin(Coin.BTC, marketId);
 			} catch (ServerErrorException e) {
-				Log.i(e.log());
 				e.printStackTrace();			
 				return msgMaker.warningWaitSecond(lang) + e.getTelegramMsg();
 			}
@@ -964,7 +963,6 @@ public class TelegramBot extends AbilityBot  {
 				JSONObject coin = coinManager.getCoin(myCoinId, client.getMarketId());
 				return calcResult(client, coin.getDouble("last"));
 			} catch (ServerErrorException e) {
-				Log.i(e.log());
 				e.printStackTrace();
 				return msgMaker.warningWaitSecond(lang) + e.getTelegramMsg();
 			}
@@ -984,7 +982,6 @@ public class TelegramBot extends AbilityBot  {
 			try {
 				btcObj = coinManager.getCoin(Coin.BTC, client.getMarketId());
 			} catch (ServerErrorException e) {
-				Log.i(e.log());
 				e.printStackTrace();
 				return msgMaker.warningWaitSecond(lang) + e.getTelegramMsg();
 			}
@@ -1015,7 +1012,7 @@ public class TelegramBot extends AbilityBot  {
 	}
 	
 	public void sendMessage(String userId, Integer msgId, String msg, ReplyKeyboard keyboard){
-		Log.i("To Client\t:\t" + myCoinId + "\t[id :" +userId + " ]  " + msg.replace("\n", "  "));
+		MyLog.i(this.getClass(), ">>>  " + myCoinId + "  [id :" +userId + " ]  " + msg);
 		
 		SendMessage sendMessage = new SendMessage(userId, msg);
 		sendMessage.setReplyToMessageId(msgId);
@@ -1029,7 +1026,7 @@ public class TelegramBot extends AbilityBot  {
 
 				@Override
 				public void onError(BotApiMethod<Message> arg0, TelegramApiRequestException e) {
-					Log.i("To Client Error\t:\t" + myCoinId +  "\t[id :" + userId + " ]  에게 메세지를 보낼 수 없습니다.  :" + e.getMessage());
+					MyLog.i(this.getClass(), "!!!  " + myCoinId +  "   [id :" + userId + " ]  에게 메세지를 보낼 수 없습니다.  :" + e.getMessage());
 					e.printStackTrace();
 					clientService.increaseErrCnt(myCoinId, userId);
 				}
@@ -1069,7 +1066,7 @@ public class TelegramBot extends AbilityBot  {
 			
 			msg = msgMaker.msgTargetPriceNotify(currentValue, targetPrice, marketId, lang);
 			sendMessage(target.getUserId(), null, msg, null);
-			if(clientTargetService.delete(myCoinId, userId, targetPrice)) {
+			if(clientTargetService.delete(myCoinId, userId, targetPrice) == 1) {
 				sendMessage(userId, null, msgMaker.msgTargetPriceDeleted(lang), null);
 			}
 		}

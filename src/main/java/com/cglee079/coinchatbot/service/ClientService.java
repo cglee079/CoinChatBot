@@ -15,8 +15,8 @@ import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.config.id.Lang;
 import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.config.id.MenuState;
+import com.cglee079.coinchatbot.config.log.MyLog;
 import com.cglee079.coinchatbot.dao.ClientDao;
-import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientVo;
 import com.cglee079.coinchatbot.util.TimeStamper;
 import com.google.gson.Gson;
@@ -124,7 +124,7 @@ public class ClientService {
 				int errCnt = client.getErrCnt();
 				errCnt = errCnt + 1;
 				if(errCnt > maxErrorCnt) {
-					Log.i("Close Client\t:\t[id :" + userId+ "\t" + client.getUsername() + " ] ");
+					MyLog.i(this.getClass(), "!!!  Close Client  :  [id :" + userId+ " ]");
 					client.setEnabled(false);
 					client.setCloseDate(TimeStamper.getDateTime());
 				} else {

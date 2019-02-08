@@ -3,15 +3,18 @@ package com.cglee079.coinchatbot.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientMessageVo;
 
 @Repository
 public class ClientMessageDao {
+	private Log log = LogFactory.getLog(ClientMessageDao.class);
+	
 	final static String namespace = "com.cglee079.coinchatbot.mapper.ClientMessageMapper";
 
 	@Autowired
@@ -29,8 +32,7 @@ public class ClientMessageDao {
 	public boolean insert(ClientMessageVo clientMsg){
 		try { return sqlSession.insert(namespace + ".insert", clientMsg) == 1; }
 		catch (Exception e){
-			Log.i("ERROR\t:\t" + e.getMessage());
-			e.printStackTrace();
+			log.error(e);
 			return false;
 		}
 	}

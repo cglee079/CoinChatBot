@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,9 +17,7 @@ import com.cglee079.coinchatbot.coin.CoinManager;
 import com.cglee079.coinchatbot.config.id.Coin;
 import com.cglee079.coinchatbot.config.id.Market;
 import com.cglee079.coinchatbot.exception.ServerErrorException;
-import com.cglee079.coinchatbot.log.Log;
 import com.cglee079.coinchatbot.model.ClientTargetVo;
-import com.cglee079.coinchatbot.model.ClientVo;
 import com.cglee079.coinchatbot.model.CoinMarketConfigVo;
 import com.cglee079.coinchatbot.service.ClientTargetService;
 import com.cglee079.coinchatbot.service.CoinMarketConfigService;
@@ -25,6 +25,8 @@ import com.cglee079.coinchatbot.telegram.TelegramBot;
 
 @Component
 public class TargetScheduler {
+	private Log log = LogFactory.getLog(TargetScheduler.class);
+	
 	@Autowired
 	private ClientTargetService clientTargetService;
 
@@ -83,7 +85,6 @@ public class TargetScheduler {
 			
 			
 		} catch (ServerErrorException e) {
-			Log.i("Load TargetPrice  " + e.log());
 			e.printStackTrace();
 		}
 	}

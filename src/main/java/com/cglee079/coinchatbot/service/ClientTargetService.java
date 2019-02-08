@@ -27,11 +27,11 @@ public class ClientTargetService {
 		return clientTargetDao.list(coinId, userId.toString());
 	}
 
-	public boolean delete(Coin coinId, String userId, Double price) {
+	public int delete(Coin coinId, String userId, Double price) {
 		return clientTargetDao.delete(coinId, userId, price);
 	}
 
-	public boolean delete(Coin coinId, Integer userId) {
+	public int delete(Coin coinId, Integer userId) {
 		return clientTargetDao.delete(coinId, userId.toString(), null);
 	}
 
