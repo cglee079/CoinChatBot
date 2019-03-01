@@ -97,8 +97,7 @@
 
 <h2><strong>관련링크</strong></h2>
 
-<ul>
-	<li>소스코드(GitHub) :&nbsp;<a href="https://github.com/cgLee079/CoinTeleBot">https://github.com/cgLee079/CoinTeleBot</a></li>
+<ul
 	<li>가상화폐 알리미&nbsp;
 	<ul>
 		<li>&nbsp;ADA :&nbsp;<a href="https://telegram.me/cg_ada_bot"> https://telegram.me/cg_ada_bot</a></li>
