@@ -13,8 +13,6 @@
 
 <p>&nbsp;</p>
 
-<h2>&nbsp;</h2>
-
 <h2><strong>팀원 및 역할분담</strong></h2>
 
 <ul>
