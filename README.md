@@ -1,15 +1,19 @@
+<p><img alt="" src="http://www.changoos.com/uploaded/project/image/PL9SIU181224235523.PNG"/></p>
+
+
 <h2><strong>개요</strong></h2>
 
-<p>본 프로젝트는 텔레그램을 이용한 코인알리미 입니다.</p>
+<p>본 프로젝트는 토이프로젝트이며, 텔레그램 챗봇을&nbsp;이용한 가상화폐 가격 알리미 서비스입니다.</p>
 
-<p>인턴중 소액을 가상화폐에 투자하였습니다.</p>
+<p>설정을 통해 주기적으로 가격 정보&nbsp;알림을 주는 서비스를 제공하며,</p>
 
-<p>주기적으로 가격 정보&nbsp;알림을 주는 서비스가 있으면 좋을 것이라&nbsp;생각하였고 본 프로젝트를 개발하였습니다.</p>
+<p>이외에도 거래소별 가격, 목표가 알림, 손익금 계산 등 다양한 가상화폐관련 편의기능을 제공하니다.</p>
 
-<p>개발 후 커뮤니티에 배포하였고 현재까지 유지보수 하고 있습니다.</p>
+<p>개발 후 커뮤니티에 배포하였고, 현재까지 유지보수 하고 있습니다.</p>
 
 <p>&nbsp;</p>
 
+<h2>&nbsp;</h2>
 
 <h2><strong>팀원 및 역할분담</strong></h2>
 
@@ -21,7 +25,7 @@
 
 <p>&nbsp;</p>
 
-<h2><strong>프로젝트 개발기간</strong></h2>
+<h2><strong>개발기간</strong></h2>
 
 <ul>
 	<li>2018.02 ~ 유지보수 및 고도화 유지중.</li>
@@ -31,7 +35,20 @@
 
 <p>&nbsp;</p>
 
+<h2>기술스택</h2>
+
+<ul>
+	<li>Java, MySql</li>
+	<li>Management, Spring, MyBatis</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
 <h2><strong>프로젝트 구성도</strong></h2>
+
+<p><img alt="" src="/uploaded/project/image/VZKRPS181224235523.JPG" style="height:358px; width:640px"/></p>
 
 <ul>
 	<li>Server : Synology DS218+</li>
@@ -56,13 +73,17 @@
 <p>&nbsp;</p>
 
 <h2><strong>스킬</strong></h2>
+
 <ul>
+	<li><strong>Spring, MyBatis, Telegram API, Docker</strong></li>
 	<li>Telegram API : 사용자 메세지 수신/ 발송</li>
-	<li>SpringMVC : 4.2</li>
+	<li>SpringMVC : 4.2.5</li>
 	<li>Spring-Scheduler : 사용자 시간 주기 알림</li>
-	<li>Docker : 가상화폐별 독립 WAS 운영</li>
+	<li>Docker : Tomcat9 컨테이너 운용</li>
 	<li>JSON : 거래소 restful API 호출 Response Parse.</li>
+	<li>English : 해외 사용자를 위한 영어 지원.</li>
 </ul>
+
 
 <p>&nbsp;</p>
 
