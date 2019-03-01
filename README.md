@@ -1,4 +1,4 @@
-<p><img alt="" src="http://www.changoos.com/uploaded/project/image/PL9SIU181224235523.PNG"/></p>
+<p><img src="http://www.changoos.com/uploaded/project/image/PL9SIU181224235523.PNG"></p>
 
 
 <h2><strong>개요</strong></h2>
@@ -7,7 +7,7 @@
 
 <p>설정을 통해 주기적으로 가격 정보&nbsp;알림을 주는 서비스를 제공하며,</p>
 
-<p>이외에도 거래소별 가격, 목표가 알림, 손익금 계산 등 다양한 가상화폐관련 편의기능을 제공하니다.</p>
+<p>이외에도 거래소별 가격, 목표가 알림, 손익금 계산 등 다양한 가상화폐관련 편의기능을 제공합니다.</p>
 
 <p>개발 후 커뮤니티에 배포하였고, 현재까지 유지보수 하고 있습니다.</p>
 
