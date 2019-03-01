@@ -1,6 +1,3 @@
-<p><img src="http://www.changoos.com/uploaded/project/image/PL9SIU181224235523.PNG"></p>
-
-
 <h2><strong>개요</strong></h2>
 
 <p>본 프로젝트는 토이프로젝트이며, 텔레그램 챗봇을&nbsp;이용한 가상화폐 가격 알리미 서비스입니다.</p>
