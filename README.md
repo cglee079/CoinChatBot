@@ -6,7 +6,6 @@
 
 <p>이외에도 거래소별 가격, 목표가 알림, 손익금 계산 등 다양한 가상화폐관련 편의기능을 제공합니다.</p>
 
-<p>개발 후 커뮤니티에 배포하였고, 현재까지 유지보수 하고 있습니다.</p>
 
 <p>&nbsp;</p>
 
@@ -43,24 +42,14 @@
 
 <h2><strong>프로젝트 구성도</strong></h2>
 
-<p><img alt="" src="/uploaded/project/image/VZKRPS181224235523.JPG" style="height:358px; width:640px"/></p>
+<p><img alt="" src="http://www.changoos.com/uploaded/project/image/VZKRPS181224235523.JPG" style="height:358px; width:640px"/></p>
 
 <ul>
-	<li>Server : Synology DS218+</li>
+	<li>H/W : Synology DS218+</li>
 	<li>DBMS : MariaDB</li>
-	<li>WAS&nbsp;: Tomcat9</li>
-	<li>Backend: Spring</li>
-	<li>Lang : Java 1.8</li>
-</ul>
-
-<p>&nbsp;</p>
-
-<p>&nbsp;</p>
-
-<h2><strong><span style="color:null">개발도구</span></strong></h2>
-
-<ul>
-	<li><span style="color:null">IDE : Eclipse</span></li>
+	<li>WAS : Tomcat9.0</li>
+	<li>Backend: SpringMVC 4.2.5</li>
+	<li>Language : Java 1.8</li>
 </ul>
 
 <p>&nbsp;</p>
@@ -73,9 +62,8 @@
 	<li><strong>Spring, MyBatis, Telegram API, Docker</strong></li>
 	<li>Telegram API : 사용자 메세지 수신/ 발송</li>
 	<li>SpringMVC : 4.2.5</li>
-	<li>Spring-Scheduler : 사용자 시간 주기 알림</li>
-	<li>Docker : Tomcat9 컨테이너 운용</li>
-	<li>JSON : 거래소 restful API 호출 Response Parse.</li>
+	<li>Spring-scheduler : 사용자 시간 주기 알림</li>
+	<li>Docker : Tomcat9.0 컨테이너 운용</li>
 	<li>English : 해외 사용자를 위한 영어 지원.</li>
 </ul>
 
