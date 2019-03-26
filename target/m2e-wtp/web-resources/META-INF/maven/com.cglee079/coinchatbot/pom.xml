@@ -13,6 +13,8 @@
 		<org.springframework-version>4.2.5.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.7.25</org.slf4j-version>
+		<httpcompontents.version>4.5.3</httpcompontents.version>
+		<guice.version>4.1.0</guice.version>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
 	</properties>
@@ -86,16 +88,19 @@
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
+
+
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.3.0</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
@@ -185,12 +190,15 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 
-		<!-- Telegram Bots Lib -->
+		<!-- Telegram Bots -->
 		<dependency>
 			<groupId>org.telegram</groupId>
 			<artifactId>telegrambots-abilities</artifactId>
-			<version>4.1.2</version>
+			<version>4.0.0</version>
 		</dependency>
+
+
+
 	</dependencies>
 	<build>
 		<plugins>

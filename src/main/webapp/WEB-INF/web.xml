@@ -9,7 +9,6 @@
   <context-param>
     <param-name>enumServletContextConfig</param-name>
     <param-value> 
-			
 			com.cglee079.coinchatbot.config.id.Coin,
 			com.cglee079.coinchatbot.config.id.Lang,
 			com.cglee079.coinchatbot.config.id.Market,
@@ -24,7 +23,7 @@
     <param-value>
 		/WEB-INF/spring/root-context.xml
 		/WEB-INF/spring/appServlet/**-context.xml
-		/WEB-INF/spring/appServlet/coin/**-context.xml
+		/WEB-INF/spring/appServlet/coin_test/**-context.xml
 		</param-value>
   </context-param>
   <servlet>
