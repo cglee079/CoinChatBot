@@ -21,6 +21,4 @@
 	<bean id="hadaxPooler" 		class="com.cglee079.coinchatbot.coin.pooler.HadaxPooler"/>
 	<bean id="okexPooler" 		class="com.cglee079.coinchatbot.coin.pooler.OkexPooler"/>
 	<bean id="cashierestPooler" class="com.cglee079.coinchatbot.coin.pooler.CashierestPooler"/>
-	
-
 </beans>
