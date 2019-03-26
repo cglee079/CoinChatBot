@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.coinchatbot.mapper.CoinMarketConfigMapper">
+
+	<resultMap type="CoinMarketConfigVo" id="coinMarketConfigResultMap">
+		<id property="coinId" column="COIN_ID" />
+		<id property="marketId" column="MARKET_CD" />
+		<result property="inBtc" column="IS_INBTC"/>
+		<result property="param" column="URL_PARAM"/>
+		<result property="enabled" column="ENABLED"/>
+	</resultMap>
+	
+	<select id="list" parameterType="map" resultMap="coinMarketConfigResultMap">
+		SELECT
+			*
+		FROM TB_COINBOT_MARKET_CONFIG
+		WHERE 1 = 1
+		AND ENABLED = true
+		<if test="coinId != null">
+		AND COIN_ID = #{coinId}
+		</if>
+		<if test="marketId != null">
+		AND MARKET_CD = #{marketId}
+		</if>
+		ORDER BY MARKET_CD ASC;
+	</select>
+	
+</mapper>

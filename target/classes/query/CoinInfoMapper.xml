@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.coinchatbot.mapper.CoinInfoMapper">
+
+	<resultMap type="CoinInfoVo" id="coinInfoResultMap">
+		<id property="coinId" column="COIN_ID" />
+		<result property="chatAddr" column="CHAT_URL"/>
+		<result property="enabled" column="ENABLED"/>
+	</resultMap>
+	
+	<select id="list" resultMap="coinInfoResultMap">
+			SELECT 
+				*
+			FROM TB_COINBOT_COIN_INFO
+			WHERE 1 = 1
+			AND ENABLED = true
+			<![CDATA[AND COIN_ID <> #{coinId}]]>
+	</select>
+	
+</mapper>

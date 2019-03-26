@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.coinchatbot.mapper.ClientMessageMapper">
+
+	<select id="count" resultType="Integer" parameterType="map">
+		SELECT 
+			COUNT(*)
+		FROM TB_COINBOT_CLIENT_MSG
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		<if test="coinId != ''">
+			AND COIN_ID = #{coinId}
+		</if>
+		<if test="userId != ''">
+			AND CLNT_USERID = #{userId}
+		</if>
+		<if test="username != ''">
+			AND CLNT_USERNAME = #{username}
+		</if>
+		<if test="startDate != ''">
+			<![CDATA[AND MSG_DATE >= #{startDate}]]>
+		</if>
+		<if test="endDate != ''">
+			<![CDATA[AND MSG_DATE <= #{endDate}]]>
+		</if>
+		<if test="contents != ''">
+			AND UPPER(MSG_CONTENTS) LIKE CONCAT('%',UPPER(#{contents}),'%')
+		</if>
+		</trim>
+	</select>
+	
+	<select id="list" resultType="ClientMessageVo" parameterType="map">
+		SELECT 
+		@rownum:=@rownum+1 as 'row',
+		MSG_SEQ as 'seq',
+		COIN_ID as 'coinId',
+		CLNT_USERID as 'userId',
+		CLNT_USERNAME as 'username',
+		MSG_CONTENTS as 'contents',
+		MSG_DATE as 'date'
+		FROM TB_COINBOT_CLIENT_MSG, (SELECT @rownum:=0) TMP
+		
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		<if test="coinId != ''">
+			AND COIN_ID = #{coinId}
+		</if>
+		<if test="userId != ''">
+			AND CLNT_USERID = #{userId}
+		</if>
+		<if test="username != ''">
+			AND CLNT_USERNAME = #{username}
+		</if>
+		<if test="startDate != ''">
+			<![CDATA[AND MSG_DATE >= #{startDate}]]>
+		</if>
+		<if test="endDate != ''">
+			<![CDATA[AND MSG_DATE <= #{endDate}]]>
+		</if>
+		<if test="contents != ''">
+			AND UPPER(MSG_CONTENTS) LIKE CONCAT('%',UPPER(#{contents}),'%')
+		</if>
+		</trim>
+		
+		ORDER BY MSG_DATE DESC
+		LIMIT ${stRow}, ${rows}
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_COINBOT_CLIENT_MSG (
+			COIN_ID,
+			CLNT_USERID, 
+			CLNT_USERNAME, 
+			MSG_CONTENTS, 
+			MSG_DATE
+		)
+ 		VALUES ( 
+ 			#{coinId},
+ 			#{userId},
+ 			#{username},
+ 			#{contents},
+ 			#{date}
+ 		)
+	</insert>
+	
+	<delete id="delete" >
+		DELETE FROM TB_COINBOT_CLIENT_MSG
+		WHERE CLNT_USERID = #{userId}
+	</delete>
+	
+	<select id="countTotalMessage" resultType="map">
+		/* 총 사용자 메시지 - 코인별, 날짜별 */
+		SELECT 
+		   COIN_ID as 'coinId',
+		   DATE_FORMAT(MSG_DATE, '%Y-%m') as 'month', 
+		   DATE_FORMAT(MSG_DATE, '%Y-%m-%d') as 'day', 
+		   COUNT(CLNT_USERID) as 'msgCnt', 
+		   COUNT(distinct CLNT_USERID) as 'userCnt'
+		FROM TB_COINBOT_CLIENT_MSG
+		GROUP BY coinId, day
+		ORDER BY coinId, day desc
+	</select>
+	
+</mapper>

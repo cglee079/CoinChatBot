@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.coinchatbot.mapper.CoinConfigMapper">
+
+	<resultMap type="CoinConfigVo" id="coinConfigResultMap">
+		<id property="coinId" column="COIN_ID" />
+		<result property="exInvestKRW" column="EX_INVEST_KRW"/>
+		<result property="exInvestUSD" column="EX_INVEST_USD"/>
+		<result property="exTargetKRW" column="EX_TARGET_KRW"/>
+		<result property="exTargetUSD" column="EX_TARGET_USD"/>
+		<result property="exTargetRate" column="EX_TARGET_RATE"/>
+		<result property="exCoinCnt" column="EX_COINCNT"/>
+		<result property="digitKRW" column="DIGIT_KRW"/>
+		<result property="digitUSD" column="DIGIT_USD"/>
+		<result property="digitBTC" column="DIGIT_BTC"/>
+		<result property="version" column="VERSION"/>
+	</resultMap>
+	
+	<select id="get" resultMap="coinConfigResultMap">
+			SELECT 
+				*
+			FROM TB_COINBOT_COIN_CONFIG
+			WHERE 1 = 1
+			AND COIN_ID = #{coinId}
+	</select>
+	
+</mapper>

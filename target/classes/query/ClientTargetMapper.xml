@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.coinchatbot.mapper.ClientTargetMapper">
+	
+	<resultMap type="ClientTargetVo" id="clientTargetResultMap">
+		<id property="coinId" column="COIN_ID" />
+		<id property="userId" column="CLNT_USERID"/>
+		<result  property="price" column="TG_PRICE" />
+		<result  property="focus" column="TG_FOCUS" />
+		<result  property="createDate" column="CRE_DATE"/>
+	</resultMap>
+	
+	<select id="list" resultMap ="clientTargetResultMap" parameterType="map">
+		SELECT 
+			A.*
+		FROM 
+			TB_COINBOT_CLIENT_TARGET A
+		WHERE 
+			COIN_ID = #{coinId}
+			AND CLNT_USERID = #{userId}
+		ORDER BY TG_PRICE ASC
+	</select>
+	
+	<select id="listForAlert" resultMap ="clientTargetResultMap" parameterType="map">
+		SELECT 
+			A.*
+		FROM 
+			TB_COINBOT_CLIENT_TARGET A 
+			JOIN TB_COINBOT_CLIENT B
+			ON A.COIN_ID = B.COIN_ID
+			AND A.CLNT_USERID = B.CLNT_USERID
+		
+		WHERE
+			 A.TG_FOCUS = 'UP'
+			AND A.COIN_ID = #{coinId}
+			AND B.MARKET_CD = #{marketId}
+			AND B.CLNT_ENABLED = true
+		<![CDATA[ AND  #{coinValue} >= A.TG_PRICE ]]>
+		
+		UNION 
+		
+		SELECT 
+			A.*
+		FROM 
+			TB_COINBOT_CLIENT_TARGET A 
+			JOIN TB_COINBOT_CLIENT B
+			ON A.COIN_ID = B.COIN_ID
+			AND A.CLNT_USERID = B.CLNT_USERID
+		
+		WHERE 
+			A.TG_FOCUS = 'DOWN'
+			AND A.COIN_ID = #{coinId}
+			AND B.MARKET_CD = #{marketId}
+			AND B.CLNT_ENABLED = true
+		<![CDATA[ AND  #{coinValue} <= A.TG_PRICE ]]>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_COINBOT_CLIENT_TARGET (
+			COIN_ID,
+			CLNT_USERID, 
+			TG_PRICE, 
+			TG_FOCUS, 
+			CRE_DATE
+		)
+ 		VALUES (
+ 			#{coinId},
+			#{userId}, 
+			#{price}, 
+			#{focus}, 
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="updatePrice">
+		UPDATE 
+			TB_COINBOT_CLIENT_TARGET
+		SET
+			TG_PRICE = #{price}
+		WHERE
+			COIN_ID = #{target.coinId}
+			AND CLNT_USERID = #{target.userId} 
+			AND TG_PRICE = #{target.price} 
+	</update>
+	
+	<delete id="delete" parameterType="map">
+		DELETE
+		FROM TB_COINBOT_CLIENT_TARGET
+		WHERE COIN_ID = #{coinId}
+		AND CLNT_USERID = #{userId}
+		<if test="price != null">
+			AND TG_PRICE = #{price}
+		</if>
+	</delete>
+	
+</mapper>

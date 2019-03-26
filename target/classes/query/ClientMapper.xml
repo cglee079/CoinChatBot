@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cglee079.coinchatbot.mapper.ClientMapper">
+
+	<resultMap type="ClientVo" id="clientResultMap">
+		<id property="coinId" column="COIN_ID" />
+		<id property="userId" column="CLNT_USERID"/>
+		<result  property="row" column="row" />
+		<result  property="marketId" column="MARKET_CD" />
+		<result  property="username" column="CLNT_USERNAME"/>
+		<result  property="localtime" column="CLNT_LOCTIME"/>
+		<result  property="lang" column="CLNT_LANG"/>
+		<result  property="stateId" column="CLNT_STATECD" />
+		<result  property="timeloop" column="ALERT_TIMELOOP"/>
+		<result  property="dayloop" column="ALERT_DAYLOOP"/>
+		<result  property="invest" column="CLNT_INVEST"/>
+		<result  property="coinCnt" column="CLNT_COINCNT"/>
+		<result  property="enabled" column="CLNT_ENABLED"/>
+		<result  property="errCnt" column="CLNT_ERRCNT"/>
+		<result  property="openDate" column="OPEN_DATE"/>
+		<result  property="reopenDate" column="REOPEN_DATE"/>
+		<result  property="closeDate" column="CLOSE_DATE"/>
+		<result  property="laMsgDate" column="LA_MSG_DATE"/>
+	</resultMap>
+	
+	
+	<select id="get" resultMap="clientResultMap">
+		SELECT
+			*
+		FROM TB_COINBOT_CLIENT
+		WHERE COIN_ID = #{coinId}
+		AND CLNT_USERID = #{userId}
+	</select>
+	
+	<select id="count" resultType="Integer" parameterType="map">
+		SELECT 
+			count(*)
+			FROM TB_COINBOT_CLIENT
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		<if test="coinId != null and coinId != ''">
+			AND COIN_ID = #{coinId}
+		</if>
+		<if test="userId != null and userId != ''">
+			AND CLNT_USERID = #{userId}
+		</if>
+		<if test="username  != null and username != ''">
+			AND CLNT_USERNAME = #{username}
+		</if>
+		<if test="language  != null and language != ''">
+			AND CLNT_LANG = #{language}
+		</if>
+		<if test="marketId  != null and marketId != ''">
+			AND MARKET_CD = #{marketId}
+		</if>
+		<if test="stateId  != null and stateId != ''">
+			AND CLNT_STATECD = #{stateId}
+		</if>
+		<if test="enabled  != null and enabled != ''">
+			AND CLNT_ENABLED = #{enabled}
+		</if>
+		<if test="openDate  != null and openDate != ''">
+			<![CDATA[AND OPEN_DATE like CONCAT(#{openDate},'%')]]>
+		</if>
+		
+		<choose>
+			<when test="msgDate1 != null and msgDate1 != '' 
+						and (msgDate2 == null or msgDate2 == '')">
+				<![CDATA[AND LA_MSG_DATE like '${msgDate1}%']]>
+			</when>
+			<when test="msgDate1 != null and msgDate1 != '' 
+						and msgDate2 != null and msgDate2 != ''">
+				<![CDATA[AND LA_MSG_DATE >= #{msgDate1}]]>
+				<![CDATA[AND LA_MSG_DATE <= #{msgDate2}]]>
+			</when>
+		</choose>
+		</trim>
+	</select>
+	
+	<select id="list" resultMap="clientResultMap" parameterType="map">
+		SELECT 
+			@rownum:=@rownum+1 as 'row',
+			A.*
+		FROM 
+			TB_COINBOT_CLIENT A, 
+			(SELECT @rownum:=0) TMP
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		
+		<if test="coinId != null and coinId != ''">
+			AND COIN_ID = #{coinId}
+		</if>
+		<if test="userId != null and userId != ''">
+			AND CLNT_USERID = #{userId}
+		</if>
+		<if test="username != null and username != ''">
+			AND CLNT_USERNAME = #{username}
+		</if>
+		<if test="language != null and language != ''">
+			AND CLNT_LANG = #{language}
+		</if>
+		<if test="marketId != null and marketId != ''">
+			AND MARKET_CD = #{marketId}
+		</if>
+		<if test="stateId != null and stateId != ''">
+			AND CLNT_STATECD = #{stateId}
+		</if>
+		<if test="enabled != null and enabled != ''">
+			AND CLNT_ENABLED = #{enabled}
+		</if>
+		<if test="openDate  != null and openDate != ''">
+			<![CDATA[AND OPEN_DATE like CONCAT(#{openDate},'%')]]>
+		</if>
+		
+		<choose>
+			<when test="msgDate1 != null and msgDate1 != '' 
+						and (msgDate2 == null or msgDate2 == '')">
+				<![CDATA[AND LA_MSG_DATE like '${msgDate1}%']]>
+			</when>
+			<when test="msgDate1 != null and msgDate1 != '' 
+						and msgDate2 != null and msgDate2 != ''">
+				<![CDATA[AND LA_MSG_DATE >= #{msgDate1}]]>
+				<![CDATA[AND LA_MSG_DATE <= #{msgDate2}]]>
+			</when>
+		</choose>
+		</trim>
+		
+		<choose>
+			<when test="sort != null and sort == 'coinId'"> ORDER BY COIN_ID ${order}</when>
+			<when test="sort != null and sort == 'userId'"> ORDER BY CLNT_USERID ${order}</when>
+			<when test="sort != null and sort == 'username'"> ORDER BY CLNT_USERNAME ${order}</when>
+			<when test="sort != null and sort == 'marketId'"> ORDER BY MARKET_CD ${order}</when>
+			<when test="sort != null and sort == 'lang'"> ORDER BY CLNT_LANG ${order}</when>
+			<when test="sort != null and sort == 'stateId'"> ORDER BY CLNT_STATECD ${order}</when>
+			<when test="sort != null and sort == 'dayloop'"> ORDER BY ALERT_DAYLOOP ${order}</when>
+			<when test="sort != null and sort == 'timeloop'"> ORDER BY ALERT_TIMELOOP ${order}</when>
+			<when test="sort != null and sort == 'invest'"> ORDER BY CLNT_INVEST ${order}</when>
+			<when test="sort != null and sort == 'coinCnt'"> ORDER BY CLNT_COINCNT ${order}</when>
+			<when test="sort != null and sort == 'enabled'"> ORDER BY CLNT_ENABLED ${order}</when>
+			<when test="sort != null and sort == 'openDate'"> ORDER BY OPEN_DATE ${order}</when>
+			<when test="sort != null and sort == 'reopenDate'"> ORDER BY REOPEN_DATE ${order}</when>
+			<when test="sort != null and sort == 'closeDate'"> ORDER BY CLOSE_DATE ${order}</when>
+			<when test="sort != null and sort == 'laMsgDate'"> ORDER BY LA_MSG_DATE ${order}</when>
+			<otherwise>
+				ORDER BY CLNT_USERID ASC, COIN_ID ASC
+			</otherwise>
+		</choose>
+		
+		<if test="stRow != null">
+			LIMIT ${stRow}, ${rows}
+		</if>
+	</select>
+	
+	
+	<select id="listAlertLoop" resultMap="clientResultMap" parameterType="map">
+		/* 거래소, 시간주기, 일일주기 별 사용자 리스트 */
+		SELECT 
+			*
+		FROM TB_COINBOT_CLIENT
+		WHERE 1 = 1
+		AND COIN_ID = #{coinId}
+		AND CLNT_ENABLED = true
+		<if test="marketId != null">
+		AND MARKET_CD = #{marketId}
+		</if>
+		<if test="timeLoop != null">
+		AND ALERT_TIMELOOP = #{timeLoop}
+		</if>
+		<if test="dayLoop != null">
+		AND ALERT_DAYLOOP = #{dayLoop}
+		</if>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_COINBOT_CLIENT(
+			COIN_ID, 
+			CLNT_USERID, 
+			CLNT_USERNAME, 
+			CLNT_LOCTIME,
+			CLNT_LANG, 
+			CLNT_STATECD,
+			MARKET_CD,
+			ALERT_TIMELOOP,
+			ALERT_DAYLOOP,
+			CLNT_INVEST,
+			CLNT_COINCNT,
+			CLNT_ENABLED,
+			CLNT_ERRCNT,
+			OPEN_DATE,
+			REOPEN_DATE,
+			CLOSE_DATE,
+			LA_MSG_DATE
+		)
+		VALUES ( 
+			#{coinId}, 
+			#{userId}, 
+			#{username}, 
+			#{localtime}, 
+			#{lang}, 
+			#{stateId},
+			#{marketId},
+			#{timeloop},
+			#{dayloop},
+			#{invest},
+			#{coinCnt},
+			#{enabled},
+			#{errCnt},
+			#{openDate},
+			#{reopenDate},
+			#{closeDate},
+			#{laMsgDate}
+		)
+	</insert>
+	
+	<delete id="delete" parameterType="map">
+		DELETE FROM TB_COINBOT_CLIENT
+		WHERE COIN_ID = #{coinId}
+		AND CLNT_USERID = #{userId}
+	</delete>
+	
+	<update id="update">
+		UPDATE TB_COINBOT_CLIENT
+		SET
+		CLNT_USERNAME = #{username},
+		CLNT_LOCTIME = #{localtime},
+		CLNT_LANG = #{lang},
+		CLNT_STATECD = #{stateId},
+		MARKET_CD = #{marketId},
+		ALERT_TIMELOOP = #{timeloop},
+		ALERT_DAYLOOP = #{dayloop},
+		<choose>
+			<when test="invest == 0">
+			CLNT_INVEST = null,
+			</when>
+			<otherwise>
+			CLNT_INVEST = #{invest},
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="coinCnt == 0">
+			CLNT_COINCNT = null,
+			</when>
+			<otherwise>
+			CLNT_COINCNT = #{coinCnt},
+			</otherwise>
+		</choose>
+		CLNT_ENABLED = #{enabled},
+		CLNT_ERRCNT = #{errCnt},
+		OPEN_DATE = #{openDate},
+		REOPEN_DATE = #{reopenDate},
+		CLOSE_DATE = #{closeDate},
+		LA_MSG_DATE	= #{laMsgDate}
+		WHERE COIN_ID = #{coinId}
+		AND CLNT_USERID = #{userId}
+	</update>
+	
+	<!-- 통계 관련  -->
+	<select id="countChat" resultType="Integer" parameterType="map">
+		SELECT count(CLNT_USERID)
+		FROM TB_COINBOT_CLIENT
+		WHERE 1 = 1
+		<if test="enabled != null">
+			AND CLNT_ENABLED = #{enabled}
+		</if>
+	</select>
+	
+	<select id="countUser" resultType="Integer" parameterType="map">
+		SELECT count(distinct CLNT_USERID)
+		FROM TB_COINBOT_CLIENT
+		WHERE 1 = 1
+		<if test="enabled != null">
+			AND CLNT_ENABLED = #{enabled}
+		</if>
+	</select>
+	
+	<select id="countNewClientInToday" resultType="map" >
+		SELECT 
+		   DATE_FORMAT(OPEN_DATE, '%Y-%m-%d') as 'date', count(distinct CLNT_USERID) as 'count'
+		FROM TB_COINBOT_CLIENT
+		GROUP BY date
+		ORDER BY date desc
+	</select>
+	
+	<select id="countNewClientInTomonth" resultType="map">
+		SELECT 
+		   DATE_FORMAT(OPEN_DATE, '%Y-%m') as 'date', count(distinct CLNT_USERID) as 'count'
+		FROM TB_COINBOT_CLIENT
+		GROUP BY date
+		ORDER BY date desc	
+	</select>
+</mapper>

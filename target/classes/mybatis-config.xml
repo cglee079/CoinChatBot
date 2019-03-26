@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.cglee079.coinchatbot.model.ClientVo" alias="ClientVo"/>
+		<typeAlias type="com.cglee079.coinchatbot.model.TimelyInfoVo" alias="TimelyInfoVo"/>
+		<typeAlias type="com.cglee079.coinchatbot.model.CoinConfigVo" alias="CoinConfigVo"/>
+		<typeAlias type="com.cglee079.coinchatbot.model.CoinInfoVo" alias="CoinInfoVo"/>
+		<typeAlias type="com.cglee079.coinchatbot.model.CoinMarketConfigVo" alias="CoinMarketConfigVo"/>
+		<typeAlias type="com.cglee079.coinchatbot.model.CoinWalletVo" alias="CoinWalletVo"/>
+		<typeAlias type="com.cglee079.coinchatbot.model.ClientMessageVo" alias="ClientMessageVo" />
+		<typeAlias type="com.cglee079.coinchatbot.model.ClientSuggestVo" alias="ClientSuggestVo" />
+		<typeAlias type="com.cglee079.coinchatbot.model.ClientTargetVo" alias="ClientTargetVo" />
+		<typeAlias type="com.cglee079.coinchatbot.config.id.Market" alias="Market" />
+	</typeAliases>
+	
+	<typeHandlers>
+		 <typeHandler handler="com.cglee079.coinchatbot.config.mybatis.CodeEnumTypeHandler" 
+			  javaType="com.cglee079.coinchatbot.config.id.CodeEnum"/>
+	</typeHandlers>
+</configuration>
