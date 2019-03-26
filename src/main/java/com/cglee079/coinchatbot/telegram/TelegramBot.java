@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.logging.Log;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.abilitybots.api.bot.AbilityBot;
@@ -54,7 +53,6 @@ import com.cglee079.coinchatbot.service.ClientTargetService;
 import com.cglee079.coinchatbot.service.CoinConfigService;
 import com.cglee079.coinchatbot.service.CoinInfoService;
 import com.cglee079.coinchatbot.service.CoinMarketConfigService;
-import com.cglee079.coinchatbot.service.CoinWalletService;
 import com.cglee079.coinchatbot.telegram.keyboard.KeyboardManager;
 import com.cglee079.coinchatbot.telegram.message.MessageMaker;
 import com.cglee079.coinchatbot.util.NumberFormmater;
@@ -77,9 +75,6 @@ public class TelegramBot extends AbilityBot  {
 	
 	@Autowired
 	private CoinInfoService coinInfoService;
-
-	@Autowired
-	private CoinWalletService coinWalletService;
 
 	@Autowired
 	private CoinConfigService coinConfigService;
@@ -241,9 +236,7 @@ public class TelegramBot extends AbilityBot  {
 			break;
 			
 		case SPONSORING: //후원하기
-			sendMessage(userId, messageId, msgMaker.explainSupport(lang), null);
-			sendMessage(userId, null, msgMaker.explainSupportWallet(coinWalletService.get(myCoinId), coinWalletService.get(Coin.XRP), lang), null);
-			sendMessage(userId, null, msgMaker.explainSupportAN(lang), km.getMainKeyboard(lang));
+			sendMessage(userId, messageId, msgMaker.explainSupport(lang), km.getMainKeyboard(lang));
 			break;
 			
 		case SET_DAYLOOP : // 일일 알림주기 설정
@@ -1016,6 +1009,7 @@ public class TelegramBot extends AbilityBot  {
 		
 		SendMessage sendMessage = new SendMessage(userId, msg);
 		sendMessage.setReplyToMessageId(msgId);
+		sendMessage.enableHtml(true);
 		
 		if(keyboard != null) { 
 			sendMessage.setReplyMarkup(keyboard);

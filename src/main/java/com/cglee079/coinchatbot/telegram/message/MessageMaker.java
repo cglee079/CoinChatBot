@@ -1200,99 +1200,36 @@ public class MessageMaker {
 	/***************************/
 	public String explainSupport(Lang lang) {
 		StringBuilder msg = new StringBuilder();
+		String url = "https://toon.at/donate/dev-cglee";
 		switch(lang) {
 		case KR :
 			msg.append("안녕하세요. 개발자 CGLEE 입니다.\n");
 			msg.append("본 서비스는 무료 서비스 임을 다시 한번 알려드리며,\n");
 			msg.append("절대로! 후원하지 않는다하여 사용자 여러분에게 불이익을 제공하지 않습니다.^^\n");
 			msg.append("\n");
-			msg.append("후원된 금액은 다음 용도로 소중히 사용하겠습니다\n");
+			msg.append("<a href='");
+			msg.append(url);
+			msg.append("'>★ 후원하러가기!</a>");
 			msg.append("\n");
-			msg.append("1 순위. 서버 업그레이드 (타 코인 알리미 추가)\n");
-			msg.append("2 순위. 서버 운영비 (전기세...^^)\n");
-			msg.append("3 순위. 취업자금\n");
-			msg.append("4 순위. 개발보상 (치킨 냠냠)\n");
 			msg.append("\n");
 			msg.append("감사합니다.\n");
-			msg.append("하단에 정보를 참고하여주세요^^\n");
 			break;
 			
 		case US : 
 			msg.append("Hi. I'm developer CGLEE\n");
 			msg.append("Never! I don't offer disadvantages to users by not sponsoring. :D\n");
 			msg.append("\n");
+			msg.append("<a href='");
+			msg.append(url);
+			msg.append("'>★ Go to Sponsoring!</a>");
+			msg.append("\n");
+			msg.append("\n");
 			msg.append("Thank you for sponsoring.\n");
-			msg.append("See the information below.\n");
 			break; 
 		}
 		return msg.toString();
 	}
 	
-	public String explainSupportWallet(CoinWalletVo wallet, CoinWalletVo xrpWallet, Lang lang) {
-		StringBuilder msg = new StringBuilder();
-		switch(lang) {
-		case KR :
-			if (wallet != null) {
-				msg.append("* " + wallet.getCoinId() + " [ " + wallet.getCoinId().getKr() + " ]  지갑주소 : \n");
-				msg.append(wallet.getAddr1() + "\n");
-				if (myCoinId == Coin.XRP) {
-					msg.append("데스티네이션 태그 :  " + wallet.getAddr2() + "\n");
-				}
-			} else {
-				msg.append("해당 코인은 지갑을 개설 할 수 없어,\n");
-				msg.append("타 코인 지갑 정보를 전송합니다.\n");
-				msg.append("\n");
-
-				wallet = xrpWallet;
-				msg.append("* " + wallet.getCoinId() + " [ " +wallet.getCoinId().getKr() + " ]  지갑주소 : \n");
-				msg.append(wallet.getAddr1() + "\n");
-				msg.append("데스티네이션 태그 :  " + wallet.getAddr2() + "\n");
-			}
-			break;
-			
-		case US : 
-			if (wallet != null) {
-				msg.append("* " + wallet.getCoinId() + " [ " + wallet.getCoinId().getUs() + " ]  Wallet address : \n");
-				msg.append(wallet.getAddr1() + "\n");
-				if (myCoinId == Coin.XRP) {
-					msg.append("destination tag :  " + wallet.getAddr2() + "\n");
-				}
-			} else {
-				msg.append("Because this coin cannot open a wallet,\n");
-				msg.append("another coin wallet address send.\n");
-				msg.append("\n");
-
-				wallet = xrpWallet;
-				msg.append("* " + wallet.getCoinId() + " [ " + wallet.getCoinId().getUs() + " ]  Wallet address : \n");
-				msg.append(wallet.getAddr1() + "\n");
-				msg.append("destination tag :  " + wallet.getAddr2() + "\n");
-			}
-			break; 
-		}
-		
-		return msg.toString();
-	}
-
-	public String explainSupportAN(Lang lang) {
-		StringBuilder msg = new StringBuilder();
-		switch(lang) {
-		case KR :
-			msg.append("* 후원계좌\n");
-			msg.append("예금주: 이찬구\n");
-			msg.append("은행   : 신한은행 \n");
-			msg.append("번호   : 110 409 338434");
-			break;
-			
-		case US : 
-			msg.append("* Sponsored account\n");
-			msg.append("Bank   : Shinhan Bank (in Korea)\n");
-			msg.append("Account Holder: Lee Changoo(이찬구)\n");
-			msg.append("Account Number: 110 409 338434");
-			break; 
-		}
-		
-		return msg.toString();
-	}
 
 	/*********************/
 	/*** Language Set  ***/
