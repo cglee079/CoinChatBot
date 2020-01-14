@@ -24,7 +24,7 @@ public class BithumbPooler extends ApiPooler{
 			newCoinObj.put("errorCode", istatus);
 			newCoinObj.put("errorMsg", "");
 			newCoinObj.put("result", "success");
-			newCoinObj.put("volume", coinObj.getDouble("volume_1day"));
+			newCoinObj.put("volume", coinObj.getDouble("units_traded_24H"));
 			newCoinObj.put("first", coinObj.getDouble("opening_price"));
 			newCoinObj.put("last", coinObj.getDouble("closing_price"));
 			newCoinObj.put("high", coinObj.getDouble("max_price"));
