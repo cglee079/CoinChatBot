@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,11 +20,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import com.cglee079.coinchatbot.config.id.Coin;
-import com.cglee079.coinchatbot.config.log.MyLog;
 import com.cglee079.coinchatbot.dao.ClientMessageDao;
 import com.cglee079.coinchatbot.model.ClientMessageVo;
 import com.cglee079.coinchatbot.util.TimeStamper;
 
+@Slf4j
 @Service
 public class ClientMessageService {
 	
@@ -63,7 +64,7 @@ public class ClientMessageService {
 				.date(TimeStamper.getDateTime())
 				.build();
 		
-		MyLog.i(this.getClass(), clientMsg.log(coinId));
+		log.info(clientMsg.log(coinId));
 		
 		return clientMessageDao.insert(clientMsg);
 	}

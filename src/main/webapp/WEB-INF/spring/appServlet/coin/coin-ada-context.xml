@@ -6,8 +6,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
-	
-	<context:annotation-config></context:annotation-config>
+
+	<context:annotation-config/>
 	
 	<bean id="COIN_ADA" class="com.cglee079.coinchatbot.config.id.Coin" factory-method="valueOf">
 		<constructor-arg value="ADA"/>

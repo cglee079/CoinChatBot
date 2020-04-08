@@ -148,14 +148,12 @@
 			<version>1.3.0</version>
 		</dependency>
 
-
 		<!-- SQL Log -->
 		<dependency>
-			<groupId>org.lazyluke</groupId>
-			<artifactId>log4jdbc-remix</artifactId>
-			<version>0.2.7</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.0-alpha1</version>
 		</dependency>
-
 
 		<!-- GSON -->
 		<dependency>

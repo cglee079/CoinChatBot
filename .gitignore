@@ -1,1 +1,3 @@
-*/target/**
+target/
+.idea/
+coinchatbot.iml

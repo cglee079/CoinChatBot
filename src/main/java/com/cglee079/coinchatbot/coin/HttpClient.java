@@ -1,16 +1,14 @@
 package com.cglee079.coinchatbot.coin;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import com.cglee079.coinchatbot.config.log.MyLog;
-
+@Slf4j
 public class HttpClient {
 	public String get(String url) throws Exception {
 		try {
@@ -25,7 +23,7 @@ public class HttpClient {
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String inputLine;
-			StringBuffer response = new StringBuffer();
+			StringBuilder response = new StringBuilder();
 
 			while ((inputLine = in.readLine()) != null) {
 				response.append(inputLine);
@@ -34,7 +32,6 @@ public class HttpClient {
 			
 			return response.toString();
 		} catch (MalformedURLException e) {
-			MyLog.e(this.getClass(), e.getMessage());
 			e.printStackTrace();
 		} 		
 		return null;

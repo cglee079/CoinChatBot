@@ -1,11 +1,10 @@
 package com.cglee079.coinchatbot.config.cmd;
 
 import com.cglee079.coinchatbot.config.id.Lang;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum MainCmd implements CmdEnum{
 	NULL("", ""),
 	CURRENT_PRICE("현재가", "Current Price"),
@@ -32,6 +31,7 @@ public enum MainCmd implements CmdEnum{
 	
 	@Getter
 	private final String us;
+
 	public static MainCmd from(Lang lang, String str) {
 		return CmdEnum.from(values(), lang, str, MainCmd.NULL);
 	}

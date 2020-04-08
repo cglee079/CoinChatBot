@@ -43,7 +43,7 @@ public class CashierestPooler extends ApiPooler{
 		if(coinParam != null) {
 			coinObjs = new JSONObject();
 			
-			String url = "https://rest.cashierest.com/public/tickerall";
+			String url = "https://api.cashierest.com/V2/PbV11/tickerall";
 			HttpClient httpClient = new HttpClient();
 			String response;
 			JSONObject responseObj = null;

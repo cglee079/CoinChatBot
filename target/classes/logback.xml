@@ -7,35 +7,27 @@
 		</encoder>
 	</appender>
 
-	<appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
-		<connectionSource
-			class="ch.qos.logback.core.db.DriverManagerConnectionSource">
-			<driverClass>com.mysql.jdbc.Driver</driverClass>
-			<url>jdbc:mysql://192.168.219.103:3307/cg_coin_log?autoReconnect=true
-			</url>
-			<user>coinchatbot-logger</user>
-			<password>s12345</password>
-		</connectionSource>
+	<appender name="FILE_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>
+			<pattern>%d{yyyy:MM:dd HH:mm:ss.SSS} %-5level --- [%thread] %logger{35} : %msg %n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
 	</appender>
+
 
 	<logger name="org.springframework" level="info" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 
 	<logger name="com.cglee079.coinchatbot" level="info" additivity="false">
-		<appender-ref ref="DB" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE_INFO" />
 	</logger>
-
-	<!-- <logger name="jdbc.sqlonly" additivity="false"> <level value="INFO" 
-		/> <appender-ref ref="STDOUT" /> </logger> <logger name="jdbc.resultsettable" 
-		additivity="false"> <level value="INFO" /> <appender-ref ref="STDOUT" /> 
-		</logger> -->
-
-	<!-- <logger name="jdbc.connection" additivity="false"> <level value="DEBUG" 
-		/> </logger> <logger name="jdbc.sqltiming" additivity="false"> <level value="DEBUG" 
-		/> </logger> <logger name="jdbc.audit" additivity="false"> <level value="DEBUG" 
-		/> </logger> <logger name="jdbc.resultset" additivity="false"> <level value="DEBUG" 
-		/> </logger> -->
 
 	<root level="info">
 		<appender-ref ref="STDOUT" />
